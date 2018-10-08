@@ -11,4 +11,6 @@ The project board keeps track of current progress and activities.
 Publish issues and label them to add them to the project. 
 
 ## Technology
-C#  
+C#
+
+## Other things
