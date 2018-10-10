@@ -21,7 +21,7 @@ namespace EvolutionSim.Source.UI
             list.AddItem("Rat");
             panel.AddChild(list);
             
-            Button button = new Button("Test");
+            var button = new Button("Test");
             panel.AddChild(button);
         }
 
