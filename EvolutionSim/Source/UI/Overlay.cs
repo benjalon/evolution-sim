@@ -7,6 +7,8 @@ namespace EvolutionSim.Source.UI
 {
     public class Overlay
     {
+        public Button Button { get; private set; }
+
         public Overlay()
         {
             var panel = new Panel(new Vector2(200, 0), PanelSkin.Simple, anchor: Anchor.CenterLeft);
@@ -21,8 +23,8 @@ namespace EvolutionSim.Source.UI
             list.AddItem("Rat");
             panel.AddChild(list);
             
-            var button = new Button("Test");
-            panel.AddChild(button);
+            Button = new Button("Test");
+            panel.AddChild(Button);
         }
 
         public void Update(GameTime gameTime)

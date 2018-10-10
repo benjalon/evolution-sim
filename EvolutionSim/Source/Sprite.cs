@@ -10,7 +10,7 @@ namespace EvolutionSim.Source
         private Rectangle _rectangle;
         private Color _color;
 
-        private Random random = new Random();
+        private Random _random = new Random();
 
         public Sprite(ref Texture2D texture, Rectangle rectangle)
         {
@@ -28,8 +28,8 @@ namespace EvolutionSim.Source
 
         public void Update(GameTime gameTime)
         {
-            _rectangle.X += random.Next(-7, 8);
-            _rectangle.Y += random.Next(-7, 8);
+            _rectangle.X += _random.Next(-7, 8);
+            _rectangle.Y += _random.Next(-7, 8);
         }
 
         public void Draw(SpriteBatch spriteBatch)
