@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8E5C53B4-F160-474E-B7D4-572AC14D6FA1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>EvolutionSim</RootNamespace>
     <AssemblyName>EvolutionSim</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -32,6 +32,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DataTypes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -83,6 +86,7 @@
     <Compile Include="Graphics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\UI\Overlay.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -99,9 +103,7 @@
     <None Include="Content\GeonBit.UI\themes\lowres\fonts\Regular.spritefont" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Content\GeonBit.UI\themes\editor\effects\disabled.fx" />
     <Content Include="Content\GeonBit.UI\themes\editor\effects\silhouette.fx" />

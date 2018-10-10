@@ -1,14 +1,16 @@
-﻿using GeonBit.UI;
+﻿using EvolutionSim.Source.UI;
+using GeonBit.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace EvolutionSim
 {
-    class Graphics : Game
+    public class Graphics : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Overlay _overlay;
 
         public Graphics()
         {
@@ -19,6 +21,7 @@ namespace EvolutionSim
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
+            _overlay = new Overlay();
 
             base.Initialize();
         }
@@ -40,7 +43,7 @@ namespace EvolutionSim
                 Exit();
             }
 
-            UserInterface.Active.Update(gameTime);
+            _overlay.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -49,7 +52,7 @@ namespace EvolutionSim
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            UserInterface.Active.Draw(_spriteBatch);
+            _overlay.Draw(_spriteBatch);
             
             base.Draw(gameTime);
         }
