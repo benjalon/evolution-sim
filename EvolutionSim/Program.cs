@@ -4,11 +4,11 @@ namespace EvolutionSim
 {
     class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        static void Main()
         {
-            Console.WriteLine("Hello World");
-
-            Console.ReadLine();
+            using (var graphics = new Graphics())
+                graphics.Run();
         }
     }
 }
