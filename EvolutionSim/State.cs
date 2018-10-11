@@ -24,5 +24,13 @@ public class State
 	}
 
 
+    //method to determine which State our organism needs to be in
+    public void DetermineState(States _passedAction)
+    {
+
+
+
+    }
+
 
 }
