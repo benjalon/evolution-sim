@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading;
 
 //Class used to represent the state of an organism
 public class State
 {
+    States currentAction;
+
 
     enum States{
 
@@ -13,9 +16,10 @@ public class State
 
     }
     
+    //Sets each state to roaming by default
 	public State()
 	{
-
+        this.currentAction = States.roaming;
 
 	}
 
