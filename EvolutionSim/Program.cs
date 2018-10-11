@@ -2,9 +2,8 @@
 
 namespace EvolutionSim
 {
-    class Program
+    public class Program
     {
-        [STAThread]
         static void Main()
         {
             var graphics = new Graphics();
