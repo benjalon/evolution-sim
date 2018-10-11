@@ -25,9 +25,26 @@ public class State
 
 
     //method to determine which State our organism needs to be in
-    public void DetermineState(States _passedAction)
+    public void StateLogic()
     {
+        if (this.currentAction == States.roaming)
+        {
+            //roam
 
+        }
+
+        else if(this.currentAction == States.repoducing)
+        {
+
+            //repoduce
+
+        }
+
+        else if (this.currentAction == States.eating)
+        {
+            //eat
+
+        }
 
 
     }
