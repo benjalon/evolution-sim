@@ -1,71 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 //these represent states
-enum States
+public enum States
 {
-
-    roaming = 0,
-    eating = 1,
-    repoducing = 2,
-    seekMate = 3,
-    seekFood = 4,
+    roaming,
+    eating,
+    repoducing,
+    seekMate,
+    seekFood,
 }
 
 //these represent the transition psths between states
-enum Action
+public enum Action
 {
-    notHungry = 0,
-    hungryRoam = 1,
-    hungryMae = 2,
-
-
-
+    notHungry,
+    hungryRoam,
+    hungryMate,
 }
 
 
 
-//Class used to represent the state of an organism
-public class State
-{
-
-
-    //a nested and publically avaliable class to determine behaviour of organsim when changing states
-    class StateTransition
+    //Class used to represent the state of an organism
+    public class State
     {
-        readonly States CurrentState;
-        readonly Action action;
 
-        public StateTransition(States PassedCurrentState, Action passedAction)
+
+        //a nested and publically avaliable class to determine behaviour of organsim when changing states
+        class StateTransition
         {
-            this.CurrentState = PassedCurrentState;
-            this.action = passedAction;
+            readonly States CurrentState;
+            readonly Action action;
+
+            public StateTransition(States PassedCurrentState, Action passedAction)
+            {
+                this.CurrentState = PassedCurrentState;
+                this.action = passedAction;
+
+            }
+
+        //important to have a hash code for each stateTransition as it is being used as a key in
+        //the dictonary (lookup table)
+            public override int GetHashCode()
+            {
+
+                return 17 + 31 * CurrentState.GetHashCode() + 31 * Action.GetHashCode();
+
+            }
+
+            public override bool Equals(Object obj)
+            {
+                StateTransition other = obj as StateTransition;
+                return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
+
+            }
 
         }
 
-        public override bool Equals(Object obj)
-        {
-            StateTransition other = obj as StateTransition;
-            return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
+        // represent a transition table as a dictonary
+        Dictionary<StateTransition, States> transitions;
 
-        }
-
+    //getters and setters for the differing states
+        public States CurrentState
+    {
+        get;
+        private set;
     }
 
-    // represent a transition table as a dictonary
-    Dictionary <StateTransition, States> transitions;
+
+        //Sets each state to roaming by default
+        public State()
+        {
+            CurrentState = States.roaming;
+
+            //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
+            transitions = new Dictionary<StateTransition, States>
+            {
 
 
 
-    //Sets each state to roaming by default
-	public State()
-	{
-       
-
-	}
 
 
- 
+            }
+    
+
+
+    }
 
 }
