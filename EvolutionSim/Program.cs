@@ -6,12 +6,12 @@ namespace EvolutionSim
     {
         static void Main()
         {
-            Organism lmao = new Organism();
+  
 
-            Console.WriteLine(lmao);
+            //.Console.WriteLine(lmao);
 
 
-            Console.WriteLine("sds");
+            //onsole.WriteLine("sds");
           
             var graphics = new Graphics();
             graphics.Run();
