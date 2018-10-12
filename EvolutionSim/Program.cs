@@ -2,9 +2,9 @@
 
 namespace EvolutionSim
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Organism lmao = new Organism();
 
@@ -12,6 +12,9 @@ namespace EvolutionSim
 
 
             Console.WriteLine("sds");
+          
+            var graphics = new Graphics();
+            graphics.Run();
         }
     }
 }
