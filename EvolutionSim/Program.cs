@@ -2,13 +2,12 @@
 
 namespace EvolutionSim
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("Hello World");
-
-            Console.ReadLine();
+            var graphics = new Graphics();
+            graphics.Run();
         }
     }
 }
