@@ -6,9 +6,12 @@ namespace EvolutionSim
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World");
+            Organism lmao = new Organism();
 
-            Console.ReadLine();
+            Console.WriteLine(lmao);
+
+
+            Console.WriteLine("sds");
         }
     }
 }
