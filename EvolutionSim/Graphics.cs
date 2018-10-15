@@ -1,5 +1,4 @@
-﻿using EvolutionSim.Source;
-using EvolutionSim.Source.UI;
+﻿using EvolutionSim.UI;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
@@ -12,7 +11,7 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
-        private const int WINDOW_SIZE = 800;
+        public static int WINDOW_SIZE = 800;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -81,7 +80,7 @@ namespace EvolutionSim
             // Update graphical elements
             foreach (var organism in _organisms)
             {
-                organism._sprite.Update(gameTime);
+                organism.Sprite.Update(gameTime, GraphicsDevice.Viewport.Bounds);
             }
 
             // Update UI elements
@@ -102,7 +101,7 @@ namespace EvolutionSim
             _spriteBatch.Begin();
             foreach (var organism in _organisms)
             {
-                organism._sprite.Draw(_spriteBatch);
+                organism.Sprite.Draw(_spriteBatch);
             }
             _spriteBatch.End();
 

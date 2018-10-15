@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace EvolutionSim.Source
+namespace EvolutionSim
 {
     /// <summary>
     /// A combination of a texture and rectangle form a sprite, where the texture is drawn on top of the rectangle.
@@ -12,6 +12,8 @@ namespace EvolutionSim.Source
         private Texture2D _texture;
         private Rectangle _rectangle;
         private Color _color;
+        private Point _movement;
+        private int _ticksPerMovement=0;
 
         private Random _random = new Random(); // Temporary
 
@@ -43,12 +45,32 @@ namespace EvolutionSim.Source
         /// <summary>
         /// Update the Sprite by moving its rectangle
         /// </summary>
-        /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
+        /// <param name="gameTime">Delta</param>
+        public void Update(GameTime gameTime, Rectangle bounds)
         {
-            // Temporary
-            _rectangle.X += _random.Next(-7, 8);
-            _rectangle.Y += _random.Next(-7, 8);
+            if (_ticksPerMovement <= 0)
+            {
+                _ticksPerMovement = 40;
+                _movement.X= _random.Next(-2, 3);
+                _movement.Y = _random.Next(-2, 3);
+            }
+
+            if (_rectangle.X + _movement.X >= bounds.Right ||
+                _rectangle.X + _movement.X <= bounds.Left)
+            {
+                _movement.X = -_movement.X;
+            }
+            if (_rectangle.Y + _movement.Y >= bounds.Bottom ||
+                _rectangle.Y + _movement.Y <= bounds.Top)
+            {
+                _movement.Y = -_movement.Y;
+            }
+            
+            _rectangle.X += _movement.X;
+            _rectangle.Y += _movement.Y;
+
+            _ticksPerMovement--;
+
         }
 
         /// <summary>
