@@ -84,7 +84,7 @@ public enum Action
                 //here we add all of the possible state transitions in
 
                 //if organism is in roam state and isn't hungry then remain in roaming
-                { new StateTransition (States.Roaming, Action.NotHungry ), States.Roaming},
+                { new StateTransition (States.Roaming, Action.NotHungry), States.Roaming},
 
                 //if organism is in roaming state and wants to mate then place into seekMate state
                 { new StateTransition (States.Roaming, Action.HungryMate), States.SeekMate},
