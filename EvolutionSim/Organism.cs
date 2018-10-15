@@ -10,15 +10,15 @@ namespace EvolutionSim
     {
         private OrganismAttributes _attributes;
         private String _speciesName;
+        public Source.Sprite _sprite { get; set; }
+
 
         // private OrganismState _state;
 
-        public Organism()
+        public Organism(Source.Sprite sprite_Passed)
         {
             _attributes = new OrganismAttributes(100, 0, 50, 500, 50, FoodType.Carnivore);
-            Console.WriteLine("Input a species name");
-            _speciesName = Console.ReadLine();
-
+            _sprite = sprite_Passed;
         }
 
         public override String ToString()

@@ -17,7 +17,7 @@ namespace EvolutionSim.Source.UI
         public Overlay()
         {
             // All temporary
-            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, anchor: Anchor.CenterLeft);
+            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Fancy, anchor: Anchor.CenterLeft);
             UserInterface.Active.AddEntity(panel);
 
             var testText = new Paragraph("Click button to create organisms");
