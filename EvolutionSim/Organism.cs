@@ -8,17 +8,21 @@ namespace EvolutionSim
 {
     class Organism
     {
+
+        public static int TOTAL_POPULATION = 0;
         private OrganismAttributes _attributes;
         private String _speciesName;
-        public Source.Sprite _sprite { get; set; }
+
+        public Sprite Sprite { get; set; }
 
 
         // private OrganismState _state;
 
-        public Organism(Source.Sprite sprite_Passed)
+        public Organism(Sprite sprite_Passed)
         {
             _attributes = new OrganismAttributes(100, 0, 50, 500, 50, FoodType.Carnivore);
-            _sprite = sprite_Passed;
+            Sprite = sprite_Passed;
+            TOTAL_POPULATION++;
         }
 
         public override String ToString()
