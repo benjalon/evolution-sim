@@ -6,13 +6,14 @@ namespace EvolutionSim
 {
     public abstract class MovingSprite : Sprite
     {
-
         private Random _random = new Random(); // Temporary
 
         private Point _movement;
-        private int _ticksPerMovement = 0;
         private int _movementSpeed;
         private float _detectionRadius;
+
+        private const int _msPerDirectionChange = 400;
+        private int _msSinceDirectionChange = _msPerDirectionChange;
 
         /// <summary>
         /// Create a moving sprite from a given texture and rectangle
@@ -36,19 +37,21 @@ namespace EvolutionSim
         /// <param name="bounds">The game area boundary</param>
         public void Update(GameTime gameTime, Rectangle bounds)
         {
-            move(bounds);
+            move(gameTime, bounds);
         }
 
-        private void move(Rectangle bounds)
+        private void move(GameTime gameTime, Rectangle bounds)
         {
-            // Only pick a new movement after a certain number of ticks
-            if (_ticksPerMovement <= 0)
+            // Change directions every so often
+            _msSinceDirectionChange += gameTime.ElapsedGameTime.Milliseconds;
+
+            var shouldChangeDirection = _msSinceDirectionChange > _msPerDirectionChange;        
+            if (shouldChangeDirection)
             {
-                _ticksPerMovement = 40;
+                _msSinceDirectionChange = 0;
                 _movement.X = _random.Next(-_movementSpeed, _movementSpeed + 1); // +1 because Random's upper bound is -1 for some reason
                 _movement.Y = _random.Next(-_movementSpeed, _movementSpeed + 1);
             }
-            _ticksPerMovement--;
 
             // Constrain sprite to game area
             var outOfBoundsLeftRight = _rectangle.X + _movement.X <= bounds.Left || _rectangle.X + _movement.X >= bounds.Right;
