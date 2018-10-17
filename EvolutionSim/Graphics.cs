@@ -21,7 +21,7 @@ namespace EvolutionSim
         private Texture2D _organismTexture;
         private List<Organism> _organisms = new List<Organism>();
 
-        private Random _random = new Random(); // Temporary
+        private Random _random = new Random(); // TODO Delete this when we don't want random colors anymore
 
         public Graphics()
         {
@@ -115,8 +115,10 @@ namespace EvolutionSim
         
         private void createOrganism()
         {
-            var newOrganism = new Organism(ref _organismTexture, new Rectangle(_random.Next(0, 801), _random.Next(0, 801), 16, 16));
-            newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255); // Temporary- assign a random color to the organism
+            var newOrganism = new Organism(ref _organismTexture, new Rectangle(_random.Next(0, WINDOW_SIZE + 1), _random.Next(0, WINDOW_SIZE + 1), 16, 16));
+            
+            // TODO Delete this when we don't want random colors anymore
+            newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255); 
 
             _organisms.Add(newOrganism);
         }
