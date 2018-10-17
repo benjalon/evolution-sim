@@ -11,8 +11,13 @@ namespace EvolutionSim
     public abstract class Sprite
     {
         protected Texture2D _texture;
-        protected Rectangle _rectangle;
         public Color Color { get; set; }
+
+        protected Rectangle _rectangle;
+        public Rectangle Rectangle
+        {
+            get => _rectangle;
+        }
 
         /// <summary>
         /// Create a static sprite from a given texture and rectangle
@@ -32,7 +37,7 @@ namespace EvolutionSim
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _rectangle, Color);
+            spriteBatch.Draw(_texture, Rectangle, Color);
         }
     }
 }

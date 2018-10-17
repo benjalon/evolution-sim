@@ -19,7 +19,7 @@ namespace EvolutionSim
         private Overlay _overlay;
 
         private Texture2D _organismTexture;
-        private List<Organism> _organisms = new List<Organism>();
+        private List<Sprite> _organisms = new List<Sprite>();
 
         private Random _random = new Random(); // TODO Delete this when we don't want random colors anymore
 
@@ -81,7 +81,7 @@ namespace EvolutionSim
             // Update graphical elements
             foreach (var organism in _organisms)
             {
-                organism.Update(gameTime, GraphicsDevice.Viewport.Bounds);
+                ((Organism)organism).Update(gameTime, GraphicsDevice.Viewport.Bounds, _organisms);
             }
 
             // Update UI elements

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace EvolutionSim
 {
@@ -34,19 +35,24 @@ namespace EvolutionSim
         /// </summary>
         /// <param name="gameTime">Delta</param>
         /// <param name="bounds">The game area boundary</param>
-        public void Update(GameTime gameTime, Rectangle bounds)
+        public void Update(GameTime gameTime, Rectangle bounds, List<Sprite> colliders)
         {
-            Move(gameTime, bounds);
+            Move(gameTime, bounds, colliders);
         }
 
-        private void Move(GameTime gameTime, Rectangle bounds)
+        private void Move(GameTime gameTime, Rectangle bounds, List<Sprite> colliders)
         {
             AttemptDirectionChange(gameTime);
-            ConstrainMovementToGameArea(bounds);
+
+            var plannedPosition = new Point(Rectangle.X + _movement.X, Rectangle.Y + _movement.Y);
+            if (CheckOutOfBounds(bounds, plannedPosition) || CheckCollisions(colliders, plannedPosition))
+            {
+                return; // Give up with this movement and wait for either the collider to move or the next direction change
+            }
 
             // Move the sprite
-            _rectangle.X += _movement.X;
-            _rectangle.Y += _movement.Y;
+            _rectangle.X += plannedPosition.X * gameTime.ElapsedGameTime.Milliseconds;
+            _rectangle.Y += plannedPosition.Y * gameTime.ElapsedGameTime.Milliseconds;
         }
 
         /// <summary>
@@ -62,27 +68,43 @@ namespace EvolutionSim
             if (shouldChangeDirection)
             {
                 _msSinceDirectionChange = 0;
-                _movement.X = _random.Next(-_movementSpeed, _movementSpeed + 1); // +1 because Random's upper bound is -1 for some reason
+                _movement.X = _random.Next(-_movementSpeed, _movementSpeed + 1); // +1 because Random's upper bound is exclusive
                 _movement.Y = _random.Next(-_movementSpeed, _movementSpeed + 1);
             }
         }
 
         /// <summary>
-        /// Adjust movement so the sprite won't walk out of bounds
+        /// Check whether the planned movement will cause any collisions
+        /// </summary>
+        /// <param name="colliders">Elements this move could possibly collide with</param>
+        /// <param name="plannedPosition">The planned new position</param>
+        /// <returns>True for will collide, false for will not collide</returns>
+        private bool CheckCollisions(List<Sprite> colliders, Point plannedPosition)
+        {
+            var collisionRectangle = Rectangle.Empty;
+            foreach (var collider in colliders)
+            {
+                if (collider.Rectangle.Contains(plannedPosition))
+                {
+                    collisionRectangle = collider.Rectangle; // Collision found
+                    break;
+                }
+            }
+
+            return !collisionRectangle.IsEmpty;
+        }
+
+        /// <summary>
+        /// Check whether planned movement will cause the sprite to walk out of bounds
         /// </summary>
         /// <param name="bounds">The screen bounds</param>
-        private void ConstrainMovementToGameArea(Rectangle bounds)
+        /// <param name="plannedPosition">The planned movement</param>
+        /// <returns>True for will be out of bounds, false for will not be out of bounds</returns>
+        private bool CheckOutOfBounds(Rectangle bounds, Point plannedPosition)
         {
-            var outOfBoundsLeftRight = _rectangle.X + _movement.X <= bounds.Left || _rectangle.X + _movement.X >= bounds.Right;
-            var outOfBoundsTopBottom = _rectangle.Y + _movement.Y <= bounds.Top || _rectangle.Y + _movement.Y >= bounds.Bottom;
-            if (outOfBoundsLeftRight)
-            {
-                _movement.X = -_movement.X;
-            }
-            if (outOfBoundsTopBottom)
-            {
-                _movement.Y = -_movement.Y;
-            }
+            var outOfBoundsLeftRight = plannedPosition.X <= bounds.Left || plannedPosition.X >= bounds.Right;
+            var outOfBoundsTopBottom = plannedPosition.Y <= bounds.Top || plannedPosition.Y >= bounds.Bottom;
+            return outOfBoundsLeftRight || outOfBoundsTopBottom;
         }
     }
 }
