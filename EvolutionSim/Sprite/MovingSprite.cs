@@ -51,8 +51,8 @@ namespace EvolutionSim
             }
 
             // Move the sprite
-            _rectangle.X += plannedPosition.X * gameTime.ElapsedGameTime.Milliseconds;
-            _rectangle.Y += plannedPosition.Y * gameTime.ElapsedGameTime.Milliseconds;
+            _rectangle.X = plannedPosition.X;
+            _rectangle.Y = plannedPosition.Y;
         }
 
         /// <summary>
