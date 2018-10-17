@@ -15,6 +15,7 @@ namespace EvolutionSim
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
         private Overlay _overlay;
 
         private Texture2D _organismTexture;
@@ -80,7 +81,7 @@ namespace EvolutionSim
             // Update graphical elements
             foreach (var organism in _organisms)
             {
-                organism.Sprite.Update(gameTime, GraphicsDevice.Viewport.Bounds);
+                organism.Update(gameTime, GraphicsDevice.Viewport.Bounds);
             }
 
             // Update UI elements
@@ -101,7 +102,7 @@ namespace EvolutionSim
             _spriteBatch.Begin();
             foreach (var organism in _organisms)
             {
-                organism.Sprite.Draw(_spriteBatch);
+                organism.Draw(_spriteBatch);
             }
             _spriteBatch.End();
 
@@ -114,13 +115,10 @@ namespace EvolutionSim
         
         private void createOrganism()
         {
-            _organisms.Add(new Organism(new Sprite(ref _organismTexture,
-                                      new Rectangle(_random.Next(0, 801), _random.Next(0, 801), 16, 16),
-                                      Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255))));
-            //// Temporary
-            //_organisms.Add(new Sprite(ref _organismTexture, 
-            //                         new Rectangle(_random.Next(0, 801), _random.Next(0, 801), 16, 16), 
-            //                         Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255)));
+            var newOrganism = new Organism(ref _organismTexture, new Rectangle(_random.Next(0, 801), _random.Next(0, 801), 16, 16));
+            newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255); // Temporary- assign a random color to the organism
+
+            _organisms.Add(newOrganism);
         }
     }
 }
