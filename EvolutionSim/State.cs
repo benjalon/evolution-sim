@@ -125,5 +125,22 @@ public enum Action
     }
 
 
+    //used to test the transition logic
+    public void testTransition()
+    {
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
 
 }

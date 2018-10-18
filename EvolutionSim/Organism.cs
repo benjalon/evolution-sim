@@ -9,13 +9,16 @@ namespace EvolutionSim
     class Organism
     {
 
+
+
         public static int TOTAL_POPULATION = 0;
         private OrganismAttributes _attributes;
         private String _speciesName;
-        private State currentState;
+
+        //what state is the organism currently in
+        public State _state;
 
         public Sprite Sprite { get; set; }
-
 
         // private OrganismState _state;
 
@@ -24,6 +27,7 @@ namespace EvolutionSim
             _attributes = new OrganismAttributes(100, 0, 50, 500, 50, FoodType.Carnivore);
             Sprite = sprite_Passed;
             TOTAL_POPULATION++;
+            _state = new State();
         }
 
         public override String ToString()
