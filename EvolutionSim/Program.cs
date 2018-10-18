@@ -7,11 +7,7 @@ namespace EvolutionSim
         static void Main()
         {
 
-            //.Console.WriteLine(lmao);
 
-
-            //console.WriteLine("sds");
-          
             var graphics = new Graphics();
             graphics.Run();
         }

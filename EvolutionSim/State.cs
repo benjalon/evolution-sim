@@ -1,27 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//these represent states
-public enum States
-{
-    Roaming,
-    Eating,
-    SeekMate,
-    SeekFood,
-    Mating,
-
-}
-
-//these represent the transition paths between states
-public enum Action
-{
-    NotHungry,
-    HungryRoam,
-    HungryMate,
-    FoodFound,
-    MateFound,
-    FinishedMating
-}
 
 
 
@@ -30,8 +9,35 @@ public enum Action
     {
 
 
-        //a nested and publically avaliable class to determine behaviour of organsim when changing states
-        class StateTransition
+
+    //these represent states
+    enum States
+    {
+        Roaming,
+        Eating,
+        SeekMate,
+        SeekFood,
+        Mating,
+
+    }
+
+    //these represent the transition paths between states
+    enum Action
+    {
+        NotHungry,
+        HungryRoam,
+        HungryMate,
+        FoodFound,
+        MateFound,
+        FinishedMating
+    }
+
+
+
+
+
+    //a nested and publically avaliable class to determine behaviour of organsim when changing states
+    class StateTransition
         {
             readonly States CurrentState;
             readonly Action action;
