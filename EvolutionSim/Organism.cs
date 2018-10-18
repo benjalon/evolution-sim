@@ -12,6 +12,7 @@ namespace EvolutionSim
         public static int TOTAL_POPULATION = 0;
         private OrganismAttributes _attributes;
         private String _speciesName;
+        private StateMachine State;
 
         public Sprite Sprite { get; set; }
 
