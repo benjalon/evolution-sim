@@ -10,7 +10,6 @@ namespace EvolutionSim
         private Random _random = new Random();
         private Point _movement;
         private int _movementSpeed;
-        private float _detectionRadius;
 
         private const int MS_PER_DIRECTION_CHANGE = 400;
         private int _msSinceDirectionChange = MS_PER_DIRECTION_CHANGE;
@@ -21,13 +20,10 @@ namespace EvolutionSim
         /// <param name="texture">The appearance of the Sprite</param>
         /// <param name="rectangle">The position and size of the Sprite</param>
         /// <param name="movementSpeed">The speed in pixels at which the sprite moves</param>
-        /// <param name="detectionRadius">A circular distance around the sprite where the sprite will react to other sprite, if not given then
-        /// the sprite will use it's rectangle instead.</param>
-        public MovingSprite(ref Texture2D texture, Rectangle rectangle, int movementSpeed = 2, float detectionRadius = -1.0f)
+        public MovingSprite(ref Texture2D texture, Rectangle rectangle, int movementSpeed = 2)
             : base(ref texture, rectangle)
         {
             _movementSpeed = movementSpeed;
-            _detectionRadius = detectionRadius;
         }
         
         /// <summary>
@@ -35,7 +31,7 @@ namespace EvolutionSim
         /// </summary>
         /// <param name="gameTime">Delta</param>
         /// <param name="bounds">The game area boundary</param>
-        public void Update(GameTime gameTime, Rectangle bounds, List<Sprite> colliders)
+        public virtual void Update(GameTime gameTime, Rectangle bounds, List<Sprite> colliders)
         {
             Move(gameTime, bounds, colliders);
         }

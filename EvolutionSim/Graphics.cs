@@ -21,6 +21,9 @@ namespace EvolutionSim
         private Texture2D _organismTexture;
         private List<Sprite> _organisms = new List<Sprite>();
 
+        private Texture2D _foodTexture;
+        private Food _food;
+
         private Random _random = new Random(); // TODO Delete this when we don't want random colors anymore
 
         public Graphics()
@@ -56,6 +59,9 @@ namespace EvolutionSim
 
             // Load textures
             _organismTexture = Content.Load<Texture2D>("face");
+            _foodTexture = Content.Load<Texture2D>("pizza");
+
+            _food = new Food(ref _foodTexture, new Rectangle(500, 400, 16, 16), 50.0f);
         }
         
         /// <summary>
@@ -104,6 +110,7 @@ namespace EvolutionSim
             {
                 organism.Draw(_spriteBatch);
             }
+            _food.Draw(_spriteBatch);
             _spriteBatch.End();
 
             // Draw UI elements on top

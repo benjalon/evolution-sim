@@ -17,8 +17,8 @@ namespace EvolutionSim
 
         // private OrganismState _state;
 
-        public Organism(ref Texture2D texture, Rectangle rectangle, int movementSpeed = 2, float detectionRadius = -1.0f)
-            : base(ref texture, rectangle, movementSpeed, detectionRadius)
+        public Organism(ref Texture2D texture, Rectangle rectangle, int movementSpeed = 2)
+            : base(ref texture, rectangle, movementSpeed)
         {
             _attributes = new OrganismAttributes(100, 0, 50, 500, 50, FoodType.Carnivore);
             TOTAL_POPULATION++;
