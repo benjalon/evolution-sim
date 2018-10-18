@@ -16,7 +16,7 @@ namespace EvolutionSim
         
 
     
-    public void determineBehaviour()
+    public void performAction()
         {
 
             //for everything in the live organisms list
@@ -26,25 +26,63 @@ namespace EvolutionSim
                 //by switching on the current state
 
                 States organismState = (States)thing._state.CurrentState;
+                Action neededAction;
 
-                switch (organismState)
+                //then we're in roaming
+                if (organismState == States.Roaming)
                 {
-                    case organismState:
-                        break;
+                    //hunger falls below a certain percentage or value
+            
 
-                    case
 
-                   
+
 
                 }
+
+
+                else if(organismState == States.Eating)
+                {
+
+
+
+
+
+                }
+
+                else if (organismState == States.SeekFood)
+                {
+
+
+
+
+
+                }
+
+                else if (organismState == States.SeekMate)
+                {
+
+
+
+
+
+                }
+
+
+                else 
+                {
+
+
+
+
+
+                }
+
 
 
             }
 
 
-           
-
-
+   
         }
 
   
