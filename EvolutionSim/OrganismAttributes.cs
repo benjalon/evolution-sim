@@ -9,16 +9,16 @@ namespace EvolutionSim
     class OrganismAttributes
     {
         public int _age { get; set; }
-        public double _health { get; set; }
-        public double _hunger { get; set; }
+        public float _health { get; set; }
+        public float _hunger { get; set; }
         public double _speed { get; set; }
         public double _strength { get; set; }
         public FoodType _foodType;
 
 
-        public OrganismAttributes(double Health_Passed,
+        public OrganismAttributes(float Health_Passed,
                                   int Age_Passed,
-                                  double Hunger_Passed,
+                                  float Hunger_Passed,
                                   double Speed_Passed,
                                   double Strength_Passsed,
                                   FoodType FoodType_Passed)
