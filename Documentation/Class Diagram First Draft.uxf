@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>54</x>
+      <y>90</y>
+      <w>189</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>Organism
+--
+- attributes OrganismAttributes
+- speciesName string
+- Sprite Sprite
+--
++ toString()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>594</x>
+      <y>387</y>
+      <w>189</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>FoodTypes
+--
+Herbivore
+Carnivore
+Omnivore
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>54</x>
+      <y>351</y>
+      <w>189</w>
+      <h>153</h>
+    </coordinates>
+    <panel_attributes>OrganismAttributes
+--
+- age int
+- health double
+- hunger double
+- speed double
+- strength double
+- foodtype FoodType
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>342</x>
+      <y>387</y>
+      <w>189</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>FoodType
+--
+- foodType : FoodTypes
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>522</x>
+      <y>423</y>
+      <w>90</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+</panel_attributes>
+    <additional_attributes>10.0;20.0;80.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>234</x>
+      <y>414</y>
+      <w>126</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+has</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>144</x>
+      <y>225</y>
+      <w>45</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+has</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>369</x>
+      <y>90</y>
+      <w>189</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>Sprite
+--
+- texture Texture2D
+- rectangle Rectangle
+- color Color
+- movement Point
+- ticksPerMovement int
+
+--
++ Update()
++ Draw()</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
