@@ -19,6 +19,9 @@ namespace EvolutionSim
 
         private Texture2D _organismTexture;
         private List<Organism> _organisms = new List<Organism>();
+        //list of food objects here
+
+        //We also need a single stateMachine object 
 
         private Random _random = new Random(); // Temporary
 

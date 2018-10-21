@@ -19,8 +19,6 @@ namespace EvolutionSim
             //by switching on the current state
 
             States organismState = (States)_passedOrganism._state.CurrentState;
-            Action neededAction;
-            State newState;
 
 
             switch (organismState)
@@ -90,6 +88,13 @@ namespace EvolutionSim
                 //
                 case States.SeekMate:
 
+                    if (trackMate(_passedOrganism))
+                    {
+
+                        _passedOrganism._state.MoveState(Action.MateFound);
+
+                    }
+
                     break;
 
                 case States.SeekFood:
@@ -97,12 +102,25 @@ namespace EvolutionSim
                     // 1) call tracking method, 
                     // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
 
-                    _passedOrganism._state.MoveState(Action.FoodFound);
+                    if (trackFood(_passedOrganism))
+                    {
+                        _passedOrganism._state.MoveState(Action.FoodFound);
+
+                    }
+
+                    else
+                    {
+                        //remain in the same state
+                        return;
+                    }
+                    
 
                     break;
 
 
                 case States.Mating:
+                 
+                   
 
                     break;
 
@@ -119,9 +137,37 @@ namespace EvolutionSim
 
         }
 
+           
+        //responsible for finding surronding food sources and setting the organism to track it
+        private bool trackFood(Organism _passedOrganism)
+        {
+            bool foodFound = true;
 
-        //needs some sort of behaviour method
-        //need to tie in graphics to a behviour method of some sort 
+
+
+
+
+
+            return foodFound;
+
+        } 
+
+
+        //
+        private bool trackMate(Organism _passedOrganism)
+        {
+            bool foundMate = false;
+
+
+
+
+
+
+
+
+            return foundMate;
+
+        }
 
 
 
