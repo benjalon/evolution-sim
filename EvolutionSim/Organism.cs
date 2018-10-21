@@ -12,7 +12,7 @@ namespace EvolutionSim
 
 
         public static int TOTAL_POPULATION = 0;
-        private OrganismAttributes _attributes;
+        public OrganismAttributes _attributes;
         private String _speciesName;
 
         //what state is the organism currently in
@@ -20,11 +20,19 @@ namespace EvolutionSim
 
         public Sprite Sprite { get; set; }
 
+        float health_passed = 1;
+        int age_passed = 0;
+        float hunger_passed = 50;
+        double speed_passed = 500;
+        double strength_passsed = 50;
+        FoodType foodType_passed = FoodType.Carnivore;
+
         // private OrganismState _state;
 
         public Organism(Sprite sprite_Passed)
         {
-            _attributes = new OrganismAttributes(100, 0, 50, 500, 50, FoodType.Carnivore);
+
+            _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             Sprite = sprite_Passed;
             TOTAL_POPULATION++;
             _state = new State();

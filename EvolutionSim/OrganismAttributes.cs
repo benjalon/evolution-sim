@@ -16,20 +16,20 @@ namespace EvolutionSim
         public FoodType _foodType;
 
 
-        public OrganismAttributes(float Health_Passed,
-                                  int Age_Passed,
-                                  float Hunger_Passed,
-                                  double Speed_Passed,
-                                  double Strength_Passsed,
-                                  FoodType FoodType_Passed)
+        public OrganismAttributes(float health_passed,
+                                  int age_passed,
+                                  float hunger_passed,
+                                  double speed_passed,
+                                  double strength_passsed,
+                                  FoodType foodType_passed)
         {
 
-            _health = Health_Passed;
-            _age = Age_Passed;
-            _hunger = Hunger_Passed;
-            _speed = Speed_Passed;
-            _strength = Strength_Passsed;
-            _foodType = FoodType_Passed;
+            _health = health_passed;
+            _age = age_passed;
+            _hunger = hunger_passed;
+            _speed = speed_passed;
+            _strength = strength_passsed;
+            _foodType = foodType_passed;
 
         }
 
