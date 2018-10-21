@@ -16,17 +16,14 @@ namespace EvolutionSim
         
 
     
-    public void performAction()
+    public State performAction(Organism _passedOrganism)
         {
-
-            //for everything in the live organisms list
-            foreach (var thing in liveOrganisms)
-            {
                 //test the organisms current attributes
                 //by switching on the current state
 
-                States organismState = (States)thing._state.CurrentState;
+                States organismState = (States)_passedOrganism._state.CurrentState;
                 Action neededAction;
+                State newState;
 
                 //then we're in roaming
                 if (organismState == States.Roaming)
@@ -79,8 +76,15 @@ namespace EvolutionSim
 
 
 
-            }
 
+
+
+
+
+
+
+
+            return newState;
 
    
         }
