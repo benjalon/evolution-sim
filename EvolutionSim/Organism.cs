@@ -16,7 +16,7 @@ namespace EvolutionSim
         private String _speciesName;
 
         //what state is the organism currently in
-        public State _state;
+        public PotentialStates organismState { get; set; }
 
         public Sprite Sprite { get; set; }
 
@@ -35,7 +35,7 @@ namespace EvolutionSim
             _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             Sprite = sprite_Passed;
             TOTAL_POPULATION++;
-            _state = new State();
+            organismState = PotentialStates.Roaming;
         }
 
         public override String ToString()

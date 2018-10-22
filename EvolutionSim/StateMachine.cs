@@ -7,24 +7,25 @@ using System.Threading.Tasks;
 namespace EvolutionSim
 {
     //State Machine Class
-    //this class is used for describing the conditions for which a change in state occurs
+    //this class is used for describing the conditions for which a change in state occurs and modeling organism behaviour
     class StateMachine
     {
+        State _state = new State();
 
 
         //this method provides the logic for state transitions
-        public void performAction(Organism _passedOrganism)
+        public void performAction(ref Organism _passedOrganism)
         {
             //test the organisms current attributes
             //by switching on the current state
 
-            States organismState = (States)_passedOrganism._state.CurrentState;
+            PotentialStates organismState = _passedOrganism.organismState;
 
 
             switch (organismState)
             {
 
-                case States.Roaming:
+                case PotentialStates.Roaming:
 
                     //if food < 50 then go to seek food, contuine to seek food until back to 80% full?
                     //diferent food sources have different values
@@ -33,7 +34,7 @@ namespace EvolutionSim
                     {
 
                         //then move into the seek food state
-                        _passedOrganism._state.MoveState(Action.HungryRoam);
+                        _passedOrganism.organismState = _state.MoveState(Action.HungryRoam);
 
 
 
@@ -42,7 +43,7 @@ namespace EvolutionSim
                     if (_passedOrganism._attributes._hunger > 0.8)
                     {
                         //go find a mate
-                        _passedOrganism._state.MoveState(Action.HungryMate);
+                        _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
 
 
                     }
@@ -55,13 +56,13 @@ namespace EvolutionSim
 
                         if (MateOrEat == 1)
                         {
-                            _passedOrganism._state.MoveState(Action.HungryMate);
+                            _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
 
                         }
                         else
                         {
 
-                            _passedOrganism._state.MoveState(Action.HungryRoam);
+                            _passedOrganism.organismState = _state.MoveState(Action.HungryRoam);
 
                         }
 
@@ -70,7 +71,7 @@ namespace EvolutionSim
                     break;
 
                 //this code block handles logic when organism is the middle of eating
-                case States.Eating:
+                case PotentialStates.Eating:
 
                     //if there is food in food source then contuine eating
 
@@ -78,7 +79,7 @@ namespace EvolutionSim
                     if (_passedOrganism._attributes._hunger == 1.0)
                     {
 
-                        _passedOrganism._state.MoveState(Action.NotHungry);
+                        _passedOrganism.organismState = _state.MoveState(Action.NotHungry);
 
                     }
 
@@ -86,25 +87,25 @@ namespace EvolutionSim
 
                 //organism needs way of tracking other organisms of the same species
                 //
-                case States.SeekMate:
+                case PotentialStates.SeekMate:
 
                     if (trackMate(_passedOrganism))
                     {
 
-                        _passedOrganism._state.MoveState(Action.MateFound);
+                        _passedOrganism.organismState = _state.MoveState(Action.MateFound);
 
                     }
 
                     break;
 
-                case States.SeekFood:
+                case PotentialStates.SeekFood:
 
                     // 1) call tracking method, 
                     // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
 
                     if (trackFood(_passedOrganism))
                     {
-                        _passedOrganism._state.MoveState(Action.FoodFound);
+                        _passedOrganism.organismState = _state.MoveState(Action.FoodFound);
 
                     }
 
@@ -118,7 +119,7 @@ namespace EvolutionSim
                     break;
 
                //mating class
-                case States.Mating:
+                case PotentialStates.Mating:
                     //once an organism has begun mating it cannont stop or change state
                     //once a certain time has elasped move back to roaming
 
