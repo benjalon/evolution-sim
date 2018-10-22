@@ -117,8 +117,11 @@ namespace EvolutionSim
 
                     break;
 
-
+               //mating class
                 case States.Mating:
+                    //once an organism has begun mating it cannont stop or change state
+                    //once a certain time has elasped move back to roaming
+
                  
                    
 
@@ -153,7 +156,7 @@ namespace EvolutionSim
         } 
 
 
-        //
+        //responsible for finding a mate
         private bool trackMate(Organism _passedOrganism)
         {
             bool foundMate = false;

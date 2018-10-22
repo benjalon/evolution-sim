@@ -21,7 +21,7 @@ namespace EvolutionSim
         private List<Organism> _organisms = new List<Organism>();
         //list of food objects here
 
-        //We also need a single stateMachine object 
+        StateMachine organismState = new StateMachine(); //not sure this should be here
 
         private Random _random = new Random(); // Temporary
 
