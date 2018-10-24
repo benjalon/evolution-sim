@@ -7,11 +7,8 @@ using System.Text;
 
 namespace EvolutionSim
 {
-    class Organism : MovingSprite
+    class Organism : Sprite
     {
-
-
-
         public static int TOTAL_POPULATION = 0;
         public OrganismAttributes _attributes;
         private String _speciesName;
@@ -30,10 +27,9 @@ namespace EvolutionSim
 
         // private OrganismState _state;
 
-        public Organism(ref Texture2D texture, Rectangle rectangle, int movementSpeed = 2)
-            : base(ref texture, rectangle, movementSpeed)
+        public Organism(ref Texture2D texture)
+            : base(ref texture)
         {
-
             _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             TOTAL_POPULATION++;
             organismState = PotentialStates.Roaming;

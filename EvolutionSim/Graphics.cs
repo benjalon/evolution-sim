@@ -19,14 +19,14 @@ namespace EvolutionSim
         private Overlay _overlay;
 
         private Texture2D _organismTexture;
+
+        private Grid _grid;
         
-        private List<Sprite> _organisms = new List<Sprite>();
         //list of food objects here
 
-        StateMachine organismState = new StateMachine(); //not sure this should be here
+        StateMachine _organismState = new StateMachine(); //not sure this should be here
 
         private Texture2D _foodTexture;
-        private Food _food;
 
         private Random _random = new Random(); // TODO Delete this when we don't want random colors anymore
 
@@ -48,7 +48,6 @@ namespace EvolutionSim
             UserInterface.Initialize(Content, BuiltinThemes.hd);
 
             _overlay = new Overlay();
-            _overlay.Button.OnClick = (Entity btn) => createOrganism();
             
             base.Initialize();
         }
@@ -60,12 +59,16 @@ namespace EvolutionSim
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             // Load textures
             _organismTexture = Content.Load<Texture2D>("face");
             _foodTexture = Content.Load<Texture2D>("pizza");
 
-            _food = new Food(ref _foodTexture, new Rectangle(500, 400, 16, 16), 50.0f);
+            var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
+            var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
+            _grid = new Grid(ref _foodTexture, screenWidth, screenHeight);
+
+            _overlay.Button.OnClick = (Entity btn) => _grid.AddInhabitant(new Organism(ref _organismTexture));
         }
         
         /// <summary>
@@ -87,13 +90,7 @@ namespace EvolutionSim
             {
                 Exit();
             }
-
-            // Update graphical elements
-            foreach (var organism in _organisms)
-            {
-                ((Organism)organism).Update(gameTime, GraphicsDevice.Viewport.Bounds, _organisms);
-            }
-
+            
             // Update UI elements
             _overlay.Update(gameTime);
 
@@ -110,28 +107,24 @@ namespace EvolutionSim
 
             // Draw graphical elements
             _spriteBatch.Begin();
-            foreach (var organism in _organisms)
-            {
-                organism.Draw(_spriteBatch);
-            }
-            _food.Draw(_spriteBatch);
+            _grid.Draw(_spriteBatch);
             _spriteBatch.End();
 
             // Draw UI elements on top
             _overlay.Draw(_spriteBatch);
-
+            
             base.Draw(gameTime);
         }
 
         
-        private void createOrganism()
-        {
-            var newOrganism = new Organism(ref _organismTexture, new Rectangle(_random.Next(0, WINDOW_SIZE + 1), _random.Next(0, WINDOW_SIZE + 1), 16, 16));
+        //private void createOrganism()
+        //{
+        //    var newOrganism = new Organism(ref _organismTexture, new Rectangle(_random.Next(0, WINDOW_SIZE + 1), _random.Next(0, WINDOW_SIZE + 1), 16, 16));
             
-            // TODO Delete this when we don't want random colors anymore
-            newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255); 
+        //    // TODO Delete this when we don't want random colors anymore
+        //    newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255);
 
-            _organisms.Add(newOrganism);
-        }
+        //    _grid.AddInhabitant(newOrganism);
+        //}
     }
 }

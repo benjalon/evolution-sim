@@ -17,6 +17,17 @@ namespace EvolutionSim
         public Rectangle Rectangle
         {
             get => _rectangle;
+            set => _rectangle = value;
+        }
+
+        /// <summary>
+        /// Create a static sprite from a given texture and rectangle
+        /// </summary>
+        /// <param name="texture">The appearance of the Sprite</param>
+        public Sprite(ref Texture2D texture)
+        {
+            _texture = texture;
+            Color = Color.White;
         }
 
         /// <summary>
@@ -35,7 +46,7 @@ namespace EvolutionSim
         /// Draw the texture at the position of the rectangle
         /// </summary>
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Rectangle, Color);
         }
