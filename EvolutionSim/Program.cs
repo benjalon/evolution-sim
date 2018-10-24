@@ -1,13 +1,9 @@
-﻿using System;
-
-namespace EvolutionSim
+﻿namespace EvolutionSim
 {
     public class Program
     {
         static void Main()
         {
-
-
             var graphics = new Graphics();
             graphics.Run();
         }

@@ -1,4 +1,5 @@
 ﻿using GeonBit.UI;
+using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,7 @@ namespace EvolutionSim.UI
         {
             // All temporary
             var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, anchor: Anchor.CenterLeft);
+            panel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(panel);
 
             var testText = new Paragraph("Click button to create organisms");

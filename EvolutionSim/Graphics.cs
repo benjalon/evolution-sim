@@ -15,15 +15,20 @@ namespace EvolutionSim
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
         private Overlay _overlay;
 
         private Texture2D _organismTexture;
-        private List<Organism> _organisms = new List<Organism>();
+        
+        private List<Sprite> _organisms = new List<Sprite>();
         //list of food objects here
 
         StateMachine organismState = new StateMachine(); //not sure this should be here
 
-        private Random _random = new Random(); // Temporary
+        private Texture2D _foodTexture;
+        private Food _food;
+
+        private Random _random = new Random(); // TODO Delete this when we don't want random colors anymore
 
         public Graphics()
         {
@@ -58,6 +63,9 @@ namespace EvolutionSim
 
             // Load textures
             _organismTexture = Content.Load<Texture2D>("face");
+            _foodTexture = Content.Load<Texture2D>("pizza");
+
+            _food = new Food(ref _foodTexture, new Rectangle(500, 400, 16, 16), 50.0f);
         }
         
         /// <summary>
@@ -83,7 +91,7 @@ namespace EvolutionSim
             // Update graphical elements
             foreach (var organism in _organisms)
             {
-                organism.Sprite.Update(gameTime, GraphicsDevice.Viewport.Bounds);
+                ((Organism)organism).Update(gameTime, GraphicsDevice.Viewport.Bounds, _organisms);
             }
 
             // Update UI elements
@@ -104,8 +112,9 @@ namespace EvolutionSim
             _spriteBatch.Begin();
             foreach (var organism in _organisms)
             {
-                organism.Sprite.Draw(_spriteBatch);
+                organism.Draw(_spriteBatch);
             }
+            _food.Draw(_spriteBatch);
             _spriteBatch.End();
 
             // Draw UI elements on top
@@ -117,13 +126,12 @@ namespace EvolutionSim
         
         private void createOrganism()
         {
-            _organisms.Add(new Organism(new Sprite(ref _organismTexture,
-                                      new Rectangle(_random.Next(0, 801), _random.Next(0, 801), 16, 16),
-                                      Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255))));
-            //// Temporary
-            //_organisms.Add(new Sprite(ref _organismTexture, 
-            //                         new Rectangle(_random.Next(0, 801), _random.Next(0, 801), 16, 16), 
-            //                         Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255)));
+            var newOrganism = new Organism(ref _organismTexture, new Rectangle(_random.Next(0, WINDOW_SIZE + 1), _random.Next(0, WINDOW_SIZE + 1), 16, 16));
+            
+            // TODO Delete this when we don't want random colors anymore
+            newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255); 
+
+            _organisms.Add(newOrganism);
         }
     }
 }

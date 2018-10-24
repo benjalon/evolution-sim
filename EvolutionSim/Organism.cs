@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EvolutionSim
 {
-    class Organism
+    class Organism : MovingSprite
     {
 
 
@@ -29,7 +30,8 @@ namespace EvolutionSim
 
         // private OrganismState _state;
 
-        public Organism(Sprite sprite_Passed)
+        public Organism(ref Texture2D texture, Rectangle rectangle, int movementSpeed = 2)
+            : base(ref texture, rectangle, movementSpeed)
         {
 
             _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
