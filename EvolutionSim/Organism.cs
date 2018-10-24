@@ -35,7 +35,6 @@ namespace EvolutionSim
         {
 
             _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
-            Sprite = sprite_Passed;
             TOTAL_POPULATION++;
             organismState = PotentialStates.Roaming;
         }
