@@ -8,12 +8,15 @@ namespace EvolutionSim
     {
         private Tile[,] _tiles;
 
+        private int horizontalCount;
+        private int verticalCount;
+
         private Random _random = new Random();
 
         public Grid(ref Texture2D tileTexture, int width, int height)
         {
-            var horizontalCount = width / Tile.TILE_SIZE;
-            var verticalCount = height / Tile.TILE_SIZE;
+            horizontalCount = width / Tile.TILE_SIZE;
+            verticalCount = height / Tile.TILE_SIZE;
 
             _tiles = new Tile[horizontalCount, verticalCount];
 
@@ -28,8 +31,8 @@ namespace EvolutionSim
 
         public void AddInhabitant(Sprite sprite)
         {
-            var x = _random.Next(0, 3);
-            var y = _random.Next(0, 3);
+            var x = _random.Next(0, horizontalCount);
+            var y = _random.Next(0, verticalCount);
 
             _tiles[x, y].AddInhabitant(sprite);
         }

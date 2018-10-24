@@ -86,7 +86,6 @@
     <Compile Include="Food.cs" />
     <Compile Include="FoodType.cs" />
     <Compile Include="Graphics\BoundingCircle.cs" />
-    <Compile Include="Graphics\MovingSprite.cs" />
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Organism.cs" />
