@@ -20,6 +20,9 @@ namespace EvolutionSim
         private int verticalCount;
 
         private Random _random = new Random();
+        
+        private const int MS_PER_DIRECTION_CHANGE = 2000;
+        private int _msSinceDirectionChange = MS_PER_DIRECTION_CHANGE;
 
         public Grid(ref Texture2D tileTexture, int width, int height)
         {
@@ -53,21 +56,28 @@ namespace EvolutionSim
             }
         }
 
-        public void Move()
+        public void Move(GameTime gameTime)
         {
-            Tile end;
-            for (var i = 0; i < horizontalCount; i++)
+            _msSinceDirectionChange += gameTime.ElapsedGameTime.Milliseconds;
+
+            var shouldChangeDirection = _msSinceDirectionChange > MS_PER_DIRECTION_CHANGE;
+            if (shouldChangeDirection)
             {
-                for (var j = 0; j < verticalCount; j++)
+                _msSinceDirectionChange = 0;
+                
+                for (var i = 0; i < horizontalCount; i++)
                 {
-                    if (_tiles[i, j].HasInhabitant())
+                    for (var j = 0; j < verticalCount; j++)
                     {
-                        Roam(_tiles[i, j]);
+                        if (_tiles[i, j].HasInhabitant())
+                        {
+                            Roam(_tiles[i, j]);
+                        }
                     }
-                    
                 }
             }
         }
+
 
         //Takes tile.inhabitant, moves them randomly. 
         public void Roam(Tile state)

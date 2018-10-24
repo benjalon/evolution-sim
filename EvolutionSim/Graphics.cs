@@ -93,7 +93,7 @@ namespace EvolutionSim
             // Update UI elements
             _overlay.Update(gameTime);
 
-            _grid.Move();
+            _grid.Move(gameTime);
 
             base.Update(gameTime);
         }
