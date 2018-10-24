@@ -19,7 +19,11 @@ namespace EvolutionSim
         private Overlay _overlay;
 
         private Texture2D _organismTexture;
+        
         private List<Sprite> _organisms = new List<Sprite>();
+        //list of food objects here
+
+        StateMachine organismState = new StateMachine(); //not sure this should be here
 
         private Texture2D _foodTexture;
         private Food _food;

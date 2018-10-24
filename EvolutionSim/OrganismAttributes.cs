@@ -9,27 +9,27 @@ namespace EvolutionSim
     class OrganismAttributes
     {
         public int _age { get; set; }
-        public double _health { get; set; }
-        public double _hunger { get; set; }
+        public float _health { get; set; }
+        public float _hunger { get; set; }
         public double _speed { get; set; }
         public double _strength { get; set; }
         public FoodType _foodType;
 
 
-        public OrganismAttributes(double Health_Passed,
-                                  int Age_Passed,
-                                  double Hunger_Passed,
-                                  double Speed_Passed,
-                                  double Strength_Passsed,
-                                  FoodType FoodType_Passed)
+        public OrganismAttributes(float health_passed,
+                                  int age_passed,
+                                  float hunger_passed,
+                                  double speed_passed,
+                                  double strength_passsed,
+                                  FoodType foodType_passed)
         {
 
-            _health = Health_Passed;
-            _age = Age_Passed;
-            _hunger = Hunger_Passed;
-            _speed = Speed_Passed;
-            _strength = Strength_Passsed;
-            _foodType = FoodType_Passed;
+            _health = health_passed;
+            _age = age_passed;
+            _hunger = hunger_passed;
+            _speed = speed_passed;
+            _strength = strength_passsed;
+            _foodType = foodType_passed;
 
         }
 

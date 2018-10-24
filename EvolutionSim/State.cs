@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 //these represent states
-public enum States
+public enum PotentialStates
 {
     Roaming,
     Eating,
@@ -33,11 +33,11 @@ public enum Action
         //a nested and publically avaliable class to determine behaviour of organsim when changing states
         class StateTransition
         {
-            readonly States CurrentState;
+            readonly PotentialStates CurrentState;
             readonly Action action;
 
         //StateTransition object constructor 
-            public StateTransition(States PassedCurrentState, Action passedAction)
+            public StateTransition(PotentialStates PassedCurrentState, Action passedAction)
             {
                 this.CurrentState = PassedCurrentState;
                 this.action = passedAction;
@@ -63,10 +63,10 @@ public enum Action
         }
 
         // represent a transition table as a dictonary
-        Dictionary<StateTransition, States> transitions;
+        Dictionary<StateTransition, PotentialStates> transitions;
 
     //getters and setters for States class
-        public States CurrentState
+        public PotentialStates CurrentState
     {
         get;
         private set;
@@ -76,39 +76,39 @@ public enum Action
         //Sets each state to roaming by default
         public State()
         {
-            CurrentState = States.Roaming;
+            CurrentState = PotentialStates.Roaming;
 
         //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
-        transitions = new Dictionary<StateTransition, States>
+        transitions = new Dictionary<StateTransition, PotentialStates>
             {
                 //here we add all of the possible state transitions in
 
                 //if organism is in roam state and isn't hungry then remain in roaming
-                { new StateTransition (States.Roaming, Action.NotHungry), States.Roaming},
+                { new StateTransition (PotentialStates.Roaming, Action.NotHungry), PotentialStates.Roaming},
 
                 //if organism is in roaming state and wants to mate then place into seekMate state
-                { new StateTransition (States.Roaming, Action.HungryMate), States.SeekMate},
+                { new StateTransition (PotentialStates.Roaming, Action.HungryMate), PotentialStates.SeekMate},
 
-                { new StateTransition (States.SeekMate, Action.MateFound), States.Mating},
+                { new StateTransition (PotentialStates.SeekMate, Action.MateFound), PotentialStates.Mating},
 
                 // if the organism is seeking a mate but becomes too hungry then switch to seek food
-                { new StateTransition (States.SeekMate, Action.HungryRoam), States.SeekFood},
+                { new StateTransition (PotentialStates.SeekMate, Action.HungryRoam), PotentialStates.SeekFood},
 
                 //once the organism has finished mating place back into the roaming state
-                { new StateTransition(States.Mating, Action.FinishedMating), States.Roaming},
+                { new StateTransition(PotentialStates.Mating, Action.FinishedMating), PotentialStates.Roaming},
 
                 //when the organism finds food place into the eating state
-                { new StateTransition(States.Roaming, Action.FoodFound), States.Eating},
+                { new StateTransition(PotentialStates.Roaming, Action.FoodFound), PotentialStates.Eating},
 
             };
     }
 
 
     //return the next state deterministically
-    public States GetNext(Action action)
+    public PotentialStates GetNext(Action action)
     {
         StateTransition transition = new StateTransition(CurrentState, action);
-        States nextState;
+        PotentialStates nextState;
 
         if (!transitions.TryGetValue(transition, out nextState))
             throw new Exception("The following is not a valid transition: " + CurrentState + "->" + action);
@@ -117,13 +117,20 @@ public enum Action
     }
 
     //handles the moving of states.
-    public States MoveState (Action action)
+    public PotentialStates MoveState (Action action)
     {
         CurrentState = GetNext(action);
         return CurrentState;
 
     }
 
+
+    //used to test the transition logic
+    public void testTransition()
+    {
+
+
+    }
 
 
 }
