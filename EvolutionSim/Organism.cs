@@ -9,9 +9,6 @@ namespace EvolutionSim
 {
     class Organism : MovingSprite
     {
-
-
-
         public static int TOTAL_POPULATION = 0;
         public OrganismAttributes _attributes;
         private String _speciesName;
