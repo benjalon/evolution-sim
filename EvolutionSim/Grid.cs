@@ -4,6 +4,14 @@ using System;
 
 namespace EvolutionSim
 {
+    enum Directions
+    {
+        Up,
+        Left,
+        Down,
+        Right
+    }
+
     public class Grid
     {
         private Tile[,] _tiles;
@@ -12,6 +20,9 @@ namespace EvolutionSim
         private int verticalCount;
 
         private Random _random = new Random();
+        
+        private const int MS_PER_DIRECTION_CHANGE = 2000;
+        private int _msSinceDirectionChange = MS_PER_DIRECTION_CHANGE;
 
         public Grid(ref Texture2D tileTexture, int width, int height)
         {
@@ -44,5 +55,81 @@ namespace EvolutionSim
                 tile.Draw(spriteBatch);
             }
         }
+
+        public void Move(GameTime gameTime)
+        {
+            _msSinceDirectionChange += gameTime.ElapsedGameTime.Milliseconds;
+
+            var shouldChangeDirection = _msSinceDirectionChange > MS_PER_DIRECTION_CHANGE;
+            if (shouldChangeDirection)
+            {
+                _msSinceDirectionChange = 0;
+                
+                for (var i = 0; i < horizontalCount; i++)
+                {
+                    for (var j = 0; j < verticalCount; j++)
+                    {
+                        if (_tiles[i, j].HasInhabitant())
+                        {
+                            Roam(_tiles[i, j]);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //Takes tile.inhabitant, moves them randomly. 
+        public void Roam(Tile state)
+        {
+            //decide destination
+            var num = (Directions)_random.Next(0, 4);
+            var destinationTileX = state.GridPositionX;
+            var destinationTileY = state.GridPositionY;
+
+            switch (num)
+            {
+                case Directions.Up:
+                    if (destinationTileY > 0)
+                    {
+                        destinationTileY -= 1;
+                    }
+                    break;
+                case Directions.Left:
+                    if (destinationTileX > 0)
+                    {
+                        destinationTileX -= 1;
+                    }
+                    break;
+                case Directions.Down:
+                    if (destinationTileY < _tiles.GetLength(1)-1)
+                    {
+                        destinationTileY += 1;
+                    }
+                    break;
+                case Directions.Right:
+                    if (destinationTileX < _tiles.GetLength(0)-1)
+                    {
+                        destinationTileX += 1;
+                    }
+                    break;
+            }
+
+            var destinationTile = _tiles[destinationTileX, destinationTileY];
+            if (!destinationTile.HasInhabitant())
+            {
+                state.MoveInhabitant(destinationTile);
+            }
+
+            //if destination full decide again.
+        }
+
+        //private void MoveInhabitant(int x, int y, int endX, int endY)
+        //{
+        //    var endPosition = _tiles[endX, endY].Rectangle;
+
+        //    _tiles[x, y].MoveInhabitant(endPosition);
+
+        //}
     }
 }
