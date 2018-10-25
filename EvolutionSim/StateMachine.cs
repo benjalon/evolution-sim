@@ -12,7 +12,8 @@ namespace EvolutionSim
     {
         State _state = new State();
 
-
+        Grid simGrid;
+        
         //this method provides the logic for state transitions
         public void performAction(ref Organism _passedOrganism)
         {
