@@ -187,7 +187,7 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekMate:
 
-                   
+                    _simGrid.Move(gameTime);
 
                     break;
 

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace EvolutionSim
 {
-    public class Organism : Sprite
+    public class Organism : MapItem
     {
         public static int TOTAL_POPULATION = 0;
         public OrganismAttributes _attributes;
@@ -16,11 +16,11 @@ namespace EvolutionSim
         //what state is the organism currently in
         public PotentialStates organismState { get; set; }
 
-        public Sprite Sprite { get; set; }
+        public MapItem Sprite { get; set; }
 
         float health_passed = 1;
         int age_passed = 0;
-        double hunger_passed = 0.3;
+        double hunger_passed = 1;
         double speed_passed = 500;
         double strength_passsed = 50;
         FoodType foodType_passed = FoodType.Carnivore;
@@ -33,6 +33,7 @@ namespace EvolutionSim
             _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             TOTAL_POPULATION++;
             organismState = PotentialStates.Roaming;
+            System.Diagnostics.Debug.WriteLine("Total Population: " + TOTAL_POPULATION);
         }
 
         public override String ToString()

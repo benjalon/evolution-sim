@@ -14,6 +14,7 @@ namespace EvolutionSim.UI
         public static int PANEL_WIDTH = 200;
 
         public Button Button { get; private set; }
+        public Button Button_Two { get; private set; }
 
         public Overlay()
         {
@@ -32,7 +33,11 @@ namespace EvolutionSim.UI
             panel.AddChild(list);
             
             Button = new Button("Test");
+            Button_Two = new Button("Test");
+
             panel.AddChild(Button);
+            panel.AddChild(Button_Two);
+
         }
 
         /// <summary>
