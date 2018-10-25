@@ -58,33 +58,33 @@ namespace EvolutionSim
 
                     }
 
-                    //if (_passedOrganism._attributes._hunger >= 0.8)
-                    //{
-                    //    //go find a mate
-                    //    _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
+                    if (_passedOrganism._attributes._hunger >= 0.8)
+                    {
+                        //go find a mate
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
 
 
-                    //}
+                    }
 
-                    //else
-                    //{
-                    //    Random newRand = new Random();
+                    else
+                    {
+                        Random newRand = new Random();
 
-                    //    int MateOrEat = newRand.Next(0, 1);
+                        int MateOrEat = newRand.Next(0, 1);
 
-                    //    if (MateOrEat == 1)
-                    //    {
-                    //        _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
+                        if (MateOrEat == 1)
+                        {
+                            _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
 
-                    //    }
-                    //    else
-                    //    {
+                        }
+                        else
+                        {
 
-                    //        _passedOrganism.organismState = _state.MoveState(Action.HungryRoam);
+                            _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
 
-                    //    }
+                        }
 
-                    //}
+                    }
 
                     break;
 
@@ -168,7 +168,7 @@ namespace EvolutionSim
 
                 case PotentialStates.Roaming:
 
-                    
+                    _simGrid.Move(gameTime);
 
                     break;
 
@@ -181,7 +181,7 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekFood:
 
-                    _simGrid.Move(gameTime);
+                    
 
                     break;
 
