@@ -67,24 +67,30 @@ namespace EvolutionSim
         /// Find and move toward the nearest food source given an organism.
         /// </summary>
         /// <param name="_passedOrganism"></param>
-        public void TrackFood(Organism _passedOrganism)
+        public bool TrackFood(Organism _passedOrganism)
         {
             var startTile = _passedOrganism.ParentTile;
+            bool found = false;
 
             // TODO: Whoever does the AI path traversal
             // var destinationTile = _tiles[i][j];
+
+            return found;
         }
 
         /// <summary>
         /// Find and move toward the nearest potential mate given an organism.
         /// </summary>
         /// <param name="_passedOrganism"></param>
-        public void TrackMate(Organism _passedOrganism)
+        public bool TrackMate(Organism _passedOrganism)
         {
-            var startTile = _passedOrganism.ParentTile;
+           // var startTile = _passedOrganism.ParentTile;
+            bool found = false;
 
             // TODO: Whoever does the AI path traversal
             // var destinationTile = _tiles[i][j];
+
+            return found;
         }
         public void Move(GameTime gameTime)
         {
