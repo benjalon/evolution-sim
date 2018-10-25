@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +12,27 @@ namespace EvolutionSim
     //this class is used for describing the conditions for which a change in state occurs and modeling organism behaviour
     class StateMachine
     {
+        //initalise lookup table
         State _state = new State();
 
-        Grid simGrid;
         
-        //this method provides the logic for state transitions
-        public void performAction(ref Organism _passedOrganism)
+        Grid _simGrid;
+
+       public StateMachine(ref Grid passedGrid)
+        {
+
+
+            this._simGrid = passedGrid;
+
+       
+
+        }
+        
+        /// <summary>
+        /// This method is used for testing which state an organism is in, should be called in the update method
+        /// </summary>
+        /// <param name="_passedOrganism"></param>
+        public void checkState(Organism _passedOrganism)
         {
             //test the organisms current attributes
             //by switching on the current state
@@ -41,33 +58,33 @@ namespace EvolutionSim
 
                     }
 
-                    if (_passedOrganism._attributes._hunger > 0.8)
-                    {
-                        //go find a mate
-                        _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
+                    //else if (_passedOrganism._attributes._hunger > 0.8)
+                    //{
+                    //    //go find a mate
+                    //    _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
 
 
-                    }
+                    //}
 
-                    else
-                    {
-                        Random newRand = new Random();
+                    //else
+                    //{
+                    //    Random newRand = new Random();
 
-                        int MateOrEat = newRand.Next(0, 1);
+                    //    int MateOrEat = newRand.Next(0, 1);
 
-                        if (MateOrEat == 1)
-                        {
-                            _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
+                    //    if (MateOrEat == 1)
+                    //    {
+                    //        _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
 
-                        }
-                        else
-                        {
+                    //    }
+                    //    else
+                    //    {
 
-                            _passedOrganism.organismState = _state.MoveState(Action.HungryRoam);
+                    //        _passedOrganism.organismState = _state.MoveState(Action.HungryRoam);
 
-                        }
+                    //    }
 
-                    }
+                    //}
 
                     break;
 
@@ -90,32 +107,31 @@ namespace EvolutionSim
                 //
                 case PotentialStates.SeekMate:
 
-                    //if (trackMate(_passedOrganism))
-                    //{
+                    bool foundMate = false;
 
-                    //    _passedOrganism.organismState = _state.MoveState(Action.MateFound);
+                    if(_simGrid.TrackMate(_passedOrganism))
 
-                    //}
+                    _passedOrganism.organismState = _state.MoveState(Action.MateFound);
+
 
                     break;
 
                 case PotentialStates.SeekFood:
 
-                    // 1) call tracking method, 
+                    // 1) call tracking method located in grid, 
                     // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
+                    if (_simGrid.TrackFood(_passedOrganism))
+                    {
+                        _passedOrganism.organismState = _state.MoveState(Action.FoodFound);
 
-                    //if (trackFood(_passedOrganism))
-                    //{
-                    //    _passedOrganism.organismState = _state.MoveState(Action.FoodFound);
+                    }
 
-                    //}
+                    else
+                    {
+                        //remain in the same state
+                        return;
+                    }
 
-                    //else
-                    //{
-                    //    //remain in the same state
-                    //    return;
-                    //}
-                    
 
                     break;
 
@@ -123,9 +139,20 @@ namespace EvolutionSim
                 case PotentialStates.Mating:
                     //once an organism has begun mating it cannont stop or change state
                     //once a certain time has elasped move back to roaming
+                    if (_simGrid.TrackMate(_passedOrganism))
+                    {
 
-                 
-                   
+                        _passedOrganism.organismState = _state.MoveState(Action.MateFound);
+
+
+                    }
+                    else
+                    {
+                        //keep looking for mate
+                        return;
+
+                    }
+
 
                     break;
 
@@ -134,9 +161,56 @@ namespace EvolutionSim
 
                     break;
 
+            }
 
+
+
+        }
+
+        /// <summary>
+        /// This method controls how an organism goes about its buisness when in a given state
+        /// </summary>
+        public void determineBehaviour(Organism _passedOrganism, GameTime gameTime)
+        {
+
+            PotentialStates organismState = _passedOrganism.organismState;
+
+
+            switch (organismState)
+            {
+
+                case PotentialStates.Roaming:
+
+                    _simGrid.Move(gameTime);
+
+                    break;
+
+                case PotentialStates.Eating:
+
+                    break;
+                case PotentialStates.Mating:
+
+                    break;
+
+                case PotentialStates.SeekFood:
+
+                    break;
+
+                case PotentialStates.SeekMate:
+
+                    break;
+
+                default:
+
+                    break;
 
             }
+
+
+
+
+
+
 
 
 

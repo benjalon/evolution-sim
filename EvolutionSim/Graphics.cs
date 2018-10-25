@@ -22,10 +22,10 @@ namespace EvolutionSim
         private Texture2D _tileTexture;
 
         private Grid _grid;
-        
+
         //list of food objects here
 
-        StateMachine _organismState = new StateMachine(); //not sure this should be here
+        StateMachine _organismState;
 
         public Graphics()
         {
@@ -65,6 +65,7 @@ namespace EvolutionSim
             var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             _grid = new Grid(ref _tileTexture, screenWidth, screenHeight);
+            _organismState = new StateMachine( ref _grid);
 
             _overlay.Button.OnClick = (Entity btn) => _grid.AddInhabitant(new Organism(ref _organismTexture));
         }
@@ -92,14 +93,12 @@ namespace EvolutionSim
             // Update UI elements
             _overlay.Update(gameTime);
 
-            //checks the organism state
-           // _organismState.performAction()
 
-            //after checking if organism is in the correct state make the organism act
-           // _organismState.organismBehaviour()
-
-
-            _grid.Move(gameTime);
+            handle_organism(gameTime);
+      
+            //not sure if this should be contained within the determine behaviour method, as we aren't too sure if an organism should be moving or nor
+            //i.e could be mating, or eating, in which case we dont want to call move
+                //_grid.Move(gameTime);
 
             base.Update(gameTime);
         }
@@ -121,6 +120,24 @@ namespace EvolutionSim
             _overlay.Draw(_spriteBatch);
             
             base.Draw(gameTime);
+        }
+
+
+        //for each organism on the grid we need to check if we need to change state,
+        //then we call a method which determines how each organism behaves
+        private void handle_organism(GameTime gameTime)
+        {
+
+            foreach (Organism _org in _grid.Organisms)
+            {
+
+                _organismState.checkState(_org);
+
+
+                _organismState.determineBehaviour(_org, gameTime);
+
+
+            }
         }
 
         
