@@ -10,7 +10,7 @@ namespace EvolutionSim
     {
         public int _age { get; set; }
         public float _health { get; set; }
-        public float _hunger { get; set; }
+        public double _hunger { get; set; }
         public double _speed { get; set; }
         public double _strength { get; set; }
         public FoodType _foodType;
@@ -18,7 +18,7 @@ namespace EvolutionSim
 
         public OrganismAttributes(float health_passed,
                                   int age_passed,
-                                  float hunger_passed,
+                                  double hunger_passed,
                                   double speed_passed,
                                   double strength_passsed,
                                   FoodType foodType_passed)

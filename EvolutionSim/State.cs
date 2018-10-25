@@ -44,16 +44,16 @@ public enum Action
 
             }
 
-        //important to have a hash code for each stateTransition as it is being used as a key in
-        //the dictonary (lookup table)
-            public override int GetHashCode()
-            {
+        // important to have a hash code for each stateTransition as it is being used as a key in
+        // the dictonary(lookup table)
+        public override int GetHashCode()
+        {
 
-                return 17 + 31 * CurrentState.GetHashCode() + 31 * action.GetHashCode();
+            return 17 + 31 * CurrentState.GetHashCode() + 31 * action.GetHashCode();
 
-            }
+        }
 
-            public override bool Equals(Object obj)
+        public override bool Equals(Object obj)
             {
                 StateTransition other = obj as StateTransition;
                 return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
@@ -76,7 +76,7 @@ public enum Action
         //Sets each state to roaming by default
         public State()
         {
-            CurrentState = PotentialStates.Roaming;
+            //CurrentState = PotentialStates.Roaming;
 
         //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
         transitions = new Dictionary<StateTransition, PotentialStates>
@@ -89,10 +89,15 @@ public enum Action
                 //if organism is in roaming state and wants to mate then place into seekMate state
                 { new StateTransition (PotentialStates.Roaming, Action.HungryMate), PotentialStates.SeekMate},
 
+                { new StateTransition (PotentialStates.Roaming, Action.HungryRoam), PotentialStates.SeekFood},
+
                 { new StateTransition (PotentialStates.SeekMate, Action.MateFound), PotentialStates.Mating},
 
                 // if the organism is seeking a mate but becomes too hungry then switch to seek food
                 { new StateTransition (PotentialStates.SeekMate, Action.HungryRoam), PotentialStates.SeekFood},
+
+                //this is a test statement, i don't understand why this transition is being accessed tbh
+                { new StateTransition (PotentialStates.SeekFood, Action.HungryRoam), PotentialStates.SeekFood},
 
                 //once the organism has finished mating place back into the roaming state
                 { new StateTransition(PotentialStates.Mating, Action.FinishedMating), PotentialStates.Roaming},

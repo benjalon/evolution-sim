@@ -20,7 +20,7 @@ namespace EvolutionSim
 
         float health_passed = 1;
         int age_passed = 0;
-        float hunger_passed = 50;
+        double hunger_passed = 0.3;
         double speed_passed = 500;
         double strength_passsed = 50;
         FoodType foodType_passed = FoodType.Carnivore;

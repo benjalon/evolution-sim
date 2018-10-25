@@ -84,7 +84,7 @@ namespace EvolutionSim
         /// <param name="_passedOrganism"></param>
         public bool TrackMate(Organism _passedOrganism)
         {
-            var startTile = _passedOrganism.ParentTile;
+           // var startTile = _passedOrganism.ParentTile;
             bool found = false;
 
             // TODO: Whoever does the AI path traversal

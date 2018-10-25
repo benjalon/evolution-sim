@@ -58,7 +58,7 @@ namespace EvolutionSim
 
                     }
 
-                    //else if (_passedOrganism._attributes._hunger > 0.8)
+                    //if (_passedOrganism._attributes._hunger >= 0.8)
                     //{
                     //    //go find a mate
                     //    _passedOrganism.organismState = _state.MoveState(Action.HungryMate);
@@ -107,11 +107,11 @@ namespace EvolutionSim
                 //
                 case PotentialStates.SeekMate:
 
-                    bool foundMate = false;
+                    if (_simGrid.TrackMate(_passedOrganism))
+                    {
+                        _passedOrganism.organismState = _state.MoveState(Action.MateFound);
 
-                    if(_simGrid.TrackMate(_passedOrganism))
-
-                    _passedOrganism.organismState = _state.MoveState(Action.MateFound);
+                    }
 
 
                     break;
@@ -139,20 +139,7 @@ namespace EvolutionSim
                 case PotentialStates.Mating:
                     //once an organism has begun mating it cannont stop or change state
                     //once a certain time has elasped move back to roaming
-                    if (_simGrid.TrackMate(_passedOrganism))
-                    {
-
-                        _passedOrganism.organismState = _state.MoveState(Action.MateFound);
-
-
-                    }
-                    else
-                    {
-                        //keep looking for mate
-                        return;
-
-                    }
-
+    
 
                     break;
 
@@ -194,9 +181,13 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekFood:
 
+         
+
                     break;
 
                 case PotentialStates.SeekMate:
+
+                   
 
                     break;
 
@@ -205,11 +196,6 @@ namespace EvolutionSim
                     break;
 
             }
-
-
-
-
-
 
 
 
