@@ -52,7 +52,7 @@ namespace EvolutionSim
                     {
 
                         //then move into the seek food state
-                        _passedOrganism.organismState = _state.MoveState(Action.HungryRoam);
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
 
 
 
@@ -97,7 +97,7 @@ namespace EvolutionSim
                     if (_passedOrganism._attributes._hunger == 1.0)
                     {
 
-                        _passedOrganism.organismState = _state.MoveState(Action.NotHungry);
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
 
                     }
 
@@ -109,7 +109,7 @@ namespace EvolutionSim
 
                     if (_simGrid.TrackMate(_passedOrganism))
                     {
-                        _passedOrganism.organismState = _state.MoveState(Action.MateFound);
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.MateFound);
 
                     }
 
@@ -122,7 +122,7 @@ namespace EvolutionSim
                     // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
                     if (_simGrid.TrackFood(_passedOrganism))
                     {
-                        _passedOrganism.organismState = _state.MoveState(Action.FoodFound);
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
 
                     }
 
@@ -168,7 +168,7 @@ namespace EvolutionSim
 
                 case PotentialStates.Roaming:
 
-                    _simGrid.Move(gameTime);
+                    
 
                     break;
 
@@ -181,7 +181,7 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekFood:
 
-         
+                    _simGrid.Move(gameTime);
 
                     break;
 

@@ -44,21 +44,21 @@ public enum Action
 
             }
 
-        // important to have a hash code for each stateTransition as it is being used as a key in
-        // the dictonary(lookup table)
-        public override int GetHashCode()
-        {
-
-            return 17 + 31 * CurrentState.GetHashCode() + 31 * action.GetHashCode();
-
-        }
-
-        public override bool Equals(Object obj)
+            // important to have a hash code for each stateTransition as it is being used as a key in
+            // the dictonary(lookup table)
+            public override int GetHashCode()
             {
-                StateTransition other = obj as StateTransition;
-                return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
+
+                return 17 + 31 * CurrentState.GetHashCode() + 31 * action.GetHashCode();
 
             }
+
+            public override bool Equals(Object obj)
+                {
+                    StateTransition other = obj as StateTransition;
+                    return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
+
+                }
 
         }
 
@@ -66,11 +66,11 @@ public enum Action
         Dictionary<StateTransition, PotentialStates> transitions;
 
     //getters and setters for States class
-        public PotentialStates CurrentState
-    {
-        get;
-        private set;
-    }
+    //    public PotentialStates CurrentState
+    //{
+    //    get;
+    //    private set;
+    //}
 
 
         //Sets each state to roaming by default
@@ -97,7 +97,7 @@ public enum Action
                 { new StateTransition (PotentialStates.SeekMate, Action.HungryRoam), PotentialStates.SeekFood},
 
                 //this is a test statement, i don't understand why this transition is being accessed tbh
-                { new StateTransition (PotentialStates.SeekFood, Action.HungryRoam), PotentialStates.SeekFood},
+              //  { new StateTransition (PotentialStates.SeekFood, Action.HungryRoam), PotentialStates.SeekFood},
 
                 //once the organism has finished mating place back into the roaming state
                 { new StateTransition(PotentialStates.Mating, Action.FinishedMating), PotentialStates.Roaming},
@@ -110,7 +110,7 @@ public enum Action
 
 
     //return the next state deterministically
-    public PotentialStates GetNext(Action action)
+    public PotentialStates GetNext(PotentialStates CurrentState, Action action)
     {
         StateTransition transition = new StateTransition(CurrentState, action);
         PotentialStates nextState;
@@ -122,10 +122,10 @@ public enum Action
     }
 
     //handles the moving of states.
-    public PotentialStates MoveState (Action action)
+    public PotentialStates MoveState (PotentialStates determinedState, Action action)
     {
-        CurrentState = GetNext(action);
-        return CurrentState;
+        determinedState = GetNext(determinedState, action);
+        return determinedState;
 
     }
 
