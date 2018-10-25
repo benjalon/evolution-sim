@@ -92,6 +92,13 @@ namespace EvolutionSim
             // Update UI elements
             _overlay.Update(gameTime);
 
+            //checks the organism state
+           // _organismState.performAction()
+
+            //after checking if organism is in the correct state make the organism act
+           // _organismState.organismBehaviour()
+
+
             _grid.Move(gameTime);
 
             base.Update(gameTime);
