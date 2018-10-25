@@ -17,13 +17,12 @@ namespace EvolutionSim
 
         public Tile(ref Texture2D texture, Rectangle rectangle) : base(ref texture, rectangle)
         {
-
         }
 
         public void AddInhabitant(Sprite sprite)
         {
             _inhabitant = sprite;
-            _inhabitant.Rectangle = _rectangle;
+            sprite.MoveToTile(this);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -141,38 +141,6 @@ namespace EvolutionSim
 
         }
 
-           
-        //responsible for finding surronding food sources and setting the organism to track it
-        private bool trackFood(Organism _passedOrganism)
-        {
-            bool foodFound = true;
-
-
-
-
-
-
-            return foodFound;
-
-        } 
-
-
-        //responsible for finding a mate
-        private bool trackMate(Organism _passedOrganism)
-        {
-            bool foundMate = false;
-
-
-
-
-
-
-
-
-            return foundMate;
-
-        }
-
 
 
     }

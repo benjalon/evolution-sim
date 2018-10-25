@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EvolutionSim
 {
-    class OrganismAttributes
+    public class OrganismAttributes
     {
         public int _age { get; set; }
         public float _health { get; set; }

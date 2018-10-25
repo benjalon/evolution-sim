@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace EvolutionSim
 {
-    enum FoodType {Herbivore, Carnivore, Omnivore}
+    public enum FoodType {Herbivore, Carnivore, Omnivore}
 }

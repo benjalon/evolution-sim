@@ -7,7 +7,7 @@ using System.Text;
 
 namespace EvolutionSim
 {
-    class Organism : Sprite
+    public class Organism : Sprite
     {
         public static int TOTAL_POPULATION = 0;
         public OrganismAttributes _attributes;

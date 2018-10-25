@@ -17,9 +17,10 @@ namespace EvolutionSim
         public Rectangle Rectangle
         {
             get => _rectangle;
-            set => _rectangle = value;
         }
 
+        public Tile ParentTile { get; private set; }
+        
         /// <summary>
         /// Create a static sprite from a given texture and rectangle
         /// </summary>
@@ -49,6 +50,16 @@ namespace EvolutionSim
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Rectangle, Color);
+        }
+
+        /// <summary>
+        /// Reparents the sprite to the given tile (i.e. makes it an inhabitant of the tile).
+        /// </summary>
+        /// <param name="tile">The tile to move to</param>
+        public void MoveToTile(Tile tile)
+        {
+            ParentTile = tile;
+            _rectangle = tile.Rectangle;
         }
     }
 }
