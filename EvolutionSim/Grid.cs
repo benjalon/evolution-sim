@@ -21,7 +21,7 @@ namespace EvolutionSim
 
         private Random _random = new Random();
         
-        private const int MS_PER_DIRECTION_CHANGE = 2000;
+        private const int MS_PER_DIRECTION_CHANGE = 0; // The time in milliseconds per movement update
         private int _msSinceDirectionChange = MS_PER_DIRECTION_CHANGE;
 
         public Grid(ref Texture2D tileTexture, int width, int height)
