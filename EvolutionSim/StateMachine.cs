@@ -89,12 +89,12 @@ namespace EvolutionSim
                 //
                 case PotentialStates.SeekMate:
 
-                    if (trackMate(_passedOrganism))
-                    {
+                    //if (trackMate(_passedOrganism))
+                    //{
 
-                        _passedOrganism.organismState = _state.MoveState(Action.MateFound);
+                    //    _passedOrganism.organismState = _state.MoveState(Action.MateFound);
 
-                    }
+                    //}
 
                     break;
 
@@ -103,17 +103,17 @@ namespace EvolutionSim
                     // 1) call tracking method, 
                     // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
 
-                    if (trackFood(_passedOrganism))
-                    {
-                        _passedOrganism.organismState = _state.MoveState(Action.FoodFound);
+                    //if (trackFood(_passedOrganism))
+                    //{
+                    //    _passedOrganism.organismState = _state.MoveState(Action.FoodFound);
 
-                    }
+                    //}
 
-                    else
-                    {
-                        //remain in the same state
-                        return;
-                    }
+                    //else
+                    //{
+                    //    //remain in the same state
+                    //    return;
+                    //}
                     
 
                     break;
@@ -138,38 +138,6 @@ namespace EvolutionSim
             }
 
 
-
-        }
-
-           
-        //responsible for finding surronding food sources and setting the organism to track it
-        private bool trackFood(Organism _passedOrganism)
-        {
-            bool foodFound = true;
-
-
-
-
-
-
-            return foodFound;
-
-        } 
-
-
-        //responsible for finding a mate
-        private bool trackMate(Organism _passedOrganism)
-        {
-            bool foundMate = false;
-
-
-
-
-
-
-
-
-            return foundMate;
 
         }
 
