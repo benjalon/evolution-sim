@@ -12,9 +12,6 @@ namespace EvolutionSim
     public class Tile : MapItem
     {
         public const int TILE_SIZE = 10;
-        private DateTime startDate = DateTime.Now;
-
-        private double _lastUpdate = 0;
 
         public int MyProperty { get; set; }
         public MapItem Inhabitant { get; private set; }
@@ -22,11 +19,11 @@ namespace EvolutionSim
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
 
-        public Tile(ref Texture2D texture, Rectangle rectangle) : base(ref texture, rectangle)
+        public Tile(Texture2D texture, Rectangle rectangle) : base(texture, rectangle)
         {
             GridPositionX = rectangle.X / TILE_SIZE;
             GridPositionY = rectangle.Y / TILE_SIZE;
-        
+
         }
 
         public void AddInhabitant(MapItem sprite)
@@ -44,20 +41,12 @@ namespace EvolutionSim
                 Inhabitant.Draw(spriteBatch);
             }
         }
-    
+
         public void MoveInhabitant(Tile endPosition)
-{
-            //double elapsedMs = DateTime.Now.Subtract(startDate).TotalMilliseconds;
-
-            //if (elapsedMs > 2000)
-            
-                Inhabitant.MoveToTile(endPosition);
-                endPosition.Inhabitant = Inhabitant;
-                Inhabitant = null;
-            //    startDate = DateTime.Now;
-            
-
-           
+        {
+            Inhabitant.MoveToTile(endPosition);
+            endPosition.Inhabitant = Inhabitant;
+            Inhabitant = null;
         }
 
         public bool HasInhabitant()
@@ -65,9 +54,4 @@ namespace EvolutionSim
             return Inhabitant != null;
         }
     }
-
-    //Roam
-    //find mate
-    //find food
-
 }

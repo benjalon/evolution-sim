@@ -25,7 +25,7 @@ namespace EvolutionSim
         /// Create a static sprite from a given texture and rectangle
         /// </summary>
         /// <param name="texture">The appearance of the MapItem</param>
-        public MapItem(ref Texture2D texture)
+        public MapItem(Texture2D texture)
         {
             _texture = texture;
             Color = Color.White;
@@ -36,7 +36,7 @@ namespace EvolutionSim
         /// </summary>
         /// <param name="texture">The appearance of the MapItem</param>
         /// <param name="rectangle">The position and size of the MapItem</param>
-        public MapItem(ref Texture2D texture, Rectangle rectangle)
+        public MapItem(Texture2D texture, Rectangle rectangle)
         {
             _texture = texture;
             _rectangle = rectangle;

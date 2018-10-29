@@ -18,7 +18,7 @@ namespace EvolutionSim
         
         Grid _simGrid;
 
-       public StateMachine(ref Grid passedGrid)
+       public StateMachine(Grid passedGrid)
         {
 
 
@@ -66,25 +66,6 @@ namespace EvolutionSim
 
                     }
 
-                    //else
-                    //{
-                    //    Random newRand = new Random();
-
-                    //    int MateOrEat = newRand.Next(0, 1);
-
-                    //    if (MateOrEat == 1)
-                    //    {
-                    //        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
-
-                    //    }
-                    //    else
-                    //    {
-
-                    //        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
-
-                    //    }
-
-                    //}
 
                     break;
 

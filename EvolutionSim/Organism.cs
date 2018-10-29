@@ -20,7 +20,6 @@ namespace EvolutionSim
 
         float health_passed = 1;
         int age_passed = 0;
-        const int timeConst = 20000;
         double hunger_passed = 0.6;
         double speed_passed = 500;
         double strength_passsed = 50;
@@ -28,8 +27,8 @@ namespace EvolutionSim
 
         // private OrganismState _state;
 
-        public Organism(ref Texture2D texture)
-            : base(ref texture)
+        public Organism(Texture2D texture)
+            : base(texture)
         {
             _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             TOTAL_POPULATION++;
