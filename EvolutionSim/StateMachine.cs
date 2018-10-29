@@ -66,11 +66,6 @@ namespace EvolutionSim
 
                     }
 
-                    else
-                    {
-                       
-
-                    }
 
                     break;
 
@@ -121,10 +116,11 @@ namespace EvolutionSim
 
                     break;
 
-               //mating class
+                //once an organism has begun mating it cannont stop or change state
+                //once a certain time has elasped move back to roaming
+
                 case PotentialStates.Mating:
-                    //once an organism has begun mating it cannont stop or change state
-                    //once a certain time has elasped move back to roaming
+                  
     
 
                     break;
@@ -173,7 +169,7 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekMate:
 
-                    _simGrid.Move(gameTime);
+                   // _simGrid.Move(gameTime);
 
                     break;
 

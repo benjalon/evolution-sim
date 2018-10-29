@@ -46,5 +46,22 @@ namespace EvolutionSim
             return stringBuilder.ToString();
 
         }
+
+       
+
+        /// <summary>
+        /// Constantly reduce food over time
+        /// </summary>
+        public void decrementAttributes(GameTime gameTime)
+        {
+
+            //hardcode a value that doesn't go down too fast
+            _attributes._hunger -= 0.00005;
+
+            Console.WriteLine(_attributes._hunger);
+           
+        }
+
     }
-}
+
+    }
