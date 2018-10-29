@@ -67,7 +67,8 @@ namespace EvolutionSim
             _grid = new Grid(ref _tileTexture, screenWidth, screenHeight);
             _organismState = new StateMachine( ref _grid);
 
-            _overlay.Button.OnClick = (Entity btn) => _grid.AddInhabitant(new Organism(ref _organismTexture));
+            _overlay.Button.OnClick = (Entity btn) => _grid.AddOrganism(new Organism(ref _organismTexture));
+            _overlay.Button_Two.OnClick = (Entity btn) => _grid.AddFood(new Food(ref _foodTexture, FoodType.Carnivore,0));
         }
         
         /// <summary>

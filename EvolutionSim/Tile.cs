@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EvolutionSim
 {
@@ -8,11 +9,15 @@ namespace EvolutionSim
         Grass
     }
 
-    public class Tile : Sprite
+    public class Tile : MapItem
     {
-        public const int TILE_SIZE = 16;
+        public const int TILE_SIZE = 10;
+        private DateTime startDate = DateTime.Now;
 
-        public Sprite Inhabitant { get; private set; }
+        private double _lastUpdate = 0;
+
+        public int MyProperty { get; set; }
+        public MapItem Inhabitant { get; private set; }
         private TerrainTypes _terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
@@ -21,9 +26,10 @@ namespace EvolutionSim
         {
             GridPositionX = rectangle.X / TILE_SIZE;
             GridPositionY = rectangle.Y / TILE_SIZE;
+        
         }
 
-        public void AddInhabitant(Sprite sprite)
+        public void AddInhabitant(MapItem sprite)
         {
             Inhabitant = sprite;
             sprite.MoveToTile(this);
@@ -38,12 +44,20 @@ namespace EvolutionSim
                 Inhabitant.Draw(spriteBatch);
             }
         }
-
+    
         public void MoveInhabitant(Tile endPosition)
-        {
-            Inhabitant.MoveToTile(endPosition);
-            endPosition.Inhabitant = Inhabitant;
-            Inhabitant = null;
+{
+            //double elapsedMs = DateTime.Now.Subtract(startDate).TotalMilliseconds;
+
+            //if (elapsedMs > 2000)
+            
+                Inhabitant.MoveToTile(endPosition);
+                endPosition.Inhabitant = Inhabitant;
+                Inhabitant = null;
+            //    startDate = DateTime.Now;
+            
+
+           
         }
 
         public bool HasInhabitant()
