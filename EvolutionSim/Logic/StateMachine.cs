@@ -40,7 +40,6 @@ namespace EvolutionSim
             }
  
 
-            Console.WriteLine("Hunger: " + organism._attributes._hunger);
 
         }
 
@@ -167,7 +166,6 @@ namespace EvolutionSim
             {
 
                 case PotentialStates.Roaming:
-                    System.Diagnostics.Debug.WriteLine("State: Roaming");
                     Logic.StateActions.Roam(_passedOrganism,_grid);
 
                     break;
@@ -180,7 +178,6 @@ namespace EvolutionSim
                     break;
 
                 case PotentialStates.SeekFood:
-                    System.Diagnostics.Debug.WriteLine("State: Seeking Food");
                     Logic.StateActions.SeekingFood.SeekFood(_passedOrganism, _grid);
 
 

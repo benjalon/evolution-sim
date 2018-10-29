@@ -136,7 +136,6 @@ namespace EvolutionSim.Logic
                     {
                         if (InBounds(firstX + i,firstY+j) && grid._tiles[firstX + i][firstY+j].Inhabitant is Food)
                         {
-                            System.Diagnostics.Debug.WriteLine("FOOD DETECTED at X: " + (firstX + i) + " Y: " + (firstY + j));
 
                             return true;
                         }
