@@ -24,7 +24,7 @@ namespace EvolutionSim
 
         private Random _random = new Random();
         
-        private const int MS_PER_DIRECTION_CHANGE = 0; // The time in milliseconds per movement update
+        private const int MS_PER_DIRECTION_CHANGE = 2500; // The time in milliseconds per movement update
         private int _msSinceDirectionChange = MS_PER_DIRECTION_CHANGE;
         
         public Grid(ref Texture2D tileTexture, int width, int height)
@@ -103,6 +103,54 @@ namespace EvolutionSim
 
             return found;
         }
+
+        private Boolean InBounds(int x, int y)
+        {
+            if (y >= verticalCount || y < 0 || x >= horizontalCount || x < 0){
+                return false;
+            }
+            return true;
+        }
+        private Boolean FoodInRange(Tile tile)
+        {
+            // Check +X +Y -X -Y
+            for (int i = 1; i < 3; i++)
+            {
+
+
+                if (InBounds(tile.GridPositionX +i,tile.GridPositionY) && _tiles[tile.GridPositionX + i, tile.GridPositionY].Inhabitant is Food) { 
+                        
+                        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
+                     
+                    }
+
+                if (InBounds(tile.GridPositionX - i, tile.GridPositionY) && _tiles[tile.GridPositionX - i, tile.GridPositionY].Inhabitant is Food)
+                {
+
+                    System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
+
+                }
+                if (InBounds(tile.GridPositionX, tile.GridPositionY + i) && _tiles[tile.GridPositionX, tile.GridPositionY + i].Inhabitant is Food)
+                {
+
+                    System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
+
+                }
+                if (InBounds(tile.GridPositionX, tile.GridPositionY - i) && _tiles[tile.GridPositionX, tile.GridPositionY - i].Inhabitant is Food)
+                {
+
+                    System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
+
+                }
+
+
+
+            }
+
+
+
+            return false;
+        }
         public void Move(GameTime gameTime)
         {
             _msSinceDirectionChange += gameTime.ElapsedGameTime.Milliseconds;
@@ -118,8 +166,11 @@ namespace EvolutionSim
                     {
                         if (_tiles[i, j].HasInhabitant())
                         {
-                            if (_tiles[i, j].Inhabitant.GetType() == typeof(Organism))
+                            if (_tiles[i, j].Inhabitant is Organism)
+                            {
+                                FoodInRange(_tiles[i, j]);
                                 Roam(_tiles[i, j]);
+                            }
                         }
                     }
                 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Diagnostics;
 
 namespace EvolutionSim
 {
@@ -12,7 +11,7 @@ namespace EvolutionSim
 
     public class Tile : MapItem
     {
-        public const int TILE_SIZE = 16;
+        public const int TILE_SIZE = 10;
         private DateTime startDate = DateTime.Now;
 
         private double _lastUpdate = 0;
@@ -47,16 +46,16 @@ namespace EvolutionSim
         }
     
         public void MoveInhabitant(Tile endPosition)
-        {
-            double elapsedMs = DateTime.Now.Subtract(startDate).TotalMilliseconds;
+{
+            //double elapsedMs = DateTime.Now.Subtract(startDate).TotalMilliseconds;
 
-            if (elapsedMs > 2000)
-            {
+            //if (elapsedMs > 2000)
+            
                 Inhabitant.MoveToTile(endPosition);
                 endPosition.Inhabitant = Inhabitant;
                 Inhabitant = null;
-                startDate = DateTime.Now;
-            }
+            //    startDate = DateTime.Now;
+            
 
            
         }
