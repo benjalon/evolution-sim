@@ -27,8 +27,8 @@ namespace EvolutionSim
 
         // private OrganismState _state;
 
-        public Organism(ref Texture2D texture)
-            : base(ref texture)
+        public Organism(Texture2D texture)
+            : base(texture)
         {
             _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             TOTAL_POPULATION++;

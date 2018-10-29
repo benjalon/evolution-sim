@@ -18,7 +18,7 @@ namespace EvolutionSim
         
         Grid _simGrid;
 
-       public StateMachine(ref Grid passedGrid)
+       public StateMachine(Grid passedGrid)
         {
 
 

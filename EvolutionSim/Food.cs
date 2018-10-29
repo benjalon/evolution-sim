@@ -10,8 +10,8 @@ namespace EvolutionSim
         public int foodHealth{ get; set; }
 
 
-        public Food(ref Texture2D texture,FoodType foodType, int foodHealth)
-            : base(ref texture)
+        public Food(Texture2D texture,FoodType foodType, int foodHealth)
+            : base(texture)
         {
             this.foodHealth = foodHealth;
             this.foodType = foodType;

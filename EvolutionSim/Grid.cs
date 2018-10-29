@@ -27,7 +27,7 @@ namespace EvolutionSim
         private const int MS_PER_DIRECTION_CHANGE = 2500; // The time in milliseconds per movement update
         private int _msSinceDirectionChange = MS_PER_DIRECTION_CHANGE;
         
-        public Grid(ref Texture2D tileTexture, int width, int height)
+        public Grid(Texture2D tileTexture, int width, int height)
         {
             horizontalCount = width / Tile.TILE_SIZE;
             verticalCount = height / Tile.TILE_SIZE;
@@ -38,7 +38,7 @@ namespace EvolutionSim
             {
                 for (var j = 0; j < verticalCount; j++)
                 {
-                    _tiles[i, j] = new Tile(ref tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
+                    _tiles[i, j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
                 }
             }
         }

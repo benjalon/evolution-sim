@@ -64,11 +64,11 @@ namespace EvolutionSim
 
             var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
-            _grid = new Grid(ref _tileTexture, screenWidth, screenHeight);
-            _organismState = new StateMachine( ref _grid);
+            _grid = new Grid(_tileTexture, screenWidth, screenHeight);
+            _organismState = new StateMachine(_grid);
 
-            _overlay.Button.OnClick = (Entity btn) => _grid.AddOrganism(new Organism(ref _organismTexture));
-            _overlay.Button_Two.OnClick = (Entity btn) => _grid.AddFood(new Food(ref _foodTexture, FoodType.Carnivore,0));
+            _overlay.Button.OnClick = (Entity btn) => _grid.AddOrganism(new Organism(_organismTexture));
+            _overlay.Button_Two.OnClick = (Entity btn) => _grid.AddFood(new Food(_foodTexture, FoodType.Carnivore,0));
         }
         
         /// <summary>
@@ -144,7 +144,7 @@ namespace EvolutionSim
         
         //private void createOrganism()
         //{
-        //    var newOrganism = new Organism(ref _organismTexture, new Rectangle(_random.Next(0, WINDOW_SIZE + 1), _random.Next(0, WINDOW_SIZE + 1), 16, 16));
+        //    var newOrganism = new Organism(_organismTexture, new Rectangle(_random.Next(0, WINDOW_SIZE + 1), _random.Next(0, WINDOW_SIZE + 1), 16, 16));
             
         //    // TODO Delete this when we don't want random colors anymore
         //    newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255);

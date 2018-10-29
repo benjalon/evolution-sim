@@ -22,7 +22,7 @@ namespace EvolutionSim
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
 
-        public Tile(ref Texture2D texture, Rectangle rectangle) : base(ref texture, rectangle)
+        public Tile(Texture2D texture, Rectangle rectangle) : base(ref texture, rectangle)
         {
             GridPositionX = rectangle.X / TILE_SIZE;
             GridPositionY = rectangle.Y / TILE_SIZE;
