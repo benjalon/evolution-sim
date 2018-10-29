@@ -15,7 +15,7 @@ namespace EvolutionSim
 
     public class Grid
     {
-        private Tile[,] _tiles;
+        private Tile[][] _tiles;
         public List<Organism> Organisms { get; private set; } = new List<Organism>(); // List of all organisms currently in the grid, which can be used to find their parent tile
         public List<Food> Foods { get; private set; } = new List<Food>();
 
@@ -36,13 +36,14 @@ namespace EvolutionSim
             horizontalCount = width / Tile.TILE_SIZE;
             verticalCount = height / Tile.TILE_SIZE;
 
-            _tiles = new Tile[horizontalCount, verticalCount];
+            _tiles = new Tile[horizontalCount][];
 
             for (var i = 0; i < horizontalCount; i++)
             {
+                _tiles[i] = new Tile[verticalCount];
                 for (var j = 0; j < verticalCount; j++)
                 {
-                    _tiles[i, j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
+                    _tiles[i][j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
                 }
             }
         }
@@ -58,7 +59,7 @@ namespace EvolutionSim
         Organisms.Add(organism); // Keep track of newly added organisms so we can get them later
             var x = _random.Next(0, horizontalCount);
             var y = _random.Next(0, verticalCount);
-            _tiles[x, y].AddInhabitant(organism);
+            _tiles[x][y].AddInhabitant(organism);
         }
         public void AddFood(Food food)
         {
@@ -67,14 +68,17 @@ namespace EvolutionSim
 
             var x = _random.Next(0, horizontalCount);
             var y = _random.Next(0, verticalCount);
-            _tiles[x, y].AddInhabitant(food);
+            _tiles[x][y].AddInhabitant(food);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var tile in _tiles)
+            for (var i = 0; i < horizontalCount; i++)
             {
-                tile.Draw(spriteBatch);
+                for (var j = 0; j < verticalCount; j++)
+                {
+                    _tiles[i][j].Draw(spriteBatch);
+                }
             }
         }
 
@@ -122,26 +126,26 @@ namespace EvolutionSim
             {
                 // Break out of loop when food is found
                 // Collision detection
-                if (InBounds(tile.GridPositionX +i,tile.GridPositionY) && _tiles[tile.GridPositionX + i, tile.GridPositionY].Inhabitant is Food)
+                if (InBounds(tile.GridPositionX +i,tile.GridPositionY) && _tiles[tile.GridPositionX + i][tile.GridPositionY].Inhabitant is Food)
                 { 
                       
                     System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
                      
                 }
 
-                if (InBounds(tile.GridPositionX - i, tile.GridPositionY) && _tiles[tile.GridPositionX - i, tile.GridPositionY].Inhabitant is Food)
+                if (InBounds(tile.GridPositionX - i, tile.GridPositionY) && _tiles[tile.GridPositionX - i][tile.GridPositionY].Inhabitant is Food)
                 {
 
                     System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
 
                 }
-                if (InBounds(tile.GridPositionX, tile.GridPositionY + i) && _tiles[tile.GridPositionX, tile.GridPositionY + i].Inhabitant is Food)
+                if (InBounds(tile.GridPositionX, tile.GridPositionY + i) && _tiles[tile.GridPositionX][tile.GridPositionY + i].Inhabitant is Food)
                 {
 
                     System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
 
                 }
-                if (InBounds(tile.GridPositionX, tile.GridPositionY - i) && _tiles[tile.GridPositionX, tile.GridPositionY - i].Inhabitant is Food)
+                if (InBounds(tile.GridPositionX, tile.GridPositionY - i) && _tiles[tile.GridPositionX][tile.GridPositionY - i].Inhabitant is Food)
                 {
 
                     System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
@@ -168,12 +172,12 @@ namespace EvolutionSim
                 {
                     for (var j = 0; j < verticalCount; j++)
                     {
-                        if (_tiles[i, j].HasInhabitant())
+                        if (_tiles[i][j].HasInhabitant())
                         {
-                            if (_tiles[i, j].Inhabitant is Organism)
+                            if (_tiles[i][j].Inhabitant is Organism)
                             {
-                                FoodInRange(_tiles[i, j]);
-                                Roam(_tiles[i, j]);
+                                FoodInRange(_tiles[i][j]);
+                                Roam(_tiles[i][j]);
                             }
                         }
                     }
@@ -206,20 +210,20 @@ namespace EvolutionSim
                     }
                     break;
                 case Directions.Down:
-                    if (_destinationTileY < _tiles.GetLength(1)-1)
+                    if (_destinationTileY < verticalCount - 1)
                     {
                         _destinationTileY += 1;
                     }
                     break;
                 case Directions.Right:
-                    if (_destinationTileX < _tiles.GetLength(0)-1)
+                    if (_destinationTileX < horizontalCount - 1)
                     {
                         _destinationTileX += 1;
                     }
                     break;
             }
 
-            var destinationTile = _tiles[_destinationTileX, _destinationTileY];
+            var destinationTile = _tiles[_destinationTileX][_destinationTileY];
             if (!destinationTile.HasInhabitant())
             {
                 state.MoveInhabitant(destinationTile);
