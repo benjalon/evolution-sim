@@ -58,7 +58,7 @@ namespace EvolutionSim
 
                     }
 
-                    if (_passedOrganism._attributes._hunger >= 0.8)
+                    else if (_passedOrganism._attributes._hunger >= 0.8)
                     {
                         //go find a mate
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
@@ -66,25 +66,25 @@ namespace EvolutionSim
 
                     }
 
-                    else
-                    {
-                        Random newRand = new Random();
+                    //else
+                    //{
+                    //    Random newRand = new Random();
 
-                        int MateOrEat = newRand.Next(0, 1);
+                    //    int MateOrEat = newRand.Next(0, 1);
 
-                        if (MateOrEat == 1)
-                        {
-                            _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
+                    //    if (MateOrEat == 1)
+                    //    {
+                    //        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
 
-                        }
-                        else
-                        {
+                    //    }
+                    //    else
+                    //    {
 
-                            _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
+                    //        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
 
-                        }
+                    //    }
 
-                    }
+                    //}
 
                     break;
 
@@ -135,10 +135,11 @@ namespace EvolutionSim
 
                     break;
 
-               //mating class
+                //once an organism has begun mating it cannont stop or change state
+                //once a certain time has elasped move back to roaming
+
                 case PotentialStates.Mating:
-                    //once an organism has begun mating it cannont stop or change state
-                    //once a certain time has elasped move back to roaming
+                  
     
 
                     break;
@@ -187,7 +188,7 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekMate:
 
-                    _simGrid.Move(gameTime);
+                   // _simGrid.Move(gameTime);
 
                     break;
 

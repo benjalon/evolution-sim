@@ -96,10 +96,6 @@ namespace EvolutionSim
 
 
             handle_organism(gameTime);
-      
-            //not sure if this should be contained within the determine behaviour method, as we aren't too sure if an organism should be moving or nor
-            //i.e could be mating, or eating, in which case we dont want to call move
-                //_grid.Move(gameTime);
 
             base.Update(gameTime);
         }
@@ -131,6 +127,8 @@ namespace EvolutionSim
 
             foreach (Organism _org in _grid.Organisms)
             {
+
+                _org.decrementAttributes(gameTime);
 
                 _organismState.checkState(_org);
 

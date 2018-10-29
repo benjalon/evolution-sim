@@ -20,7 +20,8 @@ namespace EvolutionSim
 
         float health_passed = 1;
         int age_passed = 0;
-        double hunger_passed = 1;
+        const int timeConst = 20000;
+        double hunger_passed = 0.6;
         double speed_passed = 500;
         double strength_passsed = 50;
         FoodType foodType_passed = FoodType.Carnivore;
@@ -46,5 +47,22 @@ namespace EvolutionSim
             return stringBuilder.ToString();
 
         }
+
+       
+
+        /// <summary>
+        /// Constantly reduce food over time
+        /// </summary>
+        public void decrementAttributes(GameTime gameTime)
+        {
+
+            //hardcode a value that doesn't go down too fast
+            _attributes._hunger -= 0.00005;
+
+            Console.WriteLine(_attributes._hunger);
+           
+        }
+
     }
-}
+
+    }
