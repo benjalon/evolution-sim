@@ -18,7 +18,7 @@ namespace EvolutionSim
         
         Grid _simGrid;
 
-       public StateMachine(ref Grid passedGrid)
+       public StateMachine(Grid passedGrid)
         {
 
 
@@ -58,7 +58,7 @@ namespace EvolutionSim
 
                     }
 
-                    if (_passedOrganism._attributes._hunger >= 0.8)
+                    else if (_passedOrganism._attributes._hunger >= 0.8)
                     {
                         //go find a mate
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
@@ -68,21 +68,7 @@ namespace EvolutionSim
 
                     else
                     {
-                        Random newRand = new Random();
-
-                        int MateOrEat = newRand.Next(0, 1);
-
-                        if (MateOrEat == 1)
-                        {
-                            _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
-
-                        }
-                        else
-                        {
-
-                            _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
-
-                        }
+                       
 
                     }
 
