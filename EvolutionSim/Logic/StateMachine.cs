@@ -10,24 +10,31 @@ namespace EvolutionSim
 {
     //State Machine Class
     //this class is used for describing the conditions for which a change in state occurs and modeling organism behaviour
-    class StateMachine
+    public class StateMachine
     {
         //initalise lookup table
-        State _state = new State();
+        private State _state;
+        private Grid _grid;
 
-        
-        Grid _simGrid;
+        // Grid _simGrid;
 
-       public StateMachine(Grid passedGrid)
+        public StateMachine(Grid grid)
         {
+          _grid = grid;
+          _state = new State();
 
-
-            this._simGrid = passedGrid;
-
-       
 
         }
-        
+        public void UpdateOrganismAttributes(Organism organism)
+        {
+
+            //hardcode a value that doesn't go down too fast
+            organism._attributes._hunger -= 0.00005;
+
+            Console.WriteLine(organism._attributes._hunger);
+
+        }
+
         /// <summary>
         /// This method is used for testing which state an organism is in, should be called in the update method
         /// </summary>
@@ -88,11 +95,11 @@ namespace EvolutionSim
                 //
                 case PotentialStates.SeekMate:
 
-                    if (_simGrid.TrackMate(_passedOrganism))
-                    {
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.MateFound);
+                    //if (_simGrid.TrackMate(_passedOrganism))
+                    //{
+                    //    _passedOrganism.organismState = _state.MoveState(organismState, Action.MateFound);
 
-                    }
+                    //}
 
 
                     break;
@@ -101,17 +108,17 @@ namespace EvolutionSim
 
                     // 1) call tracking method located in grid, 
                     // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
-                    if (_simGrid.TrackFood(_passedOrganism))
-                    {
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
+                    //if (_simGrid.TrackFood(_passedOrganism))
+                    //{
+                    //    _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
 
-                    }
+                    //}
 
-                    else
-                    {
-                        //remain in the same state
-                        return;
-                    }
+                    //else
+                    //{
+                    //    //remain in the same state
+                    //    return;
+                    //}
 
 
                     break;
@@ -139,7 +146,9 @@ namespace EvolutionSim
         /// <summary>
         /// This method controls how an organism goes about its buisness when in a given state
         /// </summary>
-        public void determineBehaviour(Organism _passedOrganism, GameTime gameTime)
+        ///         public void determineBehaviour(Organism _passedOrganism, GameTime gameTime)
+
+        public void determineBehaviour(Organism _passedOrganism)
         {
 
             PotentialStates organismState = _passedOrganism.organismState;
@@ -150,7 +159,7 @@ namespace EvolutionSim
 
                 case PotentialStates.Roaming:
 
-                    _simGrid.Move(gameTime);
+                    Logic.StateActions.Roam(_passedOrganism,_grid);
 
                     break;
 

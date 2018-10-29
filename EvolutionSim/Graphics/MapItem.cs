@@ -13,9 +13,12 @@ namespace EvolutionSim
         protected Texture2D _texture;
         public Color Color { get; set; }
 
+        public Point GridPosition;
+            
         protected Rectangle _rectangle;
         public Rectangle Rectangle
         {
+
             get => _rectangle;
         }
 
@@ -58,8 +61,11 @@ namespace EvolutionSim
         /// <param name="tile">The tile to move to</param>
         public void MoveToTile(Tile tile)
         {
+            GridPosition.X = tile.GridPositionX;
+            GridPosition.Y = tile.GridPositionY;
             ParentTile = tile;
             _rectangle = tile.Rectangle;
+            
         }
     }
 }

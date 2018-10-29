@@ -26,17 +26,17 @@ namespace EvolutionSim
 
         }
 
-        public void AddInhabitant(MapItem sprite)
+        public void AddMapItem(MapItem mapItem)
         {
-            Inhabitant = sprite;
-            sprite.MoveToTile(this);
+            Inhabitant = mapItem;
+            mapItem.MoveToTile(this);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
 
-            if (HasInhabitant())
+            if (HasMapItem())
             {
                 Inhabitant.Draw(spriteBatch);
             }
@@ -49,7 +49,7 @@ namespace EvolutionSim
             Inhabitant = null;
         }
 
-        public bool HasInhabitant()
+        public bool HasMapItem()
         {
             return Inhabitant != null;
         }
