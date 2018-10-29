@@ -25,13 +25,22 @@ namespace EvolutionSim
 
 
         }
+     
         public void UpdateOrganismAttributes(Organism organism)
         {
 
             //hardcode a value that doesn't go down too fast
-            organism._attributes._hunger -= 0.00005;
+            if (organism._attributes._hunger > 0)
+            {
+                organism._attributes._hunger -= 0.0001;
+            }
+            else
+            {
+                organism._attributes._hunger = 0;
+            }
+ 
 
-            Console.WriteLine(organism._attributes._hunger);
+            Console.WriteLine("Hunger: " + organism._attributes._hunger);
 
         }
 
@@ -158,7 +167,7 @@ namespace EvolutionSim
             {
 
                 case PotentialStates.Roaming:
-
+                    System.Diagnostics.Debug.WriteLine("State: Roaming");
                     Logic.StateActions.Roam(_passedOrganism,_grid);
 
                     break;
@@ -171,8 +180,9 @@ namespace EvolutionSim
                     break;
 
                 case PotentialStates.SeekFood:
+                    System.Diagnostics.Debug.WriteLine("State: Seeking Food");
+                    Logic.StateActions.SeekingFood.SeekFood(_passedOrganism, _grid);
 
-                    
 
                     break;
 

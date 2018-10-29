@@ -8,7 +8,7 @@ public enum PotentialStates
     Eating,
     SeekMate,
     SeekFood,
-    Mating,
+    Mating
 
 }
 

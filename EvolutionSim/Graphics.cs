@@ -11,7 +11,7 @@ namespace EvolutionSim
     public class Graphics : Game
     {
         public static int WINDOW_SIZE = 800;
-
+        public static int ELAPSED_TIME; 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -85,6 +85,7 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
+            ELAPSED_TIME = gameTime.ElapsedGameTime.Milliseconds;
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)

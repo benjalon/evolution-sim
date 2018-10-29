@@ -13,6 +13,9 @@ namespace EvolutionSim
         public OrganismAttributes _attributes;
         private String _speciesName;
 
+        public const int MS_PER_DIRECTION_CHANGE = 2000;
+
+        public int MilliSecondsSinceLastMovement;
         //what state is the organism currently in
         public PotentialStates organismState { get; set; }
 
