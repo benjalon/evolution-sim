@@ -28,19 +28,30 @@ namespace EvolutionSim
      
         public void UpdateOrganismAttributes(Organism organism)
         {
+            //if organism is not eating make it more hungry over time
+            if (organism.organismState != PotentialStates.Eating)
+            {
+                //hardcode a value that doesn't go down too fast
+                if (organism._attributes._hunger > 0)
+                {
+                    organism._attributes._hunger -= 0.0001;
+                }
 
-            //hardcode a value that doesn't go down too fast
-            if (organism._attributes._hunger > 0)
-            {
-                organism._attributes._hunger -= 0.0001;
+                else
+                {
+                    organism._attributes._hunger = 0;
+                }
+
             }
-            else
+
+            else // the little guy is tucking into some grub!
             {
-                organism._attributes._hunger = 0;
+
+                organism._attributes._hunger += 0.0002;
+
+
             }
  
-
-
         }
 
         /// <summary>
