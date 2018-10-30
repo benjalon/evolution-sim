@@ -11,7 +11,7 @@ namespace EvolutionSim
     public class Graphics : Game
     {
         public static int WINDOW_SIZE = 800;
-
+        public static int ELAPSED_TIME; 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -22,10 +22,10 @@ namespace EvolutionSim
         private Texture2D _tileTexture;
 
         private Grid _grid;
+        private Logic.Brain _brain;
 
         //list of food objects here
 
-        StateMachine _organismState;
 
         public Graphics()
         {
@@ -56,7 +56,7 @@ namespace EvolutionSim
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             // Load textures
             _organismTexture = Content.Load<Texture2D>("face");
             _foodTexture = Content.Load<Texture2D>("pizza");
@@ -64,23 +64,12 @@ namespace EvolutionSim
 
             var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
-            _grid = new Grid(_tileTexture, screenWidth, screenHeight);
-            _organismState = new StateMachine(_grid);
 
-            _overlay.Button.OnClick = (Entity btn) =>
-            {
-                for (var i = 0; i < 10; i++)
-                {
-                    _grid.AddOrganism(new Organism(_organismTexture));
-                }
-            };
-            _overlay.Button_Two.OnClick = (Entity btn) =>
-            {
-                for (var i = 0; i < 10; i++)
-                {
-                    _grid.AddFood(new Food(_foodTexture, FoodType.Carnivore, 0));
-                }
-            };
+            _grid = new Grid(_tileTexture, screenWidth, screenHeight);
+            _brain = new Logic.Brain(_grid);
+            _overlay.Button.OnClick = (Entity btn) => _brain.AddOrganism(new Organism(_organismTexture), _grid);
+            _overlay.Button_Two.OnClick = (Entity btn) => _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore, 0), _grid);
+
         }
         
         /// <summary>
@@ -96,6 +85,7 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
+            ELAPSED_TIME = gameTime.ElapsedGameTime.Milliseconds;
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
@@ -107,7 +97,7 @@ namespace EvolutionSim
             _overlay.Update(gameTime);
 
 
-            handle_organism(gameTime);
+            _brain.Update();
 
             base.Update(gameTime);
         }
@@ -136,19 +126,9 @@ namespace EvolutionSim
         //then we call a method which determines how each organism behaves
         private void handle_organism(GameTime gameTime)
         {
-
-            foreach (Organism _org in _grid.Organisms)
-            {
-
-                _org.decrementAttributes(gameTime);
-
-                _organismState.checkState(_org);
+ 
 
 
-                _organismState.determineBehaviour(_org, gameTime);
-
-
-            }
         }
 
         

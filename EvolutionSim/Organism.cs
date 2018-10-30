@@ -13,6 +13,9 @@ namespace EvolutionSim
         public OrganismAttributes _attributes;
         private String _speciesName;
 
+        public const int MS_PER_DIRECTION_CHANGE = 2000;
+
+        public int MilliSecondsSinceLastMovement;
         //what state is the organism currently in
         public PotentialStates organismState { get; set; }
 
@@ -52,15 +55,7 @@ namespace EvolutionSim
         /// <summary>
         /// Constantly reduce food over time
         /// </summary>
-        public void decrementAttributes(GameTime gameTime)
-        {
-
-            //hardcode a value that doesn't go down too fast
-            _attributes._hunger -= 0.00005;
-
-            Console.WriteLine(_attributes._hunger);
-           
-        }
+  
 
     }
 

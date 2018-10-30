@@ -15,12 +15,10 @@ namespace EvolutionSim
 
     public class Grid
     {
-        private Tile[][] _tiles;
-        public List<Organism> Organisms { get; private set; } = new List<Organism>(); // List of all organisms currently in the grid, which can be used to find their parent tile
-        public List<Food> Foods { get; private set; } = new List<Food>();
+        public Tile[][] _tiles;
 
-        private int horizontalCount;
-        private int verticalCount;
+        public static int horizontalCount;
+        public static int verticalCount;
 
         private Random _random = new Random();
         
@@ -46,30 +44,10 @@ namespace EvolutionSim
                     _tiles[i][j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
                 }
             }
+
         }
 
-        /// <summary>
-        /// Add an inhabitant at a random place in the grid
-        /// </summary>
-        /// <param name="sprite">the name of the sprite</param>
-        /// 
-        public void AddOrganism(Organism organism)
-        {
-            
-        Organisms.Add(organism); // Keep track of newly added organisms so we can get them later
-            var x = _random.Next(0, horizontalCount);
-            var y = _random.Next(0, verticalCount);
-            _tiles[x][y].AddInhabitant(organism);
-        }
-        public void AddFood(Food food)
-        {
 
-            Foods.Add(food); // Keep track of newly added organisms so we can get them later
-
-            var x = _random.Next(0, horizontalCount);
-            var y = _random.Next(0, verticalCount);
-            _tiles[x][y].AddInhabitant(food);
-        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -119,6 +97,12 @@ namespace EvolutionSim
             }
             return true;
         }
+
+        
+
+
+        
+
         private Boolean FoodInRange(Tile tile)
         {
             // Check +X +Y -X -Y
@@ -172,12 +156,12 @@ namespace EvolutionSim
                 {
                     for (var j = 0; j < verticalCount; j++)
                     {
-                        if (_tiles[i][j].HasInhabitant())
+                        if (_tiles[i][j].HasMapItem())
                         {
                             if (_tiles[i][j].Inhabitant is Organism)
                             {
-                                FoodInRange(_tiles[i][j]);
-                                Roam(_tiles[i][j]);
+                                //FoodInRange(_tiles[i][j]);
+                                //Roam(_tiles[i][j]);
                             }
                         }
                     }
@@ -187,13 +171,13 @@ namespace EvolutionSim
 
 
         //Takes tile.inhabitant, moves them randomly. 
-        public void Roam(Tile state)
+        public void Roam(Organism organism)
         {
            
             //decide destination
             _num = (Directions)_random.Next(0, 4);
-            _destinationTileX = state.GridPositionX;
-            _destinationTileY = state.GridPositionY;
+            int _destinationTileX = organism.GridPosition.X;
+            int _destinationTileY = organism.GridPosition.Y;
 
             switch (_num)
             {
@@ -223,21 +207,19 @@ namespace EvolutionSim
                     break;
             }
 
+
+
             var destinationTile = _tiles[_destinationTileX][_destinationTileY];
-            if (!destinationTile.HasInhabitant())
+            if (!destinationTile.HasMapItem())
             {
-                state.MoveInhabitant(destinationTile);
+                organism.GridPosition.X = _destinationTileX;
+                organism.GridPosition.Y = _destinationTileY;
+
             }
 
             //if destination full decide again.
         }
 
-        //private void MoveInhabitant(int x, int y, int endX, int endY)
-        //{
-        //    var endPosition = _tiles[endX, endY].Rectangle;
 
-        //    _tiles[x, y].MoveInhabitant(endPosition);
-
-        //}
     }
 }
