@@ -108,6 +108,22 @@ namespace EvolutionSim
 
                     }
 
+                    else
+                    {
+
+                        _passedOrganism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
+
+                        // change state back to roaming as food no longer exists 
+                        if (_passedOrganism.MilliSecondsSinceLastMovement > (Organism.MS_PER_DIRECTION_CHANGE * 5))
+                        {
+
+                            _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
+
+                        }
+
+
+                    }
+
                     break;
 
                 //organism needs way of tracking other organisms of the same species
@@ -180,8 +196,12 @@ namespace EvolutionSim
                     Logic.StateActions.Roam(_passedOrganism,_grid);
 
                     break;
-
+                
+                //be in the eating state
                 case PotentialStates.Eating:
+
+                    Logic.StateActions.Eating.Eat(_passedOrganism, _grid);
+
 
                     break;
                 case PotentialStates.Mating:

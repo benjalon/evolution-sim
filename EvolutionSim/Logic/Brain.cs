@@ -57,7 +57,15 @@ namespace EvolutionSim.Logic
             grid._tiles[food.GridPosition.X][food.GridPosition.Y].AddMapItem(food);
         }
 
+        public void removeFood(Food food, Grid grid)
+        {
+            //get rid of the passed food from the grid
+            grid._tiles[food.GridPosition.X][food.GridPosition.Y].removeMapItem(food);
+            
+            //now take out of the food arrayList
+            Foods.Remove(food);
 
+        }
 
     }
 }

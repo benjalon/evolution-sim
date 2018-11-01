@@ -10,7 +10,7 @@ namespace EvolutionSim.Logic
     {
         private static Random _random = new Random();
 
-        public static void Roam(Organism organism,Grid grid)
+        public static void Roam(Organism organism, Grid grid)
         {
             organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
 
@@ -61,6 +61,31 @@ namespace EvolutionSim.Logic
 
             //if destination full decide again.
         }
+
+
+        /// <summary>
+        /// This method stops an organism when it's eating, then de-constructs the food object
+        /// </summary>
+        public static class Eating{
+
+            public static void Eat(Organism organism, Grid grid, Food itemBeingEaten)
+        {
+                // do nothing at the moment, organism is going to stay still
+
+                organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
+
+                if (organism.MilliSecondsSinceLastMovement > (Organism.MS_PER_DIRECTION_CHANGE * 5))
+                {
+                    
+                    //take the food off the map
+                    
+
+                }
+            
+
+       }
+
+
 
         public static class SeekingFood
         {
@@ -149,7 +174,7 @@ namespace EvolutionSim.Logic
 
 
 
-
+            
 
 
                 //// Check +X +Y -X -Y

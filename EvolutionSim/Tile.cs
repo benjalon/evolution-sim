@@ -32,6 +32,15 @@ namespace EvolutionSim
             mapItem.MoveToTile(this);
         }
 
+        public void removeMapItem(MapItem mapItem)
+        {
+            //set the mapItem to be null
+            Inhabitant = null;
+            
+
+        }
+
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
