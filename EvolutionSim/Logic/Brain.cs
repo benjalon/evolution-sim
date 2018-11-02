@@ -4,10 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace EvolutionSim.Logic
 {
+   
+
     public class Brain
     {
+        static bool removeFoodFlag = false;
 
         private  StateMachine _fsm;
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
@@ -27,6 +32,16 @@ namespace EvolutionSim.Logic
                 _fsm.checkState(org);
                 _fsm.determineBehaviour(org);
                 _fsm.UpdateOrganismAttributes(org);
+            }
+
+            //checkFood healths
+            foreach (Food food in Foods)
+            {
+                //then get rid of the food
+                if(food.foodHealth == 0)
+                {
+                    Foods.Remove(food);
+                }
             }
 
         }
@@ -65,7 +80,12 @@ namespace EvolutionSim.Logic
             //now take out of the food arrayList
             Foods.Remove(food);
 
+            removeFoodFlag = false;
+
         }
+
+
+
 
     }
 }

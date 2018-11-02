@@ -48,6 +48,7 @@ namespace EvolutionSim
             {
 
                 organism._attributes._hunger += 0.0002;
+                
 
 
             }
@@ -115,7 +116,8 @@ namespace EvolutionSim
                     {
 
                         // change state back to roaming as food no longer exists 
-                        if (_passedOrganism.MilliSecondsSinceLastMovement > (Organism.MS_PER_DIRECTION_CHANGE * 5))
+                        //need to check if food exists
+                        if ()
                         {
                             
                             _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
@@ -142,6 +144,7 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekFood:
 
+                    Logic.StateActions.SeekingFood.SeekFood(_passedOrganism, _grid);
                     // 1) call tracking method located in grid, 
                     // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
                     //if (_simGrid.TrackFood(_passedOrganism))
@@ -155,6 +158,16 @@ namespace EvolutionSim
                     //    //remain in the same state
                     //    return;
                     //}
+
+
+                    break;
+
+                case PotentialStates.MovingToFood:
+
+                    // Are we at the food yet?
+                    // If no, same state
+                    // If yes, change state to eat.
+                    //
 
 
                     break;
