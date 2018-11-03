@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace EvolutionSim
 {
@@ -8,6 +9,28 @@ namespace EvolutionSim
         private BoundingCircle _detectionArea;
         public FoodType foodType { get; set; }
         public int foodHealth{ get; set; }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public void attemptCleanup(List<Food> foods)
+        {
+
+            foreach (Food food in foods)
+            {
+
+                if (food.foodHealth == 0)
+                {
+                    food.ParentTile.Inhabitant = null;
+                    foods.Remove(food);
+                }
+
+            }
+
+        }
 
 
         public Food(Texture2D texture, FoodType foodType, int foodHealth)
@@ -21,7 +44,7 @@ namespace EvolutionSim
         public void decrementHealth(GameTime gameTime)
         {
             //decrement the health of the food
-            if(this.foodHealth  > 0)
+            if(this.foodHealth > 0)
             {
 
                 foodHealth -= 1;
@@ -38,5 +61,15 @@ namespace EvolutionSim
 
         } 
 
+     
+
+
+
+
     }
+
+
+
+
+
 }

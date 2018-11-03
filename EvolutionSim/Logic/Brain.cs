@@ -17,6 +17,7 @@ namespace EvolutionSim.Logic
         private  StateMachine _fsm;
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
+        Food food;
         private Random _random = new Random();
 
         public Brain(Grid grid)
@@ -34,16 +35,8 @@ namespace EvolutionSim.Logic
                 _fsm.UpdateOrganismAttributes(org);
             }
 
-            //checkFood healths
-            foreach (Food food in Foods)
-            {
-                //then get rid of the food
-                if(food.foodHealth == 0)
-                {
-                    Foods.Remove(food);
-                }
-            }
-
+            //try to remove foods with 0 health
+            food.attemptCleanup(Foods);
         }
         /// <summary>
         /// Add an inhabitant at a random place in the grid
@@ -72,6 +65,11 @@ namespace EvolutionSim.Logic
             grid._tiles[food.GridPosition.X][food.GridPosition.Y].AddMapItem(food);
         }
 
+        /// <summary>
+        /// Experimental method, probably dont need
+        /// </summary>
+        /// <param name="food"></param>
+        /// <param name="grid"></param>
         public void removeFood(Food food, Grid grid)
         {
             //get rid of the passed food from the grid

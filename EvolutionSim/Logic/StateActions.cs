@@ -71,17 +71,7 @@ namespace EvolutionSim.Logic
 
             public static void Eat(Organism organism, Grid grid, Food itemBeingEaten)
             {
-                // do nothing at the moment, organism is going to stay still
-
-                //organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
-
-                //if (organism.MilliSecondsSinceLastMovement > (Organism.MS_PER_DIRECTION_CHANGE * 5))
-                //{
-
-                //    //take the food off the map
-
-
-                //}
+                itemBeingEaten.foodHealth = 0;
 
 
             }
@@ -259,4 +249,5 @@ namespace EvolutionSim.Logic
         }
     }
 
-}
+
+

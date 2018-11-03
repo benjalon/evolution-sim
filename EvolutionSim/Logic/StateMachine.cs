@@ -47,7 +47,7 @@ namespace EvolutionSim
             else // the little guy is tucking into some grub!
             {
 
-                organism._attributes._hunger += 0.0002;
+                organism._attributes._hunger += 0.1;
                 
 
 

@@ -14,6 +14,8 @@ namespace EvolutionSim
         public Color Color { get; set; }
 
         public Point GridPosition;
+
+
             
         protected Rectangle _rectangle;
         public Rectangle Rectangle
