@@ -1,0 +1,31 @@
+\begin{thebibliography}{}
+
+\bibitem[Dhurim Kelmendi, 2017]{kelmendi}
+Dhurim Kelmendi (2017).
+\newblock {SOLID Principles made easy}.
+\newblock
+  {\hspace*{\fill}\linebreak[4]\url{https://hackernoon.com/solid-principles-made-easy-67b1246bcdf}\linebreak[4]Website
+  accessed 03rd November, 2018}.
+
+\bibitem[Microsoft, 2015]{microsoft}
+Microsoft (2015).
+\newblock {C\# Coding Conventions (C\# Programming Guide)}.
+\newblock
+  {\hspace*{\fill}\linebreak[4]\url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions}\linebreak[4]Website
+  accessed 03rd November, 2018}.
+
+\bibitem[Paul Callahan, 2018]{callahan}
+Paul Callahan (2018).
+\newblock {What is the Game of Life?}
+\newblock
+  {\hspace*{\fill}\linebreak[4]\url{http://www.math.com/students/wonders/life/life.html}\linebreak[4]Website
+  accessed 01st November, 2018}.
+
+\bibitem[The Guardian, 2014]{guardian}
+The Guardian (2014).
+\newblock {The Game of Life: a beginner's guide}.
+\newblock
+  {\hspace*{\fill}\linebreak[4]\url{https://www.theguardian.com/science/alexs-adventures-in-numberland/2014/dec/15/the-game-of-life-a-beginners-guide}\linebreak[4]Website
+  accessed 01st November, 2018}.
+
+\end{thebibliography}
