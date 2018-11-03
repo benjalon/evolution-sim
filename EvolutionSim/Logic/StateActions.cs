@@ -99,6 +99,7 @@ namespace EvolutionSim.Logic
                     {
 
                         // Path to food
+                        // Food located, moving to food
                     }
                     else
                     {

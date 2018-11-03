@@ -100,8 +100,6 @@ namespace EvolutionSim
                 case PotentialStates.Eating:
 
 
-                    _passedOrganism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
-
                     //if there is food in food source then contuine eating
 
                     //if food hungry is maxed out (100) then stop eating && move back into roaming
@@ -116,8 +114,9 @@ namespace EvolutionSim
                     {
 
                         // change state back to roaming as food no longer exists 
-                        //need to check if food exists
-                        if ()
+                        // need to check if food exists
+                        //need the index of where the food is
+                        if (_grid._tiles[indX][indY].HasMapItem())
                         {
                             
                             _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
