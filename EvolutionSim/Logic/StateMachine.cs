@@ -81,7 +81,7 @@ namespace EvolutionSim
 
                         //then move into the seek food state
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
-
+                        System.Diagnostics.Debug.WriteLine("HUNGRY AF");
 
 
                     }

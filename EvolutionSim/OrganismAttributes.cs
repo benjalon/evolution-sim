@@ -24,10 +24,10 @@ namespace EvolutionSim
                                   double strength_passsed,
                                   FoodType foodType_passed)
         {
-            _DetectionRadius = 5;
+            _DetectionRadius = 7;
             _health = health_passed;
             _age = age_passed;
-            _hunger = hunger_passed;
+            _hunger = 0;
             _speed = speed_passed;
             _strength = strength_passsed;
             _foodType = foodType_passed;

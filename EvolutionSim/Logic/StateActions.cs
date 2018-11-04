@@ -97,21 +97,67 @@ namespace EvolutionSim.Logic
             //if destination full decide again.
         }
 
+        public static void MoveAlongPath(Organism organism, Grid grid, List<Tile> Path)
+        {
+            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
+
+            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+            {
+                organism.MilliSecondsSinceLastMovement = 0;
+
+                if (Path.Any() && !Path.First().HasMapItem())
+                {
+                    grid._tiles[organism.GridPosition.X][organism.GridPosition.Y].MoveInhabitant(Path.First());
+                    Path.RemoveAt(0);
+                    System.Diagnostics.Debug.WriteLine("MOVING ONE UNIT ALONG PATH");
+
+                }
+
+
+
+            }
+
+            if (!Path.Any())
+            {
+                organism.MovingOnPath = false;
+                System.Diagnostics.Debug.WriteLine("PATH TRAVERSAL COMPLETE");
+
+            }
+
+
+        }
+
         public static class SeekingFood
         {
             public static void SeekFood(Organism organism, Grid grid)
             {
-                organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
-                Tile PotentialFood = FoodInRange(organism, grid);
-                if (PotentialFood != null)
+
+                // Essentially, if food has been located, and path calculated, we move towards food
+                if (organism.MovingOnPath)
                 {
-                    // Path to food
-                    List<Tile> Path = Logic.Pathfinding.PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid._tiles);
+
+                    Logic.StateActions.MoveAlongPath(organism, grid, organism.Path);
                 }
+                // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
                 else
                 {
-                    Logic.StateActions.Roam(organism, grid);
+                    Tile PotentialFood = FoodInRange(organism, grid);
+
+                    if (PotentialFood != null)
+                    {
+                        // Path to food
+                        List<Tile> Path = Logic.Pathfinding.PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid._tiles);
+                        organism.Path = Path;
+                        organism.MovingOnPath = true;
+                        System.Diagnostics.Debug.WriteLine("FOOD FOUND, PATH CALCULATED");
+                    }
+                    else
+                    {
+                        Logic.StateActions.Roam(organism, grid);
+                    }
                 }
+
+               
                
                 
 
@@ -125,12 +171,15 @@ namespace EvolutionSim.Logic
 
                 for (int i = 0; i < organism._attributes._DetectionRadius; i++)
                 {
-                    for (int j = 0; j < 5; j++)
+                    for (int j = 0; j < organism._attributes._DetectionRadius; j++)
                     {
                         if (InBounds(firstX + i,firstY+j) && grid._tiles[firstX + i][firstY+j].Inhabitant is Food)
                         {
+                            System.Diagnostics.Debug.WriteLine("FOOD IN RANGE.");
+
 
                             return grid._tiles[firstX + i][firstY + j];
+
                         }
 
 

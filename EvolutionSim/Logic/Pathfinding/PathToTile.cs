@@ -30,7 +30,6 @@ namespace EvolutionSim.Logic.Pathfinding
             {
                 //    a) find the node with the least f on 
                 //       the open list, call it current
-                open = 
                 open = open.OrderBy(x => x.FOfS).ToList();//custom sort by heuristic (distance to goal)
 
 
@@ -90,6 +89,12 @@ namespace EvolutionSim.Logic.Pathfinding
                     t = t.Previous;
                 }
                 path.Reverse();
+                // Remove first tile as its occupied by the organism being moved
+                path.RemoveAt(0);
+                // Remove last tile as its occupied by whatever the hell it's going to
+                path.RemoveAt(path.Count-1);
+
+
             }
 
             return path;
