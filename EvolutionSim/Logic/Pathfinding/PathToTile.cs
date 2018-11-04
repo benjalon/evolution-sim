@@ -59,8 +59,10 @@ namespace EvolutionSim.Logic.Pathfinding
                         //            successor  is in the CLOSED list which has
                         //            a lower f than successor, skip this successor
                         //            otherwise, add  the node to the open list
-                        var openCheck = open.Exists(x => x.Current == node.Current && x.FOfS > node.FOfS);
-                        var closedCheck = closed.Exists(x => x.Current == node.Current && x.FOfS > node.FOfS);
+                        //var openCheck = open.Exists(x => x.Current.GridPosition == node.Current.GridPosition && x.FOfS > node.FOfS);
+                        var openCheck = open.Exists(x => x.Current.GridPosition == node.Current.GridPosition);
+                        //var closedCheck = closed.Exists(x => x.Current.GridPosition == node.Current.GridPosition && x.FOfS > node.FOfS);
+                        var closedCheck = closed.Exists(x => x.Current.GridPosition == node.Current.GridPosition );
                         if (openCheck || closedCheck)
                         {
                             break;
@@ -92,7 +94,7 @@ namespace EvolutionSim.Logic.Pathfinding
                 // Remove first tile as its occupied by the organism being moved
                 path.RemoveAt(0);
                 // Remove last tile as its occupied by whatever the hell it's going to
-                path.RemoveAt(path.Count-1);
+                //path.RemoveAt(path.Count-1);
 
 
             }

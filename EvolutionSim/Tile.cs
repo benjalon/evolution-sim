@@ -23,6 +23,8 @@ namespace EvolutionSim
         {
             GridPositionX = rectangle.X / TILE_SIZE;
             GridPositionY = rectangle.Y / TILE_SIZE;
+            base.GridPosition.X = GridPositionX;
+            base.GridPosition.Y = GridPositionY;
 
         }
 

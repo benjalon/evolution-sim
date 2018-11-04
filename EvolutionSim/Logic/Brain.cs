@@ -22,12 +22,7 @@ namespace EvolutionSim.Logic
 
         public void Update()
         {
-            foreach (Organism org in Organisms)
-            {
-                _fsm.checkState(org);
-                _fsm.determineBehaviour(org);
-                _fsm.UpdateOrganismAttributes(org);
-            }
+         
 
             List<Food> toRem = new List<Food>();
             foreach(Food food in Foods)
@@ -42,6 +37,13 @@ namespace EvolutionSim.Logic
                 Foods.Remove(remove);
             }
             toRem.Clear();
+
+            foreach (Organism org in Organisms)
+            {
+                _fsm.checkState(org);
+                _fsm.determineBehaviour(org);
+                _fsm.UpdateOrganismAttributes(org);
+            }
         }
         /// <summary>
         /// Add an inhabitant at a random place in the grid

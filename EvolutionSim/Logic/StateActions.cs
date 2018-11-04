@@ -15,6 +15,19 @@ namespace EvolutionSim.Logic
             return Math.Abs(StartPosition.X - EndPosition.X) + Math.Abs(EndPosition.Y - EndPosition.Y);
         }
 
+        public static Boolean AdjacencyCheck(Point StartPosition, Point EndPosition)
+        {
+
+
+
+            double distance = Math.Floor(Math.Sqrt((StartPosition.X - EndPosition.X) * (StartPosition.X - EndPosition.X) + (StartPosition.Y - EndPosition.Y) * (StartPosition.Y - EndPosition.Y)));
+
+            if (distance == 1)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public static List<Point> GetPointsInRange(Organism organism)   
         {
@@ -109,7 +122,6 @@ namespace EvolutionSim.Logic
                 {
                     grid._tiles[organism.GridPosition.X][organism.GridPosition.Y].MoveInhabitant(Path.First());
                     Path.RemoveAt(0);
-                    System.Diagnostics.Debug.WriteLine("MOVING ONE UNIT ALONG PATH");
 
                 }
 
@@ -120,8 +132,7 @@ namespace EvolutionSim.Logic
             if (!Path.Any())
             {
                 organism.MovingOnPath = false;
-                System.Diagnostics.Debug.WriteLine("PATH TRAVERSAL COMPLETE");
-
+ 
             }
 
 
@@ -129,33 +140,38 @@ namespace EvolutionSim.Logic
 
         public static class SeekingFood
         {
-            public static void SeekFood(Organism organism, Grid grid)
+            public static Boolean SeekFood(Organism organism, Grid grid)
             {
 
                 // Essentially, if food has been located, and path calculated, we move towards food
-                if (organism.MovingOnPath)
-                {
-
-                    Logic.StateActions.MoveAlongPath(organism, grid, organism.Path);
-                }
+ 
                 // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
-                else
-                {
                     Tile PotentialFood = FoodInRange(organism, grid);
 
                     if (PotentialFood != null)
                     {
                         // Path to food
                         List<Tile> Path = Logic.Pathfinding.PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid._tiles);
-                        organism.Path = Path;
+                        organism._Path = Path;
+                        if(Path.Count == 0)
+                    {
+                        organism.DestinationTile = PotentialFood;
+                    }
+                    else
+                    {
+                        organism.DestinationTile = PotentialFood;
+                        organism._Path.RemoveAt(organism._Path.Count - 1);
+                    }
+
                         organism.MovingOnPath = true;
-                        System.Diagnostics.Debug.WriteLine("FOOD FOUND, PATH CALCULATED");
+                        return true;
                     }
                     else
                     {
                         Logic.StateActions.Roam(organism, grid);
+                        return false;
                     }
-                }
+                
 
                
                
@@ -175,7 +191,6 @@ namespace EvolutionSim.Logic
                     {
                         if (InBounds(firstX + i,firstY+j) && grid._tiles[firstX + i][firstY+j].Inhabitant is Food)
                         {
-                            System.Diagnostics.Debug.WriteLine("FOOD IN RANGE.");
 
 
                             return grid._tiles[firstX + i][firstY + j];
@@ -189,71 +204,6 @@ namespace EvolutionSim.Logic
                 return null;
 
 
-
-
-
-
-                //// Check +X +Y -X -Y
-                //for (int i = 1; i < 3; i++)
-                //{
-                //    // Break out of loop when food is found
-                //    // Collision detection
-                //    if (InBounds(organism.GridPosition.X + i, organism.GridPosition.Y) && grid._tiles[organism.GridPosition.X + i][organism.GridPosition.Y].Inhabitant is Food)
-                //    {
-
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-
-                //    if (InBounds(organism.GridPosition.X - i, organism.GridPosition.Y) && grid._tiles[organism.GridPosition.X - i][organism.GridPosition.Y].Inhabitant is Food)
-                //    {
-
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-                //    if (InBounds(organism.GridPosition.X, organism.GridPosition.Y + i) && grid._tiles[organism.GridPosition.X][organism.GridPosition.Y + i].Inhabitant is Food)
-                //    {
-
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-                //    if (InBounds(organism.GridPosition.X, organism.GridPosition.Y - i) && grid._tiles[organism.GridPosition.X][organism.GridPosition.Y - i].Inhabitant is Food)
-                //    {
-
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-                //    if (InBounds(organism.GridPosition.X - i, organism.GridPosition.Y + i) && grid._tiles[organism.GridPosition.X - i][organism.GridPosition.Y + i].Inhabitant is Food)
-                //    {
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-
-                //    if (InBounds(organism.GridPosition.X + i, organism.GridPosition.Y + i) && grid._tiles[organism.GridPosition.X + i][organism.GridPosition.Y + i].Inhabitant is Food)
-                //    {
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-                //    if (InBounds(organism.GridPosition.X - i, organism.GridPosition.Y - i) && grid._tiles[organism.GridPosition.X - i][organism.GridPosition.Y - i].Inhabitant is Food)
-                //    {
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-                //    if (InBounds(organism.GridPosition.X + i, organism.GridPosition.Y - i) && grid._tiles[organism.GridPosition.X + i][organism.GridPosition.Y - i].Inhabitant is Food)
-                //    {
-                //        System.Diagnostics.Debug.WriteLine("FOOD DETECTED");
-                //        return true;
-                //    }
-
-
-
-
-
-
-                //}
-
-
-
             }
 
             
@@ -264,12 +214,19 @@ namespace EvolutionSim.Logic
         public static class EatingFood
         {
 
-            public static void EatFood(Organism organism, Grid grid, Food itemBeingEaten)
+            public static void EatFood(Organism organism, Grid grid)
             {
-                itemBeingEaten.foodHealth = 0;
+                organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
+                if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+                {
 
-
-            }
+                    Food food = (Food)organism.DestinationTile.Inhabitant;
+                    food.foodHealth = 0;
+                    // organism._attributes._hunger += 0.3;
+                    organism.DestinationTile = null;
+                    organism._Path = new List<Tile>();
+                }
+          }
         }
 
     }
