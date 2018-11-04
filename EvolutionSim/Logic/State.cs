@@ -9,6 +9,8 @@ public enum PotentialStates
     SeekMate,
     SeekFood,
     Mating,
+    MovingToFood
+    
     
 
 }
@@ -19,9 +21,11 @@ public enum Action
     NotHungry,
     HungryRoam,
     HungryMate,
+    FoodDetected,
     FoodFound,
     MateFound,
-    FinishedMating
+    FinishedMating,
+
 }
 
 
@@ -104,7 +108,11 @@ public enum Action
                 { new StateTransition(PotentialStates.Mating, Action.FinishedMating), PotentialStates.Roaming},
 
                 //when the organism finds food place into the eating state
-                { new StateTransition(PotentialStates.Roaming, Action.FoodFound), PotentialStates.Eating},
+                { new StateTransition(PotentialStates.SeekFood, Action.FoodDetected), PotentialStates.MovingToFood},
+
+                { new StateTransition(PotentialStates.MovingToFood,Action.FoodFound),PotentialStates.Eating },
+
+                {new StateTransition(PotentialStates.Eating,Action.NotHungry),PotentialStates.Roaming },
 
             };
     }

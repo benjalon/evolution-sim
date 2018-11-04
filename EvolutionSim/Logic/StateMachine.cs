@@ -33,6 +33,8 @@ namespace EvolutionSim
                 if (food.foodHealth == 0)
                 {
                     food.ParentTile.Inhabitant = null;
+
+
                 return true;
                 }
             return false;
@@ -81,7 +83,6 @@ namespace EvolutionSim
 
                         //then move into the seek food state
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
-                        System.Diagnostics.Debug.WriteLine("HUNGRY AF");
 
 
                     }
@@ -99,16 +100,20 @@ namespace EvolutionSim
 
                 //this code block handles logic when organism is the middle of eating
                 case PotentialStates.Eating:
+                    if(_passedOrganism.DestinationTile is null)
+                    {
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
+                        
+                    }
 
+                    else if (!Logic.StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition)){
+                        // Change NotHungry?
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
+                    }
                     //if there is food in food source then contuine eating
 
                     //if food hungry is maxed out (100) then stop eating && move back into roaming
-                    if (_passedOrganism._attributes._hunger == 1.0)
-                    {
 
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
-
-                    }
 
                     break;
 
@@ -127,19 +132,25 @@ namespace EvolutionSim
 
                 case PotentialStates.SeekFood:
 
-                    // 1) call tracking method located in grid, 
-                    // 2) if tracking method return true then the organism moves over to food and transitions into the eating state:
-                    //if (_simGrid.TrackFood(_passedOrganism))
-                    //{
-                    //    _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
+                   if( _passedOrganism.MovingOnPath)
+                    {
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodDetected);
+                    }
 
-                    //}
 
-                    //else
-                    //{
-                    //    //remain in the same state
-                    //    return;
-                    //}
+
+                    break;
+                case PotentialStates.MovingToFood:
+                    if (Logic.StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
+                    {
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
+
+                    }
+                    if (!_passedOrganism.MovingOnPath)
+                    {
+                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
+
+                    }
 
 
                     break;
@@ -184,7 +195,7 @@ namespace EvolutionSim
                     break;
 
                 case PotentialStates.Eating:
-
+                    Logic.StateActions.EatingFood.EatFood(_passedOrganism, _grid);
                     break;
                 case PotentialStates.Mating:
 
@@ -200,6 +211,9 @@ namespace EvolutionSim
 
                    // _simGrid.Move(gameTime);
 
+                    break;
+                case PotentialStates.MovingToFood:
+                    Logic.StateActions.MoveAlongPath(_passedOrganism, _grid, _passedOrganism._Path);
                     break;
 
                 default:
