@@ -29,6 +29,8 @@ namespace EvolutionSim.Logic
                 _fsm.UpdateOrganismAttributes(org);
             }
 
+            Food.AttemptCleanUp(Foods);
+
         }
         /// <summary>
         /// Add an inhabitant at a random place in the grid
