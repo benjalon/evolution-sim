@@ -29,8 +29,19 @@ namespace EvolutionSim.Logic
                 _fsm.UpdateOrganismAttributes(org);
             }
 
-            Food.AttemptCleanUp(Foods);
-
+            List<Food> toRem = new List<Food>();
+            foreach(Food food in Foods)
+            {
+                if (_fsm.RemoveFood(food))
+                {
+                    toRem.Add(food);
+                }
+            }
+            foreach(Food remove in toRem)
+            {
+                Foods.Remove(remove);
+            }
+            toRem.Clear();
         }
         /// <summary>
         /// Add an inhabitant at a random place in the grid

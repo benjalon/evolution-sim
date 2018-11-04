@@ -16,8 +16,13 @@ namespace EvolutionSim.Logic.Pathfinding
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    var node = new Node(tiles[center.GridPositionX + i][center.GridPositionY + j], goal, previous);
-                    expanded.Add(node);
+
+                    if(Logic.StateActions.InBounds(center.GridPositionX + i, center.GridPositionY + j))
+                    {
+                        var node = new Node(tiles[center.GridPositionX + i][center.GridPositionY + j], goal, previous);
+                        expanded.Add(node);
+                    }
+
                 }
             }
             return expanded;

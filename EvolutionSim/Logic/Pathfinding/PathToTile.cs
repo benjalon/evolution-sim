@@ -8,7 +8,7 @@ namespace EvolutionSim.Logic.Pathfinding
 {
     public static class PathFinding
      {
-        public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition)
+        public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition,Tile[][] tiles)
         {
             Node goalNode = null;
 
@@ -26,11 +26,12 @@ namespace EvolutionSim.Logic.Pathfinding
 
             bool goalFound = false;
             //3.  while the open list is not empty
-            while (!open.Any() && !goalFound)
+            while (open.Any() && !goalFound)
             {
                 //    a) find the node with the least f on 
                 //       the open list, call it current
-                open = open.OrderByDescending(x => x.FOfS).ToList();//custom sort by heuristic (distance to goal)
+                open = 
+                open = open.OrderBy(x => x.FOfS).ToList();//custom sort by heuristic (distance to goal)
 
 
                 //    b) pop current off the open list
@@ -39,12 +40,12 @@ namespace EvolutionSim.Logic.Pathfinding
 
                 //    c) generate currents's 8 successors and set their 
                 //       parents to current
-                var expanded = NodeExpander.expand(this._tiles, current.Current, current.Goal, current);
+                var expanded = Pathfinding.NodeExpander.expand(tiles, current.Current, current.Goal, current);
                 //open.AddRange(expanded);
 
                 foreach (var node in expanded)
                 {
-                    if (node.Current == node.Goal)
+                    if (node.Current.GridPositionX == node.Goal.GridPositionX && node.Current.GridPositionY == node.Goal.GridPositionY)
                     {
                         goalNode = node;
                         goalFound = true;
@@ -77,11 +78,15 @@ namespace EvolutionSim.Logic.Pathfinding
             var endTile = false;
             var path = new List<Tile>();
             Node t = goalNode;
-            if (!(goalNode == null))
+            if (goalFound)
             {
-                while (endTile)
+                while (!endTile)
                 {
                     path.Add(t.Current);
+                    if(t.Current.GridPositionX == startPosition.GridPositionX && t.Current.GridPositionY == startPosition.GridPositionY)
+                    {
+                        endTile = true;
+                    }
                     t = t.Previous;
                 }
                 path.Reverse();

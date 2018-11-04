@@ -19,23 +19,30 @@ namespace EvolutionSim.Logic.Pathfinding
         {
             this.Current = current;
             this.Goal = goal;
-            this.Heuristic = CalculateDistance(this.Goal);
-            this.Distance = CalculateDistance(previous.Current);
+            this.Heuristic = CalculateDistance(this.Goal, this.Current);
             if (previous == null)
             {
                 this.FOfS = 0;
             }
             else
             {
+                this.Distance = CalculateDistance(this.Goal, previous.Current);
+
                 this.FOfS = this.Heuristic + this.Distance;
             }
             this.Previous = previous;
 
         }
 
-        private static int CalculateDistance(Tile Location)
+        /// <summary>
+        /// WAS LITERALLY SUBTRACTING BY ITS OWN CO-ORDINATE VALUES XD
+        /// </summary>
+        /// <param name="Location"></param>
+        /// <param name="Goal"></param>
+        /// <returns></returnsL
+        private static int CalculateDistance(Tile Goal, Tile Location)
         {
-            return Math.Abs(Location.GridPositionX - Location.GridPositionX) + Math.Abs(Location.GridPositionY - Location.GridPositionY);
+            return Math.Abs(Location.GridPositionX - Goal.GridPositionX) + Math.Abs(Location.GridPositionY - Goal.GridPositionY);
         }
 
    
