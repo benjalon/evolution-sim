@@ -208,8 +208,17 @@ namespace EvolutionSim.Logic
 
 
         }
-       
 
+        public static class EatingFood
+        {
+
+            public static void EatFood(Organism organism, Grid grid, Food itemBeingEaten)
+            {
+                itemBeingEaten.foodHealth = 0;
+
+
+            }
+        }
 
     }
 }

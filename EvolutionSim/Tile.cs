@@ -14,7 +14,7 @@ namespace EvolutionSim
         public const int TILE_SIZE = 10;
 
         public int MyProperty { get; set; }
-        public MapItem Inhabitant { get; private set; }
+        public MapItem Inhabitant { get; set; }
         private TerrainTypes _terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
