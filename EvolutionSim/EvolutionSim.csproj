@@ -89,6 +89,9 @@
     <Compile Include="Graphics\MapItem.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Logic\Brain.cs" />
+    <Compile Include="Logic\Pathfinding\Node.cs" />
+    <Compile Include="Logic\Pathfinding\NodeExpander.cs" />
+    <Compile Include="Logic\Pathfinding\PathToTile.cs" />
     <Compile Include="Logic\StateActions.cs" />
     <Compile Include="Organism.cs" />
     <Compile Include="OrganismAttributes.cs" />

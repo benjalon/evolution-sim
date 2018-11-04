@@ -15,6 +15,7 @@ namespace EvolutionSim.Logic
             return Math.Abs(StartPosition.X - EndPosition.X) + Math.Abs(EndPosition.Y - EndPosition.Y);
         }
 
+
         public static List<Point> GetPointsInRange(Organism organism)   
         {
             List<Point> toRet = new List<Point>();
