@@ -25,6 +25,19 @@ namespace EvolutionSim
 
 
         }
+
+        public bool RemoveFood(Food food)
+        {
+
+
+                if (food.foodHealth == 0)
+                {
+                    food.ParentTile.Inhabitant = null;
+                return true;
+                }
+            return false;
+     
+        }
      
         public void UpdateOrganismAttributes(Organism organism)
         {

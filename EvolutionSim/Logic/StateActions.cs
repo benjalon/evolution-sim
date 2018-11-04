@@ -15,6 +15,7 @@ namespace EvolutionSim.Logic
             return Math.Abs(StartPosition.X - EndPosition.X) + Math.Abs(EndPosition.Y - EndPosition.Y);
         }
 
+
         public static List<Point> GetPointsInRange(Organism organism)   
         {
             List<Point> toRet = new List<Point>();
@@ -36,7 +37,7 @@ namespace EvolutionSim.Logic
         }
 
         private static Random _random = new Random();
-        private static Boolean InBounds(int x, int y)
+        public static Boolean InBounds(int x, int y)
         {
             if (y >= Grid.verticalCount || y < 0 || x >= Grid.horizontalCount || x < 0)
             {
@@ -101,9 +102,11 @@ namespace EvolutionSim.Logic
             public static void SeekFood(Organism organism, Grid grid)
             {
                 organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
-                if (FoodInRange(organism,grid))
+                Tile PotentialFood = FoodInRange(organism, grid);
+                if (PotentialFood != null)
                 {
                     // Path to food
+                    List<Tile> Path = Logic.Pathfinding.PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid._tiles);
                 }
                 else
                 {
@@ -115,7 +118,7 @@ namespace EvolutionSim.Logic
                 //if destination full decide again.
             }
 
-            private static bool FoodInRange(Organism organism,Grid grid)
+            private static Tile FoodInRange(Organism organism,Grid grid)
             {
                 int firstX = organism.GridPosition.X - (organism._attributes._DetectionRadius)/2;
                 int firstY = organism.GridPosition.Y - (organism._attributes._DetectionRadius)/2;
@@ -127,14 +130,14 @@ namespace EvolutionSim.Logic
                         if (InBounds(firstX + i,firstY+j) && grid._tiles[firstX + i][firstY+j].Inhabitant is Food)
                         {
 
-                            return true;
+                            return grid._tiles[firstX + i][firstY + j];
                         }
 
 
                     }
 
                 }
-                return false;
+                return null;
 
 
 
