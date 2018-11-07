@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvolutionSim.Logic.Pathfinding;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +18,8 @@ namespace EvolutionSim.Logic
 
         public static Boolean AdjacencyCheck(Point StartPosition, Point EndPosition)
         {
-
-
-
             double distance = Math.Floor(Math.Sqrt((StartPosition.X - EndPosition.X) * (StartPosition.X - EndPosition.X) + (StartPosition.Y - EndPosition.Y) * (StartPosition.Y - EndPosition.Y)));
-
-            if (distance == 1)
-            {
-                return true;
-            }
-            return false;
+            return distance == 1;
         }
 
         public static List<Point> GetPointsInRange(Organism organism)   
@@ -98,13 +91,7 @@ namespace EvolutionSim.Logic
                         break;
                 }
 
-
-                if (!grid._tiles[_destinationTileX][_destinationTileY].HasMapItem())
-                {
-
-                    grid._tiles[organism.GridPosition.X][organism.GridPosition.Y].MoveInhabitant(grid._tiles[_destinationTileX][_destinationTileY]);
-
-                }
+                grid.MoveMapItem(organism, _destinationTileX, _destinationTileY);
             }
 
             //if destination full decide again.
@@ -120,7 +107,8 @@ namespace EvolutionSim.Logic
 
                 if (Path.Any() && !Path.First().HasMapItem())
                 {
-                    grid._tiles[organism.GridPosition.X][organism.GridPosition.Y].MoveInhabitant(Path.First());
+                    var first = Path[0];
+                    grid.MoveMapItem(organism, first);
                     Path.RemoveAt(0);
 
                 }
@@ -151,7 +139,7 @@ namespace EvolutionSim.Logic
                     if (PotentialFood != null)
                     {
                         // Path to food
-                        List<Tile> Path = Logic.Pathfinding.PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid._tiles);
+                        List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid);
                         organism._Path = Path;
                         if(Path.Count == 0)
                     {
@@ -184,17 +172,13 @@ namespace EvolutionSim.Logic
             {
                 int firstX = organism.GridPosition.X - organism._attributes._DetectionRadius;
                 int firstY = organism.GridPosition.Y - organism._attributes._DetectionRadius;
-
                 for (int i = 0; i < organism._attributes._DetectionDiameter; i++)
                 {
                     for (int j = 0; j < organism._attributes._DetectionDiameter; j++)
                     {
-                        if (InBounds(firstX + i,firstY+j) && grid._tiles[firstX + i][firstY+j].Inhabitant is Food)
+                        if (InBounds(firstX + i,firstY+j) && grid.IsFoodAt(firstX + i, firstY + j))
                         {
-
-
-                            return grid._tiles[firstX + i][firstY + j];
-
+                            return grid.GetTileAt(firstX + i, firstY + j);
                         }
 
 
@@ -222,14 +206,13 @@ namespace EvolutionSim.Logic
                     Food food = (Food)organism.DestinationTile.Inhabitant;
                     if (food != null) // It's rare but two organisms can attempt to eat the same food source
                     {
-                        food.foodHealth = 0;
+                        food.Eat();
                         // organism._attributes._hunger += 0.3;
                     }
                     organism.DestinationTile = null;
                     organism._Path = new List<Tile>();
                 }
-          }
+            }
         }
-
     }
 }

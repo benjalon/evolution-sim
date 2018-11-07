@@ -13,11 +13,11 @@ namespace EvolutionSim
     {
         public const int TILE_SIZE = 10;
 
-        public int MyProperty { get; set; }
-        public MapItem Inhabitant { get; set; }
-        private TerrainTypes _terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
+        public MapItem Inhabitant { get; private set; }
+
+        private TerrainTypes _terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
 
         public Tile(Texture2D texture, Rectangle rectangle) : base(texture, rectangle)
         {
@@ -47,6 +47,11 @@ namespace EvolutionSim
         {
             Inhabitant.MoveToTile(endPosition);
             endPosition.Inhabitant = Inhabitant;
+            Inhabitant = null;
+        }
+
+        public void RemoveInhabitant()
+        {
             Inhabitant = null;
         }
 

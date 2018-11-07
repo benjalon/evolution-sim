@@ -15,7 +15,7 @@ namespace EvolutionSim
 
     public class Grid
     {
-        public Tile[][] _tiles;
+        private Tile[][] _tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
         public static int HorizontalCount { get; private set; }
         public static int VerticalCount { get; private set; }
@@ -81,16 +81,37 @@ namespace EvolutionSim
             return found;
         }
 
-        public bool TryToPosition(MapItem item, int positionX, int positionY)
+        public bool AttemptToPositionAt(MapItem item, int x, int y)
         {
-            if (_tiles[positionX][positionY].HasMapItem())
+            if (_tiles[x][y].HasMapItem())
             {
-                return false;
+                return false; // Space occupied
             }
 
-            _tiles[positionX][positionY].AddMapItem(item);
-            return true;
+            _tiles[x][y].AddMapItem(item);
+            return true; // Successfully positioned
         }
 
+        public void MoveMapItem(MapItem mapItem, int destinationX, int destinationY)
+        {
+            var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
+            parentTile.MoveInhabitant(_tiles[destinationX][destinationY]);
+        }
+
+        public void MoveMapItem(MapItem mapItem, Tile destination)
+        {
+            var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
+            parentTile.MoveInhabitant(destination);
+        }
+
+        public bool IsFoodAt(int x, int y)
+        {
+            return _tiles[x][y].Inhabitant is Food;
+        }
+
+        public Tile GetTileAt(int x, int y)
+        {
+            return _tiles[x][y];
+        }
     }
 }

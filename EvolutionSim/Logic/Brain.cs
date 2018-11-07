@@ -10,7 +10,7 @@ namespace EvolutionSim.Logic
     public class Brain
     {
 
-        private  StateMachine _fsm;
+        private StateMachine _fsm;
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
         private Random _random = new Random();
@@ -18,21 +18,10 @@ namespace EvolutionSim.Logic
         public Brain(Grid grid)
         {
             _fsm = new StateMachine(grid);
-
         }
 
         public void Update()
         {
-
-            var foodCount = Foods.Count;
-            for(var i = foodCount - 1; i > 0; i--)
-            {
-                if (_fsm.RemoveFood(Foods[i]))
-                {
-                    Foods.RemoveAt(i);
-                }
-            }
-
             foreach (Organism org in Organisms)
             {
                 _fsm.checkState(org);
@@ -48,6 +37,7 @@ namespace EvolutionSim.Logic
         public void AddOrganism(Organism organism,Grid grid)
         {
             // Keep track of newly added organisms so we can get them later.
+            organism.DeathOccurred += OrganismDeathHandler;
             Organisms.Add(organism);
             PositionAtRandom(organism, grid);
         }
@@ -55,16 +45,27 @@ namespace EvolutionSim.Logic
         public void AddFood(Food food,Grid grid)
         {
             // Keep track of newly added food so we can get them later.
+            food.DeathOccurred += FoodDeathHandler;
             Foods.Add(food);
             PositionAtRandom(food, grid);
         }
         
         private void PositionAtRandom(MapItem item, Grid grid)
         {
-            if (!grid.TryToPosition(item, _random.Next(0, Grid.HorizontalCount), _random.Next(0, Grid.VerticalCount)))
+            if (!grid.AttemptToPositionAt(item, _random.Next(0, Grid.HorizontalCount), _random.Next(0, Grid.VerticalCount)))
             {
                 PositionAtRandom(item, grid); // Try again
             }
+        }
+
+        private void OrganismDeathHandler(object sender, EventArgs e)
+        {
+            Organisms.Remove((Organism)sender);
+        }
+
+        private void FoodDeathHandler(object sender, EventArgs e)
+        {
+            Foods.Remove((Food)sender);
         }
     }
 }

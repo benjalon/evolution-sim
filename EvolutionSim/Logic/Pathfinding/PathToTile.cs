@@ -8,7 +8,7 @@ namespace EvolutionSim.Logic.Pathfinding
 {
     public static class PathFinding
     {
-        public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition, Tile[][] tiles)
+        public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition, Grid grid)
         {
             Node goalNode = null;
 
@@ -40,7 +40,7 @@ namespace EvolutionSim.Logic.Pathfinding
 
                 //    c) generate currents's 8 successors and set their 
                 //       parents to current
-                expanded = NodeExpander.expand(tiles, current.Current, current.Goal, current);
+                expanded = NodeExpander.expand(grid, current.Current, current.Goal, current);
                 //open.AddRange(expanded);
 
                 Node node;

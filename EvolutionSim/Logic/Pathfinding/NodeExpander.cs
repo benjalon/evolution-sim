@@ -8,7 +8,7 @@ namespace EvolutionSim.Logic.Pathfinding
 {
     public static class NodeExpander
     {
-        public static List<Node> expand(Tile[][] tiles, Tile center, Tile goal, Node previous)
+        public static List<Node> expand(Grid grid, Tile center, Tile goal, Node previous)
         {
             var expanded = new List<Node>();
             Node node;
@@ -21,7 +21,7 @@ namespace EvolutionSim.Logic.Pathfinding
                     if(StateActions.InBounds(center.GridPositionX + i, center.GridPositionY + j) )
                     {
 
-                        node = new Node(tiles[center.GridPositionX + i][center.GridPositionY + j], goal, previous);
+                        node = new Node(grid.GetTileAt(center.GridPositionX + i, center.GridPositionY + j), goal, previous);
                         if (node.Current.GridPosition != center.GridPosition)
                         {
                             expanded.Add(node);
