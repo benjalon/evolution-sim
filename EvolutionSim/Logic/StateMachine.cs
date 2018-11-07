@@ -1,5 +1,4 @@
 ﻿using EvolutionSim.Logic;
-using System;
 
 namespace EvolutionSim
 {
@@ -113,7 +112,6 @@ namespace EvolutionSim
 
                    if( _passedOrganism.MovingOnPath)
                     {
-                        Console.WriteLine("Food detected");
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodDetected);
                     }
 
@@ -123,13 +121,11 @@ namespace EvolutionSim
                 case PotentialStates.MovingToFood:
                     if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
                     {
-                        Console.WriteLine("Moving to1");
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
 
                     }
                     if (!_passedOrganism.MovingOnPath)
                     {
-                        Console.WriteLine("Moving to2");
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
 
                     }

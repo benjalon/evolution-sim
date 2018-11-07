@@ -27,7 +27,7 @@ namespace EvolutionSim.Logic.Pathfinding
             Node current;
             List<Node> expanded;
             //3.  while the open list is not empty
-            while (open.Any())
+            while (open.Any() && goalNode == null)
             {
                 //    a) find the node with the least f on 
                 //       the open list, call it current

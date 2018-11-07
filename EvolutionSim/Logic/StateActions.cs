@@ -206,7 +206,7 @@ namespace EvolutionSim.Logic
                         // organism._attributes._hunger += 0.3;
                     }
                     organism.DestinationTile = null;
-                    organism.Path = new List<Tile>();
+                    organism.Path.Clear();
                 }
             }
         }
