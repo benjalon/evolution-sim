@@ -17,24 +17,22 @@ namespace EvolutionSim
     {
         public Tile[][] _tiles;
 
-        public static int horizontalCount;
-        public static int verticalCount;
+        public static int HorizontalCount { get; private set; }
+        public static int VerticalCount { get; private set; }
 
         private Random _random = new Random();
         
-
-
         public Grid(Texture2D tileTexture, int width, int height)
         {
-            horizontalCount = width / Tile.TILE_SIZE;
-            verticalCount = height / Tile.TILE_SIZE;
+            HorizontalCount = width / Tile.TILE_SIZE;
+            VerticalCount = height / Tile.TILE_SIZE;
 
-            _tiles = new Tile[horizontalCount][];
+            _tiles = new Tile[HorizontalCount][];
 
-            for (var i = 0; i < horizontalCount; i++)
+            for (var i = 0; i < HorizontalCount; i++)
             {
-                _tiles[i] = new Tile[verticalCount];
-                for (var j = 0; j < verticalCount; j++)
+                _tiles[i] = new Tile[VerticalCount];
+                for (var j = 0; j < VerticalCount; j++)
                 {
                     _tiles[i][j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
                 }
@@ -42,13 +40,11 @@ namespace EvolutionSim
 
         }
 
-
-
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (var i = 0; i < horizontalCount; i++)
+            for (var i = 0; i < HorizontalCount; i++)
             {
-                for (var j = 0; j < verticalCount; j++)
+                for (var j = 0; j < VerticalCount; j++)
                 {
                     _tiles[i][j].Draw(spriteBatch);
                 }
@@ -85,14 +81,16 @@ namespace EvolutionSim
             return found;
         }
 
+        public bool TryToPosition(MapItem item, int positionX, int positionY)
+        {
+            if (_tiles[positionX][positionY].HasMapItem())
+            {
+                return false;
+            }
 
-        
-
-
-        
-
-
-
+            _tiles[positionX][positionY].AddMapItem(item);
+            return true;
+        }
 
     }
 }

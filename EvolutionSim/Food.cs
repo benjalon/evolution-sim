@@ -19,21 +19,5 @@ namespace EvolutionSim
             this.foodHealth = 10;
             // ' _detectionArea = new BoundingCircle(rectangle.Center.ToVector2(), detectionRadius);
         }
-
-        public static void AttemptCleanUp(List<Food> foods)
-        {
-
-            foreach (Food food in foods)
-            {
-
-                if (food.foodHealth == 0)
-                {
-                    food.ParentTile.Inhabitant = null;
-                    foods.Remove(food);
-                }
-
-            }
-
-        }
     }
 }

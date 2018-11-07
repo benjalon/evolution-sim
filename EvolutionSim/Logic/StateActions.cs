@@ -33,10 +33,10 @@ namespace EvolutionSim.Logic
         {
             List<Point> toRet = new List<Point>();
 
-            int firstX = organism.GridPosition.X - (organism._attributes._DetectionRadius) / 2;
-            int firstY = organism.GridPosition.Y - (organism._attributes._DetectionRadius) / 2;
+            var firstX = organism.GridPosition.X - organism._attributes._DetectionRadius;
+            var firstY = organism.GridPosition.Y - organism._attributes._DetectionRadius;
 
-            for (int i = 0; i < organism._attributes._DetectionRadius; i++)
+            for (int i = 0; i < organism._attributes._DetectionDiameter; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
@@ -52,7 +52,7 @@ namespace EvolutionSim.Logic
         private static Random _random = new Random();
         public static Boolean InBounds(int x, int y)
         {
-            if (y >= Grid.verticalCount || y < 0 || x >= Grid.horizontalCount || x < 0)
+            if (y >= Grid.VerticalCount || y < 0 || x >= Grid.HorizontalCount || x < 0)
             {
                 return false;
             }
@@ -85,13 +85,13 @@ namespace EvolutionSim.Logic
                         }
                         break;
                     case Directions.Down:
-                        if (_destinationTileY < Grid.verticalCount - 1)
+                        if (_destinationTileY < Grid.VerticalCount - 1)
                         {
                             _destinationTileY += 1;
                         }
                         break;
                     case Directions.Right:
-                        if (_destinationTileX < Grid.horizontalCount - 1)
+                        if (_destinationTileX < Grid.HorizontalCount - 1)
                         {
                             _destinationTileX += 1;
                         }
@@ -182,12 +182,12 @@ namespace EvolutionSim.Logic
 
             private static Tile FoodInRange(Organism organism,Grid grid)
             {
-                int firstX = organism.GridPosition.X - (organism._attributes._DetectionRadius)/2;
-                int firstY = organism.GridPosition.Y - (organism._attributes._DetectionRadius)/2;
+                int firstX = organism.GridPosition.X - organism._attributes._DetectionRadius;
+                int firstY = organism.GridPosition.Y - organism._attributes._DetectionRadius;
 
-                for (int i = 0; i < organism._attributes._DetectionRadius; i++)
+                for (int i = 0; i < organism._attributes._DetectionDiameter; i++)
                 {
-                    for (int j = 0; j < organism._attributes._DetectionRadius; j++)
+                    for (int j = 0; j < organism._attributes._DetectionDiameter; j++)
                     {
                         if (InBounds(firstX + i,firstY+j) && grid._tiles[firstX + i][firstY+j].Inhabitant is Food)
                         {
@@ -219,10 +219,12 @@ namespace EvolutionSim.Logic
                 organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
                 if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
                 {
-
                     Food food = (Food)organism.DestinationTile.Inhabitant;
-                    food.foodHealth = 0;
-                    // organism._attributes._hunger += 0.3;
+                    if (food != null) // It's rare but two organisms can attempt to eat the same food source
+                    {
+                        food.foodHealth = 0;
+                        // organism._attributes._hunger += 0.3;
+                    }
                     organism.DestinationTile = null;
                     organism._Path = new List<Tile>();
                 }

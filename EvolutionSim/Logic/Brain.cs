@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,21 +23,15 @@ namespace EvolutionSim.Logic
 
         public void Update()
         {
-         
 
-            List<Food> toRem = new List<Food>();
-            foreach(Food food in Foods)
+            var foodCount = Foods.Count;
+            for(var i = foodCount - 1; i > 0; i--)
             {
-                if (_fsm.RemoveFood(food))
+                if (_fsm.RemoveFood(Foods[i]))
                 {
-                    toRem.Add(food);
+                    Foods.RemoveAt(i);
                 }
             }
-            foreach(Food remove in toRem)
-            {
-                Foods.Remove(remove);
-            }
-            toRem.Clear();
 
             foreach (Organism org in Organisms)
             {
@@ -53,26 +48,23 @@ namespace EvolutionSim.Logic
         public void AddOrganism(Organism organism,Grid grid)
         {
             // Keep track of newly added organisms so we can get them later.
-            Organisms.Add(organism); 
-            organism.GridPosition.X = _random.Next(0, Grid.horizontalCount);
-            organism.GridPosition.Y = _random.Next(0, Grid.verticalCount);
-
-            // Add to grid
-             grid._tiles[organism.GridPosition.X][organism.GridPosition.Y].AddMapItem(organism);
+            Organisms.Add(organism);
+            PositionAtRandom(organism, grid);
         }
 
         public void AddFood(Food food,Grid grid)
         {
             // Keep track of newly added food so we can get them later.
-            Foods.Add(food); 
-            food.GridPosition.X = _random.Next(0, Grid.horizontalCount);
-            food.GridPosition.Y = _random.Next(0, Grid.verticalCount);
-
-            // Add to grid
-            grid._tiles[food.GridPosition.X][food.GridPosition.Y].AddMapItem(food);
+            Foods.Add(food);
+            PositionAtRandom(food, grid);
         }
-
-
-
+        
+        private void PositionAtRandom(MapItem item, Grid grid)
+        {
+            if (!grid.TryToPosition(item, _random.Next(0, Grid.HorizontalCount), _random.Next(0, Grid.VerticalCount)))
+            {
+                PositionAtRandom(item, grid); // Try again
+            }
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace EvolutionSim
         public double _speed { get; set; }
         public double _strength { get; set; }
         public int _DetectionRadius;
+        public int _DetectionDiameter;
         public FoodType _foodType;
 
 
@@ -24,7 +25,8 @@ namespace EvolutionSim
                                   double strength_passsed,
                                   FoodType foodType_passed)
         {
-            _DetectionRadius = 7;
+            _DetectionRadius = 3;
+            _DetectionDiameter = _DetectionRadius * 2;
             _health = health_passed;
             _age = age_passed;
             _hunger = 0;

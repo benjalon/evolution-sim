@@ -25,7 +25,6 @@ namespace EvolutionSim
             GridPositionY = rectangle.Y / TILE_SIZE;
             base.GridPosition.X = GridPositionX;
             base.GridPosition.Y = GridPositionY;
-
         }
 
         public void AddMapItem(MapItem mapItem)
