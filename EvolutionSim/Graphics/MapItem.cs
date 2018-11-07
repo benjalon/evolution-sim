@@ -80,7 +80,8 @@ namespace EvolutionSim
             _health -= value;
             if (_health <= 0)
             {
-                OnDeath(EventArgs.Empty); // Fire death event so the brain/grid can be made aware
+                ParentTile.RemoveInhabitant(); // Remove from grid
+                OnDeath(EventArgs.Empty); // Remove from brain collection
             }
         }
 

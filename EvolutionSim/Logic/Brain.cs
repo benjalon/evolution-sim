@@ -37,16 +37,20 @@ namespace EvolutionSim.Logic
         public void AddOrganism(Organism organism,Grid grid)
         {
             // Keep track of newly added organisms so we can get them later.
-            organism.DeathOccurred += OrganismDeathHandler;
             Organisms.Add(organism);
+
+            organism.DeathOccurred += OrganismDeathHandler;
+
             PositionAtRandom(organism, grid);
         }
 
         public void AddFood(Food food,Grid grid)
         {
             // Keep track of newly added food so we can get them later.
-            food.DeathOccurred += FoodDeathHandler;
             Foods.Add(food);
+
+            food.DeathOccurred += FoodDeathHandler;
+            
             PositionAtRandom(food, grid);
         }
         
