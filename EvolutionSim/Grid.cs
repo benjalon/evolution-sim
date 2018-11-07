@@ -83,7 +83,7 @@ namespace EvolutionSim
 
         public bool AttemptToPositionAt(MapItem item, int x, int y)
         {
-            if (_tiles[x][y].HasMapItem())
+            if (_tiles[x][y].HasInhabitant())
             {
                 return false; // Space occupied
             }

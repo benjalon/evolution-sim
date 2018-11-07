@@ -14,20 +14,15 @@ namespace EvolutionSim
         private String _speciesName;
 
         public Tile DestinationTile;
-
-       
-
+        
         public const int MS_PER_DIRECTION_CHANGE = 2000;
 
         public int MilliSecondsSinceLastMovement;
         //what state is the organism currently in
         public PotentialStates organismState { get; set; }
         public Boolean MovingOnPath{ get; set; }
-        public List<Tile> _Path { get; set; }
+        public List<Tile> Path { get; set; }
  
-        
-        public MapItem Sprite { get; set; }
-        
         int age_passed = 0;
         double hunger_passed = 0.6;
         double speed_passed = 500;
@@ -42,7 +37,7 @@ namespace EvolutionSim
             _attributes = new OrganismAttributes(age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             TOTAL_POPULATION++;
             organismState = PotentialStates.Roaming;
-            _Path = new List<Tile>();
+            Path = new List<Tile>();
         }
 
         public override String ToString()

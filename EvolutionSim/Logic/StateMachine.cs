@@ -191,7 +191,7 @@ namespace EvolutionSim
 
                     break;
                 case PotentialStates.MovingToFood:
-                    StateActions.MoveAlongPath(_passedOrganism, _grid, _passedOrganism._Path);
+                    StateActions.MoveAlongPath(_passedOrganism, _grid, _passedOrganism.Path);
                     break;
 
                 default:

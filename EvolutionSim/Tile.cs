@@ -37,7 +37,7 @@ namespace EvolutionSim
         {
             base.Draw(spriteBatch);
 
-            if (HasMapItem())
+            if (HasInhabitant())
             {
                 Inhabitant.Draw(spriteBatch);
             }
@@ -45,9 +45,12 @@ namespace EvolutionSim
 
         public void MoveInhabitant(Tile endPosition)
         {
-            Inhabitant.MoveToTile(endPosition);
-            endPosition.Inhabitant = Inhabitant;
-            Inhabitant = null;
+            if (HasInhabitant())
+            {
+                Inhabitant.MoveToTile(endPosition);
+                endPosition.Inhabitant = Inhabitant;
+                Inhabitant = null;
+            }
         }
 
         public void RemoveInhabitant()
@@ -55,7 +58,7 @@ namespace EvolutionSim
             Inhabitant = null;
         }
 
-        public bool HasMapItem()
+        public bool HasInhabitant()
         {
             return Inhabitant != null;
         }

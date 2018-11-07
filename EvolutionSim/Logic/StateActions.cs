@@ -105,7 +105,7 @@ namespace EvolutionSim.Logic
             {
                 organism.MilliSecondsSinceLastMovement = 0;
 
-                if (Path.Any() && !Path.First().HasMapItem())
+                if (Path.Any() && !Path.First().HasInhabitant())
                 {
                     var first = Path[0];
                     grid.MoveMapItem(organism, first);
@@ -134,35 +134,31 @@ namespace EvolutionSim.Logic
                 // Essentially, if food has been located, and path calculated, we move towards food
  
                 // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
-                    Tile PotentialFood = FoodInRange(organism, grid);
+                Tile PotentialFood = FoodInRange(organism, grid);
 
-                    if (PotentialFood != null)
-                    {
-                        // Path to food
-                        List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid);
-                        organism._Path = Path;
-                        if(Path.Count == 0)
+                if (organism.DestinationTile != null && PotentialFood != null)
+                {
+                    // Path to food
+                    List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid);
+                    organism.Path = Path;
+                    if(Path.Count == 0)
                     {
                         organism.DestinationTile = PotentialFood;
                     }
                     else
                     {
                         organism.DestinationTile = PotentialFood;
-                        organism._Path.RemoveAt(organism._Path.Count - 1);
+                        organism.Path.RemoveAt(organism.Path.Count - 1);
                     }
 
-                        organism.MovingOnPath = true;
-                        return true;
-                    }
-                    else
-                    {
-                        Logic.StateActions.Roam(organism, grid);
-                        return false;
-                    }
-                
-
-               
-               
+                    organism.MovingOnPath = true;
+                    return true;
+                }
+                else
+                {
+                    Roam(organism, grid);
+                    return false;
+                }
                 
 
                 //if destination full decide again.
@@ -210,7 +206,7 @@ namespace EvolutionSim.Logic
                         // organism._attributes._hunger += 0.3;
                     }
                     organism.DestinationTile = null;
-                    organism._Path = new List<Tile>();
+                    organism.Path = new List<Tile>();
                 }
             }
         }
