@@ -1,4 +1,5 @@
 ﻿using EvolutionSim.Logic;
+using System;
 
 namespace EvolutionSim
 {
@@ -79,12 +80,11 @@ namespace EvolutionSim
 
                 //this code block handles logic when organism is the middle of eating
                 case PotentialStates.Eating:
-                    if(_passedOrganism.DestinationTile is null)
+                    if(_passedOrganism.DestinationTile == null)
                     {
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
                         
                     }
-
                     else if (!StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition)){
                         // Change NotHungry?
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
@@ -113,6 +113,7 @@ namespace EvolutionSim
 
                    if( _passedOrganism.MovingOnPath)
                     {
+                        Console.WriteLine("Food detected");
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodDetected);
                     }
 
@@ -120,13 +121,15 @@ namespace EvolutionSim
 
                     break;
                 case PotentialStates.MovingToFood:
-                    if (StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
+                    if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
                     {
+                        Console.WriteLine("Moving to1");
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
 
                     }
                     if (!_passedOrganism.MovingOnPath)
                     {
+                        Console.WriteLine("Moving to2");
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
 
                     }

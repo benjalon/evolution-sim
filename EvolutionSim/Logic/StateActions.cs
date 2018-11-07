@@ -134,20 +134,20 @@ namespace EvolutionSim.Logic
                 // Essentially, if food has been located, and path calculated, we move towards food
  
                 // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
-                Tile PotentialFood = FoodInRange(organism, grid);
+                Tile potentialFood = FoodInRange(organism, grid);
 
-                if (organism.DestinationTile != null && PotentialFood != null)
+                if (potentialFood != null)
                 {
                     // Path to food
-                    List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, PotentialFood, grid);
+                    List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, potentialFood, grid);
                     organism.Path = Path;
                     if(Path.Count == 0)
                     {
-                        organism.DestinationTile = PotentialFood;
+                        organism.DestinationTile = potentialFood;
                     }
                     else
                     {
-                        organism.DestinationTile = PotentialFood;
+                        organism.DestinationTile = potentialFood;
                         organism.Path.RemoveAt(organism.Path.Count - 1);
                     }
 
