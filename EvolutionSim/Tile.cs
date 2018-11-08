@@ -11,7 +11,7 @@ namespace EvolutionSim
 
     public class Tile : MapItem
     {
-        public const int TILE_SIZE = 100;
+        public const int TILE_SIZE = 16;
 
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }

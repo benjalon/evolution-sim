@@ -95,18 +95,26 @@ namespace EvolutionSim
         public void MoveMapItem(MapItem mapItem, int destinationX, int destinationY)
         {
             var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
-            parentTile.MoveInhabitant(_tiles[destinationX][destinationY]);
+            var destinationTile = _tiles[destinationX][destinationY];
+            if (!destinationTile.HasInhabitant())
+            {
+                parentTile.MoveInhabitant(destinationTile);
+            }
         }
 
         public void MoveMapItem(MapItem mapItem, Tile destination)
         {
             var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
-            parentTile.MoveInhabitant(destination);
+            if (!destination.HasInhabitant())
+            {
+                parentTile.MoveInhabitant(destination);
+            }
         }
 
         public bool IsFoodAt(int x, int y)
         {
-            return _tiles[x][y].Inhabitant is Food;
+            var inhabitant = _tiles[x][y].Inhabitant;
+            return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
 
         public Tile GetTileAt(int x, int y)

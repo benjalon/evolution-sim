@@ -50,7 +50,7 @@ namespace EvolutionSim.Logic
             Foods.Add(food);
 
             food.DeathOccurred += FoodDeathHandler;
-            
+
             PositionAtRandom(food, grid);
         }
         

@@ -69,12 +69,12 @@ namespace EvolutionSim
             _brain = new Brain(_grid);
             _overlay.Button.OnClick = (Entity btn) =>
             {
-                for (var i = 0; i < 1; i++) _brain.AddOrganism(new Organism(_organismTexture), _grid);
+                for (var i = 0; i < 10; i++) _brain.AddOrganism(new Organism(_organismTexture), _grid);
             };
 
             _overlay.Button_Two.OnClick = (Entity btn) =>
             {
-                for (var i = 0; i < 1; i++) _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore), _grid);
+                for (var i = 0; i < 5; i++) _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore), _grid);
             };
 
         }

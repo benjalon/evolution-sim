@@ -107,8 +107,7 @@ namespace EvolutionSim.Logic
 
                 if (Path.Any() && !Path.First().HasInhabitant())
                 {
-                    var first = Path[0];
-                    grid.MoveMapItem(organism, first);
+                    grid.MoveMapItem(organism, Path[0]);
                     Path.RemoveAt(0);
 
                 }
@@ -199,7 +198,7 @@ namespace EvolutionSim.Logic
                 organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
                 if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
                 {
-                    Food food = (Food)organism.DestinationTile.Inhabitant;
+                    Food food = organism.DestinationTile.Inhabitant as Food;
                     if (food != null) // It's rare but two organisms can attempt to eat the same food source
                     {
                         food.Eat();
