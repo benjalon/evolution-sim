@@ -1,6 +1,7 @@
 
 \documentclass[a4paper, oneside, 11pt]{report}
 \usepackage{epsfig,pifont,float,amsmath,amssymb, url, graphicx}
+\usepackage{amsmath}
 \newcommand{\mc}{\multicolumn{1}{c|}}
 \newcommand{\mb}{\mathbf}
 \newcommand{\mi}{\mathit}
@@ -239,6 +240,12 @@ The crossover algorithm is currently a work in progress.
 
 \section{Path Finding Algorithm}\label{pathfinding}
 [TODO: DFS vs Dijkstra's vs A* algorithms, why pathfinding is necessary]
+A* algorithm is used as the main method of pathfinding for organisms in the simulation. This was chosen as it is one of the most efficient pathfinding algorithms as it chooses the path based on both actual distance to the target and difficulty of reaching that target. This is in comparison to Dijkstra's algorithm which just takes difficulty of the path into account. The aim of using A* is to reduce the number of locations that need to be assessed while creating a path to a goal location. Dijkstra's algorithm would be more expensive as it would compare equally difficult locations despite if they are further away from the goal. In our simulations there are many locations with the same difficulty next to each other so it would result in many unnecessary expansions.
+
+In terms of implementation A* is incorporated into the simulation by converting each grid tile into a Node object. This node object keeps track of the node that came before it on the path, its f(n) to the goal and its current location on the grid. The f(n) is the combined distance to the goal and the difficulty in getting to it.
+\mathbb{f(n) = g(n) + h(n)}. 
+To calculate g(n) the 'difficulty' of a tile is taken. This is important when there are different types of terrain such as hill or water. These are harder to traverse for an organism and this forms the g(n). h(n) is calculated by measuring the diagonal distance between the two points; specifically the h(n) is the maximum value of either the goal's x coordinate value minus the current tile's x coordinates or the same for y coordinates.
+There are OPEN and CLOSED lists that hold Nodes to be evaluated. The node that a the organism is currently on is added to the OPEN list. This starts a while loop. This loop evaluates the Node in OPEN with the lowest f(n) and expands this Node, adding all resulting nodes to OPEN. Expanding consists of storing all the adjacent tiles on the grid as Nodes and calculating their f(n). If any of the Nodes evaluated are the goal Node then the loop ends returning the goal Node. This goal Node then is added to a list, the Node's previous Node is then added to the same list. This is done repeatedly until a list exists that contains a step by step path from the starting location to the goal. If the loop never finds the goal node then the pathing has failed and nothing is returned. 
 
 \section{Optimisation}\label{optim}
 Optimisation is considered an area of importance due to the simulation's requirement in handling a large number of organisms without noticeable lag. By default, MonoGame's render loop calls two methods at a speed of sixty times per second: update and draw. Should the logic fail to complete within this ~16-17ms time-frame then it delays the draw call, which lowers the simulation's frame-rate. This has further knock-on effects where the draw calls become progressively more delayed and eventually cause input lag on the UI.
