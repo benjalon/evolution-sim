@@ -1,4 +1,5 @@
-﻿using EvolutionSim.UI;
+﻿using EvolutionSim.Logic;
+using EvolutionSim.UI;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
@@ -22,10 +23,9 @@ namespace EvolutionSim
         private Texture2D _tileTexture;
 
         private Grid _grid;
-        private Logic.Brain _brain;
+        private Brain _brain;
 
-        //list of food objects here
-
+        private double _fpsOld = 0;
 
         public Graphics()
         {
@@ -66,9 +66,16 @@ namespace EvolutionSim
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
 
             _grid = new Grid(_tileTexture, screenWidth, screenHeight);
-            _brain = new Logic.Brain(_grid);
-            _overlay.Button.OnClick = (Entity btn) => _brain.AddOrganism(new Organism(_organismTexture), _grid);
-            _overlay.Button_Two.OnClick = (Entity btn) => _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore, 0), _grid);
+            _brain = new Brain(_grid);
+            _overlay.Button.OnClick = (Entity btn) =>
+            {
+                for (var i = 0; i < 10; i++) _brain.AddOrganism(new Organism(_organismTexture), _grid);
+            };
+
+            _overlay.Button_Two.OnClick = (Entity btn) =>
+            {
+                for (var i = 0; i < 5; i++) _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore), _grid);
+            };
 
         }
         
@@ -108,6 +115,13 @@ namespace EvolutionSim
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)
         {
+            var fps = 1 / gameTime.ElapsedGameTime.TotalSeconds;
+            if (_fpsOld != fps)
+            {
+                Console.WriteLine(fps);
+                _fpsOld = fps;
+            }
+
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
 
             // Draw graphical elements

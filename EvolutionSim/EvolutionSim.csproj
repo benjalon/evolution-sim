@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8E5C53B4-F160-474E-B7D4-572AC14D6FA1}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>EvolutionSim</RootNamespace>
     <AssemblyName>EvolutionSim</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -85,7 +85,6 @@
   <ItemGroup>
     <Compile Include="Food.cs" />
     <Compile Include="FoodType.cs" />
-    <Compile Include="Graphics\BoundingCircle.cs" />
     <Compile Include="Graphics\MapItem.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="Logic\Brain.cs" />

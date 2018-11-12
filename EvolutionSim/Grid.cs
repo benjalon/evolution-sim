@@ -15,26 +15,24 @@ namespace EvolutionSim
 
     public class Grid
     {
-        public Tile[][] _tiles;
+        private Tile[][] _tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
-        public static int horizontalCount;
-        public static int verticalCount;
+        public static int HorizontalCount { get; private set; }
+        public static int VerticalCount { get; private set; }
 
         private Random _random = new Random();
         
-
-
         public Grid(Texture2D tileTexture, int width, int height)
         {
-            horizontalCount = width / Tile.TILE_SIZE;
-            verticalCount = height / Tile.TILE_SIZE;
+            HorizontalCount = width / Tile.TILE_SIZE;
+            VerticalCount = height / Tile.TILE_SIZE;
 
-            _tiles = new Tile[horizontalCount][];
+            _tiles = new Tile[HorizontalCount][];
 
-            for (var i = 0; i < horizontalCount; i++)
+            for (var i = 0; i < HorizontalCount; i++)
             {
-                _tiles[i] = new Tile[verticalCount];
-                for (var j = 0; j < verticalCount; j++)
+                _tiles[i] = new Tile[VerticalCount];
+                for (var j = 0; j < VerticalCount; j++)
                 {
                     _tiles[i][j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
                 }
@@ -42,13 +40,11 @@ namespace EvolutionSim
 
         }
 
-
-
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (var i = 0; i < horizontalCount; i++)
+            for (var i = 0; i < HorizontalCount; i++)
             {
-                for (var j = 0; j < verticalCount; j++)
+                for (var j = 0; j < VerticalCount; j++)
                 {
                     _tiles[i][j].Draw(spriteBatch);
                 }
@@ -85,14 +81,45 @@ namespace EvolutionSim
             return found;
         }
 
+        public bool AttemptToPositionAt(MapItem item, int x, int y)
+        {
+            if (_tiles[x][y].HasInhabitant())
+            {
+                return false; // Space occupied
+            }
 
-        
+            _tiles[x][y].AddMapItem(item);
+            return true; // Successfully positioned
+        }
 
+        public void MoveMapItem(MapItem mapItem, int destinationX, int destinationY)
+        {
+            var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
+            var destinationTile = _tiles[destinationX][destinationY];
+            if (!destinationTile.HasInhabitant())
+            {
+                parentTile.MoveInhabitant(destinationTile);
+            }
+        }
 
-        
+        public void MoveMapItem(MapItem mapItem, Tile destination)
+        {
+            var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
+            if (!destination.HasInhabitant())
+            {
+                parentTile.MoveInhabitant(destination);
+            }
+        }
 
+        public bool IsFoodAt(int x, int y)
+        {
+            var inhabitant = _tiles[x][y].Inhabitant;
+            return inhabitant != null && inhabitant.GetType() == typeof(Food);
+        }
 
-
-
+        public Tile GetTileAt(int x, int y)
+        {
+            return _tiles[x][y];
+        }
     }
 }

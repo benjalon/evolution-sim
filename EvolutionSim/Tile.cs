@@ -11,13 +11,13 @@ namespace EvolutionSim
 
     public class Tile : MapItem
     {
-        public const int TILE_SIZE = 10;
+        public const int TILE_SIZE = 16;
 
-        public int MyProperty { get; set; }
-        public MapItem Inhabitant { get; set; }
-        private TerrainTypes _terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
+        public MapItem Inhabitant { get; private set; }
+
+        private TerrainTypes _terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
 
         public Tile(Texture2D texture, Rectangle rectangle) : base(texture, rectangle)
         {
@@ -25,7 +25,6 @@ namespace EvolutionSim
             GridPositionY = rectangle.Y / TILE_SIZE;
             base.GridPosition.X = GridPositionX;
             base.GridPosition.Y = GridPositionY;
-
         }
 
         public void AddMapItem(MapItem mapItem)
@@ -38,7 +37,7 @@ namespace EvolutionSim
         {
             base.Draw(spriteBatch);
 
-            if (HasMapItem())
+            if (HasInhabitant())
             {
                 Inhabitant.Draw(spriteBatch);
             }
@@ -46,12 +45,20 @@ namespace EvolutionSim
 
         public void MoveInhabitant(Tile endPosition)
         {
-            Inhabitant.MoveToTile(endPosition);
-            endPosition.Inhabitant = Inhabitant;
+            if (HasInhabitant())
+            {
+                Inhabitant.MoveToTile(endPosition);
+                endPosition.Inhabitant = Inhabitant;
+                Inhabitant = null;
+            }
+        }
+
+        public void RemoveInhabitant()
+        {
             Inhabitant = null;
         }
 
-        public bool HasMapItem()
+        public bool HasInhabitant()
         {
             return Inhabitant != null;
         }

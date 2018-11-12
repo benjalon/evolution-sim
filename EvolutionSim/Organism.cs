@@ -14,21 +14,15 @@ namespace EvolutionSim
         private String _speciesName;
 
         public Tile DestinationTile;
-
-       
-
+        
         public const int MS_PER_DIRECTION_CHANGE = 2000;
 
         public int MilliSecondsSinceLastMovement;
         //what state is the organism currently in
         public PotentialStates organismState { get; set; }
         public Boolean MovingOnPath{ get; set; }
-        public List<Tile> _Path { get; set; }
+        public List<Tile> Path { get; set; }
  
-        
-        public MapItem Sprite { get; set; }
-
-        float health_passed = 1;
         int age_passed = 0;
         double hunger_passed = 0.6;
         double speed_passed = 500;
@@ -40,17 +34,16 @@ namespace EvolutionSim
         public Organism(Texture2D texture)
             : base(texture)
         {
-            _attributes = new OrganismAttributes(health_passed, age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
+            _attributes = new OrganismAttributes(age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
             TOTAL_POPULATION++;
             organismState = PotentialStates.Roaming;
-            _Path = new List<Tile>();
+            Path = new List<Tile>();
         }
 
         public override String ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.Append("Species Name: ").Append(_speciesName).Append(Environment.NewLine);
-            stringBuilder.Append("Health: ").Append(_attributes._health).Append(Environment.NewLine);
             stringBuilder.Append("Age: ").Append(_attributes._age).Append(Environment.NewLine);
             stringBuilder.Append("Speed: ").Append(_attributes._speed).Append(Environment.NewLine);
             return stringBuilder.ToString();
@@ -64,6 +57,6 @@ namespace EvolutionSim
         /// </summary>
   
 
-    }
+        }
 
     }

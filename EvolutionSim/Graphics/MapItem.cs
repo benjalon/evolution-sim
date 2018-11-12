@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EvolutionSim
 {
@@ -14,7 +15,7 @@ namespace EvolutionSim
         public Color Color { get; set; }
 
         public Point GridPosition;
-            
+
         protected Rectangle _rectangle;
         public Rectangle Rectangle
         {
@@ -23,7 +24,10 @@ namespace EvolutionSim
         }
 
         public Tile ParentTile { get; private set; }
-        
+
+        protected int _health { get; private set; } = 10;
+        public event EventHandler DeathOccurred;
+
         /// <summary>
         /// Create a static sprite from a given texture and rectangle
         /// </summary>
@@ -65,7 +69,25 @@ namespace EvolutionSim
             GridPosition.Y = tile.GridPositionY;
             ParentTile = tile;
             _rectangle = tile.Rectangle;
-            
+        }
+
+        /// <summary>
+        /// Lower health by the given amount, handling death if it occurs
+        /// </summary>
+        /// <param name="value">The value to lower by</param>
+        public void LowerHealth(int value)
+        {
+            _health -= value;
+            if (_health <= 0)
+            {
+                ParentTile.RemoveInhabitant(); // Remove from grid
+                OnDeath(EventArgs.Empty); // Remove from brain collection
+            }
+        }
+
+        public virtual void OnDeath(EventArgs e)
+        {
+            DeathOccurred?.Invoke(this, e);
         }
     }
 }

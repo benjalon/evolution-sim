@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EvolutionSim.Logic;
 
 namespace EvolutionSim
 {
@@ -20,25 +14,10 @@ namespace EvolutionSim
 
         public StateMachine(Grid grid)
         {
-          _grid = grid;
-          _state = new State();
+              _grid = grid;
+              _state = new State();
 
 
-        }
-
-        public bool RemoveFood(Food food)
-        {
-
-
-                if (food.foodHealth == 0)
-                {
-                    food.ParentTile.Inhabitant = null;
-
-
-                return true;
-                }
-            return false;
-     
         }
      
         public void UpdateOrganismAttributes(Organism organism)
@@ -100,13 +79,12 @@ namespace EvolutionSim
 
                 //this code block handles logic when organism is the middle of eating
                 case PotentialStates.Eating:
-                    if(_passedOrganism.DestinationTile is null)
+                    if(_passedOrganism.DestinationTile == null)
                     {
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
                         
                     }
-
-                    else if (!Logic.StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition)){
+                    else if (!StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition)){
                         // Change NotHungry?
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
                     }
@@ -141,7 +119,7 @@ namespace EvolutionSim
 
                     break;
                 case PotentialStates.MovingToFood:
-                    if (Logic.StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
+                    if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
                     {
                         _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
 
@@ -190,20 +168,19 @@ namespace EvolutionSim
             {
 
                 case PotentialStates.Roaming:
-                    Logic.StateActions.Roam(_passedOrganism,_grid);
+                    StateActions.Roam(_passedOrganism,_grid);
 
                     break;
 
                 case PotentialStates.Eating:
-                    Logic.StateActions.EatingFood.EatFood(_passedOrganism, _grid);
+                    StateActions.EatingFood.EatFood(_passedOrganism, _grid);
                     break;
                 case PotentialStates.Mating:
 
                     break;
 
                 case PotentialStates.SeekFood:
-                    Logic.StateActions.SeekingFood.SeekFood(_passedOrganism, _grid);
-
+                    StateActions.SeekingFood.SeekFood(_passedOrganism, _grid);
 
                     break;
 
@@ -213,7 +190,7 @@ namespace EvolutionSim
 
                     break;
                 case PotentialStates.MovingToFood:
-                    Logic.StateActions.MoveAlongPath(_passedOrganism, _grid, _passedOrganism._Path);
+                    StateActions.MoveAlongPath(_passedOrganism, _grid, _passedOrganism.Path);
                     break;
 
                 default:

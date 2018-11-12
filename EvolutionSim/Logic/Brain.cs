@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace EvolutionSim.Logic
     public class Brain
     {
 
-        private  StateMachine _fsm;
+        private StateMachine _fsm;
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
         private Random _random = new Random();
@@ -17,27 +18,10 @@ namespace EvolutionSim.Logic
         public Brain(Grid grid)
         {
             _fsm = new StateMachine(grid);
-
         }
 
         public void Update()
         {
-         
-
-            List<Food> toRem = new List<Food>();
-            foreach(Food food in Foods)
-            {
-                if (_fsm.RemoveFood(food))
-                {
-                    toRem.Add(food);
-                }
-            }
-            foreach(Food remove in toRem)
-            {
-                Foods.Remove(remove);
-            }
-            toRem.Clear();
-
             foreach (Organism org in Organisms)
             {
                 _fsm.checkState(org);
@@ -53,26 +37,39 @@ namespace EvolutionSim.Logic
         public void AddOrganism(Organism organism,Grid grid)
         {
             // Keep track of newly added organisms so we can get them later.
-            Organisms.Add(organism); 
-            organism.GridPosition.X = _random.Next(0, Grid.horizontalCount);
-            organism.GridPosition.Y = _random.Next(0, Grid.verticalCount);
+            Organisms.Add(organism);
 
-            // Add to grid
-             grid._tiles[organism.GridPosition.X][organism.GridPosition.Y].AddMapItem(organism);
+            organism.DeathOccurred += OrganismDeathHandler;
+
+            PositionAtRandom(organism, grid);
         }
 
         public void AddFood(Food food,Grid grid)
         {
             // Keep track of newly added food so we can get them later.
-            Foods.Add(food); 
-            food.GridPosition.X = _random.Next(0, Grid.horizontalCount);
-            food.GridPosition.Y = _random.Next(0, Grid.verticalCount);
+            Foods.Add(food);
 
-            // Add to grid
-            grid._tiles[food.GridPosition.X][food.GridPosition.Y].AddMapItem(food);
+            food.DeathOccurred += FoodDeathHandler;
+
+            PositionAtRandom(food, grid);
+        }
+        
+        private void PositionAtRandom(MapItem item, Grid grid)
+        {
+            if (!grid.AttemptToPositionAt(item, _random.Next(0, Grid.HorizontalCount), _random.Next(0, Grid.VerticalCount)))
+            {
+                PositionAtRandom(item, grid); // Try again
+            }
         }
 
+        private void OrganismDeathHandler(object sender, EventArgs e)
+        {
+            Organisms.Remove((Organism)sender);
+        }
 
-
+        private void FoodDeathHandler(object sender, EventArgs e)
+        {
+            Foods.Remove((Food)sender);
+        }
     }
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace EvolutionSim.Logic.Pathfinding
 {
     public static class PathFinding
-     {
-        public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition,Tile[][] tiles)
+    {
+        public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition, Grid grid)
         {
             Node goalNode = null;
 
@@ -24,9 +24,10 @@ namespace EvolutionSim.Logic.Pathfinding
             var startNode = new Node(startPosition, endPosition, null);
             open.Add(startNode);
 
-            bool goalFound = false;
+            Node current;
+            List<Node> expanded;
             //3.  while the open list is not empty
-            while (open.Any() && !goalFound)
+            while (open.Any() && goalNode == null)
             {
                 //    a) find the node with the least f on 
                 //       the open list, call it current
@@ -34,20 +35,24 @@ namespace EvolutionSim.Logic.Pathfinding
 
 
                 //    b) pop current off the open list
-                var current = open.First();
+                current = open[0];
                 open.Remove(current);
 
                 //    c) generate currents's 8 successors and set their 
                 //       parents to current
-                var expanded = Pathfinding.NodeExpander.expand(tiles, current.Current, current.Goal, current);
+                expanded = NodeExpander.expand(grid, current.Current, current.Goal, current);
                 //open.AddRange(expanded);
 
-                foreach (var node in expanded)
+                Node node;
+                var expandedCount = expanded.Count;
+                for (var i = 0; i < expandedCount; i++)
                 {
+                    node = expanded[i];
+
                     if (node.Current.GridPositionX == node.Goal.GridPositionX && node.Current.GridPositionY == node.Goal.GridPositionY)
                     {
                         goalNode = node;
-                        goalFound = true;
+                        break;
                     }
                     else
                     {
@@ -59,11 +64,7 @@ namespace EvolutionSim.Logic.Pathfinding
                         //            successor  is in the CLOSED list which has
                         //            a lower f than successor, skip this successor
                         //            otherwise, add  the node to the open list
-                        //var openCheck = open.Exists(x => x.Current.GridPosition == node.Current.GridPosition && x.FOfS > node.FOfS);
-                        var openCheck = open.Exists(x => x.Current.GridPosition == node.Current.GridPosition);
-                        //var closedCheck = closed.Exists(x => x.Current.GridPosition == node.Current.GridPosition && x.FOfS > node.FOfS);
-                        var closedCheck = closed.Exists(x => x.Current.GridPosition == node.Current.GridPosition );
-                        if (openCheck || closedCheck)
+                        if (open.Exists(x => x.Current == node.Current) || closed.Exists(x => x.Current == node.Current))
                         {
                             break;
                         }
@@ -76,17 +77,16 @@ namespace EvolutionSim.Logic.Pathfinding
                 //    push current on the closed list
                 closed.Add(current);
             }
-            var endTile = false;
             var path = new List<Tile>();
             Node t = goalNode;
-            if (goalFound)
+            if (goalNode != null)
             {
-                while (!endTile)
+                while (true)
                 {
                     path.Add(t.Current);
-                    if(t.Current.GridPositionX == startPosition.GridPositionX && t.Current.GridPositionY == startPosition.GridPositionY)
+                    if (t.Current == startPosition)
                     {
-                        endTile = true;
+                        break;
                     }
                     t = t.Previous;
                 }
