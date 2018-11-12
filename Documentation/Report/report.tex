@@ -206,11 +206,20 @@ To ensure a clean and consistent code-base, the official Microsoft C\# conventio
 
 
 \section{State Management}\label{statemanagement}
-[TODO: Improve this]
-Organism Behaviour – First Draft
+For this project we have we have designed a class called ``StateMachine'', which is responsible for determining the behaviour of the organism as well as deciding which state it should be in.
+
+The StateMachine constructor initalises a grid object, passed by reference from the brain and a ``State" object. The state object is essentially a lookup table for each state transition, this is implemented as a dictionary which takes a pair of enum values: (organismState, Action) where ``organismState" is the organisms current state and ``Action" which is the event which causes the transition, the dictionary then returns which state the organism should be in.
+
+ it does this in two different ways: \\
+
+Each time the ``Update'' method is called in the "Brain" class it calls two methods:
+The first is called "DetermineState", this takes each organism currently existing within the game and based on their current state, checks if they are in the  correct state based on the defined rules within the simulation. For example if an organism is currently in the "Roaming" state, but it's hunger levels have dropped below 0.4, the rules of our state machine dictate that the organism must now move into "SeekingFood" state. After the correct state for an organism is determined the ``DetermineBehaviour()" method is called, which defines how an organism should behave within a given state.
+
+Organism Behaviour – Rules (first draft)
 
 1) Default organism state is “Roaming”.
 a. From roaming, an organism can transition to “Seeking Food” or “Seeking Mate”.
+b. The organisms attributes such as hunger determine which state it should currently be in, as time passes on the organism gradually becomes hungrier. Every ti
 2) If an organism is seeking food, it is simply roaming, with the added fact that if it is within a certain range of food, it will go towards it and consume it.
 3) If an organism is seeking a mate, it is simply roaming, with the added fact that if it is within a certain range of a mate WHO IS ALSO SEEKING A MATE, it will go towards it and mate.
 a. If whilst “Seeking Mate”, the organism becomes Hungry, it will transition to “Seeking Food”. End Goal: Biological Evolution Sandbox
