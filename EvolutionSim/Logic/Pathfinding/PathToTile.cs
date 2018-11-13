@@ -8,6 +8,13 @@ namespace EvolutionSim.Logic.Pathfinding
 {
     public static class PathFinding
     {
+        /// <summary>
+        /// Adadpted from pseudocode at https://www.geeksforgeeks.org/a-search-algorithm/
+        /// </summary>
+        /// <param name="startPosition"></param>
+        /// <param name="endPosition"></param>
+        /// <param name="grid"></param>
+        /// <returns>List of Tiles leading from start to end positions.</returns>
         public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition, Grid grid)
         {
             Node goalNode = null;
