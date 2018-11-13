@@ -15,7 +15,7 @@ namespace EvolutionSim
 
         public Tile DestinationTile;
         
-        public const int MS_PER_DIRECTION_CHANGE = 2000;
+        public const int MS_PER_DIRECTION_CHANGE = 500;
 
         public int MilliSecondsSinceLastMovement;
         //what state is the organism currently in
