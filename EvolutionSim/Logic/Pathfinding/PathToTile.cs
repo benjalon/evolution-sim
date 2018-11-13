@@ -64,8 +64,12 @@ namespace EvolutionSim.Logic.Pathfinding
                         //            successor  is in the CLOSED list which has
                         //            a lower f than successor, skip this successor
                         //            otherwise, add  the node to the open list
-                       // if (open.Exists(x => x.Current == node.Current) || closed.Exists(x => x.Current == node.Current))   
-                        open.Add(node);
+                        // if (open.Exists(x => x.Current == node.Current) || closed.Exists(x => x.Current == node.Current))   
+                        if (!closed.Exists(x => x.Current == node.Current))
+                        {
+                            open.Add(node);
+                        }
+                            
                     }
                 }
                 //    push current on the closed list

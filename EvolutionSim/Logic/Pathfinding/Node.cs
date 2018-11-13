@@ -10,8 +10,8 @@ namespace EvolutionSim.Logic.Pathfinding
     {
         public Tile Current { get; }
         public Tile Goal { get; }
-        public double Heuristic { get; }//euclidian(actual) distance from goal.
-        public double Distance { get; }//distance from previous node.
+        public double Heuristic { get; }//diagonal(actual) distance from goal.
+        public double Difficulty { get; }//.
         public double FOfS { get; }//heuristic + distance
         public Node Previous { get; }
 
@@ -23,12 +23,15 @@ namespace EvolutionSim.Logic.Pathfinding
             if (previous == null)
             {
                 this.FOfS = 0;
+                this.Difficulty = 0;
             }
             else
             {
-                this.Distance = CalculateDistance(this.Goal, previous.Current);
+                var terrainDifficulty = 1; //this should be taken from the tile terrain type.
+                //difficulty = difficulty of previous tile + terrain difficulty. 
+                this.Difficulty = previous.Difficulty + terrainDifficulty;
 
-                this.FOfS = this.Heuristic + this.Distance;
+                this.FOfS = this.Heuristic + this.Difficulty;
             }
             this.Previous = previous;
 
@@ -42,7 +45,7 @@ namespace EvolutionSim.Logic.Pathfinding
         /// <returns></returnsL
         private static int CalculateDistance(Tile Goal, Tile Location)
         {
-            return Math.Abs(Location.GridPositionX - Goal.GridPositionX) + Math.Abs(Location.GridPositionY - Goal.GridPositionY);
+            return Math.Max(Math.Abs(Location.GridPositionX - Goal.GridPositionX), Math.Abs(Location.GridPositionY - Goal.GridPositionY));
         }
 
    
