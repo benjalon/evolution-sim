@@ -206,14 +206,22 @@ To ensure a clean and consistent code-base, the official Microsoft C\# conventio
 
 
 \section{State Management}\label{statemanagement}
-[TODO: Improve this]
-Organism Behaviour – First Draft
+For this project we have designed a class called ``StateMachine'', which is responsible for determining the behaviour of organisms as well as deciding which state they should be in. \\
+
+The StateMachine constructor initialises a grid object, passed by reference from the brain and a ``State" object. The state object is essentially a lookup table for each state transition, this is implemented as a dictionary which takes a pair of enum values: (organismState, Action) where ``organismState" is the organism's current state and ``Action" which is the event which causes the transition, the dictionary then returns which state that given organism should be in. This class also checks for any illegal state transition attempts and throws an error, for example it is impossible for an organism in the ``Mating'' state to directly transition into Eating through the Action ``FoundFood'', as the organism must be in the ``Roaming'' state in order to reach this clause. Our StateMachine class also contains two essential methods which drives organism behaviour: ``CheckState'' and ``DetermineBehaviour". Each time the ``Update'' method is called in the ``Brain" class both these methods are called respectively.
+CheckState takes each organism currently existing within the game and based on their current state and attributes, checks if they are in the correct state according to the rules defined for the simulation. For example if an organism is currently in the ``Roaming" state, but it's hunger levels have dropped below 0.4, this would mean that the organism must now move into ``SeekingFood" state. After the correct state for an organism is determined the ``DetermineBehaviour()" method is called, which defines how an organism should behave within a given state. \\
+
+Organism Behaviour – Rules (first draft)
 
 1) Default organism state is “Roaming”.
 a. From roaming, an organism can transition to “Seeking Food” or “Seeking Mate”.
-2) If an organism is seeking food, it is simply roaming, with the added fact that if it is within a certain range of food, it will go towards it and consume it.
-3) If an organism is seeking a mate, it is simply roaming, with the added fact that if it is within a certain range of a mate WHO IS ALSO SEEKING A MATE, it will go towards it and mate.
-a. If whilst “Seeking Mate”, the organism becomes Hungry, it will transition to “Seeking Food”. End Goal: Biological Evolution Sandbox
+b. The organism's attributes such as hunger determine which state it should currently be in, as time passes on the organism gradually becomes hungrier and will eventually die if it's food levels reach 0. \\
+2) If an organism is moving to food, it will go towards it and consume it. \\
+3) If an organism is seeking a mate, it is simply roaming, with the added fact that if it is within a certain range of a mate WHO IS ALSO SEEKING A MATE, it will go towards it and mate. \\
+5)if an organism has successfully found food and the path has been calculated, then switch into the ``MovingToFood" state.
+a. If whilst``Seeking Mate”, the organism becomes Hungry, it will transition to ``Seeking Food”, abandoning it's desire to mate. \\
+
+End Goal: Biological Evolution Sandbox
 b. What do we want?
 i. End game, stable ecology
 1. Net number of organisms don’t change
