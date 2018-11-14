@@ -24,6 +24,12 @@
   {\hspace*{\fill}\linebreak[4]\url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions}\linebreak[4]Website
   accessed 03rd November, 2018}.
 
+\bibitem{belwariar}
+{A* Search Algorithm}, 2018.
+\newblock
+  {\hspace*{\fill}\linebreak[4]\url{https://www.geeksforgeeks.org/a-search-algorithm/}\linebreak[4]Website
+  accessed 14th November, 2018}.
+
 \bibitem{knuth}
 Donald Knuth.
 \newblock Computer programming as an art.

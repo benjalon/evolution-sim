@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2018/Arch Linux)
+This is BibTeX, Version 0.99d (TeX Live 2017/W32TeX)
 Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: report.aux
 The style file: unsrt.bst
@@ -6,45 +6,45 @@ Database file #1: references.bib
 Warning--I didn't find a database entry for "Taylor:2007"
 Warning--I didn't find a database entry for "Morton:1966"
 Warning--I didn't find a database entry for "Soos:2012"
-You've used 5 entries,
+You've used 6 entries,
             1791 wiz_defined-function locations,
-            477 strings with 4543 characters,
-and the built_in function-call counts, 642 in all, are:
-= -- 53
-> -- 8
+            481 strings with 4723 characters,
+and the built_in function-call counts, 744 in all, are:
+= -- 61
+> -- 9
 < -- 1
-+ -- 6
++ -- 7
 - -- 1
-* -- 12
-:= -- 75
-add.period$ -- 11
-call.type$ -- 5
-change.case$ -- 5
+* -- 13
+:= -- 84
+add.period$ -- 13
+call.type$ -- 6
+change.case$ -- 6
 chr.to.int$ -- 0
-cite$ -- 5
-duplicate$ -- 36
-empty$ -- 93
+cite$ -- 6
+duplicate$ -- 41
+empty$ -- 111
 format.name$ -- 1
-if$ -- 163
+if$ -- 190
 int.to.chr$ -- 0
-int.to.str$ -- 5
+int.to.str$ -- 6
 missing$ -- 1
-newline$ -- 24
+newline$ -- 28
 num.names$ -- 1
-pop$ -- 36
+pop$ -- 44
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 27
+skip$ -- 31
 stack$ -- 0
 substring$ -- 6
-swap$ -- 12
+swap$ -- 13
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
 while$ -- 2
-width$ -- 6
-write$ -- 45
+width$ -- 7
+write$ -- 53
 (There were 3 warnings)

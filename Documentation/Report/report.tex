@@ -41,7 +41,7 @@
 
 
 \begin{abstract}
-[TODO: write this] An abstract is a brief summary (maximum 250 words) of your entire project. It should cover your objectives, your methodology used, how you implemented the methodology for your specific results and what your final results are, your final outcome or deliverable and conclusion. You do not cover literature reviews or background in an abstract nor should you use abbreviations or acronyms. In the remainder of the report the chapter titles are suggestions and can be changed (or you can add more chapters if you wish to do so). This template is designed to help you write a clear report but you are welcome to modify it (at your peril ...). Finally, a guideline in size is approximately 3,500 words (not including abstract, captions and references) but no real limit on figures, tables, etc.
+[TODO: Write this]
 \end{abstract}
 
 \chapter{Introduction}
@@ -52,7 +52,7 @@ An evolution simulation attempts to represent the way a set of organisms evolve 
 	\item A dead cell with three live neighbours becomes alive
 \end{itemize}
 
-Conway's Game of Life is often praised for its ability to show how simple rules can spawn complex evolutionary patterns \cite{callahan}. This project will tackle evolution simulating by taking inspiration from Conway's Game of Life to produce a piece of software it terms an "evolution sandbox"; a simulation with emphasis on real-time manipulation and customization which will allow the user to observe the outcome of their actions on the ecosystem.
+Conway's Game of Life is often praised for its ability to show how simple rules can spawn complex evolutionary patterns \cite{callahan}. This project will tackle evolution simulating by taking inspiration from Conway's Game of Life to produce a piece of software it terms an ``evolution sandbox``; a simulation with emphasis on real-time manipulation and customization which will allow the user to observe the outcome of their actions on the ecosystem.
 
 \section{MoSCoW}
 In order to better understand the scope and priorities of the project, a set of analysis' were carried out with the goal of producing a MoSCoW analysis.
@@ -128,7 +128,7 @@ Finally, taking these objects and systems a MoSCoW analysis was produced:
 		Could Have & \begin{itemize}
 			\itemsep0em
 			\item Natural disasters
-			\item Speciation
+			\item Speciation (new species forming from heavily mutated organisms over time)
 			\item A game log with charts and text output
 			\item Spritesheet animation
 			\item Particle effects, e.g. weather effects, running water, blood
@@ -142,18 +142,13 @@ Finally, taking these objects and systems a MoSCoW analysis was produced:
 \end{center}
 \smallskip
 
-In general, the "Must Have" objectives are those identified to be necessary to a bare minimum working product, while "Should Have" is considered a bare minimum submission. The logic being that these "Should Have" objectives could also potentially be developed further to have enough depth to utilize advanced programming techniques or have the simulation revolve around them. "Could Have" objectives are those which are considered incredibly difficult or potentially out of scope. For example, particle effects and spritesheet animation will not improve the depth of the simulation and would require effort in areas which are not programming-related. Natural disasters and speciation on the other hand would be difficult to implement while maintaining equilibrium within the ecosystem. Finally, the "Won't Have" objectives are identified to disproportionately increase the simulation's complexity when compared with the pay-off for implementing them. The implementation of this analysis is discussed in detail in Section~\ref{versioning}.
+In general, the ``Must Have`` objectives are those identified to be necessary to a bare minimum working product, while ``Should Have`` is considered a bare minimum submission. The logic being that these ``Should Have`` objectives could also potentially be developed further to have enough depth to utilize advanced programming techniques or have the simulation revolve around them. ``Could Have`` objectives are those which are considered incredibly difficult or potentially out of scope. For example, particle effects and spritesheet animation will not improve the depth of the simulation and would require effort in areas which are not programming-related. Natural disasters and speciation on the other hand would be difficult to implement while maintaining equilibrium within the ecosystem. Finally, the ``Won't Have`` objectives are identified to disproportionately increase the simulation's complexity when compared with the pay-off for implementing them. The implementation of this analysis is discussed in detail within Section~\ref{versioning}.
 
 \section{Report structure}
-This report will cover a brief background of evolution and the algorithms and tools which attempt to simulate it in simulators in Section~\ref{background}. Section~\ref{methodology} details the various advanced programming and project management techniques utilized in the project. The tools used and development of the product is outlined in Section~\ref{implementation}, with detail on the implementation of specific simulation components. Finally, the quality of the project will be discussed and verified through testing in Section~\ref{testing} and drawn to a conclusion in Sections \ref{discussion} and \ref{conclusion}.
- Breifly describe what you will cover in the remainder of the report, chapter by chapter.
+This report will cover a brief background of evolution and the algorithms which attempt to simulate it in Section~\ref{background}. Section~\ref{methodology} details the various advanced programming and project management techniques utilized in the project. Tools used and implementation details are outlined in Section~\ref{implementation}. Finally, the product's quality will be tested and verified through testing in Section~\ref{testing} and drawn to a conclusion in Sections \ref{discussion} and \ref{conclusion}.
 
 \chapter{Background}\label{background}
-[TODO: write this]
- This chapter covers a literature, resource and/or (software) product review. This means you will cite journal or conference papers outlining methodologies you may (or may not) use but which are definitely relevant to your particular problem. Resource and/or product information will typcially be substantiated through internet links. 
-You may use different sections if different subareas are part of your problem statement and/or solution. 
-Since this chapter covers the literature, you should also update the corresponding bib file referred to in the bottom of this document and here it is called References.bib.
-You cite references like this: Taylor et al. \cite{Taylor:2007} investigated non-linear FEA on the GPU. Morton \cite{Morton:1966} developed a file sequencing method in 1966. A website on OpenCL can be found here \cite{Soos:2012}. Etc.
+[TODO: Write this]
 
 \chapter{Methodology}\label{methodology}
 
@@ -184,14 +179,14 @@ In keeping with the spirit of iterative development, the projects aim to produce
 \begin{tabular}{c|p{0.7\textwidth}|l}
 	Version & Goal & Deadline \\ \hline
 	0 & A proof of concept to test the chosen technologies & Tuesday week 2 \\ \hline
-	1 & A fully functioning basic simulation with all of the "Must Have" components from the MoSCoW analysis & Friday week 6 \\ \hline
-	2 & Improvements on V1 simulation with tasks taken from the "should have" objectives. In particular, an advanced path finding algorithm such as A*, improved crossover algorithm, carnivores and a better time system. & Undecided \\ \hline
+	1 & A fully functioning basic simulation with all of the ``Must Have`` components from the MoSCoW analysis & Friday week 6 \\ \hline
+	2 & Improvements on V1 simulation with tasks taken from the ``should have`` objectives. In particular, an advanced path finding algorithm such as A*, improved crossover algorithm, carnivores and a better time system. & Undecided \\ \hline
 	3+ & Undecided & Undecided \
 \end{tabular}
 \smallskip 
 
 \section{Code Architecture}\label{architecture}
-The SOLID principles define five guidelines to ensure code is maintainable and easy to understand [\cite{kelmendi}]: 
+The SOLID principles define five guidelines to ensure code is maintainable and easy to understand \cite{kelmendi}: 
 \begin{itemize}
 	\item Single Responsibility: Every class should have only one responsibility to prevent the class being susceptible to requirement changes.
 	\item Open-Closed: Classes should be open to extension but abstraction should be used to avoid the need for rewrites on the extended code.
@@ -200,73 +195,52 @@ The SOLID principles define five guidelines to ensure code is maintainable and e
 	\item Dependency Inversion: Keep abstract code abstract by avoiding dependencies on low level code.
 \end{itemize}
 
-While these principles each affect the architecture in some way, in particular a great deal of effort is made to ensure that each class has a single responsibility. An example of this is in separating the Grid from the StateMachine despite the fact that they operate on similar areas of the simulation. The Grid is used as the "graphical brain", positioning organisms and drawing them at their positions, whereas the StateMachine is used as the "logical brain", dictating the behaviour which causes the organisms to be repositioned in the first place. Furthermore, the use of MapItem as a swappable base for Organism and Food would not work if the Liskov Substitution principle was not applied.
+While these principles each affect the architecture in some way, in particular a great deal of effort is made to ensure that each class has a single responsibility. An example of this is in separating the Grid from the StateMachine despite them operating in similar areas of the simulation. Grid is instead used as the ``graphical brain``, positioning organisms and drawing them at their positions, whereas the StateMachine is used as the ``logical brain``, dictating the behaviour which causes the organisms to be repositioned in the first place. Furthermore, the use of MapItem as a swappable base for Organism and Food would not work if the Liskov Substitution principle was not applied.
 
-To ensure a clean and consistent code-base, the official Microsoft C\# conventions are applied where possible. Notable examples include placing braces on a new line, using camelCase for variable names and avoiding one line if statements [\cite{microsoft}].
-
+To ensure a clean and consistent code-base, the official Microsoft C\# conventions are applied where possible. Notable examples include placing braces on a new line, using camelCase for variable names and avoiding one line if statements \cite{microsoft}.
 
 \section{State Management}\label{statemanagement}
-For this project we have designed a class called ``StateMachine'', which is responsible for determining the behaviour of organisms as well as deciding which state they should be in. \\
+Within the simulation all organism behaviour is dictated by a state machine which contains a set of states and rules for moving between them. The StateMachine class is passed State objects which are essentially a lookup table for each state transition. Transitions use a pair of enum values, OrganismState and Action, where OrganismState refers to the current state of the Organism and Action is the event responsible for causing the transition. Based on this supplied information, the StateMachine determines which state the Organism should transition to and throws an exception if it determines the move to be illegal, for example it is impossible for an Organism to move directly from ``Mating`` to ``Eating`` through the Action ``FoundFood`` as the Organism must be in the ``Roaming`` state in order to reach this clause.
 
-The StateMachine constructor initialises a grid object, passed by reference from the brain and a ``State" object. The state object is essentially a lookup table for each state transition, this is implemented as a dictionary which takes a pair of enum values: (organismState, Action) where ``organismState" is the organism's current state and ``Action" which is the event which causes the transition, the dictionary then returns which state that given organism should be in. This class also checks for any illegal state transition attempts and throws an error, for example it is impossible for an organism in the ``Mating'' state to directly transition into Eating through the Action ``FoundFood'', as the organism must be in the ``Roaming'' state in order to reach this clause. Our StateMachine class also contains two essential methods which drives organism behaviour: ``CheckState'' and ``DetermineBehaviour". Each time the ``Update'' method is called in the ``Brain" class both these methods are called respectively.
-CheckState takes each organism currently existing within the game and based on their current state and attributes, checks if they are in the correct state according to the rules defined for the simulation. For example if an organism is currently in the ``Roaming" state, but it's hunger levels have dropped below 0.4, this would mean that the organism must now move into ``SeekingFood" state. After the correct state for an organism is determined the ``DetermineBehaviour()" method is called, which defines how an organism should behave within a given state. \\
-
-Organism Behaviour – Rules (first draft)
-
-1) Default organism state is “Roaming”.
-a. From roaming, an organism can transition to “Seeking Food” or “Seeking Mate”.
-b. The organism's attributes such as hunger determine which state it should currently be in, as time passes on the organism gradually becomes hungrier and will eventually die if it's food levels reach 0. \\
-2) If an organism is moving to food, it will go towards it and consume it. \\
-3) If an organism is seeking a mate, it is simply roaming, with the added fact that if it is within a certain range of a mate WHO IS ALSO SEEKING A MATE, it will go towards it and mate. \\
-5)if an organism has successfully found food and the path has been calculated, then switch into the ``MovingToFood" state.
-a. If whilst``Seeking Mate”, the organism becomes Hungry, it will transition to ``Seeking Food”, abandoning it's desire to mate. \\
-
-End Goal: Biological Evolution Sandbox
-b. What do we want?
-i. End game, stable ecology
-1. Net number of organisms don’t change
-ii. Food, vegetation, other organisms
-iii. Water
-1. Some organisms can go in water
-iv. Weatherdo not need to handle such specific details
-1. Hot cold
-2. Types of weather
-v. Statistics
-vi. A log
-vii. Dis3ease
-viii. Natural Disaster
-ix. Terrain
-x. Live Edit of organisms
-c. Tile based graphicsOnce it has eaten sufficiently, it will go back to default state of roaming.
+In addition to these state management tasks, the StateMachine also contains two methods to drive organism behaviour: CheckState and DetermineBehaviour, which are both called every cycle of the Update loop. CheckState is responsible for checking that each Organism is in the correct state based on the rules defined for the simulation, for example if an organism is currently in the ``Roaming`` state, but it's hunger levels have dropped below 0.4, this would mean that the organism must now move into ``SeekingFood``. After the state is checked, DetermineBehaviour defines how the Organism should behave within this state.
 
 \section{Crossover Algorithm}\label{crossover}
 The crossover algorithm is currently a work in progress.
 
 \section{Grid System}\label{grid}
-A common method of implementing movement in a simulation is through the use of a grid. This is a useful approach because by constricting organism movement to a set of definite positions, the number of movement states becomes finite and therefore better lends itself to algorithms such as pathfinding. In terms of efficiency, a grid also reduces the need for collision detection between simulation elements as when an organism wishes to move from one tile to another, the grid can simply accept or reject the move based on whether the destination tile is occupied. On the other hand, this limited movement is less realistic and does not necessarily reduce code complexity as the grid must constantly be made aware of the positions of its elements which requires a fair amount of manipulation to its arrays. 
+A common method of implementing movement in a simulation is by constraining it to a grid, this is useful because the number of movement states becomes finite and better lends itself to algorithms in areas such as pathfinding. In terms of efficiency a grid also reduces the need for collision detection between simulation elements because when an organism tries to move from one tile to another, the grid can simply accept or reject the move based on whether the destination tile is occupied. On the other hand, this limited movement is less realistic and does not necessarily reduce code complexity where the grid must constantly observe the positions of its elements which requires a fair amount of manipulation to its collections. 
 
-In terms of the code, Grid refers to a management class which keeps track of the Tile positions in addition to some simple methods for interacting with them, for example to check whether a given Tile is occupied. In order to achieve this, the Grid contains a jagged two dimensional array of type Tile, where each index within it refers to a Tile's actual position on the screen.
+In terms of code, the Grid class tracks the positions of all Tiles within the simulation and supplies some simple methods for interacting with them, for example to check whether a given Tile is occupied. In order to achieve this, the Grid contains a jagged two dimensional array of type Tile, where each index within it maps to a Tile's actual screen position with the equation:
+\[tilePos = offset + (tileIndex * tileSize)\]
+When an organism wishes to move, a method on the Grid called MoveMapItem is passed as parameters the MapItem requesting the move and a destination it wishes to move to. Since Tiles are always in fixed positions from the simulation start, the Grid simply has to look up the destination from its fixed position array and check whether it is occupied and then ensure that the MapItem position is adjacent.
 
-[TODO: matrix/2d array image here]
+\section{Pathfinding Algorithm}\label{pathfinding}
+Pathfinding is a key component in the simulation and three main methods were considered for it: depth first search (DFS), Dijkstra's algorithm and the A* algorithm. In terms of simplicity, DFS produces fast results but is a naive algorithm and requires a large amount of time and memory to find the shortest route. Dijkstra's algorithm is an improvement because it applies a difficulty value based on the movement cost to a destination but is expensive as it compares equally and needlessly expands difficult locations without considering direction because it does not use a heuristic. Finally, at least for single-point to single-point searches like those used in this simulation, A* is considered the fastest algorithm \cite{belwariar} due to improving upon Dijkstra's with a heuristic. 
 
-When an organism wishes to move, a method on the Grid called MoveMapItem is passed the MapItem requesting to move with the destination it wishes to move to. Since Tiles are always in fixed positions from the simulation start, the Grid simply has to look up the destination from its fixed position array and check whether it is occupied and then ensure that the MapItem position is adjacent.
+\[A* Algorithm: f(n) = g(n) + h(n)\]
+In the above formula g(n) refers to the difficulty of a tile which is an important consideration in handling different terrain types such as hills or water. h(n) is the diagonal distance between the two points and f(n) refers to the sum of g(n) and h(n).
 
-\section{Path Finding Algorithm}\label{pathfinding}
-[TODO: DFS vs Dijkstra's vs A* algorithms, why pathfinding is necessary]
+In terms of implementation, A* is incorporated by converting each Tile into a Node object. These Nodes keep a reference to the previous Node on the path, its Grid position, the destination's distance and the difficulty in reaching it. To calculate the g(n) difficulty value the terrain type of the Tile is taken into account and for the h(n) distance value the diagonal distance between the two points is calculated taking the maximum value of either the goal Tile's x coordinate minus the current Tile's x coordinate or the same for y coordinates. 
+
+To build up a path, two lists track Nodes to be evaluated: open and closed. When the algorithm starts, the Node that an Organism currently occupies is placed at the top of open. Open is iterated to evaluate which Node within the list has the lowest f(n) and expands it. Expanding consists of storing all of the adjacent Tiles on the Grid as Nodes and calculating their f(n) and adding them to open. If any of the Nodes evaluated are the goal Node then the loop ends and returns it. A list containing the goal Node and the path taken to get there is then created by repeatedly following the previous Node reference backwards from the goal to the start.
+
+[TODO: the various initial pathfinding bugs which caused lag]
 
 \section{Optimisation}\label{optim}
 Optimisation is considered an area of importance due to the simulation's requirement in handling a large number of organisms without noticeable lag. By default, MonoGame's render loop calls two methods at a speed of sixty times per second: update and draw. Should the logic fail to complete within this ~16-17ms time-frame then it delays the draw call, which lowers the simulation's frame-rate. This has further knock-on effects where the draw calls become progressively more delayed and eventually cause input lag on the UI.
 
 The update method is essentially the primary path through the code and handles all of the computation and organism logic. This method calls into several for loops to cycle through the various organisms and map items which make up the simulation. There can be several hundred objects to iterate through during any given Update loop, which as previously mentioned occurs sixty times per second. Keeping this entire iteration within the acceptable ~16-17ms time limit has requires consideration from an optimisation perspective.
 
-Optimisation is a task better left until necessary following the argument that "premature optimization is the root of all evil [...]" \cite{knuth}, as doing so before it is necessary wastes time, introduces bugs and makes code less readable. However, at several points during the project, particularly during the first round of pathfinding implementation, performance was considered to be a problem. The A* pathfinding algorithm [\ref{pathfinding}] requires that the program keep track of open, closed and expanded nodes within various collections and though there are many ways to implement the algorithm, they often involve some degree of manipulation. As previously mentioned, the update method is already within the sixty per second game loop and then within another nested loop for each of the tiles [\ref{grid}]. Before delving into loop micro-optimisation, the amount of loops and collection manipulation was cut down as much as possible.
+Optimisation is a task better left until necessary following the argument that ``premature optimization is the root of all evil [...]`` \cite{knuth}, as doing so before it is necessary wastes time, introduces bugs and makes code less readable. However, at several points during the project, particularly during the first round of pathfinding implementation, performance was considered to be a problem. The A* pathfinding algorithm [\ref{pathfinding}] requires that the program keep track of open, closed and expanded nodes within various collections and though there are many ways to implement the algorithm, they often involve some degree of manipulation. As previously mentioned, the update method is already within the sixty per second game loop and then within another nested loop for each of the tiles [\ref{grid}]. Before delving into loop micro-optimisation, the amount of loops and collection manipulation was cut down as much as possible.
 
 To improve the performance of these loops, the standard loop micro-optimisations are applied. Variables are declared outside of the loop scope, collection length is cached locally ahead of time and high precision calculations are avoided. For example, the DateTime object was initially used to time organism movements but because it uses double precision values, calculations were causing a large slowdown so it was swapped for the better optimised GameTime object. Finally, the grid stores its tiles within a two dimensional array which could potentially be implemented in C\# in two different ways: multi-dimensional arrays and jagged arrays. A jagged array is an array of arrays and allows these inner arrays to vary in length, whereas a multi-dimensional is a natural 2D array where the column count is uniform. The grid stores its tiles in a jagged array because within a jagged array, even if the arrays are the same length, it is able to iterate faster than a multi-dimensional array.
 
 Finally, though it caused issue in this instance, from an architecture perspective the grid system is also a form of optimisation. By constricting organism movements to a grid the simulation is able to cut down on the need for collision detection by having organisms request their moves to the grid, which then makes the decision of whether the move is legal. Collision detection would otherwise have been a bottleneck for the system which would have been exponentially slower as more organisms are added because each organism would need to check the position all of the others. With the tile system in place however, there are always a set number of tiles to iterate over rather than a growing list of organisms with references to each of the others.
 
+[TODO: a bit about pathfinding optimisation]
+
 \section{Multi-threading}
-To better improve the performance of the pathfinding, it is currently being moved to different threads. This is a work in progress.
+To better improve the performance of pathfinding, it is being moved to different threads. This is a work in progress.
 
 \chapter{Implementation} \label{implementation}
 
