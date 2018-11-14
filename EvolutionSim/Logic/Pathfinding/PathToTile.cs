@@ -8,6 +8,13 @@ namespace EvolutionSim.Logic.Pathfinding
 {
     public static class PathFinding
     {
+        /// <summary>
+        /// Adadpted from pseudocode at https://www.geeksforgeeks.org/a-search-algorithm/
+        /// </summary>
+        /// <param name="startPosition"></param>
+        /// <param name="endPosition"></param>
+        /// <param name="grid"></param>
+        /// <returns>List of Tiles leading from start to end positions.</returns>
         public static List<Tile> FindShortestPath(Tile startPosition, Tile endPosition, Grid grid)
         {
             Node goalNode = null;
@@ -64,14 +71,12 @@ namespace EvolutionSim.Logic.Pathfinding
                         //            successor  is in the CLOSED list which has
                         //            a lower f than successor, skip this successor
                         //            otherwise, add  the node to the open list
-                        if (open.Exists(x => x.Current == node.Current) || closed.Exists(x => x.Current == node.Current))
-                        {
-                            break;
-                        }
-                        else
+                        // if (open.Exists(x => x.Current == node.Current) || closed.Exists(x => x.Current == node.Current))   
+                        if (!closed.Exists(x => x.Current == node.Current))
                         {
                             open.Add(node);
                         }
+                            
                     }
                 }
                 //    push current on the closed list
