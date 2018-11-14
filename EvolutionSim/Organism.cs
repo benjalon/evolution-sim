@@ -14,30 +14,35 @@ namespace EvolutionSim
         private String _speciesName;
 
         public Tile DestinationTile;
-        
+
         public const int MS_PER_DIRECTION_CHANGE = 500;
 
         public int MilliSecondsSinceLastMovement;
         //what state is the organism currently in
-        public PotentialStates organismState { get; set; }
-        public Boolean MovingOnPath{ get; set; }
+        public PotentialStates OrganismState { get; set; }
+        public Boolean MovingOnPath { get; set; }
         public List<Tile> Path { get; set; }
- 
-        int age_passed = 0;
-        double hunger_passed = 0.6;
-        double speed_passed = 500;
-        double strength_passsed = 50;
-        FoodType foodType_passed = FoodType.Carnivore;
+
+        private Rectangle collisionBox;
 
         // private OrganismState _state;
 
         public Organism(Texture2D texture)
             : base(texture)
         {
-            _attributes = new OrganismAttributes(age_passed, hunger_passed, speed_passed, strength_passsed, foodType_passed);
+            _attributes = new OrganismAttributes(0, 0.6, 500, 50, FoodType.Carnivore);
             TOTAL_POPULATION++;
-            organismState = PotentialStates.Roaming;
+            OrganismState = PotentialStates.Roaming;
             Path = new List<Tile>();
+
+            this.collisionBox = new Rectangle(Rectangle.X - _attributes._DetectionRadius, Rectangle.Y - _attributes._DetectionRadius, _attributes._DetectionDiameter, _attributes._DetectionDiameter);
+        }
+
+
+        public void UpdateCollisionBox(int x, int y)
+        {
+            this.collisionBox.X = x - _attributes._DetectionRadius;
+            this.collisionBox.Y = y - _attributes._DetectionRadius;
         }
 
         public override String ToString()
@@ -47,16 +52,6 @@ namespace EvolutionSim
             stringBuilder.Append("Age: ").Append(_attributes._age).Append(Environment.NewLine);
             stringBuilder.Append("Speed: ").Append(_attributes._speed).Append(Environment.NewLine);
             return stringBuilder.ToString();
-
         }
-
-       
-
-        /// <summary>
-        /// Constantly reduce food over time
-        /// </summary>
-  
-
-        }
-
     }
+}

@@ -91,7 +91,7 @@ namespace EvolutionSim.Logic
                         break;
                 }
 
-                grid.MoveMapItem(organism, _destinationTileX, _destinationTileY);
+                grid.MoveOrganism(organism, _destinationTileX, _destinationTileY);
             }
 
             //if destination full decide again.
@@ -107,7 +107,7 @@ namespace EvolutionSim.Logic
 
                 if (Path.Any() && !Path.First().HasInhabitant())
                 {
-                    grid.MoveMapItem(organism, Path[0]);
+                    grid.MoveOrganism(organism, Path[0]);
                     Path.RemoveAt(0);
 
                 }
@@ -165,7 +165,27 @@ namespace EvolutionSim.Logic
 
             private static Tile FoodInRange(Organism organism,Grid grid)
             {
-                int firstX = organism.GridPosition.X - organism._attributes._DetectionRadius;
+                var startX = organism.GridPosition.X - 1;
+                var startY = organism.GridPosition.Y - 1;
+                var currentDepth = 1;
+                int currentX;
+                int currentY;
+                for (var i = 0; i < organism._attributes._DetectionRadius; i++)
+                {
+                    currentX = startX + i * currentDepth;
+                    for (var j = 0; j < organism._attributes._DetectionRadius; j++)
+                    {
+                        currentY = startY + j * currentDepth;
+                        if (InBounds(currentX, currentY) && grid.IsFoodAt()
+                    }
+
+                    currentDepth++;
+                }
+
+
+
+
+                    int firstX = organism.GridPosition.X - organism._attributes._DetectionRadius;
                 int firstY = organism.GridPosition.Y - organism._attributes._DetectionRadius;
                 for (int i = 0; i < organism._attributes._DetectionDiameter; i++)
                 {
@@ -175,19 +195,11 @@ namespace EvolutionSim.Logic
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
-
-
                     }
 
                 }
                 return null;
-
-
             }
-
-            
-
-
         }
 
         public static class EatingFood

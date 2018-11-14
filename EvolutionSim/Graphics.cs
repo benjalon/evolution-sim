@@ -17,13 +17,13 @@ namespace EvolutionSim
         private SpriteBatch _spriteBatch;
 
         private Overlay _overlay;
+        private Simulation simulation;
 
         private Texture2D _organismTexture;
         private Texture2D _foodTexture;
         private Texture2D _tileTexture;
 
         private Grid _grid;
-        private Brain _brain;
 
         private double _fpsOld = 0;
 
@@ -66,15 +66,15 @@ namespace EvolutionSim
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
 
             _grid = new Grid(_tileTexture, screenWidth, screenHeight);
-            _brain = new Brain(_grid);
+            _brain = new Simulation(_grid);
             _overlay.Button.OnClick = (Entity btn) =>
             {
-                for (var i = 0; i < 30; i++) _brain.AddOrganism(new Organism(_organismTexture), _grid);
+                for (var i = 0; i < 30; i++) _brain.AddOrganism(new Organism(_organismTexture));
             };
 
             _overlay.Button_Two.OnClick = (Entity btn) =>
             {
-                for (var i = 0; i < 30; i++) _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore), _grid);
+                for (var i = 0; i < 30; i++) _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore));
             };
 
         }

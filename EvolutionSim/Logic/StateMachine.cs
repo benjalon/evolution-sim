@@ -46,7 +46,7 @@ namespace EvolutionSim
             //test the organisms current attributes
             //by switching on the current state
 
-            PotentialStates organismState = _passedOrganism.organismState;
+            PotentialStates organismState = _passedOrganism.OrganismState;
 
 
             switch (organismState)
@@ -61,7 +61,7 @@ namespace EvolutionSim
                     {
 
                         //then move into the seek food state
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryRoam);
+                        _passedOrganism.OrganismState = _state.MoveState(organismState, Action.HungryRoam);
 
 
                     }
@@ -69,7 +69,7 @@ namespace EvolutionSim
                     else if (_passedOrganism._attributes._hunger >= 0.8)
                     {
                         //go find a mate
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.HungryMate);
+                        _passedOrganism.OrganismState = _state.MoveState(organismState, Action.HungryMate);
 
 
                     }
@@ -81,12 +81,12 @@ namespace EvolutionSim
                 case PotentialStates.Eating:
                     if(_passedOrganism.DestinationTile == null)
                     {
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
+                        _passedOrganism.OrganismState = _state.MoveState(organismState, Action.NotHungry);
                         
                     }
                     else if (!StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition)){
                         // Change NotHungry?
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.NotHungry);
+                        _passedOrganism.OrganismState = _state.MoveState(organismState, Action.NotHungry);
                     }
                     //if there is food in food source then contuine eating
 
@@ -112,7 +112,7 @@ namespace EvolutionSim
 
                    if( _passedOrganism.MovingOnPath)
                     {
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodDetected);
+                        _passedOrganism.OrganismState = _state.MoveState(organismState, Action.FoodDetected);
                     }
 
 
@@ -121,12 +121,12 @@ namespace EvolutionSim
                 case PotentialStates.MovingToFood:
                     if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
                     {
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
+                        _passedOrganism.OrganismState = _state.MoveState(organismState, Action.FoodFound);
 
                     }
                     if (!_passedOrganism.MovingOnPath)
                     {
-                        _passedOrganism.organismState = _state.MoveState(organismState, Action.FoodFound);
+                        _passedOrganism.OrganismState = _state.MoveState(organismState, Action.FoodFound);
 
                     }
 
@@ -161,7 +161,7 @@ namespace EvolutionSim
         public void determineBehaviour(Organism _passedOrganism)
         {
 
-            PotentialStates organismState = _passedOrganism.organismState;
+            PotentialStates organismState = _passedOrganism.OrganismState;
 
 
             switch (organismState)

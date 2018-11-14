@@ -16,7 +16,8 @@ namespace EvolutionSim
     public class Grid
     {
         private Tile[][] _tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
-
+        public List<Organism> Organisms { get; private set; } = new List<Organism>();
+        public List<Food> Foods { get; private set; } = new List<Food>();
         public static int HorizontalCount { get; private set; }
         public static int VerticalCount { get; private set; }
 
@@ -92,22 +93,24 @@ namespace EvolutionSim
             return true; // Successfully positioned
         }
 
-        public void MoveMapItem(MapItem mapItem, int destinationX, int destinationY)
+        public void MoveOrganism(Organism organism, int destinationX, int destinationY)
         {
-            var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
+            var parentTile = _tiles[organism.GridPosition.X][organism.GridPosition.Y];
             var destinationTile = _tiles[destinationX][destinationY];
             if (!destinationTile.HasInhabitant())
             {
                 parentTile.MoveInhabitant(destinationTile);
+                organism.UpdateCollisionBox(destinationX, destinationY);
             }
         }
 
-        public void MoveMapItem(MapItem mapItem, Tile destination)
+        public void MoveOrganism(Organism organism, Tile destination)
         {
-            var parentTile = _tiles[mapItem.GridPosition.X][mapItem.GridPosition.Y];
+            var parentTile = _tiles[organism.GridPosition.X][organism.GridPosition.Y];
             if (!destination.HasInhabitant())
             {
                 parentTile.MoveInhabitant(destination);
+                organism.UpdateCollisionBox(destination.GridPositionX, destination.GridPositionY);
             }
         }
 
@@ -120,6 +123,24 @@ namespace EvolutionSim
         public Tile GetTileAt(int x, int y)
         {
             return _tiles[x][y];
+        }
+
+        public void AddOrganism(Organism organism)
+        {
+            Organisms.Add(organism);
+        }
+        public void AddFood(Food food)
+        {
+            Foods.Add(food);
+        }
+        public void RemoveOrganism(Organism organism)
+        {
+            Organisms.Remove(organism);
+
+        }
+        public void RemoveFood(Food food)
+        {
+            Foods.Remove(food);
         }
     }
 }
