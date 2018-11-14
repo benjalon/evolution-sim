@@ -1,12 +1,12 @@
-﻿using EvolutionSim.Logic.Pathfinding;
+﻿using EvolutionSim.Pathfinding;
+using EvolutionSim.TileGrid;
+using EvolutionSim.TileGrid.GridItems;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EvolutionSim.Logic
+namespace EvolutionSim.StateManagement
 {
     public static class StateActions
     {
@@ -26,10 +26,10 @@ namespace EvolutionSim.Logic
         {
             List<Point> toRet = new List<Point>();
 
-            var firstX = organism.GridPosition.X - organism._attributes._DetectionRadius;
-            var firstY = organism.GridPosition.Y - organism._attributes._DetectionRadius;
+            var firstX = organism.GridPosition.X - organism.attributes.DetectionRadius;
+            var firstY = organism.GridPosition.Y - organism.attributes.DetectionRadius;
 
-            for (int i = 0; i < organism._attributes._DetectionDiameter; i++)
+            for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
@@ -43,14 +43,7 @@ namespace EvolutionSim.Logic
         }
 
         private static Random _random = new Random();
-        public static Boolean InBounds(int x, int y)
-        {
-            if (y >= Grid.VerticalCount || y < 0 || x >= Grid.HorizontalCount || x < 0)
-            {
-                return false;
-            }
-            return true;
-        }
+        
         public static void Roam(Organism organism,Grid grid)
         {
             organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
@@ -91,7 +84,7 @@ namespace EvolutionSim.Logic
                         break;
                 }
 
-                grid.MoveMapItem(organism, _destinationTileX, _destinationTileY);
+                grid.MoveOrganism(organism, _destinationTileX, _destinationTileY);
             }
 
             //if destination full decide again.
@@ -107,7 +100,7 @@ namespace EvolutionSim.Logic
 
                 if (Path.Any() && !Path.First().HasInhabitant())
                 {
-                    grid.MoveMapItem(organism, Path[0]);
+                    grid.MoveOrganism(organism, Path[0]);
                     Path.RemoveAt(0);
 
                 }
@@ -165,29 +158,21 @@ namespace EvolutionSim.Logic
 
             private static Tile FoodInRange(Organism organism,Grid grid)
             {
-                int firstX = organism.GridPosition.X - organism._attributes._DetectionRadius;
-                int firstY = organism.GridPosition.Y - organism._attributes._DetectionRadius;
-                for (int i = 0; i < organism._attributes._DetectionDiameter; i++)
+                int firstX = organism.GridPosition.X - organism.attributes.DetectionRadius;
+                int firstY = organism.GridPosition.Y - organism.attributes.DetectionRadius;
+                for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
                 {
-                    for (int j = 0; j < organism._attributes._DetectionDiameter; j++)
+                    for (int j = 0; j < organism.attributes.DetectionDiameter; j++)
                     {
-                        if (InBounds(firstX + i,firstY+j) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (Grid.InBounds(firstX + i, firstY + j) && grid.IsFoodAt(firstX + i, firstY + j))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
-
-
                     }
 
                 }
                 return null;
-
-
             }
-
-            
-
-
         }
 
         public static class EatingFood

@@ -1,18 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace EvolutionSim
+namespace EvolutionSim.TileGrid.GridItems
 {
-    public class Food : MapItem
+    public class Food : GridItem
     {
-        public FoodType foodType { get; private set; }
-        
-        public Food(Texture2D texture, FoodType foodType)
+        public Food(Texture2D texture)
             : base(texture)
         {
-            this.foodType = foodType;
         }
 
         /// <summary>

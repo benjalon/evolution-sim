@@ -1,32 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//these represent states
-public enum PotentialStates
+namespace EvolutionSim.StateManagement
 {
-    Roaming,
-    Eating,
-    SeekMate,
-    SeekFood,
-    Mating,
-    MovingToFood
-    
-    
 
-}
+    //these represent states
+    public enum PotentialStates
+    {
+        Roaming,
+        Eating,
+        SeekMate,
+        SeekFood,
+        Mating,
+        MovingToFood
 
-//these represent the transition paths between states
-public enum Action
-{
-    NotHungry,
-    HungryRoam,
-    HungryMate,
-    FoodDetected,
-    FoodFound,
-    MateFound,
-    FinishedMating,
 
-}
+
+    }
+
+    //these represent the transition paths between states
+    public enum Action
+    {
+        NotHungry,
+        HungryRoam,
+        HungryMate,
+        FoodDetected,
+        FoodFound,
+        MateFound,
+        FinishedMating,
+
+    }
 
 
 
@@ -41,7 +44,7 @@ public enum Action
             readonly PotentialStates CurrentState;
             readonly Action action;
 
-        //StateTransition object constructor 
+            //StateTransition object constructor 
             public StateTransition(PotentialStates PassedCurrentState, Action passedAction)
             {
                 this.CurrentState = PassedCurrentState;
@@ -54,37 +57,29 @@ public enum Action
             public override int GetHashCode()
             {
 
-                return 17 + 31 * CurrentState.GetHashCode() + 31 * action.GetHashCode();
+                return 17 + 31 * this.CurrentState.GetHashCode() + 31 * this.action.GetHashCode();
 
             }
 
             public override bool Equals(Object obj)
-                {
-                    StateTransition other = obj as StateTransition;
-                    return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
+            {
+                StateTransition other = obj as StateTransition;
+                return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
 
-                }
+            }
 
         }
 
         // represent a transition table as a dictonary
         Dictionary<StateTransition, PotentialStates> transitions;
-
-    //getters and setters for States class
-    //    public PotentialStates CurrentState
-    //{
-    //    get;
-    //    private set;
-    //}
-
-
+        
         //Sets each state to roaming by default
         public State()
         {
             //CurrentState = PotentialStates.Roaming;
 
-        //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
-        transitions = new Dictionary<StateTransition, PotentialStates>
+            //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
+            this.transitions = new Dictionary<StateTransition, PotentialStates>
             {
                 //here we add all of the possible state transitions in
 
@@ -115,36 +110,39 @@ public enum Action
                 {new StateTransition(PotentialStates.Eating,Action.NotHungry),PotentialStates.Roaming },
 
             };
+        }
+
+
+        //return the next state deterministically
+        public PotentialStates GetNext(PotentialStates CurrentState, Action action)
+        {
+            StateTransition transition = new StateTransition(CurrentState, action);
+            PotentialStates nextState;
+
+            if (!this.transitions.TryGetValue(transition, out nextState))
+            {
+                throw new Exception("The following is not a valid transition: " + CurrentState + "->" + action);
+            }
+
+            return nextState;
+        }
+
+        //handles the moving of states.
+        public PotentialStates MoveState(PotentialStates determinedState, Action action)
+        {
+            determinedState = GetNext(determinedState, action);
+            return determinedState;
+
+        }
+
+
+        //used to test the transition logic
+        public void testTransition()
+        {
+
+
+        }
+
+
     }
-
-
-    //return the next state deterministically
-    public PotentialStates GetNext(PotentialStates CurrentState, Action action)
-    {
-        StateTransition transition = new StateTransition(CurrentState, action);
-        PotentialStates nextState;
-
-        if (!transitions.TryGetValue(transition, out nextState))
-            throw new Exception("The following is not a valid transition: " + CurrentState + "->" + action);
-
-        return nextState;
-    }
-
-    //handles the moving of states.
-    public PotentialStates MoveState (PotentialStates determinedState, Action action)
-    {
-        determinedState = GetNext(determinedState, action);
-        return determinedState;
-
-    }
-
-
-    //used to test the transition logic
-    public void testTransition()
-    {
-
-
-    }
-
-
 }

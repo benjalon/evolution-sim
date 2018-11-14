@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace EvolutionSim
 {
@@ -13,28 +14,23 @@ namespace EvolutionSim
     {
         public static int WINDOW_SIZE = 800;
         public static int ELAPSED_TIME; 
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
-        private Overlay _overlay;
+        private Overlay overlay;
+        private Simulation simulation;
 
-        private Texture2D _organismTexture;
-        private Texture2D _foodTexture;
-        private Texture2D _tileTexture;
-
-        private Grid _grid;
-        private Brain _brain;
-
-        private double _fpsOld = 0;
+        private double fps = 0;
+        private double fpsOld = 0;
 
         public Graphics()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            _graphics.PreferredBackBufferWidth = WINDOW_SIZE;
-            _graphics.PreferredBackBufferHeight = WINDOW_SIZE;
-            _graphics.ApplyChanges();
+            this.graphics.PreferredBackBufferWidth = WINDOW_SIZE;
+            this.graphics.PreferredBackBufferHeight = WINDOW_SIZE;
+            this.graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -44,7 +40,7 @@ namespace EvolutionSim
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
 
-            _overlay = new Overlay();
+            this.overlay = new Overlay();
             
             base.Initialize();
         }
@@ -55,28 +51,20 @@ namespace EvolutionSim
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load textures
-            _organismTexture = Content.Load<Texture2D>("face");
-            _foodTexture = Content.Load<Texture2D>("pizza");
-            _tileTexture = Content.Load<Texture2D>("tile");
+            var textures = new Dictionary<string, Texture2D>();
+            textures.Add("face", Content.Load<Texture2D>("face"));
+            textures.Add("pizza", Content.Load<Texture2D>("pizza"));
+            textures.Add("tile", Content.Load<Texture2D>("tile"));
 
             var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
+            this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            _grid = new Grid(_tileTexture, screenWidth, screenHeight);
-            _brain = new Brain(_grid);
-            _overlay.Button.OnClick = (Entity btn) =>
-            {
-                for (var i = 0; i < 30; i++) _brain.AddOrganism(new Organism(_organismTexture), _grid);
-            };
-
-            _overlay.Button_Two.OnClick = (Entity btn) =>
-            {
-                for (var i = 0; i < 30; i++) _brain.AddFood(new Food(_foodTexture, FoodType.Carnivore), _grid);
-            };
-
+            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(30);
+            this.overlay.Button_Two.OnClick = (Entity btn) => this.simulation.AddFood(30);
         }
         
         /// <summary>
@@ -99,12 +87,10 @@ namespace EvolutionSim
             {
                 Exit();
             }
-            
+
             // Update UI elements
-            _overlay.Update(gameTime);
-
-
-            _brain.Update();
+            this.overlay.Update(gameTime);
+            this.simulation.Update();
 
             base.Update(gameTime);
         }
@@ -115,45 +101,24 @@ namespace EvolutionSim
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)
         {
-            var fps = 1 / gameTime.ElapsedGameTime.TotalSeconds;
-            if (_fpsOld != fps)
+            this.fps = 1 / gameTime.ElapsedGameTime.TotalSeconds;
+            if (this.fpsOld != this.fps)
             {
-                Console.WriteLine(fps);
-                _fpsOld = fps;
+                Console.WriteLine(this.fps);
+                this.fpsOld = this.fps;
             }
 
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
 
             // Draw graphical elements
-            _spriteBatch.Begin();
-            _grid.Draw(_spriteBatch);
-            _spriteBatch.End();
+            this.spriteBatch.Begin();
+            this.simulation.Draw(this.spriteBatch);
+            this.spriteBatch.End();
 
             // Draw UI elements on top
-            _overlay.Draw(_spriteBatch);
+            this.overlay.Draw(this.spriteBatch);
             
             base.Draw(gameTime);
         }
-
-
-        //for each organism on the grid we need to check if we need to change state,
-        //then we call a method which determines how each organism behaves
-        private void handle_organism(GameTime gameTime)
-        {
- 
-
-
-        }
-
-        
-        //private void createOrganism()
-        //{
-        //    var newOrganism = new Organism(_organismTexture, new Rectangle(_random.Next(0, WINDOW_SIZE + 1), _random.Next(0, WINDOW_SIZE + 1), 16, 16));
-            
-        //    // TODO Delete this when we don't want random colors anymore
-        //    newOrganism.Color = Color.FromNonPremultiplied(_random.Next(0, 256), _random.Next(0, 256), _random.Next(0, 256), 255);
-
-        //    _grid.AddInhabitant(newOrganism);
-        //}
     }
 }

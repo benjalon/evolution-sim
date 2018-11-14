@@ -83,23 +83,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Food.cs" />
-    <Compile Include="FoodType.cs" />
-    <Compile Include="Graphics\MapItem.cs" />
-    <Compile Include="Grid.cs" />
-    <Compile Include="Logic\Brain.cs" />
-    <Compile Include="Logic\Pathfinding\Node.cs" />
-    <Compile Include="Logic\Pathfinding\NodeExpander.cs" />
-    <Compile Include="Logic\Pathfinding\PathToTile.cs" />
-    <Compile Include="Logic\StateActions.cs" />
-    <Compile Include="Organism.cs" />
-    <Compile Include="OrganismAttributes.cs" />
+    <Compile Include="TileGrid\GridItems\Food.cs" />
+    <Compile Include="TileGrid\GridItems\MapItem.cs" />
+    <Compile Include="TileGrid\Grid.cs" />
+    <Compile Include="Pathfinding\Node.cs" />
+    <Compile Include="Pathfinding\NodeExpander.cs" />
+    <Compile Include="Pathfinding\PathToTile.cs" />
+    <Compile Include="Simulation.cs" />
+    <Compile Include="StateManagement\StateActions.cs" />
+    <Compile Include="TileGrid\GridItems\Organism.cs" />
     <Compile Include="Graphics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Logic\State.cs" />
-    <Compile Include="Logic\StateMachine.cs" />
-    <Compile Include="Tile.cs" />
+    <Compile Include="StateManagement\State.cs" />
+    <Compile Include="StateManagement\StateMachine.cs" />
+    <Compile Include="TileGrid\GridItems\Tile.cs" />
     <Compile Include="UI\Overlay.cs" />
   </ItemGroup>
   <ItemGroup>
