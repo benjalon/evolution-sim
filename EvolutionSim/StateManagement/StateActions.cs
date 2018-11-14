@@ -156,69 +156,20 @@ namespace EvolutionSim.StateManagement
                 //if destination full decide again.
             }
 
-            private static Tile FoodInRange(Organism organism, Grid grid)
+            private static Tile FoodInRange(Organism organism,Grid grid)
             {
-                var max_depth = 3;
-                var depth = 0;
-
-                while (depth < max_depth)
+                int firstX = organism.GridPosition.X - organism.attributes.DetectionRadius;
+                int firstY = organism.GridPosition.Y - organism.attributes.DetectionRadius;
+                for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
                 {
-                    //the starting is the depth away from the origin +1 to compensate for the 0-2;
-                    var firstX = organism.GridPosition.X - (depth + 1);
-                    var firstY = organism.GridPosition.Y - (depth + 1);
-
-                    var num = 3 + (2 * depth); //number of tiles to check per depth level. 
-                    var firstCheck = 1 - depth;
-                    var i = -1;
-                    var j = 0;
-
-                    while (i < num - 1)
+                    for (int j = 0; j < organism.attributes.DetectionDiameter; j++)
                     {
-                        i++;
-                        var x = firstX + i;
-                        var y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
-                        {
-
-                            return grid.GetTileAt(firstX + i, firstY + j);
-                        }
-                    }
-                    
-                    while (j < num - 1)
-                    {
-                        j++;
-                        var x = firstX + i;
-                        var y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
-                        {
-
-                            return grid.GetTileAt(firstX + i, firstY + j);
-                        }
-                    }
-
-                    while (i > 0)
-                    {
-                        i--;
-                        var x = firstX + i;
-                        var y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (Grid.InBounds(firstX + i, firstY + j) && grid.IsFoodAt(firstX + i, firstY + j))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
                     }
 
-                    while (j > 0)
-                    {
-                        j--;
-                        var x = firstX + i;
-                        var y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
-                        {
-                            return grid.GetTileAt(firstX + i, firstY + j);
-                        }
-                    }
-
-                    depth++;
                 }
                 return null;
             }
