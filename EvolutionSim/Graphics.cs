@@ -63,7 +63,7 @@ namespace EvolutionSim
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(30);
+            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(2);
             this.overlay.Button_Two.OnClick = (Entity btn) => this.simulation.AddFood(30);
         }
         

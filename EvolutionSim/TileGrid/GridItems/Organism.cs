@@ -27,10 +27,21 @@ namespace EvolutionSim.TileGrid.GridItems
         public Organism(Texture2D texture)
             : base(texture)
         {
-            this.attributes = new OrganismAttributes(0, 0.6, 500, 50);
+            this.attributes = new OrganismAttributes(0, 8, 500, 50);
             TOTAL_POPULATION++;
             OrganismState = PotentialStates.Roaming;
             Path = new List<Tile>();
+        }
+
+        public bool PingMate()
+        {
+            if (this.attributes.WaitingForMate)
+            {
+                this.attributes.MateFound = true;
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -43,7 +54,9 @@ namespace EvolutionSim.TileGrid.GridItems
         public double Strength { get; set; }
         public int DetectionRadius { get; set; }
         public int DetectionDiameter { get; set; }
-        
+        public bool WaitingForMate { get; set; }
+        public bool MateFound { get; set; }
+
         public OrganismAttributes(int age,
                                   double hunger,
                                   double speed,
@@ -52,7 +65,7 @@ namespace EvolutionSim.TileGrid.GridItems
             DetectionRadius = 3;
             DetectionDiameter = DetectionRadius * 2;
             Age = age;
-            Hunger = 0;
+            Hunger = hunger;
             Speed = speed;
             Strength = strength;
 

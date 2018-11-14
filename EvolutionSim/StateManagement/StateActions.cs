@@ -194,5 +194,54 @@ namespace EvolutionSim.StateManagement
                 }
             }
         }
+        public static class SeekingMate
+        {
+            public static Boolean SeekMate(Organism organism, Grid grid)
+            {
+                
+                Tile potentialMate = MatesInRange(organism, grid);
+
+                if (potentialMate != null)
+                {
+                    List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, potentialMate, grid);
+                    organism.Path = Path;
+                    if (Path.Count == 0)
+                    {
+                        organism.DestinationTile = potentialMate;
+                    }
+                    else
+                    {
+                        organism.DestinationTile = potentialMate;
+                        organism.Path.RemoveAt(organism.Path.Count - 1);
+                    }
+
+                    organism.MovingOnPath = true;
+                    return true;
+                }
+                else if (!organism.attributes.WaitingForMate)
+                {
+                    Roam(organism, grid);
+                }
+                return false;
+            }
+
+            private static Tile MatesInRange(Organism organism, Grid grid)
+            {
+                int firstX = organism.GridPosition.X - organism.attributes.DetectionRadius;
+                int firstY = organism.GridPosition.Y - organism.attributes.DetectionRadius;
+                for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
+                {
+                    for (int j = 0; j < organism.attributes.DetectionDiameter; j++)
+                    {
+                        if (Grid.InBounds(firstX + i, firstY + j) && grid.IsMateAt(organism, firstX + i, firstY + j))
+                        {
+                            return grid.GetTileAt(firstX + i, firstY + j);
+                        }
+                    }
+
+                }
+                return null;
+            }
+        }
     }
 }

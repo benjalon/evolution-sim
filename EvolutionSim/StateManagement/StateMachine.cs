@@ -1,6 +1,7 @@
 ﻿using EvolutionSim.StateManagement;
 using EvolutionSim.TileGrid;
 using EvolutionSim.TileGrid.GridItems;
+using System;
 
 namespace EvolutionSim.StateManagement
 {
@@ -99,14 +100,34 @@ namespace EvolutionSim.StateManagement
                 //
                 case PotentialStates.SeekMate:
 
-                    //if (_simGrid.TrackMate(_passedOrganism))
-                    //{
-                    //    _passedOrganism.organismState = _state.MoveState(organismState, Action.MateFound);
+                        if (_passedOrganism.MovingOnPath)
+                        {
+                            _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.MateFound);
+                        }
+                 
 
-                    //}
+                    break;
+
+                
+                //check if an organism should be moving to "Moving to Mate"
+                case PotentialStates.MovingToMate:
+                    if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
+                    {
+                        _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.Bang);
+
+
+                    }
+
 
 
                     break;
+                
+                case PotentialStates.WaitingForMate:
+
+
+
+                    break;
+
 
                 case PotentialStates.SeekFood:
 
@@ -137,8 +158,9 @@ namespace EvolutionSim.StateManagement
                 //once a certain time has elasped move back to roaming
 
                 case PotentialStates.Mating:
-                  
-    
+                    Console.WriteLine("Success");
+                    _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
+                    ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
 
                     break;
 
@@ -184,11 +206,24 @@ namespace EvolutionSim.StateManagement
 
                     break;
 
-                case PotentialStates.SeekMate:
-
-                   // _simGrid.Move(gameTime);
+                case PotentialStates.MovingToMate:
+                    StateActions.MoveAlongPath(_passedOrganism, this.grid, _passedOrganism.Path);
 
                     break;
+
+                case PotentialStates.SeekMate:
+
+                        StateActions.SeekingMate.SeekMate(_passedOrganism, this.grid);
+
+                    break;
+
+                case PotentialStates.WaitingForMate:
+
+                    System.Console.WriteLine("Waiting!");
+                    break;
+                   // _simGrid.Move(gameTime);
+
+                    
                 case PotentialStates.MovingToFood:
                     StateActions.MoveAlongPath(_passedOrganism, this.grid, _passedOrganism.Path);
                     break;
