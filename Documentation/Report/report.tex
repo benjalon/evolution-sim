@@ -243,7 +243,13 @@ c. Tile based graphicsOnce it has eaten sufficiently, it will go back to default
 The crossover algorithm is currently a work in progress.
 
 \section{Grid System}\label{grid}
-[TODO: unrestricted movement vs tile based movement]
+A common method of implementing movement in a simulation is through the use of a grid. This is a useful approach because by constricting organism movement to a set of definite positions, the number of movement states becomes finite and therefore better lends itself to algorithms such as pathfinding. In terms of efficiency, a grid also reduces the need for collision detection between simulation elements as when an organism wishes to move from one tile to another, the grid can simply accept or reject the move based on whether the destination tile is occupied. On the other hand, this limited movement is less realistic and does not necessarily reduce code complexity as the grid must constantly be made aware of the positions of its elements which requires a fair amount of manipulation to its arrays. 
+
+In terms of the code, Grid refers to a management class which keeps track of the Tile positions in addition to some simple methods for interacting with them, for example to check whether a given Tile is occupied. In order to achieve this, the Grid contains a jagged two dimensional array of type Tile, where each index within it refers to a Tile's actual position on the screen.
+
+[TODO: matrix/2d array image here]
+
+When an organism wishes to move, a method on the Grid called MoveMapItem is passed the MapItem requesting to move with the destination it wishes to move to. Since Tiles are always in fixed positions from the simulation start, the Grid simply has to look up the destination from its fixed position array and check whether it is occupied and then ensure that the MapItem position is adjacent.
 
 \section{Path Finding Algorithm}\label{pathfinding}
 [TODO: DFS vs Dijkstra's vs A* algorithms, why pathfinding is necessary]
