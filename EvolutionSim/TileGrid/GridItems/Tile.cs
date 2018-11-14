@@ -1,23 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
-namespace EvolutionSim
+namespace EvolutionSim.TileGrid.GridItems
 {
     enum TerrainTypes
     {
         Grass
     }
 
-    public class Tile : MapItem
+    public class Tile : GridItem
     {
-        public const int TILE_SIZE = 16;
+        public const int TILE_SIZE = 8;
 
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
-        public MapItem Inhabitant { get; private set; }
+        public GridItem Inhabitant { get; private set; }
 
-        private TerrainTypes _terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
+        private TerrainTypes terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
 
         public Tile(Texture2D texture, Rectangle rectangle) : base(texture, rectangle)
         {
@@ -27,10 +26,10 @@ namespace EvolutionSim
             base.GridPosition.Y = GridPositionY;
         }
 
-        public void AddMapItem(MapItem mapItem)
+        public void AddMapItem(GridItem gridItem)
         {
-            Inhabitant = mapItem;
-            mapItem.MoveToTile(this);
+            Inhabitant = gridItem;
+            gridItem.MoveToTile(this);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

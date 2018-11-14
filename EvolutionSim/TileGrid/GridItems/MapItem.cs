@@ -2,27 +2,26 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace EvolutionSim
+namespace EvolutionSim.TileGrid.GridItems
 {
     /// <summary>
     /// A combination of a texture and rectangle form a sprite, where the texture is drawn on top of the rectangle.
     /// This class is purely for static sprites such as banners, background textures or sprites not requiring any
     /// kind of updates.
     /// </summary>
-    public abstract class MapItem
+    public abstract class GridItem
     {
-        protected Texture2D _texture;
-        public Color Color { get; set; }
+        protected Texture2D texture;
+        public Color Color { get; private set; }
 
         public Point GridPosition;
 
-        protected Rectangle _rectangle;
+        protected Rectangle rectangle;
         public Rectangle Rectangle
         {
-
-            get => _rectangle;
+            get => this.rectangle;
         }
-
+       
         public Tile ParentTile { get; private set; }
 
         protected int _health { get; private set; } = 10;
@@ -31,22 +30,22 @@ namespace EvolutionSim
         /// <summary>
         /// Create a static sprite from a given texture and rectangle
         /// </summary>
-        /// <param name="texture">The appearance of the MapItem</param>
-        public MapItem(Texture2D texture)
+        /// <param name="texture">The appearance of the GridItem</param>
+        public GridItem(Texture2D texture)
         {
-            _texture = texture;
+            this.texture = texture;
             Color = Color.White;
         }
 
         /// <summary>
         /// Create a static sprite from a given texture and rectangle
         /// </summary>
-        /// <param name="texture">The appearance of the MapItem</param>
-        /// <param name="rectangle">The position and size of the MapItem</param>
-        public MapItem(Texture2D texture, Rectangle rectangle)
+        /// <param name="texture">The appearance of the GridItem</param>
+        /// <param name="rectangle">The position and size of the GridItem</param>
+        public GridItem(Texture2D texture, Rectangle rectangle)
         {
-            _texture = texture;
-            _rectangle = rectangle;
+            this.texture = texture;
+            this.rectangle = rectangle;
             Color = Color.White;
         }
 
@@ -56,7 +55,7 @@ namespace EvolutionSim
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Rectangle, Color);
+            spriteBatch.Draw(this.texture, Rectangle, Color);
         }
 
         /// <summary>
@@ -65,10 +64,10 @@ namespace EvolutionSim
         /// <param name="tile">The tile to move to</param>
         public void MoveToTile(Tile tile)
         {
-            GridPosition.X = tile.GridPositionX;
-            GridPosition.Y = tile.GridPositionY;
+            this.GridPosition.X = tile.GridPositionX;
+            this.GridPosition.Y = tile.GridPositionY;
             ParentTile = tile;
-            _rectangle = tile.Rectangle;
+            this.rectangle = tile.Rectangle;
         }
 
         /// <summary>

@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvolutionSim.TileGrid.GridItems;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace EvolutionSim
+namespace EvolutionSim.TileGrid
 {
     enum Directions
     {
@@ -15,7 +16,7 @@ namespace EvolutionSim
 
     public class Grid
     {
-        private Tile[][] _tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
+        private Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
         public static int HorizontalCount { get; private set; }
@@ -28,14 +29,14 @@ namespace EvolutionSim
             HorizontalCount = width / Tile.TILE_SIZE;
             VerticalCount = height / Tile.TILE_SIZE;
 
-            _tiles = new Tile[HorizontalCount][];
+            this.tiles = new Tile[HorizontalCount][];
 
             for (var i = 0; i < HorizontalCount; i++)
             {
-                _tiles[i] = new Tile[VerticalCount];
+                this.tiles[i] = new Tile[VerticalCount];
                 for (var j = 0; j < VerticalCount; j++)
                 {
-                    _tiles[i][j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
+                    this.tiles[i][j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
                 }
             }
 
@@ -47,7 +48,7 @@ namespace EvolutionSim
             {
                 for (var j = 0; j < VerticalCount; j++)
                 {
-                    _tiles[i][j].Draw(spriteBatch);
+                    this.tiles[i][j].Draw(spriteBatch);
                 }
             }
         }
@@ -82,65 +83,78 @@ namespace EvolutionSim
             return found;
         }
 
-        public bool AttemptToPositionAt(MapItem item, int x, int y)
+        public bool AttemptToPositionAt(GridItem item, int x, int y)
         {
-            if (_tiles[x][y].HasInhabitant())
+            if (this.tiles[x][y].HasInhabitant())
             {
                 return false; // Space occupied
             }
 
-            _tiles[x][y].AddMapItem(item);
+            this.tiles[x][y].AddMapItem(item);
+
+            if (item.GetType() == typeof(Organism))
+            {
+                var organism = (Organism)item;
+                organism.DeathOccurred += OrganismDeathHandler;
+                Organisms.Add(organism);
+            }
+            else if (item.GetType() == typeof(Food))
+            {
+                var food = (Food)item;
+                food.DeathOccurred += FoodDeathHandler;
+                Foods.Add(food);
+            }
+
             return true; // Successfully positioned
         }
 
         public void MoveOrganism(Organism organism, int destinationX, int destinationY)
         {
-            var parentTile = _tiles[organism.GridPosition.X][organism.GridPosition.Y];
-            var destinationTile = _tiles[destinationX][destinationY];
+            var parentTile = this.tiles[organism.GridPosition.X][organism.GridPosition.Y];
+            var destinationTile = this.tiles[destinationX][destinationY];
             if (!destinationTile.HasInhabitant())
             {
                 parentTile.MoveInhabitant(destinationTile);
-                organism.UpdateCollisionBox(destinationX, destinationY);
             }
         }
 
         public void MoveOrganism(Organism organism, Tile destination)
         {
-            var parentTile = _tiles[organism.GridPosition.X][organism.GridPosition.Y];
+            var parentTile = this.tiles[organism.GridPosition.X][organism.GridPosition.Y];
             if (!destination.HasInhabitant())
             {
                 parentTile.MoveInhabitant(destination);
-                organism.UpdateCollisionBox(destination.GridPositionX, destination.GridPositionY);
             }
         }
 
         public bool IsFoodAt(int x, int y)
         {
-            var inhabitant = _tiles[x][y].Inhabitant;
+            var inhabitant = this.tiles[x][y].Inhabitant;
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
 
         public Tile GetTileAt(int x, int y)
         {
-            return _tiles[x][y];
+            return this.tiles[x][y];
         }
 
-        public void AddOrganism(Organism organism)
+        private void OrganismDeathHandler(object sender, EventArgs e)
         {
-            Organisms.Add(organism);
+            this.Organisms.Remove((Organism)sender);
         }
-        public void AddFood(Food food)
-        {
-            Foods.Add(food);
-        }
-        public void RemoveOrganism(Organism organism)
-        {
-            Organisms.Remove(organism);
 
-        }
-        public void RemoveFood(Food food)
+        private void FoodDeathHandler(object sender, EventArgs e)
         {
-            Foods.Remove(food);
+            this.Foods.Remove((Food)sender);
+        }
+
+        public static Boolean InBounds(int x, int y)
+        {
+            if (y >= Grid.VerticalCount || y < 0 || x >= Grid.HorizontalCount || x < 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -1,10 +1,8 @@
-﻿using System;
+﻿using EvolutionSim.TileGrid;
+using EvolutionSim.TileGrid.GridItems;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EvolutionSim.Logic.Pathfinding
+namespace EvolutionSim.Pathfinding
 {
     public static class NodeExpander
     {
@@ -18,7 +16,7 @@ namespace EvolutionSim.Logic.Pathfinding
                 for (int j = -1; j <= 1; j++)
                 {
 
-                    if(StateActions.InBounds(center.GridPositionX + i, center.GridPositionY + j) )
+                    if(Grid.InBounds(center.GridPositionX + i, center.GridPositionY + j) )
                     {
 
                         node = new Node(grid.GetTileAt(center.GridPositionX + i, center.GridPositionY + j), goal, previous);

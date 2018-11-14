@@ -1,10 +1,9 @@
-﻿using System;
+﻿using EvolutionSim.TileGrid;
+using EvolutionSim.TileGrid.GridItems;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EvolutionSim.Logic.Pathfinding
+namespace EvolutionSim.Pathfinding
 {
     public static class PathFinding
     {
