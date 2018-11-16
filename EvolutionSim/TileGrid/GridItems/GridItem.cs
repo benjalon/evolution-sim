@@ -24,7 +24,7 @@ namespace EvolutionSim.TileGrid.GridItems
        
         public Tile ParentTile { get; private set; }
 
-        protected int _health { get; private set; } = 10;
+        protected int _health { get; private set; } = 80;
         public event EventHandler DeathOccurred;
 
         /// <summary>
@@ -35,6 +35,12 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             this.texture = texture;
             Color = Color.White;
+        }
+
+        public void UpdateRectangle(float x, float y)
+        {
+            rectangle.X = (int)x;
+            rectangle.Y = (int)y;
         }
 
         /// <summary>

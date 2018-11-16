@@ -11,39 +11,64 @@ namespace EvolutionSim.UI
     /// </summary>
     public class Overlay
     {
-        public static int PANEL_WIDTH = 200;
+        public static int PANEL_WIDTH = 300;
 
-        public Button CreateOrganismButton { get; private set; }
-        public Button CreateFoodButton { get; private set; }
-        public Button CreateMountainButton { get; private set; }
-        public Button CreateWaterButton { get; private set; }
+        public TextInput OrganismCountInput { get; private set; }
+        public Button OrganismCreateButton { get; private set; }
+        public TextInput FoodCountInput { get; private set; }
+        public Button FoodCreateButton { get; private set; }
+        public TextInput WaterCountInput { get; private set; }
+        public Button WaterCreateButton { get; private set; }
+        public TextInput MountainCountInput { get; private set; }
+        public Button MountainCreateButton { get; private set; }
+
 
         public Overlay()
         {
             // All temporary
-            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, anchor: Anchor.CenterLeft);
+            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterLeft);
+            panel.Padding = new Vector2(10, 10);
             panel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(panel);
-
-            var testText = new Paragraph("Click button to create organisms");
-            panel.AddChild(testText);
-
-            var list = new SelectList(new Vector2(0, PANEL_WIDTH), Anchor.Auto, null, PanelSkin.Simple);
-            list.AddItem("Dog");
-            list.AddItem("Human");
-            list.AddItem("Rat");
-            panel.AddChild(list);
             
-            CreateOrganismButton = new Button("Organism");
-            CreateFoodButton = new Button("Food");
-            CreateMountainButton = new Button("Mountain");
-            CreateWaterButton = new Button("Water");
+            //var list = new SelectList(new Vector2(0, PANEL_WIDTH), Anchor.Auto, null, PanelSkin.Simple);
+            //list.AddItem("Dog");
+            //list.AddItem("Human");
+            //list.AddItem("Rat");
+            //panel.AddChild(list);
 
-            panel.AddChild(CreateOrganismButton);
-            panel.AddChild(CreateFoodButton);
-            panel.AddChild(CreateMountainButton);
-            panel.AddChild(CreateWaterButton);
+            var addItemsText = new Paragraph("Add Items");
 
+
+            OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            OrganismCountInput.PlaceholderText = "10";
+            OrganismCreateButton = new Button("Organism", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+
+            FoodCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            FoodCountInput.PlaceholderText = "10";
+            FoodCreateButton = new Button("Food", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+
+            WaterCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            WaterCountInput.PlaceholderText = "10";
+            WaterCreateButton = new Button("Water", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+
+            MountainCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            MountainCountInput.PlaceholderText = "10";
+            MountainCreateButton = new Button("Mountain", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+            
+            var editAttributesText = new Paragraph("Edit Attributes");
+
+
+            panel.AddChild(addItemsText);
+            panel.AddChild(OrganismCountInput);
+            panel.AddChild(OrganismCreateButton);
+            panel.AddChild(FoodCountInput);
+            panel.AddChild(FoodCreateButton);
+            panel.AddChild(MountainCountInput);
+            panel.AddChild(MountainCreateButton);
+            panel.AddChild(WaterCountInput);
+            panel.AddChild(WaterCreateButton);
+            panel.AddChild(editAttributesText);
         }
 
         /// <summary>

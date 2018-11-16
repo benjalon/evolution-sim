@@ -12,9 +12,12 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
+
         public static int WINDOW_WIDTH = 1920;
         public static int WINDOW_HEIGHT = 1080;
-        public static int ELAPSED_TIME; 
+
+        public static TimeSpan ELAPSED_TIME; 
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -32,6 +35,7 @@ namespace EvolutionSim
             this.graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
             this.graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
             this.graphics.ApplyChanges();
+            
         }
 
         /// <summary>
@@ -66,10 +70,27 @@ namespace EvolutionSim
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.overlay.CreateOrganismButton.OnClick = (Entity btn) => this.simulation.AddOrganism(30);
-            this.overlay.CreateFoodButton.OnClick = (Entity btn) => this.simulation.AddFood(30);
+
             this.overlay.CreateMountainButton.OnClick = (Entity btn) => this.simulation.AddMountain(30);
             this.overlay.CreateWaterButton.OnClick = (Entity btn) => this.simulation.AddWater(30);
+
+            this.overlay.OrganismCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(this.overlay.OrganismCountInput.Value, out input))
+                {
+                    this.simulation.AddOrganism(input);
+                }
+            };
+            this.overlay.FoodCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(this.overlay.FoodCountInput.Value, out input))
+                {
+                    this.simulation.AddFood(input);
+                }
+            };
+
         }
         
         /// <summary>
@@ -85,7 +106,7 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-            ELAPSED_TIME = gameTime.ElapsedGameTime.Milliseconds;
+            ELAPSED_TIME = gameTime.ElapsedGameTime;
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
