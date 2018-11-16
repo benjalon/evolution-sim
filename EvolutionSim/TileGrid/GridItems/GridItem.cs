@@ -86,6 +86,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public virtual void OnDeath(EventArgs e)
         {
+            // BeginInvoke() ???
             DeathOccurred?.Invoke(this, e);
         }
     }

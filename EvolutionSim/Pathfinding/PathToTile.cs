@@ -43,10 +43,6 @@ namespace EvolutionSim.Pathfinding
                 //    b) pop current off the open list
                 current = open[0];
                 open.Remove(current);
-                if (current.Current.HasInhabitant())
-                {
-                    continue;
-                }
 
                 //    c) generate currents's 8 successors and set their 
                 //       parents to current

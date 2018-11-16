@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TileGrid\GridItems\Food.cs" />
-    <Compile Include="TileGrid\GridItems\MapItem.cs" />
+    <Compile Include="TileGrid\GridItems\GridItem.cs" />
     <Compile Include="TileGrid\Grid.cs" />
     <Compile Include="Pathfinding\Node.cs" />
     <Compile Include="Pathfinding\NodeExpander.cs" />
