@@ -22,7 +22,11 @@ namespace EvolutionSim.Pathfinding
                         node = new Node(grid.GetTileAt(center.GridPositionX + i, center.GridPositionY + j), goal, previous);
                         if (node.Current.GridPosition != center.GridPosition)
                         {
-                            expanded.Add(node);
+
+                            if (node.Current.Inhabitant != null)
+                            {
+                                expanded.Add(node);
+                            }
                         }
                     }
 

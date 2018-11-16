@@ -48,7 +48,16 @@ namespace EvolutionSim.StateManagement
         {
             organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
 
-            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+            // And not on path?
+
+            //newPos = pos + (speed * deltaTime);
+            //if (newPos < targetPos)
+            //{
+            //    pos = newPos;
+            //}
+
+            // AND DESTINATION TILE ! = null
+            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE && organism.DestinationTile is null)
             {   //decide destination
 
                 organism.MilliSecondsSinceLastMovement = 0;
@@ -83,8 +92,19 @@ namespace EvolutionSim.StateManagement
                         }
                         break;
                 }
+                organism.DestinationTile = grid.GetTileAt(_destinationTileX, _destinationTileY);
 
-                grid.MoveOrganism(organism, _destinationTileX, _destinationTileY);
+                // organism.moveTowardstile
+
+                //grid.MoveOrganism(organism, _destinationTileX, _destinationTileY);
+            }
+            else if (organism.DestinationTile != null){
+                // Is organism at it's destination? if so set to null
+                if (organism.DestinationTile.GridPositionX == organism.ParentTile.GridPositionX && organism.DestinationTile.GridPositionY == organism.ParentTile.GridPositionY)
+                {
+                   organism.
+                }
+
             }
 
             //if destination full decide again.
