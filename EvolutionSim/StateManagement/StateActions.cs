@@ -160,25 +160,34 @@ namespace EvolutionSim.StateManagement
             {
 
                 // COMMENT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!
-                var max_depth = 3;
+                var max_depth = organism.attributes.DetectionRadius;
                 var depth = 0;
+
+                int firstX;
+                int firstY;
+                int num;
+                int firstCheck;
+                int i;
+                int j;
+                int x;
+                int y;
 
                 while (depth < max_depth)
                 {
                     //the starting is the depth away from the origin +1 to compensate for the 0-2;
-                    var firstX = organism.GridPosition.X - (depth + 1);
-                    var firstY = organism.GridPosition.Y - (depth + 1);
+                    firstX = organism.GridPosition.X - (depth + 1);
+                    firstY = organism.GridPosition.Y - (depth + 1);
 
-                    var num = 3 + (2 * depth); //number of tiles to check per depth level. 
-                    var firstCheck = 1 - depth;
-                    var i = -1;
-                    var j = 0;
+                    num = 3 + (2 * depth); //number of tiles to check per depth level. 
+                    firstCheck = 1 - depth;
+                    i = -1;
+                    j = 0;
 
                     while (i < num - 1)
                     {
                         i++;
-                        var x = firstX + i;
-                        var y = firstY + j;
+                        x = firstX + i;
+                        y = firstY + j;
                         if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
                         {
 
@@ -189,8 +198,8 @@ namespace EvolutionSim.StateManagement
                     while (j < num - 1)
                     {
                         j++;
-                        var x = firstX + i;
-                        var y = firstY + j;
+                        x = firstX + i;
+                        y = firstY + j;
                         if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
                         {
 
@@ -201,8 +210,8 @@ namespace EvolutionSim.StateManagement
                     while (i > 0)
                     {
                         i--;
-                        var x = firstX + i;
-                        var y = firstY + j;
+                        x = firstX + i;
+                        y = firstY + j;
                         if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
@@ -212,8 +221,8 @@ namespace EvolutionSim.StateManagement
                     while (j > 0)
                     {
                         j--;
-                        var x = firstX + i;
-                        var y = firstY + j;
+                        x = firstX + i;
+                        y = firstY + j;
                         if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
