@@ -97,9 +97,6 @@ namespace EvolutionSim.StateManagement
                 // if the organism is seeking a mate but becomes too hungry then switch to seek food
                 { new StateTransition (PotentialStates.SeekMate, Action.HungryRoam), PotentialStates.SeekFood},
 
-                //this is a test statement, i don't understand why this transition is being accessed tbh
-              //  { new StateTransition (PotentialStates.SeekFood, Action.HungryRoam), PotentialStates.SeekFood},
-
                 //once the organism has finished mating place back into the roaming state
                 { new StateTransition(PotentialStates.Mating, Action.FinishedMating), PotentialStates.Roaming},
 

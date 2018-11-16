@@ -160,6 +160,7 @@ namespace EvolutionSim.StateManagement
                 case PotentialStates.Mating:
                     Console.WriteLine("Success");
                     _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
+                    //not updating the destination tile when moving
                     ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
 
                     break;
@@ -210,7 +211,8 @@ namespace EvolutionSim.StateManagement
                     StateActions.MoveAlongPath(_passedOrganism, this.grid, _passedOrganism.Path);
 
                     break;
-
+                
+                    //when in seaking mate scan for an organism who is also in the "SeekMate" State
                 case PotentialStates.SeekMate:
 
                         StateActions.SeekingMate.SeekMate(_passedOrganism, this.grid);
