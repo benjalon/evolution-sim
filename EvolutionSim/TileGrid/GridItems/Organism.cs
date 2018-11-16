@@ -64,7 +64,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <returns></returns>
         public bool readyToMate()
         {
-            MilliSecondsSinceLastMate += Graphics.ELAPSED_TIME;
+            MilliSecondsSinceLastMate += Graphics.ELAPSED_TIME.Milliseconds;
 
             if (this.MilliSecondsSinceLastMate < matingCd)
             {

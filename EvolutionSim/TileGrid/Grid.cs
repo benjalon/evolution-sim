@@ -54,15 +54,14 @@ namespace EvolutionSim.TileGrid
             {
                 food.Draw(spriteBatch);
             }
-
-
-            //for (var i = 0; i < HorizontalCount; i++)
-            //{
-            //    for (var j = 0; j < VerticalCount; j++)
-            //    {
-            //        this.tiles[i][j].Draw(spriteBatch);
-            //    }
-            //}
+            
+            for (var i = 0; i < HorizontalCount; i++)
+            {
+                for (var j = 0; j < VerticalCount; j++)
+                {
+                    this.tiles[i][j].Draw(spriteBatch);
+                }
+            }
         }
 
         /// <summary>
