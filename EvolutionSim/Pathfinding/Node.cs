@@ -24,8 +24,9 @@ namespace EvolutionSim.Pathfinding
             }
             else
             {
+                var terrainDifficulty = 1; //this should be taken from the tile terrain type.
                 //difficulty = difficulty of previous tile + terrain difficulty. 
-                this.Difficulty = previous.Difficulty + current.MovementDifficulty;
+                this.Difficulty = previous.Difficulty + terrainDifficulty;
 
                 this.FOfS = this.Heuristic + this.Difficulty;
             }
