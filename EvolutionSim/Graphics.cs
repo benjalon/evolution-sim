@@ -12,8 +12,11 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
+        
+        
+
         public static int WINDOW_SIZE = 800;
-        public static int ELAPSED_TIME; 
+        public static TimeSpan ELAPSED_TIME; 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -31,6 +34,7 @@ namespace EvolutionSim
             this.graphics.PreferredBackBufferWidth = 1920;
             this.graphics.PreferredBackBufferHeight = 1080;
             this.graphics.ApplyChanges();
+            
         }
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace EvolutionSim
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(25);
+            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(10);
             this.overlay.Button_Two.OnClick = (Entity btn) => this.simulation.AddFood(25);
         }
         
@@ -80,7 +84,7 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-            ELAPSED_TIME = gameTime.ElapsedGameTime.Milliseconds;
+            ELAPSED_TIME = gameTime.ElapsedGameTime;
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)

@@ -23,10 +23,9 @@ namespace EvolutionSim.Pathfinding
                         if (node.Current.GridPosition != center.GridPosition)
                         {
 
-                            if (node.Current.Inhabitant != null)
-                            {
+                           
                                 expanded.Add(node);
-                            }
+                            
                         }
                     }
 

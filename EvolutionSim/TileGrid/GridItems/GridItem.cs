@@ -37,6 +37,12 @@ namespace EvolutionSim.TileGrid.GridItems
             Color = Color.White;
         }
 
+        public void UpdateRectangle(float x, float y)
+        {
+            rectangle.X = (int)x;
+            rectangle.Y = (int)y;
+        }
+
         /// <summary>
         /// Create a static sprite from a given texture and rectangle
         /// </summary>

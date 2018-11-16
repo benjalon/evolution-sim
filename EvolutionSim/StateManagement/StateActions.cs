@@ -22,7 +22,7 @@ namespace EvolutionSim.StateManagement
             return distance == 1;
         }
 
-        public static List<Point> GetPointsInRange(Organism organism)   
+        public static List<Point> GetPointsInRange(Organism organism)
         {
             List<Point> toRet = new List<Point>();
 
@@ -43,96 +43,129 @@ namespace EvolutionSim.StateManagement
         }
 
         private static Random _random = new Random();
-        
-        public static void Roam(Organism organism,Grid grid)
+
+        public static void Roam(Organism organism, Grid grid)
         {
-            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
+            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
 
-            // And not on path?
 
-            //newPos = pos + (speed * deltaTime);
-            //if (newPos < targetPos)
-            //{
-            //    pos = newPos;
-            //}
-
-            // AND DESTINATION TILE ! = null
-            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE && organism.DestinationTile is null)
+            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
             {   //decide destination
 
-                organism.MilliSecondsSinceLastMovement = 0;
-                Directions _num = (Directions)_random.Next(0, 4);
-                int _destinationTileX = organism.GridPosition.X;
-                int _destinationTileY = organism.GridPosition.Y;
-
-                switch (_num)
+                if (organism.DestinationTile is null)
                 {
-                    case Directions.Up:
-                        if (_destinationTileY > 0)
-                        {
-                            _destinationTileY -= 1;
-                        }
-                        break;
-                    case Directions.Left:
-                        if (_destinationTileX > 0)
-                        {
-                            _destinationTileX -= 1;
-                        }
-                        break;
-                    case Directions.Down:
-                        if (_destinationTileY < Grid.VerticalCount - 1)
-                        {
-                            _destinationTileY += 1;
-                        }
-                        break;
-                    case Directions.Right:
-                        if (_destinationTileX < Grid.HorizontalCount - 1)
-                        {
-                            _destinationTileX += 1;
-                        }
-                        break;
+                    organism.MilliSecondsSinceLastMovement = 0;
+
+                    Directions _num = (Directions)_random.Next(0, 4);
+                    int _destinationTileX = organism.GridPosition.X;
+                    int _destinationTileY = organism.GridPosition.Y;
+
+                    switch (_num)
+                    {
+                        case Directions.Up:
+                            if (_destinationTileY > 0)
+                            {
+                                _destinationTileY -= 1;
+                            }
+                            break;
+                        case Directions.Left:
+                            if (_destinationTileX > 0)
+                            {
+                                _destinationTileX -= 1;
+                            }
+                            break;
+                        case Directions.Down:
+                            if (_destinationTileY < Grid.VerticalCount - 1)
+                            {
+                                _destinationTileY += 1;
+                            }
+                            break;
+                        case Directions.Right:
+                            if (_destinationTileX < Grid.HorizontalCount - 1)
+                            {
+                                _destinationTileX += 1;
+                            }
+                            break;
+                    }
+                    organism.DestinationTile = grid.GetTileAt(_destinationTileX, _destinationTileY);
+
                 }
-                organism.DestinationTile = grid.GetTileAt(_destinationTileX, _destinationTileY);
+                else
+                {
+                    if (organism.Rectangle == organism.DestinationTile.Rectangle)
+                    {
+                        grid.MoveOrganism(organism, organism.DestinationTile.GridPositionX, organism.DestinationTile.GridPositionY);
+                        organism.DestinationTile = null;
+                        //organism.MilliSecondsSinceLastMovement = 0;
+
+                    }
+                    else
+                    {
+                        //MoveTowardsTile
+                        Lerper lerp = new Lerper();
+
+
+                        float newX = lerp.Lerp(organism.Rectangle.X, organism.DestinationTile.Rectangle.X);
+                        float newY = lerp.Lerp(organism.Rectangle.Y, organism.DestinationTile.Rectangle.Y);
+                        organism.UpdateRectangle(newX, newY);
+
+
+                    }
+
+                }
 
                 // organism.moveTowardstile
 
                 //grid.MoveOrganism(organism, _destinationTileX, _destinationTileY);
             }
-            else if (organism.DestinationTile != null){
-                // Is organism at it's destination? if so set to null
-                if (organism.DestinationTile.GridPositionX == organism.ParentTile.GridPositionX && organism.DestinationTile.GridPositionY == organism.ParentTile.GridPositionY)
-                {
-                   organism.
-                }
 
+
+        }
+        // Returns true if reached tile, false if not.
+        private static bool Move(Organism organism,Rectangle DestinationRec,Point DestinationPoint,Grid grid){
+            if (organism.Rectangle == DestinationRec)
+            {
+                grid.MoveOrganism(organism, DestinationPoint.X, DestinationPoint.Y);
+                //organism.DestinationTile = null;
+
+                return true;
+            }
+            else
+            {
+                //MoveTowardsTile
+                Lerper lerp = new Lerper();
+
+
+                float newX = lerp.Lerp(organism.Rectangle.X, DestinationRec.X);
+                float newY = lerp.Lerp(organism.Rectangle.Y, DestinationRec.Y);
+                organism.UpdateRectangle(newX, newY);
+
+                return false;
             }
 
-            //if destination full decide again.
         }
+
+
 
         public static void MoveAlongPath(Organism organism, Grid grid, List<Tile> Path)
         {
-            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
+            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
 
             if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
             {
-                organism.MilliSecondsSinceLastMovement = 0;
 
                 if (Path.Any() && !Path.First().HasInhabitant())
                 {
-                    grid.MoveOrganism(organism, Path[0]);
-                    Path.RemoveAt(0);
-
+                    if(Move(organism,Path.ElementAt(0).Rectangle,Path.ElementAt(0).GridPosition, grid))
+                    {
+                        Path.RemoveAt(0);
+                    }
                 }
-
-
-
             }
 
             if (!Path.Any())
             {
-                organism.MovingOnPath = false;
- 
+                    organism.MovingOnPath = false;
             }
 
 
@@ -156,14 +189,16 @@ namespace EvolutionSim.StateManagement
                     if(Path.Count == 0)
                     {
                         organism.DestinationTile = potentialFood;
+
                     }
                     else
                     {
                         organism.DestinationTile = potentialFood;
-                        organism.Path.RemoveAt(organism.Path.Count - 1);
-                    }
+                        //organism.Path.RemoveAt(organism.Path.Count - 1);
 
+                    }
                     organism.MovingOnPath = true;
+
                     return true;
                 }
                 else
@@ -260,9 +295,11 @@ namespace EvolutionSim.StateManagement
 
             public static void EatFood(Organism organism, Grid grid)
             {
-                organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME;
+                organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
                 if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
                 {
+                    organism.MilliSecondsSinceLastMovement = 0;
+
                     Food food = organism.DestinationTile.Inhabitant as Food;
                     if (food != null) // It's rare but two organisms can attempt to eat the same food source
                     {
