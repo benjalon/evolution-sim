@@ -24,7 +24,7 @@ namespace EvolutionSim.TileGrid.GridItems
        
         public Tile ParentTile { get; private set; }
 
-        protected int _health { get; private set; } = 10;
+        protected int _health { get; private set; } = 80;
         public event EventHandler DeathOccurred;
 
         /// <summary>

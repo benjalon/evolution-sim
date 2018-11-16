@@ -12,10 +12,9 @@ namespace EvolutionSim.StateManagement
         SeekMate,
         SeekFood,
         Mating,
-        MovingToFood
-
-
-
+        MovingToFood,
+        WaitingForMate,
+        MovingToMate,
     }
 
     //these represent the transition paths between states
@@ -28,6 +27,9 @@ namespace EvolutionSim.StateManagement
         FoodFound,
         MateFound,
         FinishedMating,
+        Move,
+        Waiting,
+        Bang,
 
     }
 
@@ -91,13 +93,10 @@ namespace EvolutionSim.StateManagement
 
                 { new StateTransition (PotentialStates.Roaming, Action.HungryRoam), PotentialStates.SeekFood},
 
-                { new StateTransition (PotentialStates.SeekMate, Action.MateFound), PotentialStates.Mating},
+               // { new StateTransition (PotentialStates.SeekMate, Action.MateFound), PotentialStates.Mating},
 
                 // if the organism is seeking a mate but becomes too hungry then switch to seek food
                 { new StateTransition (PotentialStates.SeekMate, Action.HungryRoam), PotentialStates.SeekFood},
-
-                //this is a test statement, i don't understand why this transition is being accessed tbh
-              //  { new StateTransition (PotentialStates.SeekFood, Action.HungryRoam), PotentialStates.SeekFood},
 
                 //once the organism has finished mating place back into the roaming state
                 { new StateTransition(PotentialStates.Mating, Action.FinishedMating), PotentialStates.Roaming},
@@ -108,6 +107,16 @@ namespace EvolutionSim.StateManagement
                 { new StateTransition(PotentialStates.MovingToFood,Action.FoodFound),PotentialStates.Eating },
 
                 {new StateTransition(PotentialStates.Eating,Action.NotHungry),PotentialStates.Roaming },
+                
+                { new StateTransition(PotentialStates.SeekMate, Action.MateFound), PotentialStates.MovingToMate},
+
+                //now if an organism is waiting for a mate and takes the action move to go over to partner
+                {new StateTransition(PotentialStates.SeekMate, Action.Waiting), PotentialStates.WaitingForMate},
+
+                //we are finished with mating, so now go back to roaming!
+                {new StateTransition(PotentialStates.WaitingForMate, Action.Move), PotentialStates.Roaming},
+
+                {new StateTransition(PotentialStates.MovingToMate, Action.Bang), PotentialStates.Mating}
 
             };
         }

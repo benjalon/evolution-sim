@@ -1,4 +1,5 @@
-﻿using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.StateManagement;
+using EvolutionSim.TileGrid.GridItems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -142,6 +143,23 @@ namespace EvolutionSim.TileGrid
         {
             var inhabitant = this.tiles[x][y].Inhabitant;
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
+        }
+
+        /// <summary>
+        /// This method is called by an organism who is searching for another one to mate with
+        /// </summary>
+        /// <param name="organism"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool IsMateAt(Organism organism, int x, int y)
+        {
+            var inhabitant = this.tiles[x][y].Inhabitant;
+            if (inhabitant == organism)
+            {
+                return false;
+            }
+            return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).OrganismState == PotentialStates.SeekMate;
         }
 
         public Tile GetTileAt(int x, int y)
