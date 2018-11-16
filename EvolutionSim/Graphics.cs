@@ -12,7 +12,8 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
-        public static int WINDOW_SIZE = 800;
+        public static int WINDOW_WIDTH = 1920;
+        public static int WINDOW_HEIGHT = 1080;
         public static int ELAPSED_TIME; 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -28,8 +29,8 @@ namespace EvolutionSim
             this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            this.graphics.PreferredBackBufferWidth = WINDOW_SIZE;
-            this.graphics.PreferredBackBufferHeight = WINDOW_SIZE;
+            this.graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
+            this.graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
             this.graphics.ApplyChanges();
         }
 
@@ -58,13 +59,17 @@ namespace EvolutionSim
             textures.Add("face", Content.Load<Texture2D>("face"));
             textures.Add("pizza", Content.Load<Texture2D>("pizza"));
             textures.Add("tile", Content.Load<Texture2D>("tile"));
+            textures.Add("mountain", Content.Load<Texture2D>("mountain"));
+            textures.Add("grass", Content.Load<Texture2D>("grass"));
 
             var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(30);
-            this.overlay.Button_Two.OnClick = (Entity btn) => this.simulation.AddFood(30);
+            this.overlay.CreateOrganismButton.OnClick = (Entity btn) => this.simulation.AddOrganism(30);
+            this.overlay.CreateFoodButton.OnClick = (Entity btn) => this.simulation.AddFood(30);
+            this.overlay.CreateMountainButton.OnClick = (Entity btn) => this.simulation.AddMountain(30);
+            this.overlay.CreateWaterButton.OnClick = (Entity btn) => this.simulation.AddWater(30);
         }
         
         /// <summary>

@@ -13,8 +13,10 @@ namespace EvolutionSim.UI
     {
         public static int PANEL_WIDTH = 200;
 
-        public Button Button { get; private set; }
-        public Button Button_Two { get; private set; }
+        public Button CreateOrganismButton { get; private set; }
+        public Button CreateFoodButton { get; private set; }
+        public Button CreateMountainButton { get; private set; }
+        public Button CreateWaterButton { get; private set; }
 
         public Overlay()
         {
@@ -32,11 +34,15 @@ namespace EvolutionSim.UI
             list.AddItem("Rat");
             panel.AddChild(list);
             
-            Button = new Button("Test");
-            Button_Two = new Button("Test");
+            CreateOrganismButton = new Button("Organism");
+            CreateFoodButton = new Button("Food");
+            CreateMountainButton = new Button("Mountain");
+            CreateWaterButton = new Button("Water");
 
-            panel.AddChild(Button);
-            panel.AddChild(Button_Two);
+            panel.AddChild(CreateOrganismButton);
+            panel.AddChild(CreateFoodButton);
+            panel.AddChild(CreateMountainButton);
+            panel.AddChild(CreateWaterButton);
 
         }
 

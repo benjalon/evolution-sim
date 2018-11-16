@@ -51,6 +51,21 @@ namespace EvolutionSim.Logic
                 PositionAtRandom(new Food(this.textures["pizza"]));
             }
         }
+        public void AddMountain(int amount)
+        {
+            for (var i = 0; i < amount; i++)
+            {
+                PositionAtRandom(ne(this.textures["face"]));
+            }
+        }
+
+        public void AddWater(int amount)
+        {
+            for (var i = 0; i < amount; i++)
+            {
+                PositionAtRandom(new Food(this.textures["pizza"]));
+            }
+        }
 
         private void PositionAtRandom(GridItem item)
         {
