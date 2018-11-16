@@ -17,7 +17,7 @@ namespace EvolutionSim.Logic
         public Simulation(Dictionary<string, Texture2D> textures, int screenWidth, int screenHeight)
         {
             this.textures = textures;
-            this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"], screenWidth, screenHeight);
+            this.grid = new Grid(textures["tile"], screenWidth, screenHeight);
             this.fsm = new StateMachine(this.grid);
         }
 
@@ -49,21 +49,6 @@ namespace EvolutionSim.Logic
             for (var i = 0; i < amount; i++)
             {
                 PositionAtRandom(new Food(this.textures["pizza"]));
-            }
-        }
-        public void AddMountain(int amount)
-        {
-            for (var i = 0; i < amount; i++)
-            {
-                this.grid.SetTerrainAt(TerrainTypes.Mountain, this.random.Next(0, Grid.HorizontalCount), this.random.Next(0, Grid.VerticalCount));
-            }
-        }
-
-        public void AddWater(int amount)
-        {
-            for (var i = 0; i < amount; i++)
-            {
-                this.grid.SetTerrainAt(TerrainTypes.Water, this.random.Next(0, Grid.HorizontalCount), this.random.Next(0, Grid.VerticalCount));
             }
         }
 

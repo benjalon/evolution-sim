@@ -3,11 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EvolutionSim.TileGrid.GridItems
 {
-    public enum TerrainTypes
+    enum TerrainTypes
     {
-        Grass,
-        Mountain,
-        Water
+        Grass
     }
 
     public class Tile : GridItem
@@ -18,21 +16,14 @@ namespace EvolutionSim.TileGrid.GridItems
         public int GridPositionY { get; private set; }
         public GridItem Inhabitant { get; private set; }
 
-        private TerrainTypes terrain = TerrainTypes.Grass;
-        public int MovementDifficulty = 1;
-        private int difficultyModifier = 3;
+        private TerrainTypes terrain = TerrainTypes.Grass; // For the time being, everything is standard grass
 
-        private Texture2D mountainTexture;
-        private Texture2D waterTexture;
-
-        public Tile(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, Rectangle rectangle) : base(tileTexture, rectangle)
+        public Tile(Texture2D texture, Rectangle rectangle) : base(texture, rectangle)
         {
             GridPositionX = rectangle.X / TILE_SIZE;
             GridPositionY = rectangle.Y / TILE_SIZE;
             base.GridPosition.X = GridPositionX;
             base.GridPosition.Y = GridPositionY;
-            this.mountainTexture = mountainTexture;
-            this.waterTexture = waterTexture;
         }
 
         public void AddMapItem(GridItem gridItem)
@@ -41,27 +32,9 @@ namespace EvolutionSim.TileGrid.GridItems
             gridItem.MoveToTile(this);
         }
 
-        public void SetTerrain(TerrainTypes terrainType)
-        {
-            this.terrain = terrainType;
-            this.MovementDifficulty = (int)terrainType * this.difficultyModifier;
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-
-            switch (this.terrain)
-            {
-                case TerrainTypes.Mountain:
-                    spriteBatch.Draw(this.mountainTexture, Rectangle, Color);
-                    break;
-                case TerrainTypes.Water:
-                    spriteBatch.Draw(this.waterTexture, Rectangle, Color);
-                    break;
-                default:
-                    break;
-            }
 
             if (HasInhabitant())
             {
