@@ -23,7 +23,7 @@ namespace EvolutionSim.StateManagement
      
         public void UpdateOrganismAttributes(Organism organism)
         {
-
+            
             //hardcode a value that doesn't go down too fast
             if (organism.attributes.Hunger > 0)
             {
@@ -67,7 +67,7 @@ namespace EvolutionSim.StateManagement
 
                     }
 
-                    else if (_passedOrganism.attributes.Hunger >= 0.8)
+                    else if (_passedOrganism.attributes.Hunger >= 0.8 && _passedOrganism.readyToMate())
                     {
                         //go find a mate
                         _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.HungryMate);
@@ -104,6 +104,13 @@ namespace EvolutionSim.StateManagement
                         {
                             _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.MateFound);
                         }
+
+                        else if (_passedOrganism.attributes.WaitingForMate)
+                    {
+                        //then the organism has been pinged by the organism and will wait to get fkt
+                        _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.Waiting);
+
+                    }
                  
 
                     break;
@@ -113,6 +120,7 @@ namespace EvolutionSim.StateManagement
                 case PotentialStates.MovingToMate:
                     if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
                     {
+                        //the organism is adjacent to mate, so go ahead and make love
                         _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.Bang);
 
 
@@ -123,7 +131,14 @@ namespace EvolutionSim.StateManagement
                     break;
                 
                 case PotentialStates.WaitingForMate:
+                    if(_passedOrganism.attributes.WaitingForMate == false)
+                    {
 
+                        //mating is over, so go back into roaming.
+                        _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.Move);
+
+
+                    }
 
 
                     break;
@@ -158,10 +173,18 @@ namespace EvolutionSim.StateManagement
                 //once a certain time has elasped move back to roaming
 
                 case PotentialStates.Mating:
-                    Console.WriteLine("Success");
+
                     _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
-                    //not updating the destination tile when moving
+                    
+                    //this line throws a null pointer in the senario where an organism moves over to anther organism's destination 
+                    //but it has moved away because because it didn't detect the organism coming over to mate with it
+                    //I'm not 100% sure how to fix this yet.
                     ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
+
+
+                    Console.WriteLine("Added Oganism");
+                    //grid.AttemptToPositionAt(grid.AddOrganism, _passedOrganism.GridPosition.X, _passedOrganism.GridPosition.Y + 1);
+
 
                     break;
 
@@ -203,6 +226,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case PotentialStates.SeekFood:
+
                     StateActions.SeekingFood.SeekFood(_passedOrganism, this.grid);
 
                     break;
@@ -214,16 +238,18 @@ namespace EvolutionSim.StateManagement
                 
                     //when in seaking mate scan for an organism who is also in the "SeekMate" State
                 case PotentialStates.SeekMate:
-
+        
                         StateActions.SeekingMate.SeekMate(_passedOrganism, this.grid);
-
+                
                     break;
-
+                
+                    
                 case PotentialStates.WaitingForMate:
 
-                    System.Console.WriteLine("Waiting!");
+                    StateActions.SeekingMate.WaitForMate(_passedOrganism, this.grid);
+
                     break;
-                   // _simGrid.Move(gameTime);
+                   
 
                     
                 case PotentialStates.MovingToFood:

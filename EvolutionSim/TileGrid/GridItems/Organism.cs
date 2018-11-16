@@ -16,7 +16,12 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public const int MS_PER_DIRECTION_CHANGE = 500;
 
+        public const int matingCd = 10000;
+
         public int MilliSecondsSinceLastMovement;
+
+        public int MilliSecondsSinceLastMate = 10001;
+
         //what state is the organism currently in
         public PotentialStates OrganismState { get; set; }
         public Boolean MovingOnPath { get; set; }
@@ -33,17 +38,39 @@ namespace EvolutionSim.TileGrid.GridItems
             Path = new List<Tile>();
         }
 
-        public bool PingMate()
+        public void PingMate()
         {
-            if (this.attributes.WaitingForMate)
+            this.attributes.WaitingForMate = true;
+        }
+
+        /// <summary>
+        /// Check if orgaism is ready to mate
+        /// </summary>
+        /// <returns></returns>
+        public bool readyToMate()
+        {
+            MilliSecondsSinceLastMate += Graphics.ELAPSED_TIME;
+
+            if (this.MilliSecondsSinceLastMate < matingCd)
             {
-                this.attributes.MateFound = true;
-                return true;
+
+                return false;
+
             }
 
-            return false;
+            else
+            {
+                MilliSecondsSinceLastMate = 0;
+                return true;
+
+            }
         }
+
+
+
+
     }
+
 
     public class OrganismAttributes
     {
@@ -56,6 +83,7 @@ namespace EvolutionSim.TileGrid.GridItems
         public int DetectionDiameter { get; set; }
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
+        public bool JustMated { get; set; }
 
         public OrganismAttributes(int age,
                                   double hunger,
@@ -68,6 +96,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Hunger = hunger;
             Speed = speed;
             Strength = strength;
+            JustMated = false;
 
         }
     }

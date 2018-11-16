@@ -134,6 +134,13 @@ namespace EvolutionSim.TileGrid
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
 
+        /// <summary>
+        /// This method is called by an organism who is searching for another one to mate with
+        /// </summary>
+        /// <param name="organism"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool IsMateAt(Organism organism, int x, int y)
         {
             var inhabitant = this.tiles[x][y].Inhabitant;

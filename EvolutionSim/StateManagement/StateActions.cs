@@ -120,7 +120,7 @@ namespace EvolutionSim.StateManagement
 
         public static class SeekingFood
         {
-            public static Boolean SeekFood(Organism organism, Grid grid)
+            public static void SeekFood(Organism organism, Grid grid)
             {
 
                 // Essentially, if food has been located, and path calculated, we move towards food
@@ -144,12 +144,12 @@ namespace EvolutionSim.StateManagement
                     }
 
                     organism.MovingOnPath = true;
-                    return true;
+                    
                 }
                 else
                 {
                     Roam(organism, grid);
-                    return false;
+                    
                 }
                 
 
@@ -196,14 +196,20 @@ namespace EvolutionSim.StateManagement
         }
         public static class SeekingMate
         {
-            public static Boolean SeekMate(Organism organism, Grid grid)
+            public static void SeekMate(Organism organism, Grid grid)
             {
                 
                 Tile potentialMate = MatesInRange(organism, grid);
 
                 if (potentialMate != null)
                 {
+                    //ping the potential mate in the given position and get them to move into the waitingForMateState.
+                    ((Organism)potentialMate.Inhabitant).PingMate();
+
+
+                    //shouldn't be calling the A* for mating probably
                     List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, potentialMate, grid);
+
                     organism.Path = Path;
                     if (Path.Count == 0)
                     {
@@ -216,13 +222,14 @@ namespace EvolutionSim.StateManagement
                     }
 
                     organism.MovingOnPath = true;
-                    return true;
+                    
                 }
+                //this check wont work. Organisms have no way of entering the waiting for mate state
                 else if (!organism.attributes.WaitingForMate)
                 {
                     Roam(organism, grid);
                 }
-                return false;
+                
             }
 
             private static Tile MatesInRange(Organism organism, Grid grid)
@@ -242,6 +249,22 @@ namespace EvolutionSim.StateManagement
                 }
                 return null;
             }
+
+            //this handles the logic for when an organism is waiting for a mate
+            public static void WaitForMate(Organism organism, Grid grid)
+            {
+
+
+
+                System.Console.WriteLine("Waiting!");
+
+
+
+
+
+            }
+
+
         }
     }
 }
