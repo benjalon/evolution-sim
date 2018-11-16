@@ -83,6 +83,23 @@ namespace EvolutionSim
                     this.simulation.AddFood(input);
                 }
             };
+            this.overlay.MountainCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(this.overlay.MountainCountInput.Value, out input))
+                {
+                    this.simulation.AddMountain(input);
+                }
+            };
+            this.overlay.WaterCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(this.overlay.WaterCountInput.Value, out input))
+                {
+                    this.simulation.AddWater(input);
+                }
+            };
+
         }
         
         /// <summary>
