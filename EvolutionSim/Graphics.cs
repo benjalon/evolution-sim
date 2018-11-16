@@ -28,8 +28,8 @@ namespace EvolutionSim
             this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            this.graphics.PreferredBackBufferWidth = WINDOW_SIZE;
-            this.graphics.PreferredBackBufferHeight = WINDOW_SIZE;
+            this.graphics.PreferredBackBufferWidth = 1920;
+            this.graphics.PreferredBackBufferHeight = 1080;
             this.graphics.ApplyChanges();
         }
 
@@ -63,8 +63,8 @@ namespace EvolutionSim
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(30);
-            this.overlay.Button_Two.OnClick = (Entity btn) => this.simulation.AddFood(30);
+            this.overlay.Button.OnClick = (Entity btn) => this.simulation.AddOrganism(1000);
+            this.overlay.Button_Two.OnClick = (Entity btn) => this.simulation.AddFood(1000);
         }
         
         /// <summary>

@@ -158,6 +158,8 @@ namespace EvolutionSim.StateManagement
 
             private static Tile FoodInRange(Organism organism, Grid grid)
             {
+
+                // COMMENT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!
                 var max_depth = 3;
                 var depth = 0;
 
