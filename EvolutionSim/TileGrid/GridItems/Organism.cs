@@ -13,8 +13,11 @@ namespace EvolutionSim.TileGrid.GridItems
         public OrganismAttributes attributes;
 
         public Tile DestinationTile;
+        public float MovementSpeed = 0.0000002f;
+        public const int MS_PER_DIRECTION_CHANGE = 600;
 
-        public const int MS_PER_DIRECTION_CHANGE = 500;
+
+
 
         public const int matingCd = 10000;
 
