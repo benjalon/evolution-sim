@@ -38,9 +38,21 @@ namespace EvolutionSim.TileGrid.GridItems
             Path = new List<Tile>();
         }
 
+        /// <summary>
+        /// Signal to a mate to stop
+        /// </summary>
         public void PingMate()
         {
             this.attributes.WaitingForMate = true;
+        }
+
+        /// <summary>
+        /// signal to waiting organism they can move
+        /// </summary>
+        public void pingFinished()
+        {
+            this.attributes.WaitingForMate = false;
+
         }
 
         /// <summary>

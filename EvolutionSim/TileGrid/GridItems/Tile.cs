@@ -10,7 +10,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
     public class Tile : GridItem
     {
-        public const int TILE_SIZE = 120;
+        public const int TILE_SIZE = 16;
 
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }

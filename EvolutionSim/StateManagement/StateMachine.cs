@@ -131,7 +131,7 @@ namespace EvolutionSim.StateManagement
                     break;
                 
                 case PotentialStates.WaitingForMate:
-                    if(_passedOrganism.attributes.WaitingForMate == false)
+                    if(!_passedOrganism.attributes.WaitingForMate)
                     {
 
                         //mating is over, so go back into roaming.
@@ -181,8 +181,10 @@ namespace EvolutionSim.StateManagement
                     //I'm not 100% sure how to fix this yet.
                     ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
 
+                    //Sets the oganism back to not waiting for a mate
+                    ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).pingFinished();
 
-                    Console.WriteLine("Added Oganism");
+                   Console.WriteLine("Added Oganism");
                     //grid.AttemptToPositionAt(grid.AddOrganism, _passedOrganism.GridPosition.X, _passedOrganism.GridPosition.Y + 1);
 
 

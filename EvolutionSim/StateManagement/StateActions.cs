@@ -196,6 +196,7 @@ namespace EvolutionSim.StateManagement
         }
         public static class SeekingMate
         {
+            
             public static void SeekMate(Organism organism, Grid grid)
             {
                 
@@ -257,6 +258,7 @@ namespace EvolutionSim.StateManagement
 
 
                 System.Console.WriteLine("Waiting!");
+
 
 
 
