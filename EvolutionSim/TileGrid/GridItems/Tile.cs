@@ -19,6 +19,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public GridItem Inhabitant { get; private set; }
 
         private TerrainTypes terrain = TerrainTypes.Grass;
+        public int MovementDifficulty = 1;
+        private int difficultyModifier = 3;
 
         private Texture2D mountainTexture;
         private Texture2D waterTexture;
@@ -42,6 +44,7 @@ namespace EvolutionSim.TileGrid.GridItems
         public void SetTerrain(TerrainTypes terrainType)
         {
             this.terrain = terrainType;
+            this.MovementDifficulty = (int)terrainType * this.difficultyModifier;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

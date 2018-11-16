@@ -60,7 +60,7 @@ namespace EvolutionSim
             textures.Add("pizza", Content.Load<Texture2D>("pizza"));
             textures.Add("tile", Content.Load<Texture2D>("tile"));
             textures.Add("mountain", Content.Load<Texture2D>("mountain"));
-            textures.Add("grass", Content.Load<Texture2D>("grass"));
+            textures.Add("water", Content.Load<Texture2D>("water"));
 
             var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
