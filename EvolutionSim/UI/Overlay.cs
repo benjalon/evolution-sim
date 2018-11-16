@@ -11,8 +11,18 @@ namespace EvolutionSim.UI
     /// </summary>
     public class Overlay
     {
-        public static int PANEL_WIDTH = 200;
-        
+        public static int PANEL_WIDTH = 300;
+
+        public TextInput OrganismCountInput { get; private set; }
+        public Button OrganismCreateButton { get; private set; }
+        public TextInput FoodCountInput { get; private set; }
+        public Button FoodCreateButton { get; private set; }
+        public TextInput WaterCountInput { get; private set; }
+        public Button WaterCreateButton { get; private set; }
+        public TextInput MountainCountInput { get; private set; }
+        public Button MountainCreateButton { get; private set; }
+
+
         public Overlay()
         {
             // All temporary
@@ -29,33 +39,33 @@ namespace EvolutionSim.UI
 
             var addItemsText = new Paragraph("Add Items");
 
-            var organismCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
-            organismCountInput.Value = "0";
-            var organismCreateButton = new Button("Organism", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+            OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            OrganismCountInput.PlaceholderText = "10";
+            OrganismCreateButton = new Button("Organism", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
 
-            var foodCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
-            foodCountInput.Value = "0";
-            var foodCreateButton = new Button("Food", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+            FoodCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            FoodCountInput.PlaceholderText = "10";
+            FoodCreateButton = new Button("Food", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
 
-            var waterCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
-            waterCountInput.Value = "0";
-            var waterCreateButton = new Button("Water", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+            WaterCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            WaterCountInput.PlaceholderText = "10";
+            WaterCreateButton = new Button("Water", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
 
-            var mountainCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
-            mountainCountInput.Value = "0";
-            var mountainCreateButton = new Button("Mountain", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+            MountainCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            MountainCountInput.PlaceholderText = "10";
+            MountainCreateButton = new Button("Mountain", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
             
             var editAttributesText = new Paragraph("Edit Attributes");
 
             panel.AddChild(addItemsText);
-            panel.AddChild(organismCountInput);
-            panel.AddChild(organismCreateButton);
-            panel.AddChild(foodCountInput);
-            panel.AddChild(foodCreateButton);
-            panel.AddChild(mountainCountInput);
-            panel.AddChild(mountainCreateButton);
-            panel.AddChild(waterCountInput);
-            panel.AddChild(waterCreateButton);
+            panel.AddChild(OrganismCountInput);
+            panel.AddChild(OrganismCreateButton);
+            panel.AddChild(FoodCountInput);
+            panel.AddChild(FoodCreateButton);
+            panel.AddChild(MountainCountInput);
+            panel.AddChild(MountainCreateButton);
+            panel.AddChild(WaterCountInput);
+            panel.AddChild(WaterCreateButton);
             panel.AddChild(editAttributesText);
         }
 
