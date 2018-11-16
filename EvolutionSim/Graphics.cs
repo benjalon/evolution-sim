@@ -12,11 +12,12 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
-        
-        
 
-        public static int WINDOW_SIZE = 800;
+        public static int WINDOW_WIDTH = 1920;
+        public static int WINDOW_HEIGHT = 1080;
+
         public static TimeSpan ELAPSED_TIME; 
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -31,8 +32,8 @@ namespace EvolutionSim
             this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            this.graphics.PreferredBackBufferWidth = 1920;
-            this.graphics.PreferredBackBufferHeight = 1080;
+            this.graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
+            this.graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
             this.graphics.ApplyChanges();
             
         }
@@ -62,10 +63,16 @@ namespace EvolutionSim
             textures.Add("face", Content.Load<Texture2D>("face"));
             textures.Add("pizza", Content.Load<Texture2D>("pizza"));
             textures.Add("tile", Content.Load<Texture2D>("tile"));
+            textures.Add("mountain", Content.Load<Texture2D>("mountain"));
+            textures.Add("water", Content.Load<Texture2D>("water"));
 
             var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
             var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
+
+
+            this.overlay.CreateMountainButton.OnClick = (Entity btn) => this.simulation.AddMountain(30);
+            this.overlay.CreateWaterButton.OnClick = (Entity btn) => this.simulation.AddWater(30);
 
             this.overlay.OrganismCreateButton.OnClick = (Entity btn) =>
             {
@@ -83,6 +90,7 @@ namespace EvolutionSim
                     this.simulation.AddFood(input);
                 }
             };
+
         }
         
         /// <summary>

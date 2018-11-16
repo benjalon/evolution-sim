@@ -25,7 +25,7 @@ namespace EvolutionSim.TileGrid
 
         private Random _random = new Random();
         
-        public Grid(Texture2D tileTexture, int width, int height)
+        public Grid(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, int width, int height)
         {
             HorizontalCount = width / Tile.TILE_SIZE;
             VerticalCount = height / Tile.TILE_SIZE;
@@ -37,7 +37,7 @@ namespace EvolutionSim.TileGrid
                 this.tiles[i] = new Tile[VerticalCount];
                 for (var j = 0; j < VerticalCount; j++)
                 {
-                    this.tiles[i][j] = new Tile(tileTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
+                    this.tiles[i][j] = new Tile(tileTexture, mountainTexture, waterTexture, new Rectangle(i * Tile.TILE_SIZE, j * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
                 }
             }
 
@@ -118,6 +118,11 @@ namespace EvolutionSim.TileGrid
             }
 
             return true; // Successfully positioned
+        }
+
+        public void SetTerrainAt(TerrainTypes type, int x, int y)
+        {
+            this.tiles[x][y].SetTerrain(type);
         }
 
         public void MoveOrganism(Organism organism, int destinationX, int destinationY)

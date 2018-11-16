@@ -39,6 +39,7 @@ namespace EvolutionSim.UI
 
             var addItemsText = new Paragraph("Add Items");
 
+
             OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
             OrganismCountInput.PlaceholderText = "10";
             OrganismCreateButton = new Button("Organism", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
@@ -56,6 +57,7 @@ namespace EvolutionSim.UI
             MountainCreateButton = new Button("Mountain", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
             
             var editAttributesText = new Paragraph("Edit Attributes");
+
 
             panel.AddChild(addItemsText);
             panel.AddChild(OrganismCountInput);
