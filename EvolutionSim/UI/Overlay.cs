@@ -12,32 +12,51 @@ namespace EvolutionSim.UI
     public class Overlay
     {
         public static int PANEL_WIDTH = 200;
-
-        public Button Button { get; private set; }
-        public Button Button_Two { get; private set; }
-
+        
         public Overlay()
         {
             // All temporary
-            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, anchor: Anchor.CenterLeft);
+            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterLeft);
+            panel.Padding = new Vector2(10, 10);
             panel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(panel);
-
-            var testText = new Paragraph("Click button to create organisms");
-            panel.AddChild(testText);
-
-            var list = new SelectList(new Vector2(0, PANEL_WIDTH), Anchor.Auto, null, PanelSkin.Simple);
-            list.AddItem("Dog");
-            list.AddItem("Human");
-            list.AddItem("Rat");
-            panel.AddChild(list);
             
-            Button = new Button("Test");
-            Button_Two = new Button("Test");
+            //var list = new SelectList(new Vector2(0, PANEL_WIDTH), Anchor.Auto, null, PanelSkin.Simple);
+            //list.AddItem("Dog");
+            //list.AddItem("Human");
+            //list.AddItem("Rat");
+            //panel.AddChild(list);
 
-            panel.AddChild(Button);
-            panel.AddChild(Button_Two);
+            var addItemsText = new Paragraph("Add Items");
 
+            var organismCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            organismCountInput.Value = "0";
+            var organismCreateButton = new Button("Organism", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+
+            var foodCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            foodCountInput.Value = "0";
+            var foodCreateButton = new Button("Food", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+
+            var waterCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            waterCountInput.Value = "0";
+            var waterCreateButton = new Button("Water", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+
+            var mountainCountInput = new TextInput(false, new Vector2(60, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            mountainCountInput.Value = "0";
+            var mountainCreateButton = new Button("Mountain", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(120, 40));
+            
+            var editAttributesText = new Paragraph("Edit Attributes");
+
+            panel.AddChild(addItemsText);
+            panel.AddChild(organismCountInput);
+            panel.AddChild(organismCreateButton);
+            panel.AddChild(foodCountInput);
+            panel.AddChild(foodCreateButton);
+            panel.AddChild(mountainCountInput);
+            panel.AddChild(mountainCreateButton);
+            panel.AddChild(waterCountInput);
+            panel.AddChild(waterCreateButton);
+            panel.AddChild(editAttributesText);
         }
 
         /// <summary>
