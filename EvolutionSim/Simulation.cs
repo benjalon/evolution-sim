@@ -52,7 +52,7 @@ namespace EvolutionSim.Logic
         {
             for (var i = 0; i < amount; i++)
             {
-                PositionAtRandom(new Food(this.textures["pizza"]));
+                PositionAtRandom(new Food(this.textures["food"]));
             }
         }
 

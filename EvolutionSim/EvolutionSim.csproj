@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Background.cs" />
     <Compile Include="Lerper.cs" />
     <Compile Include="TileGrid\GridItems\Food.cs" />
     <Compile Include="TileGrid\GridItems\GridItem.cs" />

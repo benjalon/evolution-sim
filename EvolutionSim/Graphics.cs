@@ -18,6 +18,7 @@ namespace EvolutionSim
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
+        private Background background;
         private Overlay overlay;
         private Simulation simulation;
 
@@ -32,7 +33,6 @@ namespace EvolutionSim
             this.graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
             this.graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
             this.graphics.ApplyChanges();
-            
         }
 
         /// <summary>
@@ -55,6 +55,11 @@ namespace EvolutionSim
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
+            var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
+
+            this.background = new Background(Content.Load<Texture2D>("grass"), screenWidth, screenHeight);
+
             // Load textures
             var textures = new Dictionary<string, Texture2D>();
             textures.Add("bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0"));
@@ -62,13 +67,11 @@ namespace EvolutionSim
             textures.Add("bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2"));
             textures.Add("bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3"));
             textures.Add("bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4"));
-            textures.Add("pizza", Content.Load<Texture2D>("pizza"));
+            textures.Add("food", Content.Load<Texture2D>("food"));
             textures.Add("tile", Content.Load<Texture2D>("tile"));
             textures.Add("mountain", Content.Load<Texture2D>("mountain"));
             textures.Add("water", Content.Load<Texture2D>("water"));
 
-            var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
-            var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
             this.overlay.OrganismCreateButton.OnClick = (Entity btn) =>
@@ -151,6 +154,7 @@ namespace EvolutionSim
 
             // Draw graphical elements
             this.spriteBatch.Begin();
+            this.background.Draw(spriteBatch);
             this.simulation.Draw(this.spriteBatch);
             this.spriteBatch.End();
 
