@@ -56,10 +56,10 @@ namespace EvolutionSim.TileGrid.GridItems
                     break;
             }
 
-            if (HasInhabitant())
-            {
-                Inhabitant.Draw(spriteBatch);
-            }
+            //if (HasInhabitant())
+            //{
+            //    Inhabitant.Draw(spriteBatch);
+            //}
         }
 
         public void MoveInhabitant(Tile endPosition)
