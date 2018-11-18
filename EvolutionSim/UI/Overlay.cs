@@ -26,7 +26,7 @@ namespace EvolutionSim.UI
         public Overlay()
         {
             // All temporary
-            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterLeft);
+            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterRight);
             panel.Padding = new Vector2(10, 10);
             panel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(panel);
@@ -39,21 +39,21 @@ namespace EvolutionSim.UI
 
             var addItemsText = new Paragraph("Add Items");
 
-            OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
             OrganismCountInput.PlaceholderText = "10";
-            OrganismCreateButton = new Button("Organism", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+            OrganismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
 
-            FoodCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            FoodCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
             FoodCountInput.PlaceholderText = "10";
-            FoodCreateButton = new Button("Food", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+            FoodCreateButton = new Button("Food", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
 
-            WaterCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            WaterCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
             WaterCountInput.PlaceholderText = "10";
-            WaterCreateButton = new Button("Water", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+            WaterCreateButton = new Button("Water", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
 
-            MountainCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Simple);
+            MountainCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
             MountainCountInput.PlaceholderText = "10";
-            MountainCreateButton = new Button("Mountain", ButtonSkin.Fancy, Anchor.AutoInline, new Vector2(170, 40));
+            MountainCreateButton = new Button("Mountain", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
             
             var editAttributesText = new Paragraph("Edit Attributes");
 

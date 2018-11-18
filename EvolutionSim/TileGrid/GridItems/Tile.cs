@@ -12,7 +12,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
     public class Tile : GridItem
     {
-        public const int TILE_SIZE = 16;
+        public const int TILE_SIZE = 32;
 
         public int GridPositionX { get; private set; }
         public int GridPositionY { get; private set; }
@@ -42,7 +42,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            //base.Draw(spriteBatch);            //base.Draw(spriteBatch);
 
             switch (this.terrain)
             {

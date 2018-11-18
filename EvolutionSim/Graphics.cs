@@ -57,7 +57,11 @@ namespace EvolutionSim
 
             // Load textures
             var textures = new Dictionary<string, Texture2D>();
-            textures.Add("face", Content.Load<Texture2D>("face"));
+            textures.Add("bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0"));
+            textures.Add("bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1"));
+            textures.Add("bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2"));
+            textures.Add("bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3"));
+            textures.Add("bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4"));
             textures.Add("pizza", Content.Load<Texture2D>("pizza"));
             textures.Add("tile", Content.Load<Texture2D>("tile"));
             textures.Add("mountain", Content.Load<Texture2D>("mountain"));
