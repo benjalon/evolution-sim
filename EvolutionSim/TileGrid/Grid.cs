@@ -45,22 +45,22 @@ namespace EvolutionSim.TileGrid
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Organism organism in Organisms)
-            {
-                organism.Draw(spriteBatch);
-            }
-
-            foreach (Food food in Foods)
-            {
-                food.Draw(spriteBatch);
-            }
-            
             for (var i = 0; i < HorizontalCount; i++)
             {
                 for (var j = 0; j < VerticalCount; j++)
                 {
                     this.tiles[i][j].Draw(spriteBatch);
                 }
+            }
+
+            foreach (Food food in Foods)
+            {
+                food.Draw(spriteBatch);
+            }
+
+            foreach (Organism organism in Organisms)
+            {
+                organism.Draw(spriteBatch);
             }
         }
 

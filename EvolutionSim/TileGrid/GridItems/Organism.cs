@@ -29,11 +29,13 @@ namespace EvolutionSim.TileGrid.GridItems
         public PotentialStates OrganismState { get; set; }
         public Boolean MovingOnPath { get; set; }
         public List<Tile> Path { get; set; }
+
+        private static Random random = new Random();
         
         // private OrganismState _state;
 
-        public Organism(Texture2D texture)
-            : base(texture)
+        public Organism(Texture2D[] textures)
+            : base(textures[random.Next(0, textures.Length - 1)])
         {
             this.attributes = new OrganismAttributes(0, 8, 500, 50);
             TOTAL_POPULATION++;
@@ -80,10 +82,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
             }
         }
-
-
-
-
+        
     }
 
 

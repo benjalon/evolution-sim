@@ -198,8 +198,6 @@ namespace EvolutionSim.StateManagement
 
                     }
                     organism.MovingOnPath = true;
-
-                    organism.MovingOnPath = true;
                     
                 }
                 else

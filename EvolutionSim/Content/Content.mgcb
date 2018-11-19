@@ -14,7 +14,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Face.png
+#begin Food.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -24,7 +24,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Face.png
+/build:Food.png
 
 #begin GeonBit.UI/themes/editor/effects/disabled.fx
 /importer:EffectImporter
@@ -4793,6 +4793,18 @@
 /processor:PassThroughProcessor
 /build:GeonBit.UI/themes/lowres/ThemeData.xml
 
+#begin Grass.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Grass.png
+
 #begin Mountain.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4805,7 +4817,7 @@
 /processorParam:TextureFormat=Color
 /build:Mountain.png
 
-#begin Pizza.png
+#begin Species_Obese_Bear_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -4815,7 +4827,55 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Pizza.png
+/build:Species_Obese_Bear_0.png
+
+#begin Species_Obese_Bear_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Species_Obese_Bear_1.png
+
+#begin Species_Obese_Bear_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Species_Obese_Bear_2.png
+
+#begin Species_Obese_Bear_3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Species_Obese_Bear_3.png
+
+#begin Species_Obese_Bear_4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Species_Obese_Bear_4.png
 
 #begin Tile.png
 /importer:TextureImporter
