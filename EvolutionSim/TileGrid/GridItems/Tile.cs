@@ -28,8 +28,8 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             GridPositionX = rectangle.X / TILE_SIZE;
             GridPositionY = rectangle.Y / TILE_SIZE;
-            base.GridPosition.X = GridPositionX;
-            base.GridPosition.Y = GridPositionY;
+            this.GridPosition.X = GridPositionX;
+            this.GridPosition.Y = GridPositionY;
             this.mountainTexture = mountainTexture;
             this.waterTexture = waterTexture;
         }
@@ -42,7 +42,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //base.Draw(spriteBatch);            //base.Draw(spriteBatch);
+            //base.Draw(spriteBatch);
 
             switch (this.terrain)
             {

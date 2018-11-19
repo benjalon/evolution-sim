@@ -39,8 +39,8 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public void UpdateRectangle(float x, float y)
         {
-            rectangle.X = (int)x;
-            rectangle.Y = (int)y;
+            this.rectangle.X = (int)x;
+            this.rectangle.Y = (int)y;
         }
 
         /// <summary>
