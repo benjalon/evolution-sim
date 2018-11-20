@@ -67,7 +67,7 @@ namespace EvolutionSim.Logic
         {
             for (var i = 0; i < amount; i++)
             {
-                this.grid.SetTerrainAt(TerrainTypes.Mountain, this.random.Next(0, Grid.HorizontalCount), this.random.Next(0, Grid.VerticalCount));
+                this.grid.SetTerrainAt(TerrainTypes.Mountain, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY));
             }
         }
 
@@ -75,13 +75,13 @@ namespace EvolutionSim.Logic
         {
             for (var i = 0; i < amount; i++)
             {
-                this.grid.SetTerrainAt(TerrainTypes.Water, this.random.Next(0, Grid.HorizontalCount), this.random.Next(0, Grid.VerticalCount));
+                this.grid.SetTerrainAt(TerrainTypes.Water, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY));
             }
         }
 
         private void PositionAtRandom(GridItem item)
         {
-            if (!this.grid.AttemptToPositionAt(item, this.random.Next(0, Grid.HorizontalCount), this.random.Next(0, Grid.VerticalCount)))
+            if (!this.grid.AttemptToPositionAt(item, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY)))
             {
                 PositionAtRandom(item); // Try again
             }

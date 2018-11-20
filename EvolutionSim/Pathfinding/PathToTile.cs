@@ -59,7 +59,7 @@ namespace EvolutionSim.Pathfinding
                 {
                     node = expanded[i];
 
-                    if (node.Current.GridPositionX == node.Goal.GridPositionX && node.Current.GridPositionY == node.Goal.GridPositionY)
+                    if (node.Current == node.Goal)
                     {
                         goalNode = node;
                         break;

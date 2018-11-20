@@ -16,11 +16,11 @@ namespace EvolutionSim.Pathfinding
                 for (int j = -1; j <= 1; j++)
                 {
 
-                    if(Grid.InBounds(center.GridPositionX + i, center.GridPositionY + j) )
+                    if(Grid.InBounds(center.GridIndex.X + i, center.GridIndex.Y + j) )
                     {
 
-                        node = new Node(grid.GetTileAt(center.GridPositionX + i, center.GridPositionY + j), goal, previous);
-                        if (node.Current.GridPosition != center.GridPosition)
+                        node = new Node(grid.GetTileAt(center.GridIndex.X + i, center.GridIndex.Y + j), goal, previous);
+                        if (node.Current.GridIndex != center.GridIndex)
                         {
 
                            

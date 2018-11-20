@@ -12,18 +12,11 @@ namespace EvolutionSim.TileGrid.GridItems
     public abstract class GridItem
     {
         protected Texture2D texture;
-        public Color Color { get; private set; }
-
-        public Point GridPosition;
-
         protected Rectangle rectangle;
-        public Rectangle Rectangle
-        {
-            get => this.rectangle;
-        }
-       
-        public Tile ParentTile { get; private set; }
+        public Rectangle Rectangle { get => this.rectangle; } // Alias for the rectangle because structs and properties don't play nice
 
+        public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
+        
         protected int _health { get; private set; } = 80;
         public event EventHandler DeathOccurred;
 
@@ -34,26 +27,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public GridItem(Texture2D texture)
         {
             this.texture = texture;
-            Color = Color.White;
         }
-
-        public void UpdateRectangle(float x, float y)
-        {
-            this.rectangle.X = (int)x;
-            this.rectangle.Y = (int)y;
-        }
-
-        /// <summary>
-        /// Create a static sprite from a given texture and rectangle
-        /// </summary>
-        /// <param name="texture">The appearance of the GridItem</param>
-        /// <param name="rectangle">The position and size of the GridItem</param>
-        public GridItem(Texture2D texture, Rectangle rectangle)
-        {
-            this.texture = texture;
-            this.rectangle = rectangle;
-            Color = Color.White;
-        }
+        
 
         /// <summary>
         /// Draw the texture at the position of the rectangle
@@ -61,19 +36,43 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.texture, Rectangle, Color);
+            if (this.rectangle != null)
+            {
+                spriteBatch.Draw(this.texture, Rectangle, Color.White);
+            }
+        }
+
+        /// <summary>
+        /// Give the item a rectangle used for drawing.
+        /// </summary>
+        /// <param name="x">The x position.</param>
+        /// <param name="y">The y position.</param>
+        /// <param name="width">The width of the item.</param>
+        /// <param name="height">The height of the item.</param>
+        public void SetInitialScreenPosition(int x, int y, int width, int height)
+        {
+            this.rectangle = new Rectangle(x, y, width, height);
+        }
+
+        /// <summary>
+        /// Set the position of the item to a new place on the screen. Note that this is the actual screen position and not the grid index.
+        /// </summary>
+        /// <param name="x">The x position to move to.</param>
+        /// <param name="y">The y position to move to.</param>
+        public void SetScreenPosition(int x, int y)
+        {
+            this.rectangle.X = x;
+            this.rectangle.Y = y;
         }
 
         /// <summary>
         /// Reparents the sprite to the given tile (i.e. makes it an inhabitant of the tile).
         /// </summary>
         /// <param name="tile">The tile to move to</param>
-        public void MoveToTile(Tile tile)
+        public void SetGridIndex(Tile tile)
         {
-            this.GridPosition.X = tile.GridPositionX;
-            this.GridPosition.Y = tile.GridPositionY;
-            ParentTile = tile;
-            this.rectangle = tile.Rectangle;
+            this.GridIndex.X = tile.GridIndex.X;
+            this.GridIndex.Y = tile.GridIndex.Y;
         }
 
         /// <summary>
@@ -85,15 +84,8 @@ namespace EvolutionSim.TileGrid.GridItems
             _health -= value;
             if (_health <= 0)
             {
-                ParentTile.RemoveInhabitant(); // Remove from grid
-                OnDeath(EventArgs.Empty); // Remove from brain collection
+                DeathOccurred?.Invoke(this, EventArgs.Empty);
             }
-        }
-
-        public virtual void OnDeath(EventArgs e)
-        {
-            // BeginInvoke() ???
-            DeathOccurred?.Invoke(this, e);
         }
     }
 }

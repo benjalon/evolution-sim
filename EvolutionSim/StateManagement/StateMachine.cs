@@ -86,7 +86,7 @@ namespace EvolutionSim.StateManagement
                         _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.NotHungry);
 
                     }
-                    else if (!StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
+                    else if (!StateActions.AdjacencyCheck(_passedOrganism.GridIndex, _passedOrganism.DestinationTile.GridIndex))
                     {
                         // Change NotHungry?
                         _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.NotHungry);
@@ -120,7 +120,7 @@ namespace EvolutionSim.StateManagement
 
                 //check if an organism should be moving to "Moving to Mate"
                 case PotentialStates.MovingToMate:
-                    if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
+                    if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridIndex, _passedOrganism.DestinationTile.GridIndex))
                     {
                         //the organism is adjacent to mate, so go ahead and make love
                         _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.Bang);
@@ -157,7 +157,7 @@ namespace EvolutionSim.StateManagement
 
                     break;
                 case PotentialStates.MovingToFood:
-                    if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridPosition, _passedOrganism.DestinationTile.GridPosition))
+                    if (_passedOrganism.DestinationTile != null && StateActions.AdjacencyCheck(_passedOrganism.GridIndex, _passedOrganism.DestinationTile.GridIndex))
                     {
                         _passedOrganism.OrganismState = this.state.MoveState(organismState, Action.FoodFound);
 
