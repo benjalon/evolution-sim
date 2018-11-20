@@ -77,7 +77,7 @@ namespace EvolutionSim.TileGrid
                 return false; // Space occupied
             }
 
-            this.tiles[x][y].SetInhabitant(item);
+            this.tiles[x][y].AddInhabitant(item);
             item.SetInitialScreenPosition(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
 
             // Add the item to the simulation and set up appropriate event handlers
