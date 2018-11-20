@@ -41,7 +41,7 @@ namespace EvolutionSim.TileGrid
                 this.tiles[x] = new Tile[TileCountY];
                 for (var y = 0; y < TileCountY; y++)
                 {
-                    this.tiles[x][y] = new Tile(tileTexture, mountainTexture, waterTexture, new Rectangle(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE));
+                    this.tiles[x][y] = new Tile(tileTexture, mountainTexture, waterTexture, new Point(x, y));
                 }
             }
         }
@@ -52,15 +52,6 @@ namespace EvolutionSim.TileGrid
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            // TODO: Remove this once the new terrain system is implemented as iterating over tiles is no longer efficient
-            for (var i = 0; i < TileCountX; i++)
-            {
-                for (var j = 0; j < TileCountY; j++)
-                {
-                    this.tiles[i][j].Draw(spriteBatch);
-                }
-            }
-
             foreach (var food in Foods)
             {
                 food.Draw(spriteBatch); // Draw all food objects in simulation
@@ -86,7 +77,8 @@ namespace EvolutionSim.TileGrid
                 return false; // Space occupied
             }
 
-            this.tiles[x][y].AddMapItem(item);
+            this.tiles[x][y].SetInhabitant(item);
+            item.SetInitialScreenPosition(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
 
             // Add the item to the simulation and set up appropriate event handlers
             if (item.GetType() == typeof(Organism))
@@ -122,9 +114,9 @@ namespace EvolutionSim.TileGrid
         /// <param name="organism">The organism to move.</param>
         /// <param name="destinationX">The x index of the tile to move to.</param>
         /// <param name="destinationY">The y index of the tile to move to.</param>
-        public void MoveOrganism(Organism organism, int destinationX, int destinationY)
+        public void ReparentOrganism(Organism organism, int destinationX, int destinationY)
         {
-            var parentTile = this.tiles[organism.TileIndex.X][organism.TileIndex.Y];
+            var parentTile = this.tiles[organism.GridIndex.X][organism.GridIndex.Y];
             var destinationTile = this.tiles[destinationX][destinationY];
             if (!destinationTile.HasInhabitant())
             {
@@ -150,7 +142,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>The tile in question.</returns>
         public Tile GetTileAt(GridItem item)
         {
-            return this.tiles[item.TileIndex.X][item.TileIndex.Y];
+            return this.tiles[item.GridIndex.X][item.GridIndex.Y];
         }
 
         /// <summary>
@@ -164,7 +156,7 @@ namespace EvolutionSim.TileGrid
             var inhabitant = this.tiles[x][y].Inhabitant;
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
-
+        
         /// <summary>
         /// Checks whether there is a mate at the given index.
         /// </summary>

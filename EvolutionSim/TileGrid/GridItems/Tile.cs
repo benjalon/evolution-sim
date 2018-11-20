@@ -10,54 +10,42 @@ namespace EvolutionSim.TileGrid.GridItems
         Water
     }
 
-    public class Tile : GridItem
+    public class Tile
     {
         public const int TILE_SIZE = 32;
-        
-        public GridItem Inhabitant { get; private set; }
 
-        private TerrainTypes terrain = TerrainTypes.Grass; // For the time being, everything is standard grass        
         private Texture2D mountainTexture;
         private Texture2D waterTexture;
+
+        public Point GridIndex; // The index of this tile on the grid, this is not the object's actual screen position
+        public int ScreenPositionX { get => GridIndex.X * TILE_SIZE; } // The actual screen position of the tile
+        public int ScreenPositionY { get => GridIndex.Y * TILE_SIZE; } // The actual screen position of the tile
+
+        public GridItem Inhabitant { get; private set; }
+        private TerrainTypes terrain = TerrainTypes.Grass; // For the time being, everything is standard grass        
+
         public int MovementDifficulty = 1;
         private int difficultyModifier = 3;
 
-        public Tile(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, Rectangle rectangle) : base(tileTexture, rectangle)
+        public Tile(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, Point gridIndex)
         {
-            this.TileIndex.X = rectangle.X / TILE_SIZE;
-            this.TileIndex.Y = rectangle.Y / TILE_SIZE;
+            this.GridIndex = gridIndex;
             this.mountainTexture = mountainTexture;
             this.waterTexture = waterTexture;
         }
 
-        public void AddMapItem(GridItem gridItem)
+        public void SetInhabitant(GridItem gridItem)
         {
             Inhabitant = gridItem;
-            gridItem.SetTileIndex(this);
-        }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            //base.Draw(spriteBatch);
-
-            switch (this.terrain)
-            {
-                case TerrainTypes.Mountain:
-                    spriteBatch.Draw(this.mountainTexture, Rectangle, Color.White);
-                    break;
-                case TerrainTypes.Water:
-                    spriteBatch.Draw(this.waterTexture, Rectangle, Color.White);
-                    break;
-                default:
-                    break;
-            }
+            gridItem.SetGridIndex(this);
         }
 
         public void MoveInhabitant(Tile endPosition)
         {
             if (HasInhabitant())
             {
-                Inhabitant.SetTileIndex(endPosition);
+                Inhabitant.SetGridIndex(endPosition);
                 endPosition.Inhabitant = Inhabitant;
                 Inhabitant = null;
             }

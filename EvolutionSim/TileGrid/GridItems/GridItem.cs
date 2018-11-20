@@ -15,7 +15,7 @@ namespace EvolutionSim.TileGrid.GridItems
         protected Rectangle rectangle;
         public Rectangle Rectangle { get => this.rectangle; } // Alias for the rectangle because structs and properties don't play nice
 
-        public Point TileIndex; // The index of this item on the grid, this is not the object's actual screen position
+        public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
         
         protected int _health { get; private set; } = 80;
         public event EventHandler DeathOccurred;
@@ -28,17 +28,7 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             this.texture = texture;
         }
-
-        /// <summary>
-        /// Create a static sprite from a given texture and rectangle
-        /// </summary>
-        /// <param name="texture">The appearance of the GridItem</param>
-        /// <param name="rectangle">The position and size of the GridItem</param>
-        public GridItem(Texture2D texture, Rectangle rectangle)
-        {
-            this.texture = texture;
-            this.rectangle = rectangle;
-        }
+        
 
         /// <summary>
         /// Draw the texture at the position of the rectangle
@@ -46,7 +36,22 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.texture, Rectangle, Color.White);
+            if (this.rectangle != null)
+            {
+                spriteBatch.Draw(this.texture, Rectangle, Color.White);
+            }
+        }
+
+        /// <summary>
+        /// Give the item a rectangle used for drawing.
+        /// </summary>
+        /// <param name="x">The x position.</param>
+        /// <param name="y">The y position.</param>
+        /// <param name="width">The width of the item.</param>
+        /// <param name="height">The height of the item.</param>
+        public void SetInitialScreenPosition(int x, int y, int width, int height)
+        {
+            this.rectangle = new Rectangle(x, y, width, height);
         }
 
         /// <summary>
@@ -54,7 +59,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// </summary>
         /// <param name="x">The x position to move to.</param>
         /// <param name="y">The y position to move to.</param>
-        public void SetPosition(int x, int y)
+        public void SetScreenPosition(int x, int y)
         {
             this.rectangle.X = x;
             this.rectangle.Y = y;
@@ -64,11 +69,10 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Reparents the sprite to the given tile (i.e. makes it an inhabitant of the tile).
         /// </summary>
         /// <param name="tile">The tile to move to</param>
-        public void SetTileIndex(Tile tile)
+        public void SetGridIndex(Tile tile)
         {
-            this.TileIndex.X = tile.TileIndex.X;
-            this.TileIndex.Y = tile.TileIndex.Y;
-            this.rectangle = tile.Rectangle;
+            this.GridIndex.X = tile.GridIndex.X;
+            this.GridIndex.Y = tile.GridIndex.Y;
         }
 
         /// <summary>

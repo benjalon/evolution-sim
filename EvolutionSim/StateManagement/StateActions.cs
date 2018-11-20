@@ -34,8 +34,8 @@ namespace EvolutionSim.StateManagement
         {
             List<Point> toRet = new List<Point>();
 
-            var firstX = organism.TileIndex.X - organism.attributes.DetectionRadius;
-            var firstY = organism.TileIndex.Y - organism.attributes.DetectionRadius;
+            var firstX = organism.GridIndex.X - organism.attributes.DetectionRadius;
+            var firstY = organism.GridIndex.Y - organism.attributes.DetectionRadius;
 
             for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
             {
@@ -65,8 +65,8 @@ namespace EvolutionSim.StateManagement
                     organism.MilliSecondsSinceLastMovement = 0;
 
                     Directions _num = (Directions)_random.Next(0, 4);
-                    int _destinationTileX = organism.TileIndex.X;
-                    int _destinationTileY = organism.TileIndex.Y;
+                    int _destinationTileX = organism.GridIndex.X;
+                    int _destinationTileY = organism.GridIndex.Y;
 
                     switch (_num)
                     {
@@ -100,9 +100,9 @@ namespace EvolutionSim.StateManagement
                 }
                 else
                 {
-                    if (organism.Rectangle == organism.DestinationTile.Rectangle)
+                    if (organism.Rectangle.X == organism.DestinationTile.ScreenPositionX && organism.Rectangle.Y == organism.DestinationTile.ScreenPositionY)
                     {
-                        grid.MoveOrganism(organism, organism.DestinationTile.TileIndex.X, organism.DestinationTile.TileIndex.Y);
+                        grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
                         organism.DestinationTile = null;
                         //organism.MilliSecondsSinceLastMovement = 0;
 
@@ -113,9 +113,9 @@ namespace EvolutionSim.StateManagement
                         Lerper lerp = new Lerper();
 
 
-                        var newX = (int)lerp.Lerp(organism.Rectangle.X, organism.DestinationTile.Rectangle.X);
-                        var newY = (int)lerp.Lerp(organism.Rectangle.Y, organism.DestinationTile.Rectangle.Y);
-                        organism.SetPosition(newX, newY);
+                        var newX = (int)lerp.Lerp(organism.Rectangle.X, organism.DestinationTile.ScreenPositionX);
+                        var newY = (int)lerp.Lerp(organism.Rectangle.Y, organism.DestinationTile.ScreenPositionY);
+                        organism.SetScreenPosition(newX, newY);
 
 
                     }
@@ -130,10 +130,10 @@ namespace EvolutionSim.StateManagement
 
         }
         // Returns true if reached tile, false if not.
-        private static bool Move(Organism organism,Rectangle DestinationRec,Point DestinationPoint,Grid grid){
-            if (organism.Rectangle == DestinationRec)
+        private static bool Move(Organism organism,Tile Destination,Grid grid){
+            if (organism.Rectangle.X == Destination.ScreenPositionX && organism.Rectangle.Y == Destination.ScreenPositionY)
             {
-                grid.MoveOrganism(organism, DestinationPoint.X, DestinationPoint.Y);
+                grid.ReparentOrganism(organism, Destination.GridIndex.X, Destination.GridIndex.Y);
                 //organism.DestinationTile = null;
 
                 return true;
@@ -144,9 +144,9 @@ namespace EvolutionSim.StateManagement
                 Lerper lerp = new Lerper();
 
 
-                var newX = (int)lerp.Lerp(organism.Rectangle.X, DestinationRec.X);
-                var newY = (int)lerp.Lerp(organism.Rectangle.Y, DestinationRec.Y);
-                organism.SetPosition(newX, newY);
+                var newX = (int)lerp.Lerp(organism.Rectangle.X, Destination.ScreenPositionX);
+                var newY = (int)lerp.Lerp(organism.Rectangle.Y, Destination.ScreenPositionY);
+                organism.SetScreenPosition(newX, newY);
 
                 return false;
             }
@@ -164,7 +164,7 @@ namespace EvolutionSim.StateManagement
 
                 if (Path.Any() && !Path.First().HasInhabitant())
                 {
-                    if(Move(organism,Path.ElementAt(0).Rectangle,Path.ElementAt(0).TileIndex, grid))
+                    if(Move(organism,Path.ElementAt(0), grid))
                     {
                         Path.RemoveAt(0);
                     }
@@ -237,8 +237,8 @@ namespace EvolutionSim.StateManagement
                 while (depth < max_depth)
                 {
                     //the starting is the depth away from the origin +1 to compensate for the 0-2;
-                    firstX = organism.TileIndex.X - (depth + 1);
-                    firstY = organism.TileIndex.Y - (depth + 1);
+                    firstX = organism.GridIndex.X - (depth + 1);
+                    firstY = organism.GridIndex.Y - (depth + 1);
 
                     num = 3 + (2 * depth); //number of tiles to check per depth level. 
                     firstCheck = 1 - depth;
@@ -360,8 +360,8 @@ namespace EvolutionSim.StateManagement
 
             private static Tile MatesInRange(Organism organism, Grid grid)
             {
-                int firstX = organism.TileIndex.X - organism.attributes.DetectionRadius;
-                int firstY = organism.TileIndex.Y - organism.attributes.DetectionRadius;
+                int firstX = organism.GridIndex.X - organism.attributes.DetectionRadius;
+                int firstY = organism.GridIndex.Y - organism.attributes.DetectionRadius;
                 for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
                 {
                     for (int j = 0; j < organism.attributes.DetectionDiameter; j++)
