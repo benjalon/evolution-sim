@@ -55,11 +55,6 @@ namespace EvolutionSim.TileGrid.GridItems
                 default:
                     break;
             }
-
-            //if (HasInhabitant())
-            //{
-            //    Inhabitant.Draw(spriteBatch);
-            //}
         }
 
         public void MoveInhabitant(Tile endPosition)

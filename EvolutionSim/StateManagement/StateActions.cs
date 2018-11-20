@@ -8,6 +8,14 @@ using System.Linq;
 
 namespace EvolutionSim.StateManagement
 {
+    enum Directions
+    {
+        Up,
+        Left,
+        Down,
+        Right
+    }
+
     public static class StateActions
     {
 
@@ -75,13 +83,13 @@ namespace EvolutionSim.StateManagement
                             }
                             break;
                         case Directions.Down:
-                            if (_destinationTileY < Grid.VerticalCount - 1)
+                            if (_destinationTileY < Grid.TileCountY - 1)
                             {
                                 _destinationTileY += 1;
                             }
                             break;
                         case Directions.Right:
-                            if (_destinationTileX < Grid.HorizontalCount - 1)
+                            if (_destinationTileX < Grid.TileCountX - 1)
                             {
                                 _destinationTileX += 1;
                             }
