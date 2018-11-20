@@ -228,10 +228,16 @@ namespace EvolutionSim.StateManagement
                 //if destination full decide again.
             }
 
+            /// <summary>
+            /// This method handles the spiral search method for organims when they are in searching for food
+            /// </summary>
+            /// <param name="organism"></param>
+            /// <param name="grid"></param>
+            /// <returns></returns>
             private static Tile FoodInRange(Organism organism, Grid grid)
             {
 
-                // COMMENT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // Defines the range of surronding tiles the organism can search
                 var max_depth = organism.attributes.DetectionRadius;
                 var depth = 0;
 
@@ -244,17 +250,19 @@ namespace EvolutionSim.StateManagement
                 int x;
                 int y;
 
+                //while not all the surronding tiles have been searched within the specified range
                 while (depth < max_depth)
                 {
                     //the starting is the depth away from the origin +1 to compensate for the 0-2;
                     firstX = organism.GridIndex.X - (depth + 1);
                     firstY = organism.GridIndex.Y - (depth + 1);
 
-                    num = 3 + (2 * depth); //number of tiles to check per depth level. 
+                    num = 3 + (2 * depth); //number of tiles to check per depth level. (the number of extra tiles to search is calculated by doubling the current depth)
                     firstCheck = 1 - depth;
                     i = -1;
                     j = 0;
 
+                    //first access the tiles above the organism with an offset of 1.
                     while (i < num - 1)
                     {
                         i++;
@@ -267,6 +275,7 @@ namespace EvolutionSim.StateManagement
                         }
                     }
                     
+                    //now the tiles adjacent to the organism to the right
                     while (j < num - 1)
                     {
                         j++;
@@ -279,6 +288,7 @@ namespace EvolutionSim.StateManagement
                         }
                     }
 
+                    //now go back on oneself until we are parralel with the starting position.
                     while (i > 0)
                     {
                         i--;
@@ -290,6 +300,7 @@ namespace EvolutionSim.StateManagement
                         }
                     }
 
+                    //now traverse up the reamining tiles to finish back at the starting position
                     while (j > 0)
                     {
                         j--;
@@ -301,29 +312,45 @@ namespace EvolutionSim.StateManagement
                         }
                     }
 
+                   
                     depth++;
                 }
                 return null;
             }
         }
     
-
+        /// <summary>
+        /// This class should now be checking an organim's food preference
+        /// </summary>
         public static class EatingFood
         {
 
             public static void EatFood(Organism organism, Grid grid)
             {
+                bool herbivore;
+
                 organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
                 if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
                 {
                     organism.MilliSecondsSinceLastMovement = 0;
 
-                    Food food = organism.DestinationTile.Inhabitant as Food;
-                    if (food != null) // It's rare but two organisms can attempt to eat the same food source
+                   Food food = organism.DestinationTile.Inhabitant as Food;
+                    //this combines two checks
+                    herbivore = (food.herbivoreFriendly && food != null);
+                    
+                    if (food != null && organism.OrganismPref == Organism.FoodType.Omnivore) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
+
                     {
                         food.Eat();
                         // organism._attributes._hunger += 0.3;
                     }
+
+                    else if(organism.OrganismPref == Organism.FoodType.Herbivore && herbivore)
+                    {
+
+                        food.Eat();
+                    }
+
                     organism.DestinationTile = null;
                     organism.Path.Clear();
                 }
