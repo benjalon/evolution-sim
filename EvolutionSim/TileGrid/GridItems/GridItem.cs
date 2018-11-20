@@ -21,8 +21,6 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             get => this.rectangle;
         }
-       
-        public Tile ParentTile { get; private set; }
 
         protected int _health { get; private set; } = 80;
         public event EventHandler DeathOccurred;
@@ -72,7 +70,6 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             this.GridPosition.X = tile.GridPositionX;
             this.GridPosition.Y = tile.GridPositionY;
-            ParentTile = tile;
             this.rectangle = tile.Rectangle;
         }
 
@@ -85,7 +82,6 @@ namespace EvolutionSim.TileGrid.GridItems
             _health -= value;
             if (_health <= 0)
             {
-                ParentTile.RemoveInhabitant(); // Remove from grid
                 OnDeath(EventArgs.Empty); // Remove from brain collection
             }
         }

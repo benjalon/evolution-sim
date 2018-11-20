@@ -64,36 +64,6 @@ namespace EvolutionSim.TileGrid
             }
         }
 
-        /// <summary>
-        /// Find and move toward the nearest food source given an organism.
-        /// </summary>
-        /// <param name="_passedOrganism"></param>
-        public bool TrackFood(Organism _passedOrganism)
-        {
-            var startTile = _passedOrganism.ParentTile;
-            bool found = false;
-
-            // TODO: Whoever does the AI path traversal
-            // var destinationTile = _tiles[i][j];
-
-            return found;
-        }
-
-        /// <summary>
-        /// Find and move toward the nearest potential mate given an organism.
-        /// </summary>
-        /// <param name="_passedOrganism"></param>
-        public bool TrackMate(Organism _passedOrganism)
-        {
-           // var startTile = _passedOrganism.ParentTile;
-            bool found = false;
-
-            // TODO: Whoever does the AI path traversal
-            // var destinationTile = _tiles[i][j];
-
-            return found;
-        }
-
         public bool AttemptToPositionAt(GridItem item, int x, int y)
         {
             if (this.tiles[x][y].HasInhabitant())
@@ -143,19 +113,22 @@ namespace EvolutionSim.TileGrid
             }
         }
 
+        public Tile GetTileAt(int x, int y)
+        {
+            return this.tiles[x][y];
+        }
+
+        public Tile GetTileAt(GridItem item)
+        {
+            return this.tiles[item.GridPosition.X][item.GridPosition.Y];
+        }
+
         public bool IsFoodAt(int x, int y)
         {
             var inhabitant = this.tiles[x][y].Inhabitant;
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
 
-        /// <summary>
-        /// This method is called by an organism who is searching for another one to mate with
-        /// </summary>
-        /// <param name="organism"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
         public bool IsMateAt(Organism organism, int x, int y)
         {
             var inhabitant = this.tiles[x][y].Inhabitant;
@@ -166,21 +139,6 @@ namespace EvolutionSim.TileGrid
             return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).OrganismState == PotentialStates.SeekMate;
         }
 
-        public Tile GetTileAt(int x, int y)
-        {
-            return this.tiles[x][y];
-        }
-
-        private void OrganismDeathHandler(object sender, EventArgs e)
-        {
-            this.Organisms.Remove((Organism)sender);
-        }
-
-        private void FoodDeathHandler(object sender, EventArgs e)
-        {
-            this.Foods.Remove((Food)sender);
-        }
-
         public static Boolean InBounds(int x, int y)
         {
             if (y >= Grid.VerticalCount || y < 0 || x >= Grid.HorizontalCount || x < 0)
@@ -188,6 +146,22 @@ namespace EvolutionSim.TileGrid
                 return false;
             }
             return true;
+        }
+
+        private void OrganismDeathHandler(object sender, EventArgs e)
+        {
+            var organism = (Organism)sender;
+
+            this.GetTileAt(organism).RemoveInhabitant();
+            this.Organisms.Remove(organism);
+        }
+
+        private void FoodDeathHandler(object sender, EventArgs e)
+        {
+            var food = (Food)sender;
+
+            this.GetTileAt(food).RemoveInhabitant();
+            this.Foods.Remove(food);
         }
     }
 }

@@ -184,7 +184,7 @@ namespace EvolutionSim.StateManagement
                 if (potentialFood != null)
                 {
                     // Path to food
-                    List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, potentialFood, grid);
+                    List<Tile> Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
                     organism.Path = Path;
                     if(Path.Count == 0)
                     {
@@ -326,7 +326,7 @@ namespace EvolutionSim.StateManagement
 
 
                     //shouldn't be calling the A* for mating probably
-                    List<Tile> Path = PathFinding.FindShortestPath(organism.ParentTile, potentialMate, grid);
+                    List<Tile> Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialMate, grid);
 
                     organism.Path = Path;
                     if (Path.Count == 0)
