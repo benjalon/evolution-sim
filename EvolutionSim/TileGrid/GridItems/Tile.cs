@@ -13,9 +13,7 @@ namespace EvolutionSim.TileGrid.GridItems
     public class Tile : GridItem
     {
         public const int TILE_SIZE = 32;
-
-        public int GridPositionX { get; private set; }
-        public int GridPositionY { get; private set; }
+        
         public GridItem Inhabitant { get; private set; }
 
         private TerrainTypes terrain = TerrainTypes.Grass; // For the time being, everything is standard grass        
@@ -26,10 +24,8 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public Tile(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, Rectangle rectangle) : base(tileTexture, rectangle)
         {
-            GridPositionX = rectangle.X / TILE_SIZE;
-            GridPositionY = rectangle.Y / TILE_SIZE;
-            this.GridPosition.X = GridPositionX;
-            this.GridPosition.Y = GridPositionY;
+            this.TileIndex.X = rectangle.X / TILE_SIZE;
+            this.TileIndex.Y = rectangle.Y / TILE_SIZE;
             this.mountainTexture = mountainTexture;
             this.waterTexture = waterTexture;
         }
@@ -37,7 +33,7 @@ namespace EvolutionSim.TileGrid.GridItems
         public void AddMapItem(GridItem gridItem)
         {
             Inhabitant = gridItem;
-            gridItem.MoveToTile(this);
+            gridItem.SetTileIndex(this);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -47,10 +43,10 @@ namespace EvolutionSim.TileGrid.GridItems
             switch (this.terrain)
             {
                 case TerrainTypes.Mountain:
-                    spriteBatch.Draw(this.mountainTexture, Rectangle, Color);
+                    spriteBatch.Draw(this.mountainTexture, Rectangle, Color.White);
                     break;
                 case TerrainTypes.Water:
-                    spriteBatch.Draw(this.waterTexture, Rectangle, Color);
+                    spriteBatch.Draw(this.waterTexture, Rectangle, Color.White);
                     break;
                 default:
                     break;
@@ -61,7 +57,7 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             if (HasInhabitant())
             {
-                Inhabitant.MoveToTile(endPosition);
+                Inhabitant.SetTileIndex(endPosition);
                 endPosition.Inhabitant = Inhabitant;
                 Inhabitant = null;
             }

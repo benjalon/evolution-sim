@@ -12,16 +12,11 @@ namespace EvolutionSim.TileGrid.GridItems
     public abstract class GridItem
     {
         protected Texture2D texture;
-        public Color Color { get; private set; }
-
-        public Point GridPosition;
-
         protected Rectangle rectangle;
-        public Rectangle Rectangle
-        {
-            get => this.rectangle;
-        }
+        public Rectangle Rectangle { get => this.rectangle; } // Alias for the rectangle because structs and properties don't play nice
 
+        public Point TileIndex; // The index of this item on the grid, this is not the object's actual screen position
+        
         protected int _health { get; private set; } = 80;
         public event EventHandler DeathOccurred;
 
@@ -32,13 +27,6 @@ namespace EvolutionSim.TileGrid.GridItems
         public GridItem(Texture2D texture)
         {
             this.texture = texture;
-            Color = Color.White;
-        }
-
-        public void UpdateRectangle(float x, float y)
-        {
-            this.rectangle.X = (int)x;
-            this.rectangle.Y = (int)y;
         }
 
         /// <summary>
@@ -50,7 +38,6 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             this.texture = texture;
             this.rectangle = rectangle;
-            Color = Color.White;
         }
 
         /// <summary>
@@ -59,17 +46,28 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.texture, Rectangle, Color);
+            spriteBatch.Draw(this.texture, Rectangle, Color.White);
+        }
+
+        /// <summary>
+        /// Set the position of the item to a new place on the screen. Note that this is the actual screen position and not the grid index.
+        /// </summary>
+        /// <param name="x">The x position to move to.</param>
+        /// <param name="y">The y position to move to.</param>
+        public void SetPosition(int x, int y)
+        {
+            this.rectangle.X = x;
+            this.rectangle.Y = y;
         }
 
         /// <summary>
         /// Reparents the sprite to the given tile (i.e. makes it an inhabitant of the tile).
         /// </summary>
         /// <param name="tile">The tile to move to</param>
-        public void MoveToTile(Tile tile)
+        public void SetTileIndex(Tile tile)
         {
-            this.GridPosition.X = tile.GridPositionX;
-            this.GridPosition.Y = tile.GridPositionY;
+            this.TileIndex.X = tile.TileIndex.X;
+            this.TileIndex.Y = tile.TileIndex.Y;
             this.rectangle = tile.Rectangle;
         }
 
@@ -82,14 +80,8 @@ namespace EvolutionSim.TileGrid.GridItems
             _health -= value;
             if (_health <= 0)
             {
-                OnDeath(EventArgs.Empty); // Remove from brain collection
+                DeathOccurred?.Invoke(this, EventArgs.Empty);
             }
-        }
-
-        public virtual void OnDeath(EventArgs e)
-        {
-            // BeginInvoke() ???
-            DeathOccurred?.Invoke(this, e);
         }
     }
 }

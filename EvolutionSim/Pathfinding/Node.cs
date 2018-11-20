@@ -40,7 +40,7 @@ namespace EvolutionSim.Pathfinding
         /// <returns>The diagonal distance between two Tiles.</returns>
         private static int CalculateDistance(Tile Goal, Tile Location)
         {
-            return Math.Max(Math.Abs(Location.GridPositionX - Goal.GridPositionX), Math.Abs(Location.GridPositionY - Goal.GridPositionY));
+            return Math.Max(Math.Abs(Location.TileIndex.X - Goal.TileIndex.X), Math.Abs(Location.TileIndex.Y - Goal.TileIndex.Y));
         }
 
    

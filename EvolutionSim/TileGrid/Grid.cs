@@ -124,7 +124,7 @@ namespace EvolutionSim.TileGrid
         /// <param name="destinationY">The y index of the tile to move to.</param>
         public void MoveOrganism(Organism organism, int destinationX, int destinationY)
         {
-            var parentTile = this.tiles[organism.GridPosition.X][organism.GridPosition.Y];
+            var parentTile = this.tiles[organism.TileIndex.X][organism.TileIndex.Y];
             var destinationTile = this.tiles[destinationX][destinationY];
             if (!destinationTile.HasInhabitant())
             {
@@ -150,7 +150,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>The tile in question.</returns>
         public Tile GetTileAt(GridItem item)
         {
-            return this.tiles[item.GridPosition.X][item.GridPosition.Y];
+            return this.tiles[item.TileIndex.X][item.TileIndex.Y];
         }
 
         /// <summary>
