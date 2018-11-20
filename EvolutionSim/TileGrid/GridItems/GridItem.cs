@@ -14,7 +14,7 @@ namespace EvolutionSim.TileGrid.GridItems
         protected Texture2D texture;
         protected Rectangle rectangle;
         public Rectangle Rectangle { get => this.rectangle; } // Alias for the rectangle because structs and properties don't play nice
-
+         
         public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
         
         protected int _health { get; private set; } = 80;
