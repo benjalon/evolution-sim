@@ -54,6 +54,7 @@ namespace EvolutionSim.StateManagement
 
         public static void Roam(Organism organism, Grid grid)
         {
+            Boolean FoundFreeTile = false;
             organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
 
 
@@ -62,47 +63,56 @@ namespace EvolutionSim.StateManagement
 
                 if (organism.DestinationTile is null)
                 {
-                    organism.MilliSecondsSinceLastMovement = 0;
-
-                    Directions _num = (Directions)_random.Next(0, 4);
                     int _destinationTileX = organism.GridIndex.X;
                     int _destinationTileY = organism.GridIndex.Y;
-
-                    switch (_num)
+                    organism.MilliSecondsSinceLastMovement = 0;
+                    while (!FoundFreeTile)
                     {
-                        case Directions.Up:
-                            if (_destinationTileY > 0)
-                            {
-                                _destinationTileY -= 1;
-                            }
-                            break;
-                        case Directions.Left:
-                            if (_destinationTileX > 0)
-                            {
-                                _destinationTileX -= 1;
-                            }
-                            break;
-                        case Directions.Down:
-                            if (_destinationTileY < Grid.TileCountY - 1)
-                            {
-                                _destinationTileY += 1;
-                            }
-                            break;
-                        case Directions.Right:
-                            if (_destinationTileX < Grid.TileCountX - 1)
-                            {
-                                _destinationTileX += 1;
-                            }
-                            break;
-                    }
-                    organism.DestinationTile = grid.GetTileAt(_destinationTileX, _destinationTileY);
+                        Directions _num = (Directions)_random.Next(0, 4);
 
+
+                        switch (_num)
+                        {
+                            case Directions.Up:
+                                if (_destinationTileY > 0)
+                                {
+                                    _destinationTileY -= 1;
+                                }
+                                break;
+                            case Directions.Left:
+                                if (_destinationTileX > 0)
+                                {
+                                    _destinationTileX -= 1;
+                                }
+                                break;
+                            case Directions.Down:
+                                if (_destinationTileY < Grid.TileCountY - 1)
+                                {
+                                    _destinationTileY += 1;
+                                }
+                                break;
+                            case Directions.Right:
+                                if (_destinationTileX < Grid.TileCountX - 1)
+                                {
+                                    _destinationTileX += 1;
+                                }
+                                break;
+                        }
+                        if(!grid.GetTileAt(_destinationTileX, _destinationTileY).HasInhabitant())
+                        {
+                            organism.DestinationTile = grid.GetTileAt(_destinationTileX, _destinationTileY);
+                            grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
+                            FoundFreeTile = true;
+
+                        }
+                    }
+     
                 }
                 else
                 {
                     if (organism.Rectangle.X == organism.DestinationTile.ScreenPositionX && organism.Rectangle.Y == organism.DestinationTile.ScreenPositionY)
                     {
-                        grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
+                        //grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
                         organism.DestinationTile = null;
                         //organism.MilliSecondsSinceLastMovement = 0;
 
