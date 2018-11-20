@@ -106,7 +106,7 @@ namespace EvolutionSim.Pathfinding
 
 
             }
-
+            ((Organism)startPosition.Inhabitant).Computing=false;
             return path;
         }
     }

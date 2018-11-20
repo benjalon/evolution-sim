@@ -16,7 +16,7 @@ namespace EvolutionSim.TileGrid.GridItems
         public float MovementSpeed = 0.0000002f;
         public const int MS_PER_DIRECTION_CHANGE = 600;
 
-
+        public Boolean Computing = false;
 
 
         public const int matingCd = 10000;
