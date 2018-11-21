@@ -36,7 +36,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public Organism(Texture2D[] textures) : base(textures[random.Next(0, textures.Length - 1)])
         {
-            this.attributes = new OrganismAttributes(0, 0.2, 500, 50);
+            this.attributes = new OrganismAttributes(0, 8, 500, 50);
             TOTAL_POPULATION++;
             OrganismState = PotentialStates.Roaming;
             Path = new List<Tile>();
