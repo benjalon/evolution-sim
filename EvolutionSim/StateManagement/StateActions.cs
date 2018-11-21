@@ -241,6 +241,9 @@ namespace EvolutionSim.StateManagement
                 var max_depth = organism.attributes.DetectionRadius;
                 var depth = 0;
 
+                //bool herbivore = (food.herbivoreFriendly && food != null);
+
+             
                 int firstX;
                 int firstY;
                 int num;
@@ -268,9 +271,8 @@ namespace EvolutionSim.StateManagement
                         i++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (performCheck(x, y, (firstX+i), (firstY+j), grid))
                         {
-
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
                     }
@@ -281,7 +283,7 @@ namespace EvolutionSim.StateManagement
                         j++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (performCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
 
                             return grid.GetTileAt(firstX + i, firstY + j);
@@ -294,7 +296,7 @@ namespace EvolutionSim.StateManagement
                         i--;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (performCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -306,7 +308,7 @@ namespace EvolutionSim.StateManagement
                         j--;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if(performCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -318,7 +320,29 @@ namespace EvolutionSim.StateManagement
                 return null;
             }
         }
-    
+
+
+
+
+        /// <summary>
+        /// This check will be used in the seek food to determine if the food source is valid at the searched destination
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="firstX"></param>
+        /// <param name="firstY"></param>
+        /// <param name="grid"></param>
+        /// <param name="organism"></param>
+        /// <returns></returns>
+        private static bool performCheck(int x, int y, int firstX, int firstY, Grid grid)
+        {
+            bool validFood;
+
+            return (validFood = Grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY));
+
+        }
+
+
         /// <summary>
         /// This class should now be checking an organim's food preference
         /// </summary>
@@ -327,7 +351,7 @@ namespace EvolutionSim.StateManagement
 
             public static void EatFood(Organism organism, Grid grid)
             {
-                bool herbivore;
+                bool validFood;
 
                 organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
                 if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
@@ -336,19 +360,16 @@ namespace EvolutionSim.StateManagement
 
                    Food food = organism.DestinationTile.Inhabitant as Food;
                     //this combines two checks
-                    herbivore = (food.herbivoreFriendly && food != null);
+
+                    //this check determines if the organism can eat the current food source
+                    validFood = organism.OrganismPref == Organism.FoodType.Omnivore || organism.OrganismPref == Organism.FoodType.Herbivore;
+                  
                     
-                    if (food != null && organism.OrganismPref == Organism.FoodType.Omnivore) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
+                    if (food != null && validFood && food.herbivoreFriendly) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
 
                     {
                         food.Eat();
                         // organism._attributes._hunger += 0.3;
-                    }
-
-                    else if(organism.OrganismPref == Organism.FoodType.Herbivore && herbivore)
-                    {
-
-                        food.Eat();
                     }
 
                     organism.DestinationTile = null;

@@ -16,7 +16,11 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public bool herbivoreFriendly { get; private set;}
 
-        public Food(Texture2D texture) : base(texture) { }
+        public Food(Texture2D texture) : base(texture) {
+
+            this.herbivoreFriendly = true;
+
+        }
 
         /// <summary>
         /// this can be called to specify if the spawned food cannont be consumed by an omnivore.
