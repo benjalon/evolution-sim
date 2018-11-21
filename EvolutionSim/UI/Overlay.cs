@@ -17,7 +17,9 @@ namespace EvolutionSim.UI
         public Button OrganismCreateButton { get; private set; }
         public TextInput FoodCountInput { get; private set; }
         public Button FoodCreateButton { get; private set; }
-        public int SelectedTerrain { get; private set; }
+        public RadioButton NoTerrainButton { get; private set; }
+        public RadioButton MountainButton { get; private set; }
+        public RadioButton WaterButton { get; private set; }
 
         public Overlay()
         {
@@ -45,12 +47,10 @@ namespace EvolutionSim.UI
 
             var terrainDrawText = new Paragraph("Draw Terrain");
 
-            var noTerrainButton = new RadioButton("None", Anchor.AutoCenter);
-            noTerrainButton.OnValueChange = (Entity e) => { SelectedTerrain = 0; };
-            var mountainButton = new RadioButton("Mountain", Anchor.AutoCenter);
-            mountainButton.OnValueChange = (Entity e) => { SelectedTerrain = 1; };
-            var waterButton = new RadioButton("Water", Anchor.AutoCenter);
-            waterButton.OnValueChange = (Entity e) => { SelectedTerrain = 2; };
+            NoTerrainButton = new RadioButton("None", Anchor.AutoCenter);
+            NoTerrainButton.Checked = true;
+            MountainButton = new RadioButton("Mountain", Anchor.AutoCenter);
+            WaterButton = new RadioButton("Water", Anchor.AutoCenter);
 
             var editAttributesText = new Paragraph("Edit Attributes");
 
@@ -60,9 +60,9 @@ namespace EvolutionSim.UI
             panel.AddChild(FoodCountInput);
             panel.AddChild(FoodCreateButton);
             panel.AddChild(terrainDrawText);
-            panel.AddChild(noTerrainButton);
-            panel.AddChild(mountainButton);
-            panel.AddChild(waterButton);
+            panel.AddChild(NoTerrainButton);
+            panel.AddChild(MountainButton);
+            panel.AddChild(WaterButton);
             panel.AddChild(editAttributesText);
         }
 

@@ -1,4 +1,5 @@
 ﻿using EvolutionSim.Logic;
+using EvolutionSim.TileGrid.GridItems;
 using EvolutionSim.UI;
 using EvolutionSim.Utility;
 using GeonBit.UI;
@@ -91,23 +92,9 @@ namespace EvolutionSim
                     this.simulation.AddFood(input);
                 }
             };
-            //this.overlay.MountainCreateButton.OnClick = (Entity btn) =>
-            //{
-            //    int input;
-            //    if (int.TryParse(this.overlay.MountainCountInput.Value, out input))
-            //    {
-            //        this.simulation.AddMountain(input);
-            //    }
-            //};
-            //this.overlay.WaterCreateButton.OnClick = (Entity btn) =>
-            //{
-            //    int input;
-            //    if (int.TryParse(this.overlay.WaterCountInput.Value, out input))
-            //    {
-            //        this.simulation.AddWater(input);
-            //    }
-            //};
-
+            this.overlay.NoTerrainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Grass;
+            this.overlay.MountainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Mountain;
+            this.overlay.WaterButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Water;
         }
         
         /// <summary>

@@ -21,6 +21,7 @@ namespace EvolutionSim.Logic
         private MouseManager mouseManager = new MouseManager();
         private Sprite highlight;
         private bool shouldHighlightTile = false;
+        public TerrainTypes SelectedTerrainType { private get; set; } = TerrainTypes.Grass;
 
         private Random random = new Random();
 
@@ -41,14 +42,7 @@ namespace EvolutionSim.Logic
         {
             this.mouseManager.Update();
 
-            var mouseXIndex = this.mouseManager.PositionX / Tile.TILE_SIZE;
-            var mouseYIndex = this.mouseManager.PositionY / Tile.TILE_SIZE;
-            this.shouldHighlightTile = Grid.InBounds(mouseXIndex, mouseYIndex);
-            if (this.shouldHighlightTile)
-            {
-                this.grid.HighlightTileAt(mouseXIndex, mouseYIndex);
-                this.highlight.SetScreenPosition(this.grid.HighlightedTile.ScreenPositionX, this.grid.HighlightedTile.ScreenPositionY);
-            }
+            this.HandleTerrainDrawing(SelectedTerrainType);
 
             foreach (Organism org in this.grid.Organisms)
             {
@@ -91,27 +85,28 @@ namespace EvolutionSim.Logic
             }
         }
 
-        public void AddMountain(int amount)
-        {
-            for (var i = 0; i < amount; i++)
-            {
-                this.grid.SetTerrainAt(TerrainTypes.Mountain, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY));
-            }
-        }
-
-        public void AddWater(int amount)
-        {
-            for (var i = 0; i < amount; i++)
-            {
-                this.grid.SetTerrainAt(TerrainTypes.Water, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY));
-            }
-        }
-
         private void PositionAtRandom(GridItem item)
         {
             if (!this.grid.AttemptToPositionAt(item, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY)))
             {
                 PositionAtRandom(item); // Try again
+            }
+        }
+
+        private void HandleTerrainDrawing(TerrainTypes selectedTerrainType)
+        {
+            var mouseXIndex = this.mouseManager.PositionX / Tile.TILE_SIZE;
+            var mouseYIndex = this.mouseManager.PositionY / Tile.TILE_SIZE;
+            this.shouldHighlightTile = Grid.InBounds(mouseXIndex, mouseYIndex);
+            if (this.shouldHighlightTile)
+            {
+                this.grid.HighlightTileAt(mouseXIndex, mouseYIndex);
+                this.highlight.SetScreenPosition(this.grid.HighlightedTile.ScreenPositionX, this.grid.HighlightedTile.ScreenPositionY);
+
+                if (this.mouseManager.IsClicked)
+                {
+                    this.grid.SetTerrainAt(selectedTerrainType, mouseXIndex, mouseYIndex);
+                }
             }
         }
     }

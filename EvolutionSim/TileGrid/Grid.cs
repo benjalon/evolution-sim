@@ -21,6 +21,7 @@ namespace EvolutionSim.TileGrid
         
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
+        public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
 
         /// <summary>
         /// Create a Grid with given attributes.
@@ -54,6 +55,11 @@ namespace EvolutionSim.TileGrid
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
+            foreach (var terrain in Terrains)
+            {
+                terrain.Draw(spriteBatch); // Draw all food objects in simulation
+            }
+
             foreach (var food in Foods)
             {
                 food.Draw(spriteBatch); // Draw all food objects in simulation
@@ -107,7 +113,28 @@ namespace EvolutionSim.TileGrid
         /// <param name="y">The y index of the tile to position at.</param>
         public void SetTerrainAt(TerrainTypes type, int x, int y)
         {
-            this.tiles[x][y].SetTerrain(type);
+            var tile = this.tiles[x][y];
+
+            switch (type)
+            {
+                case TerrainTypes.Grass:
+                    if (this.Terrains.Contains(tile.Terrain))
+                    {
+                        this.Terrains.Remove(tile.Terrain);
+                    }
+                    break;
+                case TerrainTypes.Mountain:
+                case TerrainTypes.Water:
+                    if (!this.Terrains.Contains(tile.Terrain))
+                    {
+                        this.Terrains.Add(tile.Terrain);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            tile.SetTerrain(type);
         }
 
         /// <summary>

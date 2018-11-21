@@ -54,7 +54,7 @@ namespace EvolutionSim.Utility
         /// Draw the texture at the position of the rectangle
         /// </summary>
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (this.rectangle == null)
             {
