@@ -17,18 +17,21 @@ namespace EvolutionSim.TileGrid
 
         private Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
+        public Tile HighlightedTile { get; private set; }
+        
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
+        public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
 
         /// <summary>
         /// Create a Grid with given attributes.
         /// </summary>
-        /// <param name="tileTexture">The tile grid background texture, used for debugging purposes.</param>
+        /// <param name="highlightTexture">The texture drawn over a tile which is highlighted with the mouse.</param>
         /// <param name="mountainTexture">Terrain texture for mountain terrain.</param>
         /// <param name="waterTexture">Terrain texture for water terrain.</param>
         /// <param name="width">The width of the grid.</param>
         /// <param name="height">The height of the grid.</param>
-        public Grid(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, int width, int height)
+        public Grid(Texture2D highlightTexture, Texture2D mountainTexture, Texture2D waterTexture, int width, int height)
         {
             TileCountX = width / Tile.TILE_SIZE;
             TileCountY = height / Tile.TILE_SIZE;
@@ -41,7 +44,7 @@ namespace EvolutionSim.TileGrid
                 this.tiles[x] = new Tile[TileCountY];
                 for (var y = 0; y < TileCountY; y++)
                 {
-                    this.tiles[x][y] = new Tile(tileTexture, mountainTexture, waterTexture, new Point(x, y));
+                    this.tiles[x][y] = new Tile(mountainTexture, waterTexture, new Point(x, y));
                 }
             }
         }
@@ -52,6 +55,11 @@ namespace EvolutionSim.TileGrid
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
+            foreach (var terrain in Terrains)
+            {
+                terrain.Draw(spriteBatch); // Draw all food objects in simulation
+            }
+
             foreach (var food in Foods)
             {
                 food.Draw(spriteBatch); // Draw all food objects in simulation
@@ -72,7 +80,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>True if successfully positioned, false if the space was occupied.</returns>
         public bool AttemptToPositionAt(GridItem item, int x, int y)
         {
-            if (this.tiles[x][y].HasInhabitant())
+            if (!InBounds(x, y) || this.tiles[x][y].HasInhabitant())
             {
                 return false; // Space occupied
             }
@@ -105,7 +113,28 @@ namespace EvolutionSim.TileGrid
         /// <param name="y">The y index of the tile to position at.</param>
         public void SetTerrainAt(TerrainTypes type, int x, int y)
         {
-            this.tiles[x][y].SetTerrain(type);
+            var tile = this.tiles[x][y];
+
+            switch (type)
+            {
+                case TerrainTypes.Grass:
+                    if (this.Terrains.Contains(tile.Terrain))
+                    {
+                        this.Terrains.Remove(tile.Terrain);
+                    }
+                    break;
+                case TerrainTypes.Mountain:
+                case TerrainTypes.Water:
+                    if (!this.Terrains.Contains(tile.Terrain))
+                    {
+                        this.Terrains.Add(tile.Terrain);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            tile.SetTerrain(type);
         }
 
         /// <summary>
@@ -156,6 +185,11 @@ namespace EvolutionSim.TileGrid
             var inhabitant = this.tiles[x][y].Inhabitant;
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
+
+        public void HighlightTileAt(int x, int y)
+        {
+            this.HighlightedTile = this.tiles[x][y];
+        }
         
         /// <summary>
         /// Checks whether there is a mate at the given index.
@@ -182,7 +216,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>True if it is, false if it is not.</returns>
         public static Boolean InBounds(int x, int y)
         {
-            if (y >= Grid.TileCountY || y < 0 || x >= Grid.TileCountX || x < 0)
+            if (y >= TileCountY || y < 0 || x >= TileCountX || x < 0)
             {
                 return false;
             }
