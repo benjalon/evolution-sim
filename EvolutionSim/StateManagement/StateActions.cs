@@ -271,7 +271,7 @@ namespace EvolutionSim.StateManagement
                         i++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (performCheck(x, y, (firstX+i), (firstY+j), grid))
+                        if (PerformValidFoodCheck(x, y, (firstX+i), (firstY+j), grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -283,7 +283,7 @@ namespace EvolutionSim.StateManagement
                         j++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (performCheck(x, y, (firstX + i), (firstY + j), grid))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
 
                             return grid.GetTileAt(firstX + i, firstY + j);
@@ -296,7 +296,7 @@ namespace EvolutionSim.StateManagement
                         i--;
                         x = firstX + i;
                         y = firstY + j;
-                        if (performCheck(x, y, (firstX + i), (firstY + j), grid))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -308,7 +308,7 @@ namespace EvolutionSim.StateManagement
                         j--;
                         x = firstX + i;
                         y = firstY + j;
-                        if(performCheck(x, y, (firstX + i), (firstY + j), grid))
+                        if(PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -334,11 +334,10 @@ namespace EvolutionSim.StateManagement
         /// <param name="grid"></param>
         /// <param name="organism"></param>
         /// <returns></returns>
-        private static bool performCheck(int x, int y, int firstX, int firstY, Grid grid)
+        private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Grid grid)
         {
-            bool validFood;
-
-            return (validFood = Grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY));
+           
+            return (Grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY));
 
         }
 

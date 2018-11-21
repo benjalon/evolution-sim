@@ -14,11 +14,11 @@ namespace EvolutionSim.TileGrid.GridItems
     public class Food : GridItem
     {
 
-        public bool herbivoreFriendly { get; private set;}
+        public bool HerbivoreFriendly { get; private set;}
 
         public Food(Texture2D texture) : base(texture) {
 
-            this.herbivoreFriendly = true;
+            this.HerbivoreFriendly = true;
 
         }
 
@@ -29,7 +29,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="omnivoreFriendly"></param>
         public Food(Texture2D texture, bool herbivoreFriendly) : base(texture) {
 
-            this.herbivoreFriendly = herbivoreFriendly;
+            this.HerbivoreFriendly = herbivoreFriendly;
         }
 
 
