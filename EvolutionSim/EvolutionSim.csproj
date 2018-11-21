@@ -102,6 +102,7 @@
     <Compile Include="StateManagement\StateMachine.cs" />
     <Compile Include="TileGrid\GridItems\Tile.cs" />
     <Compile Include="UI\Overlay.cs" />
+    <Compile Include="Utility\MatingArgs.cs" />
     <Compile Include="Utility\MouseManager.cs" />
     <Compile Include="Utility\Sprite.cs" />
   </ItemGroup>

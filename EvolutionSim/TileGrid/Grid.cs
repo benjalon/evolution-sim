@@ -80,7 +80,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>True if successfully positioned, false if the space was occupied.</returns>
         public bool AttemptToPositionAt(GridItem item, int x, int y)
         {
-            if (this.tiles[x][y].HasInhabitant())
+            if (!InBounds(x, y) || this.tiles[x][y].HasInhabitant())
             {
                 return false; // Space occupied
             }
@@ -216,7 +216,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>True if it is, false if it is not.</returns>
         public static Boolean InBounds(int x, int y)
         {
-            if (y >= Grid.TileCountY || y < 0 || x >= Grid.TileCountX || x < 0)
+            if (y >= TileCountY || y < 0 || x >= TileCountX || x < 0)
             {
                 return false;
             }
