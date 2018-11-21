@@ -229,13 +229,22 @@ namespace EvolutionSim.StateManagement
                 //if destination full decide again.
             }
 
+            /// <summary>
+            /// This method handles the spiral search method for organims when they are in searching for food
+            /// </summary>
+            /// <param name="organism"></param>
+            /// <param name="grid"></param>
+            /// <returns></returns>
             private static Tile FoodInRange(Organism organism, Grid grid)
             {
 
-                // COMMENT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // Defines the range of surronding tiles the organism can search
                 var max_depth = organism.attributes.DetectionRadius;
                 var depth = 0;
 
+                //bool herbivore = (food.herbivoreFriendly && food != null);
+
+             
                 int firstX;
                 int firstY;
                 int num;
@@ -245,86 +254,124 @@ namespace EvolutionSim.StateManagement
                 int x;
                 int y;
 
+                //while not all the surronding tiles have been searched within the specified range
                 while (depth < max_depth)
                 {
                     //the starting is the depth away from the origin +1 to compensate for the 0-2;
                     firstX = organism.GridIndex.X - (depth + 1);
                     firstY = organism.GridIndex.Y - (depth + 1);
 
-                    num = 3 + (2 * depth); //number of tiles to check per depth level. 
+                    num = 3 + (2 * depth); //number of tiles to check per depth level. (the number of extra tiles to search is calculated by doubling the current depth)
                     firstCheck = 1 - depth;
                     i = -1;
                     j = 0;
 
+                    //first access the tiles above the organism with an offset of 1.
                     while (i < num - 1)
                     {
                         i++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (PerformValidFoodCheck(x, y, (firstX+i), (firstY+j), grid))
                         {
-
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
                     }
                     
+                    //now the tiles adjacent to the organism to the right
                     while (j < num - 1)
                     {
                         j++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
 
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
                     }
 
+                    //now go back on oneself until we are parralel with the starting position.
                     while (i > 0)
                     {
                         i--;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
                     }
 
+                    //now traverse up the reamining tiles to finish back at the starting position
                     while (j > 0)
                     {
                         j--;
                         x = firstX + i;
                         y = firstY + j;
-                        if (Grid.InBounds(x, y) && grid.IsFoodAt(firstX + i, firstY + j))
+                        if(PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
                     }
 
+                   
                     depth++;
                 }
                 return null;
             }
         }
-    
 
+
+
+
+        /// <summary>
+        /// This check will be used in the seek food to determine if the food source is valid at the searched destination
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="firstX"></param>
+        /// <param name="firstY"></param>
+        /// <param name="grid"></param>
+        /// <param name="organism"></param>
+        /// <returns></returns>
+        private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Grid grid)
+        {
+           
+            return (Grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY));
+
+        }
+
+
+        /// <summary>
+        /// This class should now be checking an organim's food preference
+        /// </summary>
         public static class EatingFood
         {
 
             public static void EatFood(Organism organism, Grid grid)
             {
+                bool validFood;
+
                 organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
                 if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
                 {
                     organism.MilliSecondsSinceLastMovement = 0;
 
-                    Food food = organism.DestinationTile.Inhabitant as Food;
-                    if (food != null) // It's rare but two organisms can attempt to eat the same food source
+                   Food food = organism.DestinationTile.Inhabitant as Food;
+                    //this combines two checks
+
+                    //this check determines if the organism can eat the current food source
+                    validFood = organism.OrganismPref == Organism.FoodType.Omnivore || organism.OrganismPref == Organism.FoodType.Herbivore;
+                  
+                    
+                    if (food != null && validFood && food.herbivoreFriendly) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
+
                     {
                         food.Eat();
                         // organism._attributes._hunger += 0.3;
                     }
+
                     organism.DestinationTile = null;
                     organism.Path.Clear();
                 }

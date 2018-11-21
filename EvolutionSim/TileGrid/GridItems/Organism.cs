@@ -16,7 +16,15 @@ namespace EvolutionSim.TileGrid.GridItems
         public float MovementSpeed = 0.0000002f;
         public const int MS_PER_DIRECTION_CHANGE = 600;
 
+        /// <summary>
+        /// Dictates the type of food the organism will be eating
+        /// </summary>
+        public enum FoodType {
 
+            Herbivore,
+            Omnivore,
+            Canivore
+        }
 
 
         public const int matingCd = 10000;
@@ -29,6 +37,7 @@ namespace EvolutionSim.TileGrid.GridItems
         public PotentialStates OrganismState { get; set; }
         public Boolean MovingOnPath { get; set; }
         public List<Tile> Path { get; set; }
+        public FoodType OrganismPref { get; set; }
 
         private static Random random = new Random();
         
@@ -40,6 +49,9 @@ namespace EvolutionSim.TileGrid.GridItems
             TOTAL_POPULATION++;
             OrganismState = PotentialStates.Roaming;
             Path = new List<Tile>();
+
+            //by default set the organism to be a herbivore
+            this.OrganismPref = FoodType.Herbivore;
         }
 
         /// <summary>
