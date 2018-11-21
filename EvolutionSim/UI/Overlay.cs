@@ -17,11 +17,9 @@ namespace EvolutionSim.UI
         public Button OrganismCreateButton { get; private set; }
         public TextInput FoodCountInput { get; private set; }
         public Button FoodCreateButton { get; private set; }
-        public TextInput WaterCountInput { get; private set; }
-        public Button WaterCreateButton { get; private set; }
-        public TextInput MountainCountInput { get; private set; }
-        public Button MountainCreateButton { get; private set; }
-
+        public RadioButton NoTerrainButton { get; private set; }
+        public RadioButton MountainButton { get; private set; }
+        public RadioButton WaterButton { get; private set; }
 
         public Overlay()
         {
@@ -47,14 +45,13 @@ namespace EvolutionSim.UI
             FoodCountInput.PlaceholderText = "10";
             FoodCreateButton = new Button("Food", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
 
-            WaterCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
-            WaterCountInput.PlaceholderText = "10";
-            WaterCreateButton = new Button("Water", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
+            var terrainDrawText = new Paragraph("Draw Terrain");
 
-            MountainCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
-            MountainCountInput.PlaceholderText = "10";
-            MountainCreateButton = new Button("Mountain", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
-            
+            NoTerrainButton = new RadioButton("None", Anchor.AutoCenter);
+            NoTerrainButton.Checked = true;
+            MountainButton = new RadioButton("Mountain", Anchor.AutoCenter);
+            WaterButton = new RadioButton("Water", Anchor.AutoCenter);
+
             var editAttributesText = new Paragraph("Edit Attributes");
 
             panel.AddChild(addItemsText);
@@ -62,10 +59,10 @@ namespace EvolutionSim.UI
             panel.AddChild(OrganismCreateButton);
             panel.AddChild(FoodCountInput);
             panel.AddChild(FoodCreateButton);
-            panel.AddChild(MountainCountInput);
-            panel.AddChild(MountainCreateButton);
-            panel.AddChild(WaterCountInput);
-            panel.AddChild(WaterCreateButton);
+            panel.AddChild(terrainDrawText);
+            panel.AddChild(NoTerrainButton);
+            panel.AddChild(MountainButton);
+            panel.AddChild(WaterButton);
             panel.AddChild(editAttributesText);
         }
 
