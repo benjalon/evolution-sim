@@ -365,7 +365,7 @@ namespace EvolutionSim.StateManagement
                     validFood = organism.OrganismPref == Organism.FoodType.Omnivore || organism.OrganismPref == Organism.FoodType.Herbivore;
                   
                     
-                    if (food != null && validFood && food.herbivoreFriendly) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
+                    if (food != null && validFood && food.HerbivoreFriendly) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
 
                     {
                         food.Eat();
