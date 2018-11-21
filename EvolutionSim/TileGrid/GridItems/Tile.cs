@@ -35,7 +35,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="mountainTexture">Mountain terrain texture.</param>
         /// <param name="waterTexture">Water terrain texture.</param>
         /// <param name="gridIndex">The index in the grid to position this tile at.</param>
-        public Tile(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, Point gridIndex)
+        public Tile(Texture2D mountainTexture, Texture2D waterTexture, Point gridIndex)
         {
             this.GridIndex = gridIndex;
             this.mountainTexture = mountainTexture;

@@ -25,12 +25,12 @@ namespace EvolutionSim.TileGrid
         /// <summary>
         /// Create a Grid with given attributes.
         /// </summary>
-        /// <param name="tileTexture">The tile grid background texture, used for debugging purposes.</param>
+        /// <param name="highlightTexture">The texture drawn over a tile which is highlighted with the mouse.</param>
         /// <param name="mountainTexture">Terrain texture for mountain terrain.</param>
         /// <param name="waterTexture">Terrain texture for water terrain.</param>
         /// <param name="width">The width of the grid.</param>
         /// <param name="height">The height of the grid.</param>
-        public Grid(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, int width, int height)
+        public Grid(Texture2D highlightTexture, Texture2D mountainTexture, Texture2D waterTexture, int width, int height)
         {
             TileCountX = width / Tile.TILE_SIZE;
             TileCountY = height / Tile.TILE_SIZE;
@@ -43,7 +43,7 @@ namespace EvolutionSim.TileGrid
                 this.tiles[x] = new Tile[TileCountY];
                 for (var y = 0; y < TileCountY; y++)
                 {
-                    this.tiles[x][y] = new Tile(tileTexture, mountainTexture, waterTexture, new Point(x, y));
+                    this.tiles[x][y] = new Tile(mountainTexture, waterTexture, new Point(x, y));
                 }
             }
         }
