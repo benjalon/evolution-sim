@@ -83,8 +83,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Background.cs" />
-    <Compile Include="Lerper.cs" />
+    <Compile Include="Utility\Background.cs" />
+    <Compile Include="Utility\Lerper.cs" />
     <Compile Include="TileGrid\GridItems\Food.cs" />
     <Compile Include="TileGrid\GridItems\GridItem.cs" />
     <Compile Include="TileGrid\Grid.cs" />
@@ -101,6 +101,8 @@
     <Compile Include="StateManagement\StateMachine.cs" />
     <Compile Include="TileGrid\GridItems\Tile.cs" />
     <Compile Include="UI\Overlay.cs" />
+    <Compile Include="Utility\MouseManager.cs" />
+    <Compile Include="Utility\Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
