@@ -1,8 +1,10 @@
-﻿using GeonBit.UI;
+﻿using EvolutionSim.TileGrid.GridItems;
+using GeonBit.UI;
 using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EvolutionSim.UI
 {
@@ -20,6 +22,8 @@ namespace EvolutionSim.UI
         public RadioButton NoTerrainButton { get; private set; }
         public RadioButton MountainButton { get; private set; }
         public RadioButton WaterButton { get; private set; }
+
+        private TextInput organismAttribute;
 
         public Overlay()
         {
@@ -54,6 +58,8 @@ namespace EvolutionSim.UI
 
             var editAttributesText = new Paragraph("Edit Attributes");
 
+            this.organismAttribute = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+
             panel.AddChild(addItemsText);
             panel.AddChild(OrganismCountInput);
             panel.AddChild(OrganismCreateButton);
@@ -64,15 +70,25 @@ namespace EvolutionSim.UI
             panel.AddChild(MountainButton);
             panel.AddChild(WaterButton);
             panel.AddChild(editAttributesText);
+            panel.AddChild(this.organismAttribute);
         }
 
         /// <summary>
         /// Take input from input devices
         /// </summary>
         /// <param name="gameTime">Time elapsed since last update call</param>
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, TileHighlight tileHighlight)
         {
             UserInterface.Active.Update(gameTime);
+            
+            if (tileHighlight.SelectedOrganism == null)
+            {
+                this.organismAttribute.Value = "0.00";
+            }
+            else
+            {
+                this.organismAttribute.Value = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
+            }
         }
 
         /// <summary>

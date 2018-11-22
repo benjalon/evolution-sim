@@ -11,8 +11,11 @@ namespace EvolutionSim.TileGrid.GridItems
 {
     public class TileHighlight : Sprite
     {
-        private Tile highlightedTile;
+        public Tile HighlightedTile;
+        public Organism SelectedOrganism { get; private set; }
         public bool IsHighlighting { get; private set; } = false;
+
+        private MouseManager mouseManager = new MouseManager();
 
         public TileHighlight(Texture2D texture) : base(texture, new Rectangle(0, 0, Tile.TILE_SIZE, Tile.TILE_SIZE)) { }
 
@@ -24,20 +27,40 @@ namespace EvolutionSim.TileGrid.GridItems
             }
         }
 
-        public void Update(MouseManager mouseManager, Grid grid, TerrainTypes selectedTerrain)
+        public void Update(Grid grid, TerrainTypes selectedTerrain)
         {
-            this.IsHighlighting = Grid.InBounds(mouseManager.TileIndexX, mouseManager.TileIndexY);
+            this.mouseManager.Update();
+
+            this.IsHighlighting = Grid.InBounds(this.mouseManager.TileIndexX, this.mouseManager.TileIndexY);
 
             if (IsHighlighting)
             {
-                this.highlightedTile = grid.GetTileAt(mouseManager.TileIndexX, mouseManager.TileIndexY);
-                this.rectangle.X = this.highlightedTile.ScreenPositionX;
-                this.rectangle.Y = this.highlightedTile.ScreenPositionY;
+                this.HighlightedTile = grid.GetTileAt(this.mouseManager.TileIndexX, this.mouseManager.TileIndexY);
+                this.rectangle.X = this.HighlightedTile.ScreenPositionX;
+                this.rectangle.Y = this.HighlightedTile.ScreenPositionY;
 
-                if (mouseManager.IsClicked)
+                if (this.mouseManager.IsClicked)
                 {
-                    grid.SetTerrainAt(selectedTerrain, this.highlightedTile.GridIndex.X, this.highlightedTile.GridIndex.Y);
+                    if (this.HighlightedTile.HasOrganismInhabitant())
+                    {
+                        if (this.SelectedOrganism != null)
+                        {
+                            this.SelectedOrganism.IsSelected = false; // clean up old reference
+                        }
+
+                        this.SelectedOrganism = (Organism)this.HighlightedTile.Inhabitant;
+                        this.SelectedOrganism.IsSelected = true;
+                    }
+                    else
+                    {
+                        grid.SetTerrainAt(selectedTerrain, this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
+                    }
                 }
+            }
+            else if (this.SelectedOrganism != null && this.mouseManager.IsClicked)
+            {
+                this.SelectedOrganism.IsSelected = false;
+                this.SelectedOrganism = null;
             }
         }
     }

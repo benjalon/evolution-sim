@@ -40,6 +40,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public FoodType OrganismPref { get; set; }
 
         private static Random random = new Random();
+
+        public bool IsSelected { get; set; } = false;
         
         // private OrganismState _state;
 
@@ -56,7 +58,14 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            if (IsSelected)
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
+            else
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
         }
 
         /// <summary>

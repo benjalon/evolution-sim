@@ -17,9 +17,8 @@ namespace EvolutionSim.Logic
 
         private StateMachine fsm;
         private Grid grid;
-
-        private MouseManager mouseManager = new MouseManager();
-        private TileHighlight tileHighlight;
+        
+        public TileHighlight TileHighlight;
 
         public TerrainTypes SelectedTerrainType { private get; set; } = TerrainTypes.Grass;
 
@@ -35,14 +34,12 @@ namespace EvolutionSim.Logic
             this.fsm = new StateMachine(this.grid);
             this.fsm.MatingOccurred += this.CreateOrganismHandler;
 
-            this.tileHighlight = new TileHighlight(textures["tile"]);
+            this.TileHighlight = new TileHighlight(textures["tile"]);
         }
 
         public void Update()
         {
-            this.mouseManager.Update();
-
-            this.tileHighlight.Update(this.mouseManager, this.grid, SelectedTerrainType);
+            this.TileHighlight.Update(this.grid, SelectedTerrainType);
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;
@@ -59,7 +56,7 @@ namespace EvolutionSim.Logic
         {
             this.grid.Draw(spriteBatch);
 
-            this.tileHighlight.Draw(spriteBatch);
+            this.TileHighlight.Draw(spriteBatch);
         }
         
         public void CreateOrganismHandler(object sender, EventArgs args)

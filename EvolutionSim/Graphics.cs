@@ -119,8 +119,8 @@ namespace EvolutionSim
             }
 
             // Update UI elements
-            this.overlay.Update(gameTime);
             this.simulation.Update();
+            this.overlay.Update(gameTime, this.simulation.TileHighlight);
 
             base.Update(gameTime);
         }
