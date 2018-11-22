@@ -33,7 +33,12 @@ namespace EvolutionSim.TileGrid.GridItems
 
             this.IsHighlighting = Grid.InBounds(this.mouseManager.TileIndexX, this.mouseManager.TileIndexY);
 
-            if (IsHighlighting)
+            if (this.SelectedOrganism != null && this.mouseManager.IsClicked)
+            {
+                this.SelectedOrganism.IsSelected = false;
+                this.SelectedOrganism = null;
+            }
+            else if (IsHighlighting)
             {
                 this.HighlightedTile = grid.GetTileAt(this.mouseManager.TileIndexX, this.mouseManager.TileIndexY);
                 this.rectangle.X = this.HighlightedTile.ScreenPositionX;
@@ -56,11 +61,6 @@ namespace EvolutionSim.TileGrid.GridItems
                         grid.SetTerrainAt(selectedTerrain, this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
                     }
                 }
-            }
-            else if (this.SelectedOrganism != null && this.mouseManager.IsClicked)
-            {
-                this.SelectedOrganism.IsSelected = false;
-                this.SelectedOrganism = null;
             }
         }
     }

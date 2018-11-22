@@ -23,21 +23,17 @@ namespace EvolutionSim.UI
         public RadioButton MountainButton { get; private set; }
         public RadioButton WaterButton { get; private set; }
 
-        private TextInput organismAttribute;
+        private Paragraph editAttributesText;
+        private Paragraph organismHungerText;
+        private TextInput organismHungerValue;
 
         public Overlay()
         {
             // All temporary
             var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterRight);
-            panel.Padding = new Vector2(10, 10);
+            panel.Padding = new Vector2(10);
             panel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(panel);
-            
-            //var list = new SelectList(new Vector2(0, PANEL_WIDTH), Anchor.Auto, null, PanelSkin.Simple);
-            //list.AddItem("Dog");
-            //list.AddItem("Human");
-            //list.AddItem("Rat");
-            //panel.AddChild(list);
 
             var addItemsText = new Paragraph("Add Items");
 
@@ -56,10 +52,6 @@ namespace EvolutionSim.UI
             MountainButton = new RadioButton("Mountain", Anchor.AutoCenter);
             WaterButton = new RadioButton("Water", Anchor.AutoCenter);
 
-            var editAttributesText = new Paragraph("Edit Attributes");
-
-            this.organismAttribute = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
-
             panel.AddChild(addItemsText);
             panel.AddChild(OrganismCountInput);
             panel.AddChild(OrganismCreateButton);
@@ -69,8 +61,15 @@ namespace EvolutionSim.UI
             panel.AddChild(NoTerrainButton);
             panel.AddChild(MountainButton);
             panel.AddChild(WaterButton);
-            panel.AddChild(editAttributesText);
-            panel.AddChild(this.organismAttribute);
+
+            this.editAttributesText = new Paragraph("Edit Attributes");
+
+            this.organismHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(110, 40));
+            this.organismHungerValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            panel.AddChild(this.editAttributesText);
+            panel.AddChild(this.organismHungerText);
+            panel.AddChild(this.organismHungerValue);
         }
 
         /// <summary>
@@ -83,11 +82,16 @@ namespace EvolutionSim.UI
             
             if (tileHighlight.SelectedOrganism == null)
             {
-                this.organismAttribute.Value = "0.00";
+                this.editAttributesText.Visible = false;
+                this.organismHungerText.Visible = false;
+                this.organismHungerValue.Visible = false;
             }
             else
             {
-                this.organismAttribute.Value = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
+                this.organismHungerValue.Value = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
+                this.editAttributesText.Visible = true;
+                this.organismHungerText.Visible = true;
+                this.organismHungerValue.Visible = true;
             }
         }
 
