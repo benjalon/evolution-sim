@@ -1,8 +1,10 @@
-﻿using GeonBit.UI;
+﻿using EvolutionSim.TileGrid.GridItems;
+using GeonBit.UI;
 using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace EvolutionSim.UI
 {
@@ -21,19 +23,17 @@ namespace EvolutionSim.UI
         public RadioButton MountainButton { get; private set; }
         public RadioButton WaterButton { get; private set; }
 
+        private Paragraph editAttributesText;
+        private Paragraph organismHungerText;
+        public TextInput OrganismHungerValue { get; private set; }
+
         public Overlay()
         {
             // All temporary
             var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterRight);
-            panel.Padding = new Vector2(10, 10);
+            panel.Padding = new Vector2(10);
             panel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(panel);
-            
-            //var list = new SelectList(new Vector2(0, PANEL_WIDTH), Anchor.Auto, null, PanelSkin.Simple);
-            //list.AddItem("Dog");
-            //list.AddItem("Human");
-            //list.AddItem("Rat");
-            //panel.AddChild(list);
 
             var addItemsText = new Paragraph("Add Items");
 
@@ -52,8 +52,6 @@ namespace EvolutionSim.UI
             MountainButton = new RadioButton("Mountain", Anchor.AutoCenter);
             WaterButton = new RadioButton("Water", Anchor.AutoCenter);
 
-            var editAttributesText = new Paragraph("Edit Attributes");
-
             panel.AddChild(addItemsText);
             panel.AddChild(OrganismCountInput);
             panel.AddChild(OrganismCreateButton);
@@ -63,16 +61,39 @@ namespace EvolutionSim.UI
             panel.AddChild(NoTerrainButton);
             panel.AddChild(MountainButton);
             panel.AddChild(WaterButton);
-            panel.AddChild(editAttributesText);
+
+            this.editAttributesText = new Paragraph("Edit Attributes");
+
+            this.organismHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(110, 40));
+            this.OrganismHungerValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            panel.AddChild(this.editAttributesText);
+            panel.AddChild(this.organismHungerText);
+            panel.AddChild(this.OrganismHungerValue);
         }
 
         /// <summary>
         /// Take input from input devices
         /// </summary>
         /// <param name="gameTime">Time elapsed since last update call</param>
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, TileHighlight tileHighlight)
         {
             UserInterface.Active.Update(gameTime);
+            
+            if (tileHighlight.SelectedOrganism == null)
+            {
+                this.OrganismHungerValue.Value = "";
+                this.editAttributesText.Visible = false;
+                this.organismHungerText.Visible = false;
+                this.OrganismHungerValue.Visible = false;
+            }
+            else
+            {
+                this.OrganismHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
+                this.editAttributesText.Visible = true;
+                this.organismHungerText.Visible = true;
+                this.OrganismHungerValue.Visible = true;
+            }
         }
 
         /// <summary>

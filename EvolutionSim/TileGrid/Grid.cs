@@ -16,8 +16,6 @@ namespace EvolutionSim.TileGrid
         public static int TileCountY { get; private set; }
 
         private Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
-
-        public Tile HighlightedTile { get; private set; }
         
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
@@ -184,11 +182,6 @@ namespace EvolutionSim.TileGrid
         {
             var inhabitant = this.tiles[x][y].Inhabitant;
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
-        }
-
-        public void HighlightTileAt(int x, int y)
-        {
-            this.HighlightedTile = this.tiles[x][y];
         }
         
         /// <summary>

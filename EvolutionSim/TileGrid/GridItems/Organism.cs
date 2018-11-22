@@ -40,6 +40,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public FoodType OrganismPref { get; set; }
 
         private static Random random = new Random();
+
+        public bool IsSelected { get; set; } = false;
         
         // private OrganismState _state;
 
@@ -52,6 +54,18 @@ namespace EvolutionSim.TileGrid.GridItems
 
             //by default set the organism to be a herbivore
             this.OrganismPref = FoodType.Herbivore;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (IsSelected)
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
+            else
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
         }
 
         /// <summary>
@@ -109,6 +123,9 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
         public bool JustMated { get; set; }
+        public float Size { get; set; }
+
+        private Random random = new Random();
 
         public OrganismAttributes(int age,
                                   double hunger,
@@ -122,7 +139,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-
+            Size = 1.0f;
         }
     }
 }
