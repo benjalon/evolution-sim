@@ -54,6 +54,11 @@ namespace EvolutionSim.TileGrid.GridItems
             this.OrganismPref = FoodType.Herbivore;
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+        }
+
         /// <summary>
         /// Signal to a mate to stop
         /// </summary>
@@ -109,6 +114,9 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
         public bool JustMated { get; set; }
+        public float Size { get; set; }
+
+        private Random random = new Random();
 
         public OrganismAttributes(int age,
                                   double hunger,
@@ -122,7 +130,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-
+            Size = 1.0f;
         }
     }
 }
