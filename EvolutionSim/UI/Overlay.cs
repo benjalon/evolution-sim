@@ -25,7 +25,7 @@ namespace EvolutionSim.UI
 
         private Paragraph editAttributesText;
         private Paragraph organismHungerText;
-        private TextInput organismHungerValue;
+        public TextInput OrganismHungerValue { get; private set; }
 
         public Overlay()
         {
@@ -65,11 +65,11 @@ namespace EvolutionSim.UI
             this.editAttributesText = new Paragraph("Edit Attributes");
 
             this.organismHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(110, 40));
-            this.organismHungerValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.OrganismHungerValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
 
             panel.AddChild(this.editAttributesText);
             panel.AddChild(this.organismHungerText);
-            panel.AddChild(this.organismHungerValue);
+            panel.AddChild(this.OrganismHungerValue);
         }
 
         /// <summary>
@@ -82,16 +82,17 @@ namespace EvolutionSim.UI
             
             if (tileHighlight.SelectedOrganism == null)
             {
+                this.OrganismHungerValue.Value = "";
                 this.editAttributesText.Visible = false;
                 this.organismHungerText.Visible = false;
-                this.organismHungerValue.Visible = false;
+                this.OrganismHungerValue.Visible = false;
             }
             else
             {
-                this.organismHungerValue.Value = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
+                this.OrganismHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
                 this.editAttributesText.Visible = true;
                 this.organismHungerText.Visible = true;
-                this.organismHungerValue.Visible = true;
+                this.OrganismHungerValue.Visible = true;
             }
         }
 

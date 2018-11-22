@@ -30,10 +30,10 @@ namespace EvolutionSim.TileGrid.GridItems
         public void Update(Grid grid, TerrainTypes selectedTerrain)
         {
             this.mouseManager.Update();
+            
+            this.IsHighlighting = this.mouseManager.IsWithinGrid;
 
-            this.IsHighlighting = Grid.InBounds(this.mouseManager.TileIndexX, this.mouseManager.TileIndexY);
-
-            if (this.SelectedOrganism != null && this.mouseManager.IsClicked)
+            if (this.SelectedOrganism != null && this.mouseManager.IsClickedWithinGrid)
             {
                 this.SelectedOrganism.IsSelected = false;
                 this.SelectedOrganism = null;
@@ -44,7 +44,7 @@ namespace EvolutionSim.TileGrid.GridItems
                 this.rectangle.X = this.HighlightedTile.ScreenPositionX;
                 this.rectangle.Y = this.HighlightedTile.ScreenPositionY;
 
-                if (this.mouseManager.IsClicked)
+                if (this.mouseManager.IsClickedWithinGrid)
                 {
                     if (this.HighlightedTile.HasOrganismInhabitant())
                     {

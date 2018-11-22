@@ -1,4 +1,5 @@
-﻿using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.TileGrid;
+using EvolutionSim.TileGrid.GridItems;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,8 @@ namespace EvolutionSim.Utility
         public int TileIndexX { get => this.mouseState.X / Tile.TILE_SIZE; }
         public int TileIndexY { get => this.mouseState.Y / Tile.TILE_SIZE; }
         public bool IsClicked { get => this.mouseState.LeftButton == ButtonState.Pressed && this.mouseState != this.mouseStateOld; }
-        public bool IsHeld { get => this.mouseState.LeftButton == ButtonState.Pressed && this.mouseState == this.mouseStateOld; }
-        public bool IsReleased { get => this.mouseState.LeftButton == ButtonState.Released && this.mouseState != this.mouseStateOld; }
+        public bool IsWithinGrid { get => Grid.InBounds(this.TileIndexX, this.TileIndexY); }
+        public bool IsClickedWithinGrid { get => this.IsClicked && this.IsWithinGrid; }
 
         public void Update()
         {
