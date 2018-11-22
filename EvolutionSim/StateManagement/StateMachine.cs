@@ -23,6 +23,10 @@ namespace EvolutionSim.StateManagement
             this.state = new State();
         }
 
+        /// <summary>
+        /// as time marches on make the organism hungrey
+        /// </summary>
+        /// <param name="organism"></param>
         public void UpdateOrganismAttributes(Organism organism)
         {
 
@@ -57,10 +61,8 @@ namespace EvolutionSim.StateManagement
 
                 case PotentialStates.Roaming:
 
-                    //if food < 50 then go to seek food, contuine to seek food until back to 80% full?
-                    //diferent food sources have different values
-
-                    if (organism.attributes.Hunger < 0.4)
+                    // the organisms hunger is low then go and seek food.
+                    if (organism.attributes.Hunger < 0.8)
                     {
 
                         //then move into the seek food state
@@ -69,13 +71,17 @@ namespace EvolutionSim.StateManagement
 
                     }
 
+                    
                     else if (organism.attributes.Hunger >= 0.8 && organism.readyToMate())
                     {
+                        //sometimes an organism will 
+                        organism.MovingOnPath = false;
                         //go find a mate
                         organism.OrganismState = this.state.MoveState(organismState, Action.HungryMate);
 
 
                     }
+
 
 
                     break;
@@ -100,7 +106,8 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 //organism needs way of tracking other organisms of the same species
-                //
+                //This needs revision.
+                //we have an error where an organism will transition state but the "Moving Along path value is set to true"
                 case PotentialStates.SeekMate:
 
                     if (organism.MovingOnPath)
@@ -112,6 +119,13 @@ namespace EvolutionSim.StateManagement
                     {
                         //then the organism has been pinged by the organism and will wait to get fkt
                         organism.OrganismState = this.state.MoveState(organismState, Action.Waiting);
+
+                    }
+
+                    if(organism.attributes.Hunger < 0.4) // then stop searching for a mate and go back to searching for food
+                    {
+
+                        organism.OrganismState = this.state.MoveState(organismState, Action.HungryRoam);
 
                     }
 
