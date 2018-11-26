@@ -376,7 +376,7 @@ namespace EvolutionSim.StateManagement
             public static void EatFood(Organism organism, Grid grid)
             {
                 bool validFood;
-
+                //organism.MovingOnPath = false;
                 organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
                 if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
                 {

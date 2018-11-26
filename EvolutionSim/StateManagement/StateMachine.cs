@@ -201,8 +201,8 @@ namespace EvolutionSim.StateManagement
                         ((Organism)(organism.DestinationTile.Inhabitant)).OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
 
                         //Sets the oganism back to not waiting for a mate
-                        ((Organism)(organism.DestinationTile.Inhabitant)).pingFinished();
-                        MatingOccurred?.Invoke(this, new MatingArgs(organism));
+                        //((Organism)(organism.DestinationTile.Inhabitant)).pingFinished();
+                        //MatingOccurred?.Invoke(this, new MatingArgs(organism));
                     }
                     //grid.AttemptToPositionAt(grid.AddOrganism, _passedOrganism.GridPosition.X, _passedOrganism.GridPosition.Y + 1);
 
@@ -240,7 +240,11 @@ namespace EvolutionSim.StateManagement
                 case PotentialStates.Eating:
                     StateActions.EatingFood.EatFood(_passedOrganism, this.grid);
                     break;
+
                 case PotentialStates.Mating:
+
+                    ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).pingFinished();
+                    MatingOccurred?.Invoke(this, new MatingArgs(_passedOrganism));
 
                     break;
 
