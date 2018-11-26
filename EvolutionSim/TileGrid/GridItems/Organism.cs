@@ -16,6 +16,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public float MovementSpeed = 0.0000002f;
         public const int MS_PER_DIRECTION_CHANGE = 600;
 
+        public Boolean Computing = false;
+        
         /// <summary>
         /// Dictates the type of food the organism will be eating
         /// </summary>
@@ -25,7 +27,6 @@ namespace EvolutionSim.TileGrid.GridItems
             Omnivore,
             Canivore
         }
-
 
         public const int matingCd = 10000;
 
@@ -40,6 +41,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public FoodType OrganismPref { get; set; }
 
         private static Random random = new Random();
+
+        public bool IsSelected { get; set; } = false;
         
         // private OrganismState _state;
 
@@ -52,6 +55,18 @@ namespace EvolutionSim.TileGrid.GridItems
 
             //by default set the organism to be a herbivore
             this.OrganismPref = FoodType.Herbivore;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (IsSelected)
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
+            else
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
         }
 
         /// <summary>
@@ -120,12 +135,16 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
         public bool JustMated { get; set; }
+        public float Size { get; set; }
+
+        private Random random = new Random();
 
         public OrganismAttributes(int age,
                                   double hunger,
                                   double speed,
                                   double strength)
         {
+            Species = "Bear";
             DetectionRadius = 3;
             DetectionDiameter = DetectionRadius * 2;
             Age = age;
@@ -133,7 +152,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-
+            Size = (this.random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
         }
     }
 }

@@ -7,6 +7,8 @@ using EvolutionSim.UI;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
+
 
 namespace EvolutionSim.Logic
 {
@@ -17,10 +19,9 @@ namespace EvolutionSim.Logic
 
         private StateMachine fsm;
         private Grid grid;
+        
+        public TileHighlight TileHighlight;
 
-        private MouseManager mouseManager = new MouseManager();
-        private Sprite highlight;
-        private bool shouldHighlightTile = false;
         public TerrainTypes SelectedTerrainType { private get; set; } = TerrainTypes.Grass;
 
         private Random random = new Random();
@@ -35,14 +36,12 @@ namespace EvolutionSim.Logic
             this.fsm = new StateMachine(this.grid);
             this.fsm.MatingOccurred += this.CreateOrganismHandler;
 
-            this.highlight = new Sprite(textures["tile"], new Rectangle(0, 0, Tile.TILE_SIZE, Tile.TILE_SIZE));
+            this.TileHighlight = new TileHighlight(textures["tile"]);
         }
 
         public void Update()
         {
-            this.mouseManager.Update();
-
-            this.HandleTerrainDrawing(SelectedTerrainType);
+            this.TileHighlight.Update(this.grid, SelectedTerrainType);
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;
@@ -59,10 +58,7 @@ namespace EvolutionSim.Logic
         {
             this.grid.Draw(spriteBatch);
 
-            if (this.shouldHighlightTile)
-            {
-                this.highlight.Draw(spriteBatch);
-            }
+            this.TileHighlight.Draw(spriteBatch);
         }
         
         public void CreateOrganismHandler(object sender, EventArgs args)
@@ -121,23 +117,6 @@ namespace EvolutionSim.Logic
             if (!this.grid.AttemptToPositionAt(item, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY)))
             {
                 PositionAtRandom(item); // Try again
-            }
-        }
-
-        private void HandleTerrainDrawing(TerrainTypes selectedTerrainType)
-        {
-            var mouseXIndex = this.mouseManager.PositionX / Tile.TILE_SIZE;
-            var mouseYIndex = this.mouseManager.PositionY / Tile.TILE_SIZE;
-            this.shouldHighlightTile = Grid.InBounds(mouseXIndex, mouseYIndex);
-            if (this.shouldHighlightTile)
-            {
-                this.grid.HighlightTileAt(mouseXIndex, mouseYIndex);
-                this.highlight.SetScreenPosition(this.grid.HighlightedTile.ScreenPositionX, this.grid.HighlightedTile.ScreenPositionY);
-
-                if (this.mouseManager.IsClicked)
-                {
-                    this.grid.SetTerrainAt(selectedTerrainType, mouseXIndex, mouseYIndex);
-                }
             }
         }
     }
