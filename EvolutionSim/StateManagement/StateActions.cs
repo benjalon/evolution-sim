@@ -206,8 +206,9 @@ namespace EvolutionSim.StateManagement
                         // Path to food
                         organism.Computing = true;
                         List<Tile> Path = null;
-                        Thread thread = new Thread(() =>
-                        {
+
+                        //ThreadPool.QueueUserWorkItem(new WaitCallback(Eek));
+                        ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object state) {
                             Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
                             organism.Path = Path;
                             if (Path.Count == 0)
@@ -222,15 +223,7 @@ namespace EvolutionSim.StateManagement
 
                             }
                             organism.MovingOnPath = true;
-
-
-                        });
-                        thread.Start();
-
-                        //List<Tile> Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
-
-
-
+                        }),null);
                     }
                     else
                     {
