@@ -3,28 +3,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EvolutionSim.TileGrid.GridItems
 {
-    public enum TerrainTypes
-    {
-        Grass,
-        Mountain,
-        Water
-    }
 
     public class Tile
     {
         public const int TILE_SIZE = 32;
-        
-        private Texture2D mountainTexture;
-        private Texture2D waterTexture;
 
-        // TODO: Needs reimplementing under the new tile system
-        private TerrainTypes terrain = TerrainTypes.Grass; 
-        public int MovementDifficulty = 1;
-        private int difficultyModifier = 3;
+        public Terrain Terrain { get; private set; }
 
         public Point GridIndex; // The index of this tile on the grid, this is not the object's actual screen position
         public int ScreenPositionX { get => GridIndex.X * TILE_SIZE; } // The actual screen position of the tile, this is not the grid index
         public int ScreenPositionY { get => GridIndex.Y * TILE_SIZE; } // The actual screen position of the tile, this is not the grid index
+
+        public int MovementDifficulty { get => Terrain.MovementDifficulty; }
 
         public GridItem Inhabitant { get; private set; } // The inhabitant being managed by this tile, can be food or organisms
 
@@ -35,11 +25,11 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="mountainTexture">Mountain terrain texture.</param>
         /// <param name="waterTexture">Water terrain texture.</param>
         /// <param name="gridIndex">The index in the grid to position this tile at.</param>
-        public Tile(Texture2D tileTexture, Texture2D mountainTexture, Texture2D waterTexture, Point gridIndex)
+        public Tile(Texture2D mountainTexture, Texture2D waterTexture, Point gridIndex)
         {
             this.GridIndex = gridIndex;
-            this.mountainTexture = mountainTexture;
-            this.waterTexture = waterTexture;
+
+            this.Terrain = new Terrain(new Texture2D[] { null, mountainTexture, waterTexture }, new Rectangle(this.ScreenPositionX, this.ScreenPositionY, TILE_SIZE, TILE_SIZE));
         }
 
         /// <summary>
@@ -82,8 +72,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="terrainType">The type of terrain to set.</param>
         public void SetTerrain(TerrainTypes terrainType)
         {
-            this.terrain = terrainType;
-            this.MovementDifficulty = (int)terrainType * this.difficultyModifier;
+            this.Terrain.SetTerrain(terrainType);
         }
 
         /// <summary>
@@ -93,6 +82,24 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool HasInhabitant()
         {
             return Inhabitant != null;
+        }
+
+        /// <summary>
+        /// Check if this tile is tracking an organism-type inhabitant.
+        /// </summary>
+        /// <returns>Whether this tile has an organism inhabitant or not.</returns>
+        public bool HasOrganismInhabitant()
+        {
+            return Inhabitant != null && Inhabitant.GetType() == typeof(Organism);
+        }
+
+        /// <summary>
+        /// Check if this tile is tracking an food-type inhabitant.
+        /// </summary>
+        /// <returns>Whether this tile has an food inhabitant or not.</returns>
+        public bool HasFoodInhabitant()
+        {
+            return Inhabitant != null && Inhabitant.GetType() == typeof(Food);
         }
     }
 }

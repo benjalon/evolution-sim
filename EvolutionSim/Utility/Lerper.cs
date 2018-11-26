@@ -11,8 +11,8 @@ using System;
 	 *  http://www.bitbull.com http://blog.bitbull.com
 	 */
 
-    namespace EvolutionSim
-    {
+    namespace EvolutionSim.Utility
+{
 
         public class Lerper
         {

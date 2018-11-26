@@ -17,7 +17,16 @@ namespace EvolutionSim.TileGrid.GridItems
         public const int MS_PER_DIRECTION_CHANGE = 600;
 
         public Boolean Computing = false;
+        
+        /// <summary>
+        /// Dictates the type of food the organism will be eating
+        /// </summary>
+        public enum FoodType {
 
+            Herbivore,
+            Omnivore,
+            Canivore
+        }
 
         public const int matingCd = 10000;
 
@@ -29,17 +38,35 @@ namespace EvolutionSim.TileGrid.GridItems
         public PotentialStates OrganismState { get; set; }
         public Boolean MovingOnPath { get; set; }
         public List<Tile> Path { get; set; }
+        public FoodType OrganismPref { get; set; }
 
         private static Random random = new Random();
+
+        public bool IsSelected { get; set; } = false;
         
         // private OrganismState _state;
 
         public Organism(Texture2D[] textures) : base(textures[random.Next(0, textures.Length - 1)])
         {
-            this.attributes = new OrganismAttributes(0, 0.2, 500, 50);
+            this.attributes = new OrganismAttributes(0, 8, 500, 50);
             TOTAL_POPULATION++;
             OrganismState = PotentialStates.Roaming;
             Path = new List<Tile>();
+
+            //by default set the organism to be a herbivore
+            this.OrganismPref = FoodType.Herbivore;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (IsSelected)
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
+            else
+            {
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+            }
         }
 
         /// <summary>
@@ -97,12 +124,16 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
         public bool JustMated { get; set; }
+        public float Size { get; set; }
+
+        private Random random = new Random();
 
         public OrganismAttributes(int age,
                                   double hunger,
                                   double speed,
                                   double strength)
         {
+            Species = "Bear";
             DetectionRadius = 3;
             DetectionDiameter = DetectionRadius * 2;
             Age = age;
@@ -110,7 +141,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-
+            Size = (this.random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using EvolutionSim.Logic;
+using EvolutionSim.TileGrid.GridItems;
 using EvolutionSim.UI;
+using EvolutionSim.Utility;
 using GeonBit.UI;
 using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
@@ -74,39 +76,7 @@ namespace EvolutionSim
 
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.overlay.OrganismCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.OrganismCountInput.Value, out input))
-                {
-                    this.simulation.AddOrganism(input);
-                }
-            };
-            this.overlay.FoodCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.FoodCountInput.Value, out input))
-                {
-                    this.simulation.AddFood(input);
-                }
-            };
-            this.overlay.MountainCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.MountainCountInput.Value, out input))
-                {
-                    this.simulation.AddMountain(input);
-                }
-            };
-            this.overlay.WaterCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.WaterCountInput.Value, out input))
-                {
-                    this.simulation.AddWater(input);
-                }
-            };
-
+            this.CreateUIHandlers();
         }
         
         /// <summary>
@@ -131,8 +101,8 @@ namespace EvolutionSim
             }
 
             // Update UI elements
-            this.overlay.Update(gameTime);
             this.simulation.Update();
+            this.overlay.Update(gameTime, this.simulation.TileHighlight);
 
             base.Update(gameTime);
         }
@@ -154,7 +124,7 @@ namespace EvolutionSim
 
             // Draw graphical elements
             this.spriteBatch.Begin();
-            this.background.Draw(spriteBatch);
+            this.background.Draw(this.spriteBatch);
             this.simulation.Draw(this.spriteBatch);
             this.spriteBatch.End();
 
@@ -162,6 +132,40 @@ namespace EvolutionSim
             this.overlay.Draw(this.spriteBatch);
             
             base.Draw(gameTime);
+        }
+
+        private void CreateUIHandlers()
+        {
+            this.overlay.OrganismCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(this.overlay.OrganismCountInput.Value, out input))
+                {
+                    this.simulation.AddOrganism(input);
+                }
+            };
+
+            this.overlay.FoodCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(this.overlay.FoodCountInput.Value, out input))
+                {
+                    this.simulation.AddFood(input);
+                }
+            };
+
+            this.overlay.NoTerrainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Grass;
+            this.overlay.MountainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Mountain;
+            this.overlay.WaterButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Water;
+
+            this.overlay.OrganismHungerValue.OnValueChange = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(((TextInput)btn).Value, out input))
+                {
+                    this.simulation.TileHighlight.SelectedOrganism.attributes.Hunger = input;
+                }
+            };
         }
     }
 }
