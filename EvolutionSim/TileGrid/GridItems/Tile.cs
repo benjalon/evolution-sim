@@ -92,5 +92,14 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             return Inhabitant != null && Inhabitant.GetType() == typeof(Organism);
         }
+
+        /// <summary>
+        /// Check if this tile is tracking an food-type inhabitant.
+        /// </summary>
+        /// <returns>Whether this tile has an food inhabitant or not.</returns>
+        public bool HasFoodInhabitant()
+        {
+            return Inhabitant != null && Inhabitant.GetType() == typeof(Food);
+        }
     }
 }
