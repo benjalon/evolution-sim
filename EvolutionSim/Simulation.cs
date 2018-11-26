@@ -7,6 +7,8 @@ using EvolutionSim.UI;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
+
 
 namespace EvolutionSim.Logic
 {

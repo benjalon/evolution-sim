@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace EvolutionSim.StateManagement
 {
@@ -196,35 +197,41 @@ namespace EvolutionSim.StateManagement
             {
 
                 // Essentially, if food has been located, and path calculated, we move towards food
- 
-                // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
-                Tile potentialFood = FoodInRange(organism, grid);
-
-                if (potentialFood != null)
+                if (!organism.Computing)
                 {
-                    // Path to food
-                    List<Tile> Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
-                    organism.Path = Path;
-                    if(Path.Count == 0)
-                    {
-                        organism.DestinationTile = potentialFood;
+                    // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
+                    Tile potentialFood = FoodInRange(organism, grid);
 
+                    if (potentialFood != null)
+                    {
+                        // Path to food
+                        organism.Computing = true;
+                        List<Tile> Path = null;
+
+                        //ThreadPool.QueueUserWorkItem(new WaitCallback(Eek));
+                        ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object state) {
+                            Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
+                            organism.Path = Path;
+                            if (Path.Count == 0)
+                            {
+                                organism.DestinationTile = potentialFood;
+
+                            }
+                            else
+                            {
+                                organism.DestinationTile = potentialFood;
+                                //organism.Path.RemoveAt(organism.Path.Count - 1);
+
+                            }
+                            organism.MovingOnPath = true;
+                        }),null);
                     }
                     else
                     {
-                        organism.DestinationTile = potentialFood;
-                        //organism.Path.RemoveAt(organism.Path.Count - 1);
+                        Roam(organism, grid);
 
                     }
-                    organism.MovingOnPath = true;
-                    
                 }
-                else
-                {
-                    Roam(organism, grid);
-                    
-                }
-                
 
                 //if destination full decide again.
             }

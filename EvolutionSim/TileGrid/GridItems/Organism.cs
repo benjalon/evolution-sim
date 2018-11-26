@@ -16,6 +16,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public float MovementSpeed = 0.0000002f;
         public const int MS_PER_DIRECTION_CHANGE = 600;
 
+        public Boolean Computing = false;
+        
         /// <summary>
         /// Dictates the type of food the organism will be eating
         /// </summary>
@@ -25,7 +27,6 @@ namespace EvolutionSim.TileGrid.GridItems
             Omnivore,
             Canivore
         }
-
 
         public const int matingCd = 10000;
 
