@@ -182,7 +182,7 @@ namespace EvolutionSim.StateManagement
                     //this line throws a null pointer in the senario where an organism moves over to anther organism's destination 
                     //but it has moved away because because it didn't detect the organism coming over to mate with it
                     //I'm not 100% sure how to fix this yet.
-                    if (organism.DestinationTile.Inhabitant != null)
+                    if (organism.DestinationTile.HasOrganismInhabitant())
                     {
                         ((Organism)(organism.DestinationTile.Inhabitant)).OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
 

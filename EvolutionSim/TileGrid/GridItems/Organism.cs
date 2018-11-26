@@ -132,6 +132,7 @@ namespace EvolutionSim.TileGrid.GridItems
                                   double speed,
                                   double strength)
         {
+            Species = "Bear";
             DetectionRadius = 3;
             DetectionDiameter = DetectionRadius * 2;
             Age = age;
@@ -139,7 +140,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-            Size = 1.0f;
+            Size = (this.random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
         }
     }
 }

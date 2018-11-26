@@ -24,8 +24,16 @@ namespace EvolutionSim.UI
         public RadioButton WaterButton { get; private set; }
 
         private Paragraph editAttributesText;
+        private Paragraph organismSpeciesText;
+        public TextInput OrganismSpeciesValue { get; private set; }
         private Paragraph organismHungerText;
         public TextInput OrganismHungerValue { get; private set; }
+        private Paragraph organismAgeText;
+        public TextInput OrganismAgeValue { get; private set; }
+        private Paragraph organismStrengthText;
+        public TextInput OrganismStrengthValue { get; private set; }
+        private Paragraph organismSpeedText;
+        public TextInput OrganismSpeedValue { get; private set; }
 
         public Overlay()
         {
@@ -64,12 +72,32 @@ namespace EvolutionSim.UI
 
             this.editAttributesText = new Paragraph("Edit Attributes");
 
+            this.organismSpeciesText = new Paragraph("Species:", Anchor.AutoInline, new Vector2(110, 40));
+            this.OrganismSpeciesValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+
             this.organismHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(110, 40));
             this.OrganismHungerValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
 
+            this.organismAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(110, 40));
+            this.OrganismAgeValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            this.organismStrengthText = new Paragraph("Strength:", Anchor.AutoInline, new Vector2(110, 40));
+            this.OrganismStrengthValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            this.organismSpeedText = new Paragraph("Speed:", Anchor.AutoInline, new Vector2(110, 40));
+            this.OrganismSpeedValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+
             panel.AddChild(this.editAttributesText);
+            panel.AddChild(this.organismSpeciesText);
+            panel.AddChild(this.OrganismSpeciesValue);
             panel.AddChild(this.organismHungerText);
             panel.AddChild(this.OrganismHungerValue);
+            panel.AddChild(this.organismAgeText);
+            panel.AddChild(this.OrganismAgeValue);
+            panel.AddChild(this.organismStrengthText);
+            panel.AddChild(this.OrganismStrengthValue);
+            panel.AddChild(this.organismSpeedText);
+            panel.AddChild(this.OrganismSpeedValue);
         }
 
         /// <summary>
@@ -84,15 +112,36 @@ namespace EvolutionSim.UI
             {
                 this.OrganismHungerValue.Value = "";
                 this.editAttributesText.Visible = false;
+                this.organismSpeciesText.Visible = false;
+                this.OrganismSpeciesValue.Visible = false;
                 this.organismHungerText.Visible = false;
                 this.OrganismHungerValue.Visible = false;
+                this.organismAgeText.Visible = false;
+                this.OrganismAgeValue.Visible = false;
+                this.organismStrengthText.Visible = false;
+                this.OrganismStrengthValue.Visible = false;
+                this.organismSpeedText.Visible = false;
+                this.OrganismSpeedValue.Visible = false;
             }
             else
             {
+                this.OrganismSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.attributes.Species;
                 this.OrganismHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
+                this.OrganismAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.attributes.Age.ToString();
+                this.OrganismStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Strength, 2).ToString();
+                this.OrganismSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Speed, 2).ToString();
+
                 this.editAttributesText.Visible = true;
+                this.organismSpeciesText.Visible = true;
+                this.OrganismSpeciesValue.Visible = true;
                 this.organismHungerText.Visible = true;
                 this.OrganismHungerValue.Visible = true;
+                this.organismAgeText.Visible = true;
+                this.OrganismAgeValue.Visible = true;
+                this.organismStrengthText.Visible = true;
+                this.OrganismStrengthValue.Visible = true;
+                this.organismSpeedText.Visible = true;
+                this.OrganismSpeedValue.Visible = true;
             }
         }
 

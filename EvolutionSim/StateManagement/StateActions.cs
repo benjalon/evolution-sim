@@ -102,7 +102,7 @@ namespace EvolutionSim.StateManagement
                         if(!grid.GetTileAt(_destinationTileX, _destinationTileY).HasInhabitant())
                         {
                             organism.DestinationTile = grid.GetTileAt(_destinationTileX, _destinationTileY);
-                            grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
+                            //grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
                             FoundFreeTile = true;
 
                         }
@@ -113,7 +113,7 @@ namespace EvolutionSim.StateManagement
                 {
                     if (organism.Rectangle.X == organism.DestinationTile.ScreenPositionX && organism.Rectangle.Y == organism.DestinationTile.ScreenPositionY)
                     {
-                        //grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
+                        grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
                         organism.DestinationTile = null;
                         //organism.MilliSecondsSinceLastMovement = 0;
 
