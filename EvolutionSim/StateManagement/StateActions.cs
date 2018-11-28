@@ -123,7 +123,7 @@ namespace EvolutionSim.StateManagement
                     else
                     {
                         //now search for food with the adjacent tiles
-                      
+
                         Lerper lerp = new Lerper();
 
 
@@ -209,50 +209,44 @@ namespace EvolutionSim.StateManagement
         {
             public static void SeekFood(Organism organism, Grid grid)
             {
-                if (!organism.Computing)
+                if (organism.Computing)
                 {
-                    // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
-                    Tile potentialFood = FoodInRange(organism, grid);
+                    return; // If the path to food has been computed, there's no need to do it again
+                }
 
-                    if (potentialFood != null)
+                // If we're not moving on a path, but we're in the state seeking food, then we haven't yet found any food.
+                Tile potentialFood = FoodInRange(organism, grid);
+
+                if (potentialFood != null)
+                {
+                    // Path to food
+                    organism.Computing = true;
+                    List<Tile> Path = null;
+
+                    //ThreadPool.QueueUserWorkItem(new WaitCallback(Eek));
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
                     {
-                        // Path to food
-                        organism.Computing = true;
-                        List<Tile> Path = null;
+                        Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
+                        organism.Path = Path;
+                        if (Path.Count == 0)
+                        {
+                            organism.DestinationTile = potentialFood;
 
-                        //ThreadPool.QueueUserWorkItem(new WaitCallback(Eek));
-                        ThreadPool.QueueUserWorkItem(new WaitCallback(delegate(object state) {
-                            Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
-                            organism.Path = Path;
-                            if (Path.Count == 0)
-                            {
-                                organism.DestinationTile = potentialFood;
+                        }
+                        else
+                        {
+                            organism.DestinationTile = potentialFood;
+                            //organism.Path.RemoveAt(organism.Path.Count - 1);
 
-                            }
-                            else
-                            {
-                                organism.DestinationTile = potentialFood;
-                                //organism.Path.RemoveAt(organism.Path.Count - 1);
-
-                            }
-                            organism.MovingOnPath = true;
-                        }),null);
-                    }
-                    else
-                    {
-                        Roam(organism, grid);
-
-                    }
-                    organism.MovingOnPath = true;
-
+                        }
+                        organism.MovingOnPath = true;
+                    }), null);
                 }
                 else
                 {
                     Roam(organism, grid);
-
                 }
 
-                //if destination full decide again.
             }
 
             /// <summary>
@@ -268,8 +262,8 @@ namespace EvolutionSim.StateManagement
                 PotentialStates organismState = organism.OrganismState;
                 var max_depth = organism.attributes.DetectionRadius;
                 var depth = 0;
-               
-                
+
+
                 //else // the organism is in roaming
                 //{
                 //    max_depth = 1;
