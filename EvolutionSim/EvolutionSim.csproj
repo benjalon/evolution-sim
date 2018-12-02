@@ -106,6 +106,7 @@
     <Compile Include="Utility\MatingArgs.cs" />
     <Compile Include="Utility\MouseManager.cs" />
     <Compile Include="Utility\Sprite.cs" />
+    <Compile Include="Utility\TimeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

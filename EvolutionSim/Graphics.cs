@@ -16,7 +16,7 @@ namespace EvolutionSim
     {
         public static int WINDOW_WIDTH = 1920;
         public static int WINDOW_HEIGHT = 1080;
-        public static TimeSpan ELAPSED_TIME; 
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -92,7 +92,6 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-            ELAPSED_TIME = gameTime.ElapsedGameTime;
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
@@ -101,7 +100,7 @@ namespace EvolutionSim
             }
 
             // Update UI elements
-            this.simulation.Update();
+            this.simulation.Update(gameTime);
             this.overlay.Update(gameTime, this.simulation.TileHighlight);
 
             base.Update(gameTime);
@@ -157,6 +156,10 @@ namespace EvolutionSim
             this.overlay.NoTerrainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Grass;
             this.overlay.MountainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Mountain;
             this.overlay.WaterButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Water;
+
+            this.overlay.NormalSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(1);
+            this.overlay.DoubleSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(2);
+            this.overlay.TripleSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(3);
 
             this.overlay.OrganismHungerValue.OnValueChange = (Entity btn) =>
             {

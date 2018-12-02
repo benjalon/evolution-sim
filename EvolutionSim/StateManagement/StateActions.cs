@@ -54,20 +54,19 @@ namespace EvolutionSim.StateManagement
 
         private static Random _random = new Random();
 
-        public static void Roam(Organism organism, Grid grid)
+        public static void Roam(Organism organism, Grid grid, TimeManager timeManager)
         {
             Boolean FoundFreeTile = false;
-            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
+            organism.msSinceLastMovement += TimeManager.DELTA_MS;
 
-
-            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+            if (timeManager.ActionCooldownExpired(organism.msSinceLastMovement))
             {   //decide destination
 
                 if (organism.DestinationTile is null)
                 {
                     int _destinationTileX = organism.GridIndex.X;
                     int _destinationTileY = organism.GridIndex.Y;
-                    organism.MilliSecondsSinceLastMovement = 0;
+                    organism.msSinceLastMovement = 0;
                     while (!FoundFreeTile)
                     {
                         Directions _num = (Directions)_random.Next(0, 4);
@@ -181,11 +180,11 @@ namespace EvolutionSim.StateManagement
 
 
 
-        public static void MoveAlongPath(Organism organism, Grid grid, List<Tile> Path)
+        public static void MoveAlongPath(Organism organism, Grid grid, TimeManager timeManager, List<Tile> Path)
         {
-            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
+            organism.msSinceLastMovement += TimeManager.DELTA_MS;
 
-            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+            if (timeManager.ActionCooldownExpired(organism.msSinceLastMovement))
             {
 
                 if (Path.Any() && !Path.First().HasInhabitant())
@@ -207,7 +206,7 @@ namespace EvolutionSim.StateManagement
 
         public static class SeekingFood
         {
-            public static void SeekFood(Organism organism, Grid grid)
+            public static void SeekFood(Organism organism, Grid grid, TimeManager timeManager)
             {
                 if (organism.Computing)
                 {
@@ -244,7 +243,7 @@ namespace EvolutionSim.StateManagement
                 }
                 else
                 {
-                    Roam(organism, grid);
+                    Roam(organism, grid, timeManager);
                 }
 
             }
@@ -379,14 +378,14 @@ namespace EvolutionSim.StateManagement
         public static class EatingFood
         {
 
-            public static void EatFood(Organism organism, Grid grid)
+            public static void EatFood(Organism organism, Grid grid, TimeManager timeManager)
             {
                 bool validFood;
                 //organism.MovingOnPath = false;
-                organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
-                if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+                organism.msSinceLastMovement += TimeManager.DELTA_MS;
+                if (timeManager.ActionCooldownExpired(organism.msSinceLastMovement))
                 {
-                    organism.MilliSecondsSinceLastMovement = 0;
+                    organism.msSinceLastMovement = 0;
 
                     Food food = organism.DestinationTile.Inhabitant as Food;
                     //this combines two checks
@@ -412,7 +411,7 @@ namespace EvolutionSim.StateManagement
         public static class SeekingMate
         {
 
-            public static void SeekMate(Organism organism, Grid grid)
+            public static void SeekMate(Organism organism, Grid grid, TimeManager timeManager)
             {
 
                 Tile potentialMate = MatesInRange(organism, grid);
@@ -443,7 +442,7 @@ namespace EvolutionSim.StateManagement
                 //this check wont work. Organisms have no way of entering the waiting for mate state
                 else if (!organism.attributes.WaitingForMate)
                 {
-                    Roam(organism, grid);
+                    Roam(organism, grid, timeManager);
                 }
 
             }

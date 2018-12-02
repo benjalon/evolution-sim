@@ -1,4 +1,5 @@
 ﻿using EvolutionSim.StateManagement;
+using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,23 +15,21 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public Tile DestinationTile;
         public float MovementSpeed = 0.0000002f;
-        public const int MS_PER_DIRECTION_CHANGE = 600;
 
         public Boolean Computing = false;
-        
+
         /// <summary>
         /// Dictates the type of food the organism will be eating
         /// </summary>
-        public enum FoodType {
+        public enum FoodType
+        {
 
             Herbivore,
             Omnivore,
             Canivore
         }
 
-        public const int matingCd = 10000;
-
-        public int MilliSecondsSinceLastMovement;
+        public int msSinceLastMovement;
 
         public int MilliSecondsSinceLastMate = 10001;
 
@@ -43,7 +42,7 @@ namespace EvolutionSim.TileGrid.GridItems
         private static Random random = new Random();
 
         public bool IsSelected { get; set; } = false;
-        
+
         // private OrganismState _state;
 
         public Organism(Texture2D[] textures) : base(textures[random.Next(0, textures.Length - 1)])
@@ -96,30 +95,6 @@ namespace EvolutionSim.TileGrid.GridItems
 
 
         }
-
-        /// <summary>
-        /// Check if orgaism is ready to mate
-        /// </summary>
-        /// <returns></returns>
-        public bool readyToMate()
-        {
-            MilliSecondsSinceLastMate += Graphics.ELAPSED_TIME.Milliseconds;
-
-            if (this.MilliSecondsSinceLastMate < matingCd)
-            {
-
-                return false;
-
-            }
-
-            else
-            {
-                MilliSecondsSinceLastMate = 0;
-                return true;
-
-            }
-        }
-        
     }
 
 
