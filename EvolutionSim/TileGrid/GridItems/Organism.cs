@@ -38,14 +38,12 @@ namespace EvolutionSim.TileGrid.GridItems
         public Boolean MovingOnPath { get; set; }
         public List<Tile> Path { get; set; }
         public FoodType OrganismPref { get; set; }
-
-        private static Random random = new Random();
-
+        
         public bool IsSelected { get; set; } = false;
 
         // private OrganismState _state;
 
-        public Organism(Texture2D[] textures) : base(textures[random.Next(0, textures.Length - 1)])
+        public Organism(Texture2D[] textures) : base(textures[Graphics.Random.Next(0, textures.Length - 1)])
         {
             this.attributes = new OrganismAttributes(0, 0.2, 500, 50);
             TOTAL_POPULATION++;
@@ -79,7 +77,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <summary>
         /// signal to waiting organism they can move
         /// </summary>
-        public void pingFinished()
+        public void PingFinished()
         {
             this.attributes.WaitingForMate = false;
 
@@ -88,12 +86,9 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <summary>
         /// increase hunger by 0.1
         /// </summary>
-        public void incrementHunger()
+        public void IncrementHunger()
         {
-
             this.attributes.Hunger += 0.1;
-
-
         }
     }
 
@@ -112,8 +107,6 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool JustMated { get; set; }
         public float Size { get; set; }
 
-        private Random random = new Random();
-
         public OrganismAttributes(int age,
                                   double hunger,
                                   double speed,
@@ -127,7 +120,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-            Size = (this.random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
+            Size = (Graphics.Random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
         }
     }
 }

@@ -100,7 +100,7 @@ namespace EvolutionSim.StateManagement
                         organism.OrganismState = this.state.MoveState(organismState, Action.NotHungry);
 
                     }
-                    else if (!StateActions.AdjacencyCheck(organism.GridIndex, organism.DestinationTile.GridIndex))
+                    else if (!this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
                     {
                         // Change NotHungry?
                         organism.OrganismState = this.state.MoveState(organismState, Action.NotHungry);
@@ -142,7 +142,7 @@ namespace EvolutionSim.StateManagement
 
                 //check if an organism should be moving to "Moving to Mate"
                 case PotentialStates.MovingToMate:
-                    if (organism.DestinationTile != null && StateActions.AdjacencyCheck(organism.GridIndex, organism.DestinationTile.GridIndex))
+                    if (organism.DestinationTile != null && this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
                     {
                         //the organism is adjacent to mate, so go ahead and make love
                         organism.OrganismState = this.state.MoveState(organismState, Action.Bang);
@@ -179,7 +179,7 @@ namespace EvolutionSim.StateManagement
 
                     break;
                 case PotentialStates.MovingToFood:
-                    if (organism.DestinationTile != null && StateActions.AdjacencyCheck(organism.GridIndex, organism.DestinationTile.GridIndex))
+                    if (organism.DestinationTile != null && this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
                     {
                         organism.OrganismState = this.state.MoveState(organismState, Action.FoodFound);
 
@@ -250,7 +250,7 @@ namespace EvolutionSim.StateManagement
 
                 case PotentialStates.Mating:
 
-                    ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).pingFinished();
+                    ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).PingFinished();
                     MatingOccurred?.Invoke(this, new MatingArgs(_passedOrganism));
 
                     break;

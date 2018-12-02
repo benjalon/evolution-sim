@@ -239,5 +239,11 @@ namespace EvolutionSim.TileGrid
             this.GetTileAt(food).RemoveInhabitant();
             this.Foods.Remove(food);
         }
+
+        public bool IsAdjacent(Point StartPosition, Point EndPosition)
+        {
+            var distance = Math.Floor(Math.Sqrt((StartPosition.X - EndPosition.X) * (StartPosition.X - EndPosition.X) + (StartPosition.Y - EndPosition.Y) * (StartPosition.Y - EndPosition.Y)));
+            return distance == 1;
+        }
     }
 }

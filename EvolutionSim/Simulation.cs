@@ -26,8 +26,6 @@ namespace EvolutionSim.Logic
 
         public TerrainTypes SelectedTerrainType { private get; set; } = TerrainTypes.Grass;
 
-        private Random random = new Random();
-
         public Simulation(Dictionary<string, Texture2D> textures, int screenWidth, int screenHeight)
         {
             this.textures = textures;
@@ -120,7 +118,7 @@ namespace EvolutionSim.Logic
 
         private void PositionAtRandom(GridItem item)
         {
-            if (!this.grid.AttemptToPositionAt(item, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY)))
+            if (!this.grid.AttemptToPositionAt(item, Graphics.Random.Next(0, Grid.TileCountX), Graphics.Random.Next(0, Grid.TileCountY)))
             {
                 PositionAtRandom(item); // Try again
             }

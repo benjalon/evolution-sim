@@ -16,6 +16,7 @@ namespace EvolutionSim
     {
         public static int WINDOW_WIDTH = 1920;
         public static int WINDOW_HEIGHT = 1080;
+        public static Random Random { get; private set; } = new Random();
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
