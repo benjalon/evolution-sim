@@ -1,4 +1,5 @@
 ﻿using EvolutionSim.StateManagement;
+using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,23 +15,21 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public Tile DestinationTile;
         public float MovementSpeed = 0.0000002f;
-        public const int MS_PER_DIRECTION_CHANGE = 600;
 
         public Boolean Computing = false;
-        
+
         /// <summary>
         /// Dictates the type of food the organism will be eating
         /// </summary>
-        public enum FoodType {
+        public enum FoodType
+        {
 
             Herbivore,
             Omnivore,
             Canivore
         }
 
-        public const int matingCd = 10000;
-
-        public int MilliSecondsSinceLastMovement;
+        public int msSinceLastMovement;
 
         public int MilliSecondsSinceLastMate = 10001;
 
@@ -39,14 +38,12 @@ namespace EvolutionSim.TileGrid.GridItems
         public Boolean MovingOnPath { get; set; }
         public List<Tile> Path { get; set; }
         public FoodType OrganismPref { get; set; }
-
-        private static Random random = new Random();
-
-        public bool IsSelected { get; set; } = false;
         
+        public bool IsSelected { get; set; } = false;
+
         // private OrganismState _state;
 
-        public Organism(Texture2D[] textures) : base(textures[random.Next(0, textures.Length - 1)])
+        public Organism(Texture2D[] textures) : base(textures[Graphics.Random.Next(0, textures.Length - 1)])
         {
             this.attributes = new OrganismAttributes(0, 0.2, 500, 50);
             TOTAL_POPULATION++;
@@ -80,7 +77,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <summary>
         /// signal to waiting organism they can move
         /// </summary>
-        public void pingFinished()
+        public void PingFinished()
         {
             this.attributes.WaitingForMate = false;
 
@@ -89,37 +86,10 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <summary>
         /// increase hunger by 0.1
         /// </summary>
-        public void incrementHunger()
+        public void IncrementHunger()
         {
-
             this.attributes.Hunger += 0.1;
-
-
         }
-
-        /// <summary>
-        /// Check if orgaism is ready to mate
-        /// </summary>
-        /// <returns></returns>
-        public bool readyToMate()
-        {
-            MilliSecondsSinceLastMate += Graphics.ELAPSED_TIME.Milliseconds;
-
-            if (this.MilliSecondsSinceLastMate < matingCd)
-            {
-
-                return false;
-
-            }
-
-            else
-            {
-                MilliSecondsSinceLastMate = 0;
-                return true;
-
-            }
-        }
-        
     }
 
 
@@ -137,8 +107,6 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool JustMated { get; set; }
         public float Size { get; set; }
 
-        private Random random = new Random();
-
         public OrganismAttributes(int age,
                                   double hunger,
                                   double speed,
@@ -152,7 +120,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-            Size = (this.random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
+            Size = (Graphics.Random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
         }
     }
 }

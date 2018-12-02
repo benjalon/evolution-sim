@@ -21,7 +21,7 @@ using System;
 
             public Lerper()
             {
-                Amount = 0.0000000005f;
+                Amount = TimeManager.MOVE_SPEED;
                 Acceleration = float.MaxValue;
                 MinVelocity = 1f;
                 MaxVelocity = float.MaxValue;

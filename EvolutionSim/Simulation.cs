@@ -20,11 +20,11 @@ namespace EvolutionSim.Logic
         private StateMachine fsm;
         private Grid grid;
         
-        public TileHighlight TileHighlight;
+        public TileHighlight TileHighlight { get; private set; }
+
+        public TimeManager TimeManager { get; private set; }
 
         public TerrainTypes SelectedTerrainType { private get; set; } = TerrainTypes.Grass;
-
-        private Random random = new Random();
 
         public Simulation(Dictionary<string, Texture2D> textures, int screenWidth, int screenHeight)
         {
@@ -32,15 +32,19 @@ namespace EvolutionSim.Logic
             this.bearTextures = new Texture2D[] { textures["bear_0"], textures["bear_1"], textures["bear_2"], textures["bear_3"], textures["bear_4"] };
 
             this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"], screenWidth - Overlay.PANEL_WIDTH, screenHeight);
+            this.TimeManager = new TimeManager();
 
-            this.fsm = new StateMachine(this.grid);
+            this.fsm = new StateMachine(this.grid, this.TimeManager);
             this.fsm.MatingOccurred += this.CreateOrganismHandler;
 
             this.TileHighlight = new TileHighlight(textures["tile"]);
+
+            this.TimeManager = new TimeManager();
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
+            this.TimeManager.Update(gameTime);
             this.TileHighlight.Update(this.grid, SelectedTerrainType);
 
             var organismsCount = this.grid.Organisms.Count;
@@ -114,7 +118,7 @@ namespace EvolutionSim.Logic
 
         private void PositionAtRandom(GridItem item)
         {
-            if (!this.grid.AttemptToPositionAt(item, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY)))
+            if (!this.grid.AttemptToPositionAt(item, Graphics.Random.Next(0, Grid.TileCountX), Graphics.Random.Next(0, Grid.TileCountY)))
             {
                 PositionAtRandom(item); // Try again
             }
