@@ -12,7 +12,7 @@ namespace EvolutionSim.TileGrid.GridItems
     {
         public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
         
-        protected int _health { get; private set; } = 80;
+        protected int _health { get; private set; } = 5;
         public event EventHandler DeathOccurred;
 
         /// <summary>

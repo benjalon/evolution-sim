@@ -33,8 +33,7 @@ namespace EvolutionSim.TileGrid.GridItems
         
         // State management
         public PotentialStates OrganismState { get; set; }
-        public int MsSinceLastAction { get; set; } = Graphics.Random.Next(0, TimeManager.DEFAULT_ACTION_COOLDOWN);
-        public int MsSinceLastMate { get; set; } = Graphics.Random.Next(0, TimeManager.DEFAULT_MATING_COOLDOWN);
+        public int MsSinceLastMate { get; set; } = 0;
 
         // Misc
         public bool IsSelected { get; set; } = false;
@@ -78,13 +77,10 @@ namespace EvolutionSim.TileGrid.GridItems
             this.attributes.WaitingForMate = false;
 
         }
-
-        /// <summary>
-        /// increase hunger by 0.1
-        /// </summary>
-        public void IncrementHunger()
+        
+        public void Eat()
         {
-            this.attributes.Hunger += 0.1;
+            this.attributes.Hunger += 0.04;
         }
     }
 

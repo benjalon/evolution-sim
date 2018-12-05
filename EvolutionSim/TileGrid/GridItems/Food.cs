@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using EvolutionSim.Utility;
 
 namespace EvolutionSim.TileGrid.GridItems
 {
@@ -8,15 +9,16 @@ namespace EvolutionSim.TileGrid.GridItems
     /// </summary>
     ///
 
-      
+
 
 
     public class Food : GridItem
     {
 
-        public bool HerbivoreFriendly { get; private set;}
+        public bool HerbivoreFriendly { get; private set; }
 
-        public Food(Texture2D texture) : base(texture) {
+        public Food(Texture2D texture) : base(texture)
+        {
 
             this.HerbivoreFriendly = true;
 
@@ -27,7 +29,8 @@ namespace EvolutionSim.TileGrid.GridItems
         /// </summary>
         /// <param name="texture"></param>
         /// <param name="omnivoreFriendly"></param>
-        public Food(Texture2D texture, bool herbivoreFriendly) : base(texture) {
+        public Food(Texture2D texture, bool herbivoreFriendly) : base(texture)
+        {
 
             this.HerbivoreFriendly = herbivoreFriendly;
         }
@@ -37,9 +40,9 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Eats the food, lowering its health over time
         /// </summary>
         /// <returns>Whether or not the food is fully eaten</returns>
-        public void Eat()
+        public void BeEaten()
         {
-            LowerHealth(999); // TODO make this not instant
+            LowerHealth(1);
         }
     }
 }

@@ -283,15 +283,11 @@ namespace EvolutionSim.StateManagement
 
                 //this check determines if the organism can eat the current food source
                 validFood = organism.OrganismPref == FoodType.Omnivore || organism.OrganismPref == FoodType.Herbivore;
-
-
-                if (food != null && validFood && food.HerbivoreFriendly) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
-
+                
+                if (food != null && validFood && food.HerbivoreFriendly && TimeManager.HAS_SIMULATION_TICKED) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
                 {
-                    food.Eat();
-
-                    //organism gets fuller after eating
-                    organism.IncrementHunger();
+                    food.BeEaten();
+                    organism.Eat(); //organism gets fuller after eating
                 }
 
                 organism.DestinationTile = null;
@@ -355,8 +351,7 @@ namespace EvolutionSim.StateManagement
             //this handles the logic for when an organism is waiting for a mate
             public static void WaitForMate(Organism organism, Grid grid)
             {
-                System.Console.WriteLine("Waiting!");
-
+                System.Console.WriteLine("Waiting!"); // TODO: Have a way of leaving this state after some time if a mate hasn't reached them
             }
         }
     }

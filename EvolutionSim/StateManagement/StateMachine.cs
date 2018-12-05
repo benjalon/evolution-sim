@@ -32,11 +32,14 @@ namespace EvolutionSim.StateManagement
         /// <param name="organism"></param>
         public void UpdateOrganismAttributes(Organism organism)
         {
+            if (!TimeManager.HAS_SIMULATION_TICKED)
+            {
+                return; // Wait a bit
+            }
 
-            //hardcode a value that doesn't go down too fast
             if (organism.attributes.Hunger > 0)
             {
-                organism.attributes.Hunger -= 0.0001;
+                organism.attributes.Hunger -= 0.001;
             }
             else
             {
@@ -195,7 +198,11 @@ namespace EvolutionSim.StateManagement
                 case PotentialStates.Mating:
 
                     ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).PingFinished();
-                    MatingOccurred?.Invoke(this, new MatingArgs(_passedOrganism));
+
+                    if (TimeManager.HAS_SIMULATION_TICKED)
+                    {
+                        MatingOccurred?.Invoke(this, new MatingArgs(_passedOrganism));
+                    }
 
                     break;
 

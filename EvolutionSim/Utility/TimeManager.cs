@@ -5,61 +5,60 @@ namespace EvolutionSim.Utility
 {
     public class TimeManager
     {
-        public static int DELTA_MS { get; private set; }
+        public static float MOVE_SPEED { get; } = 0.01f;
 
-        public static float MOVE_SPEED { get; set; } = 0.01f;
+        private int deltaMs;
 
-        public static int DEFAULT_MATING_COOLDOWN { get; } = 9000;
-        public static int DEFAULT_ACTION_COOLDOWN { get; } = 1200;
+        // A simulation tick is a global progression of events. Each time this happens food gets eaten slightly, mating progresses, organisms get slightly more hungry etc.
+        private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 600;
+        private static int SIMULATION_TICK_COOLDOWN = DEFAULT_SIMULATION_TICK_COOLDOWN;
+        private static int MS_SINCE_LAST_TICK = 0;
+        public static bool HAS_SIMULATION_TICKED { get => MS_SINCE_LAST_TICK > SIMULATION_TICK_COOLDOWN + PAUSED_ELAPSED; }
 
+        private const int DEFAULT_MATING_COOLDOWN = 12000;
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;
-        private int actionCooldown = DEFAULT_ACTION_COOLDOWN;
-        
+
         public bool Paused { get; set; } = false;
-        private int pausedElapsed = 0;
+        private static int PAUSED_ELAPSED = 0;
 
         public void Update(GameTime gameTime)
         {
-            DELTA_MS = gameTime.ElapsedGameTime.Milliseconds;
-            
+            this.deltaMs = gameTime.ElapsedGameTime.Milliseconds;
+
+            if (HAS_SIMULATION_TICKED)
+            {
+                MS_SINCE_LAST_TICK = 0;
+            }
+            else
+            {
+                MS_SINCE_LAST_TICK += this.deltaMs;
+            }
+         
             if (Paused)
             {
-                pausedElapsed += DELTA_MS;
+                PAUSED_ELAPSED += this.deltaMs;
             }
-            else if (pausedElapsed > 0)
+            else if (PAUSED_ELAPSED > 0)
             {
-                pausedElapsed -= DELTA_MS;
+                PAUSED_ELAPSED -= this.deltaMs;
             }
         }
 
         public void UpdateOrganismTimers(Organism organism)
         {
-            organism.MsSinceLastAction += TimeManager.DELTA_MS;
-            organism.MsSinceLastMate += TimeManager.DELTA_MS;
+            organism.MsSinceLastMate += this.deltaMs;
         }
 
         public void SetSpeed(int multiplier)
         {
             Paused = false;
             matingCooldown = (int)DEFAULT_MATING_COOLDOWN / multiplier;
-            actionCooldown = (int)DEFAULT_ACTION_COOLDOWN / multiplier;
-        }
-
-        public bool HasActionCooldownExpired(Organism organism)
-        {
-            var cooldownExpired = organism.MsSinceLastAction > actionCooldown + pausedElapsed;
-
-            if (cooldownExpired)
-            {
-                organism.MsSinceLastAction = 0;
-            }
-
-            return cooldownExpired;
+            SIMULATION_TICK_COOLDOWN = (int)DEFAULT_SIMULATION_TICK_COOLDOWN / multiplier;
         }
 
         public bool HasMatingCooldownExpired(Organism organism)
         {
-            var cooldownExpired = organism.MsSinceLastMate > actionCooldown + pausedElapsed;
+            var cooldownExpired = organism.MsSinceLastMate > matingCooldown + PAUSED_ELAPSED;
 
             if (cooldownExpired)
             {
