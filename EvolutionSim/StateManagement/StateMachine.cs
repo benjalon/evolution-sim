@@ -64,7 +64,7 @@ namespace EvolutionSim.StateManagement
 
                 case PotentialStates.Roaming:
 
-                    organism.MilliSecondsSinceLastMate += TimeManager.DELTA_MS;
+                    organism.MsSinceLastMate += TimeManager.DELTA_MS;
 
                     // the organisms hunger is low then go and seek food.
                     if (organism.attributes.Hunger < 0.8)
@@ -77,9 +77,9 @@ namespace EvolutionSim.StateManagement
                     }
 
                     
-                    else if (organism.attributes.Hunger >= 0.8 && this.timeManager.MatingCooldownExpired(organism.MilliSecondsSinceLastMate))
+                    else if (organism.attributes.Hunger >= 0.8 && this.timeManager.MatingCooldownExpired(organism.MsSinceLastMate))
                     {
-                        organism.MilliSecondsSinceLastMate = 0;
+                        organism.MsSinceLastMate = 0;
 
                         //sometimes an organism will 
                         organism.MovingOnPath = false;

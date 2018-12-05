@@ -43,8 +43,8 @@ namespace EvolutionSim.StateManagement
         public static void Roam(Organism organism, Grid grid, TimeManager timeManager)
         {
             // Wait for the action cooldown to expire
-            organism.msSinceLastMovement += TimeManager.DELTA_MS;
-            if (!timeManager.ActionCooldownExpired(organism.msSinceLastMovement))
+            organism.MsSinceLastMovement += TimeManager.DELTA_MS;
+            if (!timeManager.ActionCooldownExpired(organism.MsSinceLastMovement))
             {
                 return; // Wait for more time to pass before acting again
             }
@@ -52,7 +52,7 @@ namespace EvolutionSim.StateManagement
             // If we don't have a set destination, pick a random tile to explore
             if (organism.DestinationTile is null)
             {
-                organism.msSinceLastMovement = 0;
+                organism.MsSinceLastMovement = 0;
                 organism.DestinationTile = PickRandomTileToExplore(organism, grid);
             }
             else
@@ -129,9 +129,9 @@ namespace EvolutionSim.StateManagement
 
         public static void MoveAlongPath(Organism organism, Grid grid, TimeManager timeManager, List<Tile> Path)
         {
-            organism.msSinceLastMovement += TimeManager.DELTA_MS;
+            organism.MsSinceLastMovement += TimeManager.DELTA_MS;
 
-            if (timeManager.ActionCooldownExpired(organism.msSinceLastMovement))
+            if (timeManager.ActionCooldownExpired(organism.MsSinceLastMovement))
             {
 
                 if (Path.Any() && !Path.First().HasInhabitant())
@@ -294,12 +294,12 @@ namespace EvolutionSim.StateManagement
         {
             public static void EatFood(Organism organism, Grid grid, TimeManager timeManager)
             {
-                organism.msSinceLastMovement += TimeManager.DELTA_MS;
-                if (!timeManager.ActionCooldownExpired(organism.msSinceLastMovement))
+                organism.MsSinceLastMovement += TimeManager.DELTA_MS;
+                if (!timeManager.ActionCooldownExpired(organism.MsSinceLastMovement))
                 {
                     return;
                 }
-                organism.msSinceLastMovement = 0;
+                organism.MsSinceLastMovement = 0;
 
                 bool validFood;
                 Food food = organism.DestinationTile.Inhabitant as Food;

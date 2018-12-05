@@ -14,7 +14,6 @@ namespace EvolutionSim.TileGrid.GridItems
         public OrganismAttributes attributes;
 
         public Tile DestinationTile;
-        public float MovementSpeed = 0.0000002f;
 
         public Boolean Computing = false;
 
@@ -29,9 +28,8 @@ namespace EvolutionSim.TileGrid.GridItems
             Canivore
         }
 
-        public int msSinceLastMovement;
-
-        public int MilliSecondsSinceLastMate = 10001;
+        public int MsSinceLastMovement { get; set; }
+        public int MsSinceLastMate { get; set; } = 10001;
 
         //what state is the organism currently in
         public PotentialStates OrganismState { get; set; }
@@ -40,8 +38,6 @@ namespace EvolutionSim.TileGrid.GridItems
         public FoodType OrganismPref { get; set; }
         
         public bool IsSelected { get; set; } = false;
-
-        // private OrganismState _state;
 
         public Organism(Texture2D[] textures) : base(textures[Graphics.Random.Next(0, textures.Length - 1)])
         {

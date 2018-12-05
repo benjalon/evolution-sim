@@ -111,6 +111,11 @@ namespace EvolutionSim.TileGrid
         /// <param name="y">The y index of the tile to position at.</param>
         public void SetTerrainAt(TerrainTypes type, int x, int y)
         {
+            if (!InBounds(x, y))
+            {
+                return; // Out of bounds
+            }
+
             var tile = this.tiles[x][y];
 
             switch (type)
@@ -209,11 +214,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>True if it is, false if it is not.</returns>
         public static Boolean InBounds(int x, int y)
         {
-            if (y >= TileCountY || y < 0 || x >= TileCountX || x < 0)
-            {
-                return false;
-            }
-            return true;
+            return x > 0 && y > 0 && x < TileCountX && y < TileCountY;
         }
 
         /// <summary>

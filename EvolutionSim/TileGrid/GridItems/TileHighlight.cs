@@ -58,7 +58,13 @@ namespace EvolutionSim.TileGrid.GridItems
                     }
                     else
                     {
-                        grid.SetTerrainAt(selectedTerrain, this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
+                        for (var x = -1; x <= 1; x++)
+                        {
+                            for (var y = -1; y <= 1; y++)
+                            {
+                                grid.SetTerrainAt(selectedTerrain, this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y);
+                            }
+                        }
                     }
                 }
             }
