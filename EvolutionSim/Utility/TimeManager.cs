@@ -28,7 +28,7 @@ namespace EvolutionSim.Utility
 
             if (HAS_SIMULATION_TICKED)
             {
-                Console.WriteLine("tick");
+                //Console.WriteLine("tick");
                 MS_SINCE_LAST_TICK = 0;
             }
             else

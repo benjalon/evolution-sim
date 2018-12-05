@@ -52,7 +52,7 @@ namespace EvolutionSim.Logic
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;
-            for (var i = 0; i < organismsCount; i++)
+            for (var i = organismsCount - 1; i >= 0; i--)
             {
                 organism = this.grid.Organisms[i];
                 this.fsm.checkState(organism);
