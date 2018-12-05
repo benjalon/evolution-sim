@@ -32,7 +32,6 @@ namespace EvolutionSim.StateManagement
                 for (int j = 0; j < 5; j++)
                 {
                     toRet.Add(new Point(firstX + i, firstY + j));
-
                 }
 
             }
@@ -42,18 +41,16 @@ namespace EvolutionSim.StateManagement
 
         public static void Roam(Organism organism, Grid grid, TimeManager timeManager)
         {
-            // Wait for the action cooldown to expire
-            organism.MsSinceLastMovement += TimeManager.DELTA_MS;
-            if (!timeManager.ActionCooldownExpired(organism.MsSinceLastMovement))
-            {
-                return; // Wait for more time to pass before acting again
-            }
-
             // If we don't have a set destination, pick a random tile to explore
             if (organism.DestinationTile is null)
             {
-                organism.MsSinceLastMovement = 0;
-                organism.DestinationTile = PickRandomTileToExplore(organism, grid);
+                organism.MsSinceLastAction += TimeManager.DELTA_MS;
+                if (timeManager.ActionCooldownExpired(organism.MsSinceLastAction))
+                {
+                    organism.MsSinceLastAction = 0;
+
+                    organism.DestinationTile = PickRandomTileToExplore(organism, grid);
+                }
             }
             else
             {
@@ -129,17 +126,11 @@ namespace EvolutionSim.StateManagement
 
         public static void MoveAlongPath(Organism organism, Grid grid, TimeManager timeManager, List<Tile> Path)
         {
-            organism.MsSinceLastMovement += TimeManager.DELTA_MS;
-
-            if (timeManager.ActionCooldownExpired(organism.MsSinceLastMovement))
+            if (Path.Any() && !Path.First().HasInhabitant())
             {
-
-                if (Path.Any() && !Path.First().HasInhabitant())
+                if (MoveTowards(organism, Path.ElementAt(0), grid))
                 {
-                    if (MoveTowards(organism, Path.ElementAt(0), grid))
-                    {
-                        Path.RemoveAt(0);
-                    }
+                    Path.RemoveAt(0);
                 }
             }
 
@@ -294,12 +285,12 @@ namespace EvolutionSim.StateManagement
         {
             public static void EatFood(Organism organism, Grid grid, TimeManager timeManager)
             {
-                organism.MsSinceLastMovement += TimeManager.DELTA_MS;
-                if (!timeManager.ActionCooldownExpired(organism.MsSinceLastMovement))
+                organism.MsSinceLastAction += TimeManager.DELTA_MS;
+                if (!timeManager.ActionCooldownExpired(organism.MsSinceLastAction))
                 {
                     return;
                 }
-                organism.MsSinceLastMovement = 0;
+                organism.MsSinceLastAction = 0;
 
                 bool validFood;
                 Food food = organism.DestinationTile.Inhabitant as Food;

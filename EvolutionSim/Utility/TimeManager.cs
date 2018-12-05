@@ -5,13 +5,14 @@ namespace EvolutionSim.Utility
     public class TimeManager
     {
         public static int DELTA_MS { get; private set; }
-        public static float MOVE_SPEED { get; } = 0.01f;
+
+        public static float MOVE_SPEED { get; set; } = 0.01f;
 
         public static int DEFAULT_MATING_COOLDOWN { get; } = 9000;
-        public static int DEFAULT_ACTION_COOLDOWN { get; } = 600;
+        public static int DEFAULT_ACTION_COOLDOWN { get; } = 1200;
 
-        private int MATING_COOLDOWN = DEFAULT_MATING_COOLDOWN;
-        private int ACTION_COOLDOWN = DEFAULT_ACTION_COOLDOWN;
+        private int matingCooldown = DEFAULT_MATING_COOLDOWN;
+        private int actionCooldown = DEFAULT_ACTION_COOLDOWN;
         
         public void Update(GameTime gameTime)
         {
@@ -20,18 +21,18 @@ namespace EvolutionSim.Utility
 
         public void SetSpeed(int multiplier)
         {
-            MATING_COOLDOWN = (int)DEFAULT_MATING_COOLDOWN / multiplier;
-            ACTION_COOLDOWN = (int)DEFAULT_ACTION_COOLDOWN / multiplier;
+            matingCooldown = (int)DEFAULT_MATING_COOLDOWN / multiplier;
+            actionCooldown = (int)DEFAULT_ACTION_COOLDOWN / multiplier;
         }
 
-        public bool ActionCooldownExpired(int msSinceLastMovement)
+        public bool ActionCooldownExpired(int msSinceLastAction)
         {
-            return msSinceLastMovement > ACTION_COOLDOWN;
+            return msSinceLastAction > actionCooldown;
         }
 
-        public bool MatingCooldownExpired(int msSinceLastMovement)
+        public bool MatingCooldownExpired(int msSinceLastMate)
         {
-            return msSinceLastMovement > MATING_COOLDOWN;
+            return msSinceLastMate > matingCooldown;
         }
     }
 }

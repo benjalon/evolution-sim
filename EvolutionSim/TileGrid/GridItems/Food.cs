@@ -39,7 +39,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <returns>Whether or not the food is fully eaten</returns>
         public void Eat()
         {
-            LowerHealth(999); // In the future this should take time but for now it's instant
+            LowerHealth(999); // TODO make this not instant
         }
     }
 }

@@ -38,8 +38,6 @@ namespace EvolutionSim.Logic
             this.fsm.MatingOccurred += this.BirthHandler;
 
             this.TileHighlight = new TileHighlight(textures["tile"]);
-
-            this.TimeManager = new TimeManager();
         }
 
         public void Update(GameTime gameTime)
