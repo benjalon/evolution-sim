@@ -44,6 +44,7 @@ namespace EvolutionSim.StateManagement
             else
             {
                 organism.attributes.Hunger = 0;
+                organism.LowerHealth(1);
             }
 
 

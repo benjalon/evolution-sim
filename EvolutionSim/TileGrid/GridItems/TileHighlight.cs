@@ -15,7 +15,6 @@ namespace EvolutionSim.TileGrid.GridItems
     {
         public Tile HighlightedTile;
         public Organism SelectedOrganism { get; private set; }
-        public bool IsHighlighting { get; private set; } = false;
 
         private MouseManager mouseManager = new MouseManager();
 
@@ -23,7 +22,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (this.IsHighlighting)
+            if (this.mouseManager.IsWithinGrid)
             {
                 base.Draw(spriteBatch);
             }

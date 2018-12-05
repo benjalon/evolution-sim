@@ -10,12 +10,12 @@ namespace EvolutionSim.Utility
         private int deltaMs;
 
         // A simulation tick is a global progression of events. Each time this happens food gets eaten slightly, mating progresses, organisms get slightly more hungry etc.
-        private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 600;
+        private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 1000;
         private static int SIMULATION_TICK_COOLDOWN = DEFAULT_SIMULATION_TICK_COOLDOWN;
         private static int MS_SINCE_LAST_TICK = 0;
-        public static bool HAS_SIMULATION_TICKED { get => MS_SINCE_LAST_TICK > SIMULATION_TICK_COOLDOWN + PAUSED_ELAPSED; }
+        public static bool HAS_SIMULATION_TICKED { get =>MS_SINCE_LAST_TICK > SIMULATION_TICK_COOLDOWN + PAUSED_ELAPSED; }
 
-        private const int DEFAULT_MATING_COOLDOWN = 12000;
+        private const int DEFAULT_MATING_COOLDOWN = 10000;
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;
 
         public bool Paused { get; set; } = false;

@@ -44,6 +44,11 @@ namespace EvolutionSim.Logic
         {
             this.TimeManager.Update(gameTime);
             this.TileHighlight.Update(this, this.grid, SelectedRadioItem);
+            
+            if (this.TimeManager.Paused)
+            {
+                return;
+            }
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;

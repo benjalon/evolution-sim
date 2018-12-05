@@ -43,11 +43,7 @@ namespace EvolutionSim.Pathfinding
                 //    b) pop current off the open list
                 current = open[0];
                 open.Remove(current);
-                //if (current.Current.HasInhabitant())
-                //{
-                //    continue; TODO this makes food search much faster but breaks mating, maybe split into two methods
-                //}
-
+                
                 //    c) generate currents's 8 successors and set their 
                 //       parents to current
                 expanded = NodeExpander.expand(grid, current.Current, current.Goal, current);
