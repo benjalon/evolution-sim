@@ -37,9 +37,16 @@ namespace EvolutionSim.StateManagement
                 return; // Wait a bit
             }
 
-            if (organism.attributes.Hunger > 0)
+            organism.attributes.Age += 1;
+            
+            if (organism.attributes.Age > 1000)
+            {
+                organism.LowerHealth(999);
+            }
+            else if (organism.attributes.Hunger > 0)
             {
                 organism.attributes.Hunger -= 0.001;
+                organism.IncreaseHealth(1);
             }
             else
             {

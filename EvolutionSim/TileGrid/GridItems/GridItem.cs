@@ -11,8 +11,9 @@ namespace EvolutionSim.TileGrid.GridItems
     public abstract class GridItem : Sprite
     {
         public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
-        
-        protected int _health { get; private set; } = 5;
+
+        private const int DEFAULT_HEALTH = 5;
+        protected int _health { get; private set; } = DEFAULT_HEALTH;
         public event EventHandler DeathOccurred;
 
         /// <summary>
@@ -41,6 +42,19 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             this.GridIndex.X = tile.GridIndex.X;
             this.GridIndex.Y = tile.GridIndex.Y;
+        }
+
+        /// <summary>
+        /// Increase health by the given amount, up to the default maximum
+        /// </summary>
+        /// <param name="value">The value to lower by</param>
+        public void IncreaseHealth(int value)
+        {
+            _health += value;
+            if (_health >= DEFAULT_HEALTH)
+            {
+                _health = DEFAULT_HEALTH;
+            }
         }
 
         /// <summary>

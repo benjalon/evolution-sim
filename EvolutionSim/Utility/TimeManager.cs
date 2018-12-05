@@ -1,5 +1,6 @@
 ﻿using EvolutionSim.TileGrid.GridItems;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace EvolutionSim.Utility
 {
@@ -27,6 +28,7 @@ namespace EvolutionSim.Utility
 
             if (HAS_SIMULATION_TICKED)
             {
+                Console.WriteLine("tick");
                 MS_SINCE_LAST_TICK = 0;
             }
             else

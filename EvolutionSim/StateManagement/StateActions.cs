@@ -351,7 +351,7 @@ namespace EvolutionSim.StateManagement
             //this handles the logic for when an organism is waiting for a mate
             public static void WaitForMate(Organism organism, Grid grid)
             {
-                System.Console.WriteLine("Waiting!"); // TODO: Have a way of leaving this state after some time if a mate hasn't reached them
+                //System.Console.WriteLine("Waiting!"); // TODO: Have a way of leaving this state after some time if a mate hasn't reached them
             }
         }
     }
