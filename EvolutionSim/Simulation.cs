@@ -24,7 +24,7 @@ namespace EvolutionSim.Logic
 
         public TimeManager TimeManager { get; private set; }
 
-        public TerrainTypes SelectedTerrainType { private get; set; } = TerrainTypes.Grass;
+        public RadioItems SelectedRadioItem { private get; set; } = RadioItems.Grass;
 
         public Simulation(Dictionary<string, Texture2D> textures, int screenWidth, int screenHeight)
         {
@@ -35,7 +35,7 @@ namespace EvolutionSim.Logic
             this.TimeManager = new TimeManager();
 
             this.fsm = new StateMachine(this.grid, this.TimeManager);
-            this.fsm.MatingOccurred += this.CreateOrganismHandler;
+            this.fsm.MatingOccurred += this.BirthHandler;
 
             this.TileHighlight = new TileHighlight(textures["tile"]);
 
@@ -45,7 +45,7 @@ namespace EvolutionSim.Logic
         public void Update(GameTime gameTime)
         {
             this.TimeManager.Update(gameTime);
-            this.TileHighlight.Update(this.grid, SelectedTerrainType);
+            this.TileHighlight.Update(this, this.grid, SelectedRadioItem);
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;
@@ -65,7 +65,7 @@ namespace EvolutionSim.Logic
             this.TileHighlight.Draw(spriteBatch);
         }
         
-        public void CreateOrganismHandler(object sender, EventArgs args)
+        public void BirthHandler(object sender, EventArgs args)
         {
             var mother = ((MatingArgs)args).Mother;
             var positioned = false;
@@ -100,7 +100,7 @@ namespace EvolutionSim.Logic
             }
         }
         
-        public void AddOrganism(int amount)
+        public void AddOrganisms(int amount)
         {
             for (var i = 0; i < amount; i++)
             {
@@ -108,12 +108,22 @@ namespace EvolutionSim.Logic
             }
         }
 
-        public void AddFood(int amount)
+        public void AddFoods(int amount)
         {
             for (var i = 0; i < amount; i++)
             {
                 PositionAtRandom(new Food(this.textures["food"]));
             }
+        }
+
+        public void AddOrganism(int x, int y)
+        {
+            this.grid.AttemptToPositionAt(new Organism(this.bearTextures), x, y);
+        }
+
+        public void AddFood(int x, int y)
+        {
+            this.grid.AttemptToPositionAt(new Food(this.textures["food"]), x, y);
         }
 
         private void PositionAtRandom(GridItem item)

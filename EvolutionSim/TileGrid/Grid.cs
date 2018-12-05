@@ -1,5 +1,6 @@
 ﻿using EvolutionSim.StateManagement;
 using EvolutionSim.TileGrid.GridItems;
+using EvolutionSim.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -109,7 +110,7 @@ namespace EvolutionSim.TileGrid
         /// <param name="type">The type of terrain to position.</param>
         /// <param name="x">The x index of the tile to position at.</param>
         /// <param name="y">The y index of the tile to position at.</param>
-        public void SetTerrainAt(TerrainTypes type, int x, int y)
+        public void SetTerrainAt(RadioItems type, int x, int y)
         {
             if (!InBounds(x, y))
             {
@@ -120,21 +121,21 @@ namespace EvolutionSim.TileGrid
 
             switch (type)
             {
-                case TerrainTypes.Grass:
+                case RadioItems.Grass:
                     if (this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Remove(tile.Terrain);
                     }
                     break;
-                case TerrainTypes.Mountain:
-                case TerrainTypes.Water:
+                case RadioItems.Mountain:
+                case RadioItems.Water:
                     if (!this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Add(tile.Terrain);
                     }
                     break;
                 default:
-                    break;
+                    return; // Type not valid, do not attempt to place
             }
 
             tile.SetTerrain(type);

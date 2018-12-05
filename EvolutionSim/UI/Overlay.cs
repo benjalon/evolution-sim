@@ -8,6 +8,15 @@ using System;
 
 namespace EvolutionSim.UI
 {
+    public enum RadioItems
+    {
+        Grass,
+        Mountain,
+        Water,
+        Organism,
+        Food
+    }
+
     /// <summary>
     /// The overlay which is displayed within the simulation itself.
     /// </summary>
@@ -19,9 +28,13 @@ namespace EvolutionSim.UI
         public Button OrganismCreateButton { get; private set; }
         public TextInput FoodCountInput { get; private set; }
         public Button FoodCreateButton { get; private set; }
-        public RadioButton NoTerrainButton { get; private set; }
-        public RadioButton MountainButton { get; private set; }
-        public RadioButton WaterButton { get; private set; }
+
+        public RadioButton NothingRadio { get; private set; }
+        public RadioButton MountainRadio { get; private set; }
+        public RadioButton WaterRadio { get; private set; }
+        public RadioButton OrganismRadio { get; private set; }
+        public RadioButton FoodRadio { get; private set; }
+
         public RadioButton NormalSpeedButton { get; private set; }
         public RadioButton DoubleSpeedButton { get; private set; }
         public RadioButton TripleSpeedButton { get; private set; }
@@ -46,7 +59,7 @@ namespace EvolutionSim.UI
             panel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(panel);
 
-            var addItemsText = new Paragraph("Add Items");
+            var addObjectsText = new Paragraph("Randomly Add Objects");
 
             OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
             OrganismCountInput.PlaceholderText = "10";
@@ -56,12 +69,14 @@ namespace EvolutionSim.UI
             FoodCountInput.PlaceholderText = "10";
             FoodCreateButton = new Button("Food", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
 
-            var terrainDrawText = new Paragraph("Draw Terrain");
+            var addAtCursorText = new Paragraph("Add Objects At Cursor");
 
-            NoTerrainButton = new RadioButton("None", Anchor.AutoCenter);
-            NoTerrainButton.Checked = true;
-            MountainButton = new RadioButton("Mountain", Anchor.AutoCenter);
-            WaterButton = new RadioButton("Water", Anchor.AutoCenter);
+            NothingRadio = new RadioButton("None", Anchor.AutoCenter);
+            NothingRadio.Checked = true;
+            MountainRadio = new RadioButton("Mountain", Anchor.AutoCenter);
+            WaterRadio = new RadioButton("Water", Anchor.AutoCenter);
+            OrganismRadio = new RadioButton("Organism", Anchor.AutoCenter);
+            FoodRadio = new RadioButton("Food", Anchor.AutoCenter);
 
             var simulationSpeedText = new Paragraph("Set Simulation Speed");
 
@@ -70,16 +85,18 @@ namespace EvolutionSim.UI
             DoubleSpeedButton = new RadioButton("2X", Anchor.AutoCenter);
             TripleSpeedButton = new RadioButton("3X", Anchor.AutoCenter);
 
-            panel.AddChild(addItemsText);
+            panel.AddChild(addObjectsText);
             panel.AddChild(OrganismCountInput);
             panel.AddChild(OrganismCreateButton);
             panel.AddChild(FoodCountInput);
             panel.AddChild(FoodCreateButton);
 
-            panel.AddChild(terrainDrawText);
-            panel.AddChild(NoTerrainButton);
-            panel.AddChild(MountainButton);
-            panel.AddChild(WaterButton);
+            panel.AddChild(addAtCursorText);
+            panel.AddChild(NothingRadio);
+            panel.AddChild(MountainRadio);
+            panel.AddChild(WaterRadio);
+            panel.AddChild(OrganismRadio);
+            panel.AddChild(FoodRadio);
 
             panel.AddChild(simulationSpeedText);
             panel.AddChild(NormalSpeedButton);

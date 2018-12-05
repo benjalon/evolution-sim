@@ -141,7 +141,7 @@ namespace EvolutionSim
                 int input;
                 if (int.TryParse(this.overlay.OrganismCountInput.Value, out input))
                 {
-                    this.simulation.AddOrganism(input);
+                    this.simulation.AddOrganisms(input);
                 }
             };
 
@@ -150,13 +150,15 @@ namespace EvolutionSim
                 int input;
                 if (int.TryParse(this.overlay.FoodCountInput.Value, out input))
                 {
-                    this.simulation.AddFood(input);
+                    this.simulation.AddFoods(input);
                 }
             };
 
-            this.overlay.NoTerrainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Grass;
-            this.overlay.MountainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Mountain;
-            this.overlay.WaterButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Water;
+            this.overlay.NothingRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Grass;
+            this.overlay.MountainRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Mountain;
+            this.overlay.WaterRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Water;
+            this.overlay.OrganismRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Organism;
+            this.overlay.FoodRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Food;
 
             this.overlay.NormalSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(1);
             this.overlay.DoubleSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(2);

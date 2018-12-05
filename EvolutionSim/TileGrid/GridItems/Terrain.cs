@@ -1,19 +1,13 @@
-﻿using EvolutionSim.Utility;
+﻿using EvolutionSim.UI;
+using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace EvolutionSim.TileGrid.GridItems
 {
-    public enum TerrainTypes
-    {
-        Grass,
-        Mountain,
-        Water
-    }
-
     public class Terrain : Sprite
     {
-        private TerrainTypes currentTerrain = TerrainTypes.Grass;
+        private RadioItems currentTerrain = RadioItems.Grass;
 
         private Texture2D[] textures;
 
@@ -37,7 +31,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Set the terrain of this tile to the given type.
         /// </summary>
         /// <param name="terrainType">The type of terrain to set.</param>
-        public void SetTerrain(TerrainTypes terrainType)
+        public void SetTerrain(RadioItems terrainType)
         {
             this.currentTerrain = terrainType;
 
