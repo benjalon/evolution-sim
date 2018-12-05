@@ -5,10 +5,10 @@ namespace EvolutionSim.Utility
     public class TimeManager
     {
         public static int DELTA_MS { get; private set; }
-        public static float MOVE_SPEED { get; private set; } = 0.01f;
-        
-        private const int DEFAULT_MATING_COOLDOWN = 9000;
-        private const int DEFAULT_ACTION_COOLDOWN = 600;
+        public static float MOVE_SPEED { get; } = 0.01f;
+
+        public static int DEFAULT_MATING_COOLDOWN { get; } = 9000;
+        public static int DEFAULT_ACTION_COOLDOWN { get; } = 600;
 
         private int MATING_COOLDOWN = DEFAULT_MATING_COOLDOWN;
         private int ACTION_COOLDOWN = DEFAULT_ACTION_COOLDOWN;

@@ -28,8 +28,8 @@ namespace EvolutionSim.TileGrid.GridItems
             Canivore
         }
 
-        public int MsSinceLastMovement { get; set; }
-        public int MsSinceLastMate { get; set; } = 10001;
+        public int MsSinceLastMovement { get; set; } = Graphics.Random.Next(0, TimeManager.DEFAULT_ACTION_COOLDOWN);
+        public int MsSinceLastMate { get; set; } = Graphics.Random.Next(0, TimeManager.DEFAULT_MATING_COOLDOWN);
 
         //what state is the organism currently in
         public PotentialStates OrganismState { get; set; }

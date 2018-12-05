@@ -62,11 +62,11 @@ namespace EvolutionSim.UI
             var addObjectsText = new Paragraph("Randomly Add Objects");
 
             OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
-            OrganismCountInput.PlaceholderText = "10";
+            OrganismCountInput.PlaceholderText = "0";
             OrganismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
 
             FoodCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
-            FoodCountInput.PlaceholderText = "10";
+            FoodCountInput.PlaceholderText = "0";
             FoodCreateButton = new Button("Food", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
 
             var addAtCursorText = new Paragraph("Add Objects At Cursor");
