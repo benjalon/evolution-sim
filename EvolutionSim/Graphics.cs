@@ -160,9 +160,9 @@ namespace EvolutionSim
             this.overlay.OrganismRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Organism;
             this.overlay.FoodRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Food;
 
-            this.overlay.NormalSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(1);
-            this.overlay.DoubleSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(2);
-            this.overlay.TripleSpeedButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(3);
+            this.overlay.NormalButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(1);
+            this.overlay.FastButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(3);
+            this.overlay.PauseButton.OnClick = (Entity btn) => this.simulation.TimeManager.Paused = true;
 
             this.overlay.OrganismHungerValue.OnValueChange = (Entity btn) =>
             {

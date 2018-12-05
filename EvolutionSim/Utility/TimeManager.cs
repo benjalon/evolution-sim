@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvolutionSim.TileGrid.GridItems;
+using Microsoft.Xna.Framework;
 
 namespace EvolutionSim.Utility
 {
@@ -14,25 +15,58 @@ namespace EvolutionSim.Utility
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;
         private int actionCooldown = DEFAULT_ACTION_COOLDOWN;
         
+        public bool Paused { get; set; } = false;
+        private int pausedElapsed = 0;
+
         public void Update(GameTime gameTime)
         {
             DELTA_MS = gameTime.ElapsedGameTime.Milliseconds;
+            
+            if (Paused)
+            {
+                pausedElapsed += DELTA_MS;
+            }
+            else if (pausedElapsed > 0)
+            {
+                pausedElapsed -= DELTA_MS;
+            }
+        }
+
+        public void UpdateOrganismTimers(Organism organism)
+        {
+            organism.MsSinceLastAction += TimeManager.DELTA_MS;
+            organism.MsSinceLastMate += TimeManager.DELTA_MS;
         }
 
         public void SetSpeed(int multiplier)
         {
+            Paused = false;
             matingCooldown = (int)DEFAULT_MATING_COOLDOWN / multiplier;
             actionCooldown = (int)DEFAULT_ACTION_COOLDOWN / multiplier;
         }
 
-        public bool ActionCooldownExpired(int msSinceLastAction)
+        public bool HasActionCooldownExpired(Organism organism)
         {
-            return msSinceLastAction > actionCooldown;
+            var cooldownExpired = organism.MsSinceLastAction > actionCooldown + pausedElapsed;
+
+            if (cooldownExpired)
+            {
+                organism.MsSinceLastAction = 0;
+            }
+
+            return cooldownExpired;
         }
 
-        public bool MatingCooldownExpired(int msSinceLastMate)
+        public bool HasMatingCooldownExpired(Organism organism)
         {
-            return msSinceLastMate > matingCooldown;
+            var cooldownExpired = organism.MsSinceLastMate > actionCooldown + pausedElapsed;
+
+            if (cooldownExpired)
+            {
+                organism.MsSinceLastMate = 0;
+            }
+
+            return cooldownExpired;
         }
     }
 }

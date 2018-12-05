@@ -39,18 +39,12 @@ namespace EvolutionSim.StateManagement
 
         }
 
-        public static void Roam(Organism organism, Grid grid, TimeManager timeManager)
+        public static void Roam(Organism organism, Grid grid)
         {
             // If we don't have a set destination, pick a random tile to explore
             if (organism.DestinationTile is null)
             {
-                organism.MsSinceLastAction += TimeManager.DELTA_MS;
-                if (timeManager.ActionCooldownExpired(organism.MsSinceLastAction))
-                {
-                    organism.MsSinceLastAction = 0;
-
-                    organism.DestinationTile = PickRandomTileToExplore(organism, grid);
-                }
+                organism.DestinationTile = PickRandomTileToExplore(organism, grid);
             }
             else
             {
@@ -124,7 +118,7 @@ namespace EvolutionSim.StateManagement
             return false;
         }
 
-        public static void MoveAlongPath(Organism organism, Grid grid, TimeManager timeManager, List<Tile> Path)
+        public static void MoveAlongPath(Organism organism, Grid grid, List<Tile> Path)
         {
             if (Path.Any() && !Path.First().HasInhabitant())
             {
@@ -133,16 +127,15 @@ namespace EvolutionSim.StateManagement
                     Path.RemoveAt(0);
                 }
             }
-
-            if (!Path.Any())
+            else if (!Path.Any())
             {
-                organism.MovingOnPath = false;
+                organism.DestinationTile = null;
             }
         }
 
         public static class SeekingFood
         {
-            public static void SeekFood(Organism organism, Grid grid, TimeManager timeManager)
+            public static void SeekFood(Organism organism, Grid grid)
             {
                 if (organism.Computing)
                 {
@@ -164,12 +157,11 @@ namespace EvolutionSim.StateManagement
                         Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
                         organism.Path = Path;
                         organism.DestinationTile = potentialFood;
-                        organism.MovingOnPath = true;
                     }), null);
                 }
                 else
                 {
-                    Roam(organism, grid, timeManager);
+                    Roam(organism, grid);
                 }
 
             }
@@ -283,21 +275,14 @@ namespace EvolutionSim.StateManagement
         /// </summary>
         public static class EatingFood
         {
-            public static void EatFood(Organism organism, Grid grid, TimeManager timeManager)
+            public static void EatFood(Organism organism, Grid grid)
             {
-                organism.MsSinceLastAction += TimeManager.DELTA_MS;
-                if (!timeManager.ActionCooldownExpired(organism.MsSinceLastAction))
-                {
-                    return;
-                }
-                organism.MsSinceLastAction = 0;
-
                 bool validFood;
                 Food food = organism.DestinationTile.Inhabitant as Food;
                 //this combines two checks
 
                 //this check determines if the organism can eat the current food source
-                validFood = organism.OrganismPref == Organism.FoodType.Omnivore || organism.OrganismPref == Organism.FoodType.Herbivore;
+                validFood = organism.OrganismPref == FoodType.Omnivore || organism.OrganismPref == FoodType.Herbivore;
 
 
                 if (food != null && validFood && food.HerbivoreFriendly) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
@@ -316,7 +301,7 @@ namespace EvolutionSim.StateManagement
         }
         public static class SeekingMate
         {
-            public static void SeekMate(Organism organism, Grid grid, TimeManager timeManager)
+            public static void SeekMate(Organism organism, Grid grid)
             {
                 Tile potentialMate = MatesInRange(organism, grid);
 
@@ -340,13 +325,11 @@ namespace EvolutionSim.StateManagement
                         organism.Path.RemoveAt(organism.Path.Count - 1);
                     }
 
-                    organism.MovingOnPath = true;
-
                 }
                 //this check wont work. Organisms have no way of entering the waiting for mate state
                 else if (!organism.attributes.WaitingForMate)
                 {
-                    Roam(organism, grid, timeManager);
+                    Roam(organism, grid);
                 }
 
             }

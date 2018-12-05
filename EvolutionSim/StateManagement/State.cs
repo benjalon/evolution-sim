@@ -93,8 +93,6 @@ namespace EvolutionSim.StateManagement
 
                 { new StateTransition (PotentialStates.Roaming, Action.HungryRoam), PotentialStates.SeekFood},
 
-               // { new StateTransition (PotentialStates.SeekMate, Action.MateFound), PotentialStates.Mating},
-
                 // if the organism is seeking a mate but becomes too hungry then switch to seek food
                 { new StateTransition (PotentialStates.SeekMate, Action.HungryRoam), PotentialStates.SeekFood},
 
@@ -106,6 +104,8 @@ namespace EvolutionSim.StateManagement
 
                 { new StateTransition(PotentialStates.MovingToFood,Action.FoodFound),PotentialStates.Eating },
 
+                { new StateTransition(PotentialStates.MovingToFood,Action.NotHungry),PotentialStates.Roaming }, // Food has disappeared
+
                 {new StateTransition(PotentialStates.Eating,Action.NotHungry),PotentialStates.Roaming },
                 
                 { new StateTransition(PotentialStates.SeekMate, Action.MateFound), PotentialStates.MovingToMate},
@@ -116,7 +116,9 @@ namespace EvolutionSim.StateManagement
                 //we are finished with mating, so now go back to roaming!
                 {new StateTransition(PotentialStates.WaitingForMate, Action.Move), PotentialStates.Roaming},
 
-                {new StateTransition(PotentialStates.MovingToMate, Action.Bang), PotentialStates.Mating}
+                {new StateTransition(PotentialStates.MovingToMate, Action.Bang), PotentialStates.Mating},
+                
+                { new StateTransition(PotentialStates.MovingToMate,Action.FinishedMating),PotentialStates.Roaming }, // Mate has disappeared
 
             };
         }

@@ -8,35 +8,35 @@ using System.Text;
 
 namespace EvolutionSim.TileGrid.GridItems
 {
+    /// <summary>
+    /// Dictates the type of food the organism will be eating
+    /// </summary>
+    public enum FoodType
+    {
+        Herbivore,
+        Omnivore,
+        Canivore
+    }
+
     public class Organism : GridItem
     {
         public static int TOTAL_POPULATION = 0;
+        
+        // Attributes
         public OrganismAttributes attributes;
+        public FoodType OrganismPref { get; set; }
 
-        public Tile DestinationTile;
-
+        // Pathfinding 
         public Boolean Computing = false;
-
-        /// <summary>
-        /// Dictates the type of food the organism will be eating
-        /// </summary>
-        public enum FoodType
-        {
-
-            Herbivore,
-            Omnivore,
-            Canivore
-        }
-
+        public List<Tile> Path { get; set; }
+        public Tile DestinationTile; // The next tile along after the path
+        
+        // State management
+        public PotentialStates OrganismState { get; set; }
         public int MsSinceLastAction { get; set; } = Graphics.Random.Next(0, TimeManager.DEFAULT_ACTION_COOLDOWN);
         public int MsSinceLastMate { get; set; } = Graphics.Random.Next(0, TimeManager.DEFAULT_MATING_COOLDOWN);
 
-        //what state is the organism currently in
-        public PotentialStates OrganismState { get; set; }
-        public Boolean MovingOnPath { get; set; }
-        public List<Tile> Path { get; set; }
-        public FoodType OrganismPref { get; set; }
-        
+        // Misc
         public bool IsSelected { get; set; } = false;
 
         public Organism(Texture2D[] textures) : base(textures[Graphics.Random.Next(0, textures.Length - 1)])

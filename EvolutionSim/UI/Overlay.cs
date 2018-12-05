@@ -35,9 +35,9 @@ namespace EvolutionSim.UI
         public RadioButton OrganismRadio { get; private set; }
         public RadioButton FoodRadio { get; private set; }
 
-        public RadioButton NormalSpeedButton { get; private set; }
-        public RadioButton DoubleSpeedButton { get; private set; }
-        public RadioButton TripleSpeedButton { get; private set; }
+        public RadioButton PauseButton { get; private set; }
+        public RadioButton NormalButton { get; private set; }
+        public RadioButton FastButton { get; private set; }
 
         private Paragraph editAttributesText;
         private Paragraph organismSpeciesText;
@@ -80,10 +80,10 @@ namespace EvolutionSim.UI
 
             var simulationSpeedText = new Paragraph("Set Simulation Speed");
 
-            NormalSpeedButton = new RadioButton("1X", Anchor.AutoCenter);
-            NormalSpeedButton.Checked = true;
-            DoubleSpeedButton = new RadioButton("2X", Anchor.AutoCenter);
-            TripleSpeedButton = new RadioButton("3X", Anchor.AutoCenter);
+            NormalButton = new RadioButton("Normal", Anchor.AutoCenter);
+            NormalButton.Checked = true;
+            FastButton = new RadioButton("Fast", Anchor.AutoCenter);
+            PauseButton = new RadioButton("Pause", Anchor.AutoCenter);
 
             panel.AddChild(addObjectsText);
             panel.AddChild(OrganismCountInput);
@@ -99,9 +99,9 @@ namespace EvolutionSim.UI
             panel.AddChild(FoodRadio);
 
             panel.AddChild(simulationSpeedText);
-            panel.AddChild(NormalSpeedButton);
-            panel.AddChild(DoubleSpeedButton);
-            panel.AddChild(TripleSpeedButton);
+            panel.AddChild(NormalButton);
+            panel.AddChild(FastButton);
+            panel.AddChild(PauseButton);
 
             this.editAttributesText = new Paragraph("Edit Attributes");
 
