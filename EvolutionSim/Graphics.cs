@@ -14,9 +14,9 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
-        public static int WINDOW_WIDTH = 1920;
-        public static int WINDOW_HEIGHT = 1080;
-        public static Random Random { get; private set; } = new Random();
+        public static int WINDOW_WIDTH { get; } = 1920;
+        public static int WINDOW_HEIGHT { get; } = 1080;
+        public static Random RANDOM { get; private set; } = new Random();
 
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -160,16 +160,16 @@ namespace EvolutionSim
             this.overlay.OrganismRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Organism;
             this.overlay.FoodRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Food;
 
-            this.overlay.NormalButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(1);
-            this.overlay.FastButton.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(4);
-            this.overlay.PauseButton.OnClick = (Entity btn) => this.simulation.TimeManager.Paused = true;
+            this.overlay.NormalRadio.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(1);
+            this.overlay.FastRadio.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(4);
+            this.overlay.PauseRadio.OnClick = (Entity btn) => this.simulation.TimeManager.Paused = true;
 
             this.overlay.OrganismHungerValue.OnValueChange = (Entity btn) =>
             {
                 int input;
                 if (int.TryParse(((TextInput)btn).Value, out input))
                 {
-                    this.simulation.TileHighlight.SelectedOrganism.attributes.Hunger = input;
+                    this.simulation.TileHighlight.SelectedOrganism.Attributes.Hunger = input;
                 }
             };
         }

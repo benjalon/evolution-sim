@@ -92,7 +92,7 @@
     <Compile Include="TileGrid\Grid.cs" />
     <Compile Include="Pathfinding\Node.cs" />
     <Compile Include="Pathfinding\NodeExpander.cs" />
-    <Compile Include="Pathfinding\PathToTile.cs" />
+    <Compile Include="Pathfinding\PathFinding.cs" />
     <Compile Include="Simulation.cs" />
     <Compile Include="StateManagement\StateActions.cs" />
     <Compile Include="TileGrid\GridItems\Organism.cs" />

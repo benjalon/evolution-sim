@@ -11,7 +11,7 @@ namespace EvolutionSim.TileGrid.GridItems
     /// <summary>
     /// Dictates the type of food the organism will be eating
     /// </summary>
-    public enum FoodType
+    public enum DietTypes
     {
         Herbivore,
         Omnivore,
@@ -23,64 +23,47 @@ namespace EvolutionSim.TileGrid.GridItems
         public static int TOTAL_POPULATION = 0;
         
         // Attributes
-        public OrganismAttributes attributes;
-        public FoodType OrganismPref { get; set; }
+        public OrganismAttributes Attributes { get; }
+        public DietTypes OrganismPref { get; private set; }
 
         // Pathfinding 
-        public Boolean Computing = false;
+        public bool Computing { get; set; } = false;
         public List<Tile> Path { get; set; }
-        public Tile DestinationTile; // The next tile along after the path
+        public Tile DestinationTile { get; set; } // The next tile along after the path
         
         // State management
-        public PotentialStates OrganismState { get; set; }
+        public PotentialStates State { get; set; }
         public int MsSinceLastMate { get; set; } = 0;
 
         // Misc
         public bool IsSelected { get; set; } = false;
 
-        public Organism(Texture2D[] textures) : base(textures[Graphics.Random.Next(0, textures.Length - 1)])
+        public Organism(Texture2D[] textures) : base(textures[Graphics.RANDOM.Next(0, textures.Length - 1)])
         {
-            this.attributes = new OrganismAttributes(0, 0.2, 500, 50);
+            this.Attributes = new OrganismAttributes(0, 0.2, 500, 50);
             TOTAL_POPULATION++;
-            OrganismState = PotentialStates.Roaming;
+            State = PotentialStates.Roaming;
             Path = new List<Tile>();
 
             //by default set the organism to be a herbivore
-            this.OrganismPref = FoodType.Herbivore;
+            this.OrganismPref = DietTypes.Herbivore;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (IsSelected)
             {
-                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.Attributes.Size, SpriteEffects.None, 0.0f);
             }
             else
             {
-                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.attributes.Size, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.Attributes.Size, SpriteEffects.None, 0.0f);
             }
-        }
-
-        /// <summary>
-        /// Signal to a mate to stop
-        /// </summary>
-        public void PingMate()
-        {
-            this.attributes.WaitingForMate = true;
-        }
-
-        /// <summary>
-        /// signal to waiting organism they can move
-        /// </summary>
-        public void PingFinished()
-        {
-            this.attributes.WaitingForMate = false;
-
         }
         
         public void Eat()
         {
-            this.attributes.Hunger += 0.04;
+            this.Attributes.Hunger += 0.04;
         }
     }
 
@@ -112,7 +95,7 @@ namespace EvolutionSim.TileGrid.GridItems
             Speed = speed;
             Strength = strength;
             JustMated = false;
-            Size = (Graphics.Random.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
+            Size = (Graphics.RANDOM.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
         }
     }
 }

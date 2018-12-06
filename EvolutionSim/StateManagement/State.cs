@@ -43,14 +43,14 @@ namespace EvolutionSim.StateManagement
         //a nested and publically avaliable class to determine behaviour of organsim when changing states
         class StateTransition
         {
-            readonly PotentialStates CurrentState;
-            readonly Action action;
+            private readonly PotentialStates currentState;
+            private readonly Action action;
 
             //StateTransition object constructor 
-            public StateTransition(PotentialStates PassedCurrentState, Action passedAction)
+            public StateTransition(PotentialStates currentState, Action action)
             {
-                this.CurrentState = PassedCurrentState;
-                this.action = passedAction;
+                this.currentState = currentState;
+                this.action = action;
 
             }
 
@@ -59,21 +59,21 @@ namespace EvolutionSim.StateManagement
             public override int GetHashCode()
             {
 
-                return 17 + 31 * this.CurrentState.GetHashCode() + 31 * this.action.GetHashCode();
+                return 17 + 31 * this.currentState.GetHashCode() + 31 * this.action.GetHashCode();
 
             }
 
             public override bool Equals(Object obj)
             {
                 StateTransition other = obj as StateTransition;
-                return other != null && this.CurrentState == other.CurrentState && this.action == other.action;
+                return other != null && this.currentState == other.currentState && this.action == other.action;
 
             }
 
         }
 
         // represent a transition table as a dictonary
-        Dictionary<StateTransition, PotentialStates> transitions;
+        private Dictionary<StateTransition, PotentialStates> transitions;
         
         //Sets each state to roaming by default
         public State()
@@ -125,14 +125,14 @@ namespace EvolutionSim.StateManagement
 
 
         //return the next state deterministically
-        public PotentialStates GetNext(PotentialStates CurrentState, Action action)
+        public PotentialStates GetNext(PotentialStates currentState, Action action)
         {
-            StateTransition transition = new StateTransition(CurrentState, action);
+            StateTransition transition = new StateTransition(currentState, action);
             PotentialStates nextState;
 
             if (!this.transitions.TryGetValue(transition, out nextState))
             {
-                throw new Exception("The following is not a valid transition: " + CurrentState + "->" + action);
+                throw new Exception("The following is not a valid transition: " + currentState + "->" + action);
             }
 
             return nextState;
@@ -145,15 +145,6 @@ namespace EvolutionSim.StateManagement
             return determinedState;
 
         }
-
-
-        //used to test the transition logic
-        public void testTransition()
-        {
-
-
-        }
-
 
     }
 }

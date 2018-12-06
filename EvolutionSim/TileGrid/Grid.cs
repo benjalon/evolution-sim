@@ -13,14 +13,14 @@ namespace EvolutionSim.TileGrid
     /// </summary>
     public class Grid
     {
-        public static int TileCountX { get; private set; }
-        public static int TileCountY { get; private set; }
+        public static int TILE_COUNT_X { get; private set; }
+        public static int TILE_COUNT_Y { get; private set; }
 
-        private Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
-        
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
         public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
+
+        private Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
         /// <summary>
         /// Create a Grid with given attributes.
@@ -32,16 +32,16 @@ namespace EvolutionSim.TileGrid
         /// <param name="height">The height of the grid.</param>
         public Grid(Texture2D highlightTexture, Texture2D mountainTexture, Texture2D waterTexture, int width, int height)
         {
-            TileCountX = width / Tile.TILE_SIZE;
-            TileCountY = height / Tile.TILE_SIZE;
+            TILE_COUNT_X = width / Tile.TILE_SIZE;
+            TILE_COUNT_Y = height / Tile.TILE_SIZE;
 
-            this.tiles = new Tile[TileCountX][];
+            this.tiles = new Tile[TILE_COUNT_X][];
 
             // Create the jagged tile array by creating a new tile at each index
-            for (var x = 0; x < TileCountX; x++)
+            for (var x = 0; x < TILE_COUNT_X; x++)
             {
-                this.tiles[x] = new Tile[TileCountY];
-                for (var y = 0; y < TileCountY; y++)
+                this.tiles[x] = new Tile[TILE_COUNT_Y];
+                for (var y = 0; y < TILE_COUNT_Y; y++)
                 {
                     this.tiles[x][y] = new Tile(mountainTexture, waterTexture, new Point(x, y));
                 }
@@ -79,7 +79,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>True if successfully positioned, false if the space was occupied.</returns>
         public bool AttemptToPositionAt(GridItem item, int x, int y)
         {
-            if (!InBounds(x, y) || this.tiles[x][y].HasInhabitant())
+            if (!InBounds(x, y) || this.tiles[x][y].HasInhabitant)
             {
                 return false; // Space occupied
             }
@@ -151,7 +151,7 @@ namespace EvolutionSim.TileGrid
         {
             var parentTile = this.tiles[organism.GridIndex.X][organism.GridIndex.Y];
             var destinationTile = this.tiles[destinationX][destinationY];
-            if (!destinationTile.HasInhabitant())
+            if (!destinationTile.HasInhabitant)
             {
                 parentTile.MoveInhabitant(destinationTile);
             }
@@ -189,7 +189,7 @@ namespace EvolutionSim.TileGrid
             var inhabitant = this.tiles[x][y].Inhabitant;
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
-        
+
         /// <summary>
         /// Checks whether there is a mate at the given index.
         /// </summary>
@@ -204,7 +204,13 @@ namespace EvolutionSim.TileGrid
             {
                 return false; // The organism is checking itself, so it isn't a mate.
             }
-            return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).OrganismState == PotentialStates.SeekMate;
+            return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).State == PotentialStates.SeekMate;
+        }
+
+        public bool IsAdjacent(Point StartPosition, Point EndPosition)
+        {
+            var distance = Math.Floor(Math.Sqrt((StartPosition.X - EndPosition.X) * (StartPosition.X - EndPosition.X) + (StartPosition.Y - EndPosition.Y) * (StartPosition.Y - EndPosition.Y)));
+            return distance == 1;
         }
 
         /// <summary>
@@ -213,9 +219,9 @@ namespace EvolutionSim.TileGrid
         /// <param name="x">The x index to check.</param>
         /// <param name="y">The y index to check.</param>
         /// <returns>True if it is, false if it is not.</returns>
-        public static Boolean InBounds(int x, int y)
+        public bool InBounds(int x, int y)
         {
-            return x > 0 && y > 0 && x < TileCountX && y < TileCountY;
+            return x > 0 && y > 0 && x < TILE_COUNT_X && y < TILE_COUNT_Y;
         }
 
         /// <summary>
@@ -240,12 +246,6 @@ namespace EvolutionSim.TileGrid
             var food = (Food)sender;
             this.GetTileAt(food).RemoveInhabitant();
             this.Foods.Remove(food);
-        }
-
-        public bool IsAdjacent(Point StartPosition, Point EndPosition)
-        {
-            var distance = Math.Floor(Math.Sqrt((StartPosition.X - EndPosition.X) * (StartPosition.X - EndPosition.X) + (StartPosition.Y - EndPosition.Y) * (StartPosition.Y - EndPosition.Y)));
-            return distance == 1;
         }
     }
 }

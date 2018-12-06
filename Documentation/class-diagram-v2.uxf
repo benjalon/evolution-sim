@@ -1,0 +1,1540 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>4</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>28</x>
+      <y>36</y>
+      <w>136</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>Node
+--
++Current: Tile { get; }
++Goal: Tile { get; }
++Heuristic: double { get; }
++Difficult: double { get; }
++FOfS: double { get; }
++Previous: Node { get; }
+--
++Node(current: Tile, goal: Tile, previous: Node)
+-static CalculateDistance(goal: Tile, location: Tile): int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>132</x>
+      <y>132</y>
+      <w>208</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>static NodeExpander
+--
+--
++static Expand(grid: Grid, center: Tile, goal: Tile, previous: Node): List&lt;Node&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>172</y>
+      <w>232</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>static PathFinding
+--
+--
++static FindShortestPath(startPosition: Tile, endPosition: Tile, grid: Grid): List&lt;Tile&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>692</x>
+      <y>336</y>
+      <w>728</w>
+      <h>624</h>
+    </coordinates>
+    <panel_attributes>EvolutionSim.TileGrid
+--
+fg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>0</x>
+      <y>8</y>
+      <w>356</w>
+      <h>212</h>
+    </coordinates>
+    <panel_attributes>EvolutionSim.Pathfinding
+--
+fg=blue
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>56</x>
+      <y>528</y>
+      <w>60</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+PotentialStates
+--
+Roaming
+Eating
+SeekMate
+SeekFood
+Mating
+MovingToFood
+WaitingForMate
+MovingToMate</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>52</x>
+      <y>672</y>
+      <w>60</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Action
+--
+NotHungry
+HungryRoam
+HungryMate
+FoodDetected
+FoodFound
+MateFound
+FinishedMating
+Move
+Waiting
+Bang</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>192</x>
+      <y>644</y>
+      <w>160</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>StateTransition
+--
+-currentState: PotentialStates
+-action: Action
+--
++StateTransition(currentState: PotentialState, action: Action)
++GetHashCode(): int
++Equals(obj: Object): bool
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>588</y>
+      <w>32</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+(nested)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>136</x>
+      <y>544</y>
+      <w>232</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>State
+--
+-transitions: Dictionary&lt;StateTransition, PotentialStates&gt;
+--
++State()
++GetNext(currentState: PotentialStates, action: Action): PotentialStates
++MoveState(determinedState: PotentialStates, action: Action): PotentialStates</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>108</x>
+      <y>620</y>
+      <w>472</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;250.0;1160.0;250.0;1160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>84</x>
+      <y>608</y>
+      <w>116</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0;270.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>32</x>
+      <y>516</y>
+      <w>180</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>50.0;480.0;10.0;480.0;10.0;10.0;430.0;10.0;430.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>152</x>
+      <y>100</y>
+      <w>12</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>40</x>
+      <y>100</y>
+      <w>12</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>44</x>
+      <y>780</y>
+      <w>60</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+Directions
+--
+Up
+Left
+Down
+Right</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>136</x>
+      <y>788</y>
+      <w>220</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>static StateActions
+--
+--
++static GetPointsInRange(organism: Organism): List&lt;Point&gt;
++static Roam(organism: Organism, grid: Grid): void
+-static PickRandomTileToExplore(organism: Organism, grid: Grid): Tile
+-static MoveTowards(organism: Organism, destination: Tile, grid: Grid): bool
+-static PerformValidFoodCheck(x: int, y: int, firstX: int, firstY: int, grid: Grid): bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>432</x>
+      <y>800</y>
+      <w>184</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>static SeekingFood
+--
+--
++static SeekFood(organism: Organism, grid: Grid): void
+-static FoodInRange(organism: Organism, grid: Grid): Tile
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>892</y>
+      <w>184</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>static EatingFood
+--
+--
++static EatFood(organism: Organism, grid: Grid): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>252</x>
+      <y>892</y>
+      <w>184</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>static SeekingMate
+--
+--
++static SeekMate(organism: Organism, grid: Grid): void
++static WaitForMate(organism: Organism, grid: Grid) void
+-static MatesInRange(organism: Organism, grid: Grid): Tile</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>840</y>
+      <w>32</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+(Nested)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>292</x>
+      <y>840</y>
+      <w>32</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+(Nested)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>352</x>
+      <y>820</y>
+      <w>88</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+(Nested)</panel_attributes>
+    <additional_attributes>10.0;20.0;200.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>552</y>
+      <w>152</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>StateMachine
+--
+-state: State
+-grid: Grid
+-timeManager: TimeManager
++MatingOccurred: EventHandler
+--
++StateMachine(grid: Grid, timeManager: TimeManager)
++UpdateOrganismAttributes(organism: Organism): void
++CheckState(organism: Organism): void
++DetermineBehaviour(organism: Organism): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>112</x>
+      <y>528</y>
+      <w>480</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;1180.0;10.0;1180.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>328</x>
+      <y>620</y>
+      <w>296</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>720.0;10.0;720.0;330.0;10.0;330.0;10.0;420.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>0</x>
+      <y>468</y>
+      <w>668</w>
+      <h>492</h>
+    </coordinates>
+    <panel_attributes>EvolutionSim.StateManagement
+--
+fg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>880</x>
+      <y>612</y>
+      <w>132</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>Organism
+--
++static TOTAL_POPULATION: int
++Attributes: OrganismAttributes { get; } 
++DietTypes: OrganismPref { get; -set; }
++Computing: bool { get; set; }
++Path: List&lt;Tile&gt; { get; set; }
++DestinationTile: Tile { get; set; }
++PotentialStates: State { get; set; }
++MsSinceLastMate: int { get; set; }
++IsSelected: bool { get; set; }
+--
++Organism(textures: Texture2D[])
++Draw(SpriteBatch spriteBatch): void
++Eat(): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>1172</x>
+      <y>8</y>
+      <w>248</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>EvolutionSim.UI
+--
+fg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>984</x>
+      <y>152</y>
+      <w>136</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>Sprite
+--
+#texture: Texture2D
+#rectangle: Rectangle
++Rectangle: Rectangle { get; } 
+--
++Sprite(texture: Texture2D)
++Sprite(texture: Texture2D, rectangle: Rectangle)
++SetScreenPosition(x: int, y: int): void
++Draw(spriteBatch: SpriteBatch): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>956</x>
+      <y>848</y>
+      <w>204</w>
+      <h>92</h>
+    </coordinates>
+    <panel_attributes>OrganismAttributes
+--
++Species: string { get; set; }
++Age: int { get; set; }
++Hunger: double { get; set; }
++Speed: double { get; set; }
++Strength: double { get; set; }
++DetectionRadius: int { get; set; }
++DetectionDiameter: int { get; set; }
++WaitingForMate: bool { get; set; }
++MateFound: bool { get; set; }
++JustMated: bool { get; set; }
++Size: float { get; set; }
+--
++OrganismAttributes(age: int, hunger: double, speed: double, strength: double)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>896</x>
+      <y>516</y>
+      <w>136</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>GridItem
+--
++GridIndex: Point
++DeathOccurred: EventHandler
+#Health: int { get; -set; }
+-DEFAULT_HEALTH: int
+--
++GridItem(texture: Texture2D)
++SetInitialScreenPosition(x: int, y: int, width: int, height: int): void
++SetGridIndex(tile: Tile): void
++IncreaseHealth(value: int): void
++DecreaseHealth(value: int): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1012</x>
+      <y>212</y>
+      <w>12</w>
+      <h>312</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;760.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>692</y>
+      <w>56</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+DietTypes
+--
+Herbivore
+Omnivore
+Carnivore</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>936</x>
+      <y>588</y>
+      <w>12</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1300</x>
+      <y>244</y>
+      <w>84</w>
+      <h>624</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;10.0;190.0;1540.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1144</x>
+      <y>652</y>
+      <w>204</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>Tile
+--
++TILE_SIZE: int
++Terrain: Terrain { get; -set; }
++GridIndex: Point { get; -set; }
++ScreenPositionX: int { get; }
++ScreenPositionY: int { get; }
++MovementDifficulty: int { get; }
++Inhabitant: GridItem { get; private set; }
++HasInhabitant: bool { get; }
++HasOrganismInhabitant: bool { get; }
++HasFoodInhabitant: bool { get; }
+--
++Tile(mountainTexture: Texture2D, waterTexture: Texture2D, gridIndex: Point)
++AddInhabitant(gridItem: GridItem): void
++RemoveInhabitant(gridItem: GridItem): void
++MoveInhabitant(destination: Tile): void
++SetTerrain(RadioItems: TerrainType): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>752</y>
+      <w>32</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+(Nested)</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>740</y>
+      <w>688</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0;1700.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>752</y>
+      <w>376</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;40.0;920.0;40.0;920.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>136</x>
+      <y>752</y>
+      <w>820</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;450.0;10.0;500.0;2030.0;500.0;2030.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>752</y>
+      <w>492</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;420.0;1210.0;420.0;1210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>624</x>
+      <y>620</y>
+      <w>340</w>
+      <h>288</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;700.0;830.0;700.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1064</x>
+      <y>504</y>
+      <w>116</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>Terrain
+--
++MovementDifficulty: int { get; -set; }
+-currentTerrain: RadioItems
+-textures: Texture2D[]
+-difficultyModifier: int
+--
++Terrain(textures: Texture2D[], rectangle: Rectangle)
++Draw(spriteBatch: SpriteBatch)
++SetTerrain(RadioItems: terrainType): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1068</x>
+      <y>212</y>
+      <w>12</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;730.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1156</x>
+      <y>564</y>
+      <w>12</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;220.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>804</x>
+      <y>648</y>
+      <w>84</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>190.0;10.0;10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>364</x>
+      <y>564</y>
+      <w>144</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>340.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>112</x>
+      <y>572</y>
+      <w>32</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>108</x>
+      <y>680</y>
+      <w>92</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>210.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>816</y>
+      <w>44</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>112</x>
+      <y>600</y>
+      <w>776</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>1920.0;200.0;950.0;200.0;950.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1020</x>
+      <y>588</y>
+      <w>132</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>310.0;240.0;10.0;240.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1248</x>
+      <y>224</y>
+      <w>56</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+RadioItems
+--
+Grass
+Mountain
+Water
+Organism
+Food</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1268</x>
+      <y>272</y>
+      <w>12</w>
+      <h>388</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;950.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1172</x>
+      <y>860</y>
+      <w>232</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>TileHighlight
+--
++HighlightedTile: Tile { get; -set; }
++SelectedOrganism: Organism { get; -set;}
+-mouseManager: MouseManager;
+--
++TileHighlight(texture: Texture2D)
++Draw(spriteBatch: SpriteBatch): void
++Update(simulation: Simulation, grid: Grid, RadioItems: selectedRadioItems): void
+-UpdateHighlightedTile(grid: Grid): void
+-UpdateOrganismSelection(): void
+-PlaceGridItem(simulation: Simulation, grid: Grid, RadioItems: selectedRadioItems): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1292</x>
+      <y>760</y>
+      <w>12</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;250.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1008</x>
+      <y>716</y>
+      <w>224</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>540.0;360.0;540.0;170.0;130.0;170.0;130.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>712</x>
+      <y>356</y>
+      <w>280</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Grid
+--
++static TILE_COUNT_X: int { get; -set; }
++static TILE_COUNT_Y: int { get; -set; }
++Organisms: List&lt;Organism&gt; { get; -set; }
++Foods: List&lt;Organism&gt; { get; -set; }
++Terrains: List&lt;Terrain&gt; { get; -set; }
+-tiles: Tile[][]
+--
++Grid(highlightTexture: Texture2D, mountainTexture: Texture2D, waterTexture: Texture2D, width: int, height: int)
++Draw(spriteBatch: SpriteBatch): void
++AttemptToPositionAt(item: GridItem, x: int, y: int): bool
++SetTerrainAt(type: RadioItems, x: int, y: int): void
++ReparentOrganism(organism: Organism, destinationX: int, destinationY: int): void
++GetTileAt(x: int, y: int): Tile
++GetTileAt(item: GridItem): Tile
++IsFoodAt(x: int, y: int): bool
++IsMateAt(organism: Organism, x: int, y: int): bool
++InBounds(x: int, y: int): bool
++IsAdjacent(startPosition: Point, endPosition: Point): bool
+-OrganismDeathHandler(sender: object, e: EventArgs): void
+-FoodEatenHandler(sender: object, e: EventArgs): void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>988</x>
+      <y>272</y>
+      <w>276</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;340.0;670.0;340.0;670.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>724</x>
+      <y>588</y>
+      <w>144</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Food
+--
++HerbivoreFriendly { get; -set; }
+--
++Food(texture: Texture2D)
++Food(texture: Texture2D, herbivoreFriendly: bool)
++BeEaten(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>812</x>
+      <y>544</y>
+      <w>92</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>210.0;10.0;10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>736</x>
+      <y>492</y>
+      <w>12</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>492</y>
+      <w>12</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;300.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>988</x>
+      <y>380</y>
+      <w>340</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;830.0;10.0;830.0;680.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>988</x>
+      <y>432</y>
+      <w>156</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;370.0;10.0;370.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>632</x>
+      <y>0</y>
+      <w>520</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>EvolutionSim.Utility
+--
+fg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1180</x>
+      <y>24</y>
+      <w>172</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>Overlay
+--
++static PANEL_WIDTH: int { get; }
++OrganismCountInput: TextInput { get; -set; }
++OrganismCreateButton: Button { get; -set; }
++FoodCountInput: TextInput { get; -set; }
++FoodCreateButton: Button { get; -set; }
++NothingRadio: RadioButton { get; -set; }
++MountainRadio: RadioButton { get; -set; }
++WaterRadio: RadioButton { get; -set; }
++OrganismRadio: RadioButton { get; -set; }
++FoodRadio: RadioButton { get; -set; }
++PauseButton: RadioButton { get; -set; }
++NormalRadio: RadioButton { get; -set; }
++FastRadio: RadioButton { get; -set; }
++OrganismSpeciesValue: TextInput { get; -set; }
++OrganismHungerValue: TextInput { get; -set; }
++OrganismAgeValue: TextInput { get; -set; }
++OrganismStrengthValue: TextInput { get; -set; }
++OrganismSpeedValue: TextInput { get; -set; }
+-editAttributesText: Paragraph
+-organismSpeciesText: Paragraph
+-organismHungerText: Paragraph
+-organismAgeText: Paragraph
+-organismStrengthText: Paragraph
+-organismSpeedText: Paragraph
+--
++Overlay()
++Update(gameTime: GameTime, tileHighlight: TileHighlight): void
++Draw(spriteBatch: SpriteBatch): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1348</x>
+      <y>160</y>
+      <w>60</w>
+      <h>708</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0;130.0;1750.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>812</x>
+      <y>244</y>
+      <w>180</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Background
+--
+--
++Background(texture: Texture2D, screenWidth: int, screenHeight: int)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>948</x>
+      <y>192</y>
+      <w>44</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>44</x>
+      <y>196</y>
+      <w>360</w>
+      <h>624</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;650.0;880.0;650.0;880.0;1540.0;780.0;1540.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>352</x>
+      <y>224</y>
+      <w>328</w>
+      <h>576</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;1420.0;320.0;1420.0;320.0;600.0;800.0;600.0;800.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>648</x>
+      <y>148</y>
+      <w>136</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Lerper
+--
++OnTargetReached: OnTargetDelegate { get; set; }
++Amount: float { get; set; }
++MinVelocity: float { get; set; }
++MaxVelocity: float { get; set; }
++Acceleration: float { get; set; }
+-previous_velocity: float
+--
++Lerper()
++Lerp(position: float, target: float): float
++delegate OnTargetDelegate(): void
+-LerpVelocity(position: float, target: float): float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>688</x>
+      <y>68</y>
+      <w>104</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>MatingArgs
+--
++Mother: Organism { get; -set; }
+--
++MatingArgs(organism: Organism)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>604</x>
+      <y>80</y>
+      <w>92</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;1180.0;10.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1032</x>
+      <y>48</y>
+      <w>92</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>MouseManager
+--
++ScreenPositionX: int { get; }
++ScreenPositionY: int { get; }
++TileIndexX: int { get; }
++TileIndexY: int { get; }
++IsClicked: bool { get; }
++IsWithinGrid: bool { get; }
++IsClickedWithinGrid: bool { get; }
+-mouseState: MouseState
+-mouseStateOld: MouseState
+--
++update(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>92</y>
+      <w>252</w>
+      <h>776</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>610.0;1920.0;610.0;580.0;100.0;580.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>820</x>
+      <y>40</y>
+      <w>148</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>TimeManager
+--
++static MOVE_SPEED: float { get; }
++static HAS_SIMULATION_TICKED: bool { get; }
++Paused: bool { get; set; }
+-deltaMS: int
+-static SIMULATION_TICK_COOLDOWN: int
+-static MS_SINCE_LAST_TICK: int
+-static PAUSED_ELAPSED: int
+-DEFAULT_SIMULATION_TICK_COOLDOWN: int
+-DEFAULT_MATING_COOLDOWN: int
+-matingCooldown: int
+--
++Update(gameTime: GameTime): void
++SetSpeed(multiplier: int): void
++HasMatingCooldownExpired(organism: Organism): bool
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>136</y>
+      <w>68</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>150.0;10.0;150.0;90.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>592</x>
+      <y>56</y>
+      <w>236</w>
+      <h>504</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;1240.0;10.0;10.0;570.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>204</x>
+      <y>260</y>
+      <w>112</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>Graphics
+--
++static WINDOW_WIDTH: int { get; }
++static WINDOW_HEIGHT: int { get; }
++static RANDOM: Random { get; -set; }
+-graphics: GraphicsDeviceManager
+-spriteBatch: SpriteBatch
+-background: Background
+-overlay: Overlay
+-simulation: Simulation
+-fps: double
+-fpsOld: double
+--
++Graphics()
+#Initialize(): void
+#LoadContent(): void
+#UnloadContent(): void
+#Update(gameTime: GameTime): void
+#Draw(gameTime: GameTime): void
+-CreateUIHandlers(): void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>1080</x>
+      <y>312</y>
+      <w>56</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>Geonbit.UI
+--
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1132</x>
+      <y>216</y>
+      <w>76</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>170.0;10.0;170.0;300.0;10.0;300.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>68</x>
+      <y>256</y>
+      <w>56</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>MonoGame
+--
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>272</y>
+      <w>92</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>312</y>
+      <w>104</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Program
+--
+--
++static Main(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>324</y>
+      <w>52</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>216</y>
+      <w>932</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;190.0;2310.0;190.0;2310.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>264</y>
+      <w>508</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;1250.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>64</x>
+      <y>348</y>
+      <w>64</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>Entry Point
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>296</y>
+      <w>136</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Simulation
+--
++TileHighlight: TileHighlight { get; -set; }
++TimeManager: TimeManager { get; -set; }
++SelectedRadioItem: RadioItems { -get set; }
+-textures: Dictionary&lt;string, Texture2D&gt;
+-bearTextures: Texture2D[]
+-fsm: StateMachine
+-grid: Grid
+--
++Simulation(textures: Dictionary&lt;string, Texture2D&gt;, screenWidth: int, screenHeight: int)
++Update(gameTime, GameTime): void
++Draw(spriteBatch, SpriteBatch): void
++BirthHandler(sender: object, args: EventArgs): void
++AddOrganisms(amount: int): void
++AddFoods(amount: int): void
++AddOrganism(x: int, y: int): void
++AddFood(x: int, y: int): void
+-PositionAtRandom(item: GridItem): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>304</y>
+      <w>904</w>
+      <h>564</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;2240.0;10.0;2240.0;1390.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>272</y>
+      <w>804</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;70.0;1990.0;70.0;1990.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>20</y>
+      <w>384</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;830.0;120.0;830.0;120.0;10.0;940.0;10.0;940.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>372</y>
+      <w>228</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+fg=black</panel_attributes>
+    <additional_attributes>10.0;10.0;550.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>432</y>
+      <w>432</w>
+      <h>364</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;890.0;10.0;690.0;380.0;690.0;380.0;10.0;1060.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>612</x>
+      <y>492</y>
+      <w>112</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;830.0;260.0;830.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>472</y>
+      <w>540</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;1150.0;10.0;1180.0;1260.0;1180.0;1260.0;10.0;1330.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>464</y>
+      <w>288</w>
+      <h>452</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;1110.0;610.0;1110.0;610.0;10.0;700.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>648</x>
+      <y>492</y>
+      <w>148</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;190.0;350.0;190.0;350.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>760</y>
+      <w>576</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;40.0;1420.0;40.0;1420.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>760</y>
+      <w>940</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;240.0;1290.0;240.0;1290.0;140.0;2330.0;140.0;2330.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>372</x>
+      <y>760</y>
+      <w>912</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;330.0;10.0;260.0;1220.0;260.0;1220.0;160.0;2260.0;160.0;2260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>928</x>
+      <y>492</y>
+      <w>12</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+</diagram>

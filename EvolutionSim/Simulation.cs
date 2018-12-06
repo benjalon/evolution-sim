@@ -55,8 +55,8 @@ namespace EvolutionSim.Logic
             for (var i = organismsCount - 1; i >= 0; i--)
             {
                 organism = this.grid.Organisms[i];
-                this.fsm.checkState(organism);
-                this.fsm.determineBehaviour(organism);
+                this.fsm.CheckState(organism);
+                this.fsm.DetermineBehaviour(organism);
                 this.fsm.UpdateOrganismAttributes(organism);
             }
         }
@@ -131,7 +131,7 @@ namespace EvolutionSim.Logic
 
         private void PositionAtRandom(GridItem item)
         {
-            if (!this.grid.AttemptToPositionAt(item, Graphics.Random.Next(0, Grid.TileCountX), Graphics.Random.Next(0, Grid.TileCountY)))
+            if (!this.grid.AttemptToPositionAt(item, Graphics.RANDOM.Next(0, Grid.TILE_COUNT_X), Graphics.RANDOM.Next(0, Grid.TILE_COUNT_Y)))
             {
                 PositionAtRandom(item); // Try again
             }

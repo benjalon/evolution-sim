@@ -42,7 +42,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <returns>Whether or not the food is fully eaten</returns>
         public void BeEaten()
         {
-            LowerHealth(1);
+            DecreaseHealth(1);
         }
     }
 }

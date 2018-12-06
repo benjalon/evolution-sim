@@ -46,7 +46,7 @@ namespace EvolutionSim.Pathfinding
                 
                 //    c) generate currents's 8 successors and set their 
                 //       parents to current
-                expanded = NodeExpander.expand(grid, current.Current, current.Goal, current);
+                expanded = NodeExpander.Expand(grid, current.Current, current.Goal, current);
                 //open.AddRange(expanded);
 
                 Node node;

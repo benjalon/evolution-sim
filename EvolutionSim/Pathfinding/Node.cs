@@ -35,12 +35,12 @@ namespace EvolutionSim.Pathfinding
         /// <summary>
         /// Provides diagonal distance between two Tiles. I.e. Max distance of y OR x coordinates. 
         /// </summary>
-        /// <param name="Location"></param>
-        /// <param name="Goal"></param>
+        /// <param name="goal"></param>
+        /// <param name="location"></param>
         /// <returns>The diagonal distance between two Tiles.</returns>
-        private static int CalculateDistance(Tile Goal, Tile Location)
+        private static int CalculateDistance(Tile goal, Tile location)
         {
-            return Math.Max(Math.Abs(Location.GridIndex.X - Goal.GridIndex.X), Math.Abs(Location.GridIndex.Y - Goal.GridIndex.Y));
+            return Math.Max(Math.Abs(location.GridIndex.X - goal.GridIndex.X), Math.Abs(location.GridIndex.Y - goal.GridIndex.Y));
         }
 
    

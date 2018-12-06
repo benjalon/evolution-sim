@@ -13,7 +13,7 @@ namespace EvolutionSim.TileGrid.GridItems
 {
     public class TileHighlight : Sprite
     {
-        public Tile HighlightedTile;
+        public Tile HighlightedTile { get; private set; }
         public Organism SelectedOrganism { get; private set; }
 
         private MouseManager mouseManager = new MouseManager();
@@ -44,13 +44,13 @@ namespace EvolutionSim.TileGrid.GridItems
 
                 if (this.mouseManager.IsClickedWithinGrid)
                 {
-                    if (this.HighlightedTile.HasOrganismInhabitant())
+                    if (this.HighlightedTile.HasOrganismInhabitant)
                     {
                         this.UpdateOrganismSelection();  // An organism was clicked, so select it
                     }
                     else
                     {
-                        this.DrawGridItem(simulation, grid, selectedRadioItem); // An organism was not clicked, so draw whatever is selected at the clicked tile (e.g. mountains or water)
+                        this.PlaceGridItem(simulation, grid, selectedRadioItem); // An organism was not clicked, so draw whatever is selected at the clicked tile (e.g. mountains or water)
                     }
                 }
             }
@@ -74,7 +74,7 @@ namespace EvolutionSim.TileGrid.GridItems
             this.SelectedOrganism.IsSelected = true;
         }
 
-        private void DrawGridItem(Simulation simulation, Grid grid, RadioItems selectedRadioItem)
+        private void PlaceGridItem(Simulation simulation, Grid grid, RadioItems selectedRadioItem)
         {
             switch (selectedRadioItem)
             {
@@ -99,8 +99,6 @@ namespace EvolutionSim.TileGrid.GridItems
                 default:
                     break;
             }
-
-           
         }
     }
 }

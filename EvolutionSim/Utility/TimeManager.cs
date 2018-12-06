@@ -14,7 +14,7 @@ namespace EvolutionSim.Utility
         private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 1000;
         private static int SIMULATION_TICK_COOLDOWN = DEFAULT_SIMULATION_TICK_COOLDOWN;
         private static int MS_SINCE_LAST_TICK = 0;
-        public static bool HAS_SIMULATION_TICKED { get =>MS_SINCE_LAST_TICK > SIMULATION_TICK_COOLDOWN + PAUSED_ELAPSED; }
+        public static bool HAS_SIMULATION_TICKED { get => MS_SINCE_LAST_TICK > SIMULATION_TICK_COOLDOWN + PAUSED_ELAPSED; }
 
         private const int DEFAULT_MATING_COOLDOWN = 10000;
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;

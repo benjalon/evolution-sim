@@ -22,7 +22,7 @@ namespace EvolutionSim.UI
     /// </summary>
     public class Overlay
     {
-        public static int PANEL_WIDTH = 300;
+        public static int PANEL_WIDTH { get; } = 300;
 
         public TextInput OrganismCountInput { get; private set; }
         public Button OrganismCreateButton { get; private set; }
@@ -35,9 +35,9 @@ namespace EvolutionSim.UI
         public RadioButton OrganismRadio { get; private set; }
         public RadioButton FoodRadio { get; private set; }
 
-        public RadioButton PauseButton { get; private set; }
-        public RadioButton NormalButton { get; private set; }
-        public RadioButton FastButton { get; private set; }
+        public RadioButton PauseRadio { get; private set; }
+        public RadioButton NormalRadio { get; private set; }
+        public RadioButton FastRadio { get; private set; }
 
         private Paragraph editAttributesText;
         private Paragraph organismSpeciesText;
@@ -80,10 +80,10 @@ namespace EvolutionSim.UI
 
             var simulationSpeedText = new Paragraph("Set Simulation Speed");
 
-            NormalButton = new RadioButton("Normal", Anchor.AutoCenter);
-            NormalButton.Checked = true;
-            FastButton = new RadioButton("Fast", Anchor.AutoCenter);
-            PauseButton = new RadioButton("Pause", Anchor.AutoCenter);
+            NormalRadio = new RadioButton("Normal", Anchor.AutoCenter);
+            NormalRadio.Checked = true;
+            FastRadio = new RadioButton("Fast", Anchor.AutoCenter);
+            PauseRadio = new RadioButton("Pause", Anchor.AutoCenter);
 
             panel.AddChild(addObjectsText);
             panel.AddChild(OrganismCountInput);
@@ -99,9 +99,9 @@ namespace EvolutionSim.UI
             panel.AddChild(FoodRadio);
 
             panel.AddChild(simulationSpeedText);
-            panel.AddChild(NormalButton);
-            panel.AddChild(FastButton);
-            panel.AddChild(PauseButton);
+            panel.AddChild(NormalRadio);
+            panel.AddChild(FastRadio);
+            panel.AddChild(PauseRadio);
 
             this.editAttributesText = new Paragraph("Edit Attributes");
 
@@ -158,11 +158,11 @@ namespace EvolutionSim.UI
             }
             else
             {
-                this.OrganismSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.attributes.Species;
-                this.OrganismHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Hunger, 2).ToString();
-                this.OrganismAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.attributes.Age.ToString();
-                this.OrganismStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Strength, 2).ToString();
-                this.OrganismSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.attributes.Speed, 2).ToString();
+                this.OrganismSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Species;
+                this.OrganismHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Hunger, 2).ToString();
+                this.OrganismAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Age.ToString();
+                this.OrganismStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Strength, 2).ToString();
+                this.OrganismSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
 
                 this.editAttributesText.Visible = true;
                 this.organismSpeciesText.Visible = true;

@@ -6,7 +6,7 @@ namespace EvolutionSim.Pathfinding
 {
     public static class NodeExpander
     {
-        public static List<Node> expand(Grid grid, Tile center, Tile goal, Node previous)
+        public static List<Node> Expand(Grid grid, Tile center, Tile goal, Node previous)
         {
             var expanded = new List<Node>();
             Node node;
@@ -16,7 +16,7 @@ namespace EvolutionSim.Pathfinding
                 for (int j = -1; j <= 1; j++)
                 {
 
-                    if(Grid.InBounds(center.GridIndex.X + i, center.GridIndex.Y + j) )
+                    if(grid.InBounds(center.GridIndex.X + i, center.GridIndex.Y + j) )
                     {
 
                         node = new Node(grid.GetTileAt(center.GridIndex.X + i, center.GridIndex.Y + j), goal, previous);
