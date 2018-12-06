@@ -34,11 +34,11 @@ namespace EvolutionSim.UI
         private Panel topPanel;
         private Panel bottomPanel;
 
-        private TextInput organismSpeciesValue;
-        private TextInput organismHungerValue;
-        private TextInput organismAgeValue;
-        private TextInput organismStrengthValue;
-        private TextInput organismSpeedValue;
+        private TextInput editSpeciesValue;
+        private TextInput editHungerValue;
+        private TextInput editAgeValue;
+        private TextInput editStrengthValue;
+        private TextInput editSpeedValue;
 
         public Overlay(Simulation simulation)
         {            
@@ -156,12 +156,12 @@ namespace EvolutionSim.UI
 
             var editAttributesText = new Paragraph("Edit Attributes");
 
-            var organismSpeciesText = new Paragraph("Species:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.organismSpeciesValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            var editSpeciesText = new Paragraph("Species:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editSpeciesValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
-            var organismHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.organismHungerValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
-            organismHungerValue.OnValueChange = (Entity btn) =>
+            var editHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editHungerValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            editHungerValue.OnValueChange = (Entity btn) =>
             {
                 int input;
                 if (int.TryParse(((TextInput)btn).Value, out input))
@@ -170,28 +170,28 @@ namespace EvolutionSim.UI
                 }
             };
 
-            var organismAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.organismAgeValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            var editAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editAgeValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
-            var organismStrengthText = new Paragraph("Strength:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.organismStrengthValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            var editStrengthText = new Paragraph("Strength:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editStrengthValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
-            var organismSpeedText = new Paragraph("Speed:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.organismSpeedValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            var editSpeedText = new Paragraph("Speed:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editSpeedValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
             // Draw order
 
             this.bottomPanel.AddChild(editAttributesText);
-            this.bottomPanel.AddChild(organismSpeciesText);
-            this.bottomPanel.AddChild(this.organismSpeciesValue);
-            this.bottomPanel.AddChild(organismHungerText);
-            this.bottomPanel.AddChild(this.organismHungerValue);
-            this.bottomPanel.AddChild(organismAgeText);
-            this.bottomPanel.AddChild(this.organismAgeValue);
-            this.bottomPanel.AddChild(organismStrengthText);
-            this.bottomPanel.AddChild(this.organismStrengthValue);
-            this.bottomPanel.AddChild(organismSpeedText);
-            this.bottomPanel.AddChild(this.organismSpeedValue);
+            this.bottomPanel.AddChild(editSpeciesText);
+            this.bottomPanel.AddChild(this.editSpeciesValue);
+            this.bottomPanel.AddChild(editHungerText);
+            this.bottomPanel.AddChild(this.editHungerValue);
+            this.bottomPanel.AddChild(editAgeText);
+            this.bottomPanel.AddChild(this.editAgeValue);
+            this.bottomPanel.AddChild(editStrengthText);
+            this.bottomPanel.AddChild(this.editStrengthValue);
+            this.bottomPanel.AddChild(editSpeedText);
+            this.bottomPanel.AddChild(this.editSpeedValue);
         }
 
         /// <summary>
@@ -204,16 +204,16 @@ namespace EvolutionSim.UI
             
             if (tileHighlight.SelectedOrganism == null)
             {
-                this.organismHungerValue.Value = "";
+                this.editHungerValue.Value = "";
                 this.bottomPanel.Visible = false;
             }
             else
             {
-                this.organismSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Species;
-                this.organismHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Hunger, 2).ToString();
-                this.organismAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Age.ToString();
-                this.organismStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Strength, 2).ToString();
-                this.organismSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
+                this.editSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Species;
+                this.editHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Hunger, 2).ToString();
+                this.editAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Age.ToString();
+                this.editStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Strength, 2).ToString();
+                this.editSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
 
                 this.bottomPanel.Visible = true;
             }
