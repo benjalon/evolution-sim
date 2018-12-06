@@ -6,7 +6,7 @@ namespace EvolutionSim.Utility
 {
     public class TimeManager
     {
-        public static float MOVE_SPEED { get; } = 0.01f;
+        public const float MOVE_SPEED = 0.01f;
 
         private int deltaMs;
 

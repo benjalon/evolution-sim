@@ -14,8 +14,9 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
-        public static int WINDOW_WIDTH { get; } = 1920;
-        public static int WINDOW_HEIGHT { get; } = 1080;
+        public const int WINDOW_WIDTH = 1920;
+        public const int WINDOW_HEIGHT = 1080;
+
         public static Random RANDOM { get; private set; } = new Random();
 
         private GraphicsDeviceManager graphics;
@@ -76,8 +77,6 @@ namespace EvolutionSim
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
             this.overlay = new Overlay(this.simulation);
-
-            this.CreateUIHandlers();
         }
         
         /// <summary>
