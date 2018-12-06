@@ -38,7 +38,7 @@ namespace EvolutionSim.StateManagement
             }
 
             organism.Attributes.Age += 1;
-            
+
             if (organism.Attributes.Age > 1000)
             {
                 organism.DecreaseHealth(999);
@@ -80,7 +80,7 @@ namespace EvolutionSim.StateManagement
                     {
                         organism.State = this.state.MoveState(organismState, Actions.HungryRoam); //then move into the seek food state
                     }
-                    else if (organism.Attributes.Hunger >= 0.8) // Not hungry so find a mate
+                    else if (organism.Attributes.Hunger >= 0.8 && this.timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
                     {
                         organism.DestinationTile = null;
                         organism.State = this.state.MoveState(organismState, Actions.HungryMate); //go find a mate
@@ -141,7 +141,7 @@ namespace EvolutionSim.StateManagement
                     }
 
                     break;
-                    
+
                 case States.MovingToMate: // When an organism is moving on a path towards a mate
                     if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant && this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
                     {
@@ -203,14 +203,9 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.Mating:
-
                     ((Organism)(organism.DestinationTile.Inhabitant)).Attributes.WaitingForMate = false;
-
-                    if (TimeManager.HAS_SIMULATION_TICKED)
-                    {
-                        MatingOccurred?.Invoke(this, new MatingArgs(organism));
-                    }
-
+                    MatingOccurred?.Invoke(this, new MatingArgs(organism));
+                    
                     break;
 
                 case States.SeekFood:
@@ -226,11 +221,10 @@ namespace EvolutionSim.StateManagement
 
                 //when in seaking mate scan for an organism who is also in the "SeekMate" State
                 case States.SeekMate:
-
                     StateActions.SeekingMate.SeekMate(organism, this.grid);
 
                     break;
-                    
+
                 case States.WaitingForMate:
 
                     StateActions.SeekingMate.WaitForMate(organism, this.grid);
