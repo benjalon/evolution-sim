@@ -1,4 +1,5 @@
-﻿using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.Logic;
+using EvolutionSim.TileGrid.GridItems;
 using GeonBit.UI;
 using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
@@ -23,6 +24,7 @@ namespace EvolutionSim.UI
     public class Overlay
     {
         public static int PANEL_WIDTH { get; } = 300;
+        private Simulation simulation;
 
         public TextInput OrganismCountInput { get; private set; }
         public Button OrganismCreateButton { get; private set; }
@@ -51,8 +53,10 @@ namespace EvolutionSim.UI
         private Paragraph organismSpeedText;
         public TextInput OrganismSpeedValue { get; private set; }
 
-        public Overlay()
+        public Overlay(Simulation simulation)
         {
+            this.simulation = simulation;
+
             // All temporary
             var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterRight);
             panel.Padding = new Vector2(10);

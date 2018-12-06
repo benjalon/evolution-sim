@@ -204,7 +204,7 @@ namespace EvolutionSim.TileGrid
             {
                 return false; // The organism is checking itself, so it isn't a mate.
             }
-            return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).State == PotentialStates.SeekMate;
+            return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).State == States.SeekMate;
         }
 
         public bool IsAdjacent(Point StartPosition, Point EndPosition)

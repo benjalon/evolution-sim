@@ -32,7 +32,7 @@ namespace EvolutionSim.TileGrid.GridItems
         public Tile DestinationTile { get; set; } // The next tile along after the path
         
         // State management
-        public PotentialStates State { get; set; }
+        public States State { get; set; }
         public int MsSinceLastMate { get; set; } = 0;
 
         // Misc
@@ -42,7 +42,7 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             this.Attributes = new OrganismAttributes(0, 0.2, 500, 50);
             TOTAL_POPULATION++;
-            State = PotentialStates.Roaming;
+            State = States.Roaming;
             Path = new List<Tile>();
 
             //by default set the organism to be a herbivore
