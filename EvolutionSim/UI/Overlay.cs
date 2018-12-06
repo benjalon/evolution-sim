@@ -1,4 +1,5 @@
-﻿using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.Logic;
+using EvolutionSim.TileGrid.GridItems;
 using GeonBit.UI;
 using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
@@ -22,115 +23,175 @@ namespace EvolutionSim.UI
     /// </summary>
     public class Overlay
     {
-        public static int PANEL_WIDTH { get; } = 300;
+        private const int PANEL_WIDTH = 300;
 
-        public TextInput OrganismCountInput { get; private set; }
-        public Button OrganismCreateButton { get; private set; }
-        public TextInput FoodCountInput { get; private set; }
-        public Button FoodCreateButton { get; private set; }
+        private const int TOP_PANEL_HEIGHT = 660;
+        private const int BOTTOM_PANEL_HEIGHT = Graphics.WINDOW_HEIGHT - TOP_PANEL_HEIGHT;
+        private const int TEXT_WIDTH = 110;
+        private const int BUTTON_WIDTH = 170;
+        private const int ELEMENT_HEIGHT = 40;
 
-        public RadioButton NothingRadio { get; private set; }
-        public RadioButton MountainRadio { get; private set; }
-        public RadioButton WaterRadio { get; private set; }
-        public RadioButton OrganismRadio { get; private set; }
-        public RadioButton FoodRadio { get; private set; }
+        private Panel topPanel;
+        private Panel bottomPanel;
 
-        public RadioButton PauseRadio { get; private set; }
-        public RadioButton NormalRadio { get; private set; }
-        public RadioButton FastRadio { get; private set; }
+        private TextInput editSpeciesValue;
+        private TextInput editHungerValue;
+        private TextInput editAgeValue;
+        private TextInput editStrengthValue;
+        private TextInput editSpeedValue;
 
-        private Paragraph editAttributesText;
-        private Paragraph organismSpeciesText;
-        public TextInput OrganismSpeciesValue { get; private set; }
-        private Paragraph organismHungerText;
-        public TextInput OrganismHungerValue { get; private set; }
-        private Paragraph organismAgeText;
-        public TextInput OrganismAgeValue { get; private set; }
-        private Paragraph organismStrengthText;
-        public TextInput OrganismStrengthValue { get; private set; }
-        private Paragraph organismSpeedText;
-        public TextInput OrganismSpeedValue { get; private set; }
+        public Overlay(Simulation simulation)
+        {            
+            // A panel which sits behind the bottom panel to prevent flickering when it's hidden or unhidden
+            var backgroundPanel = new Panel(new Vector2(PANEL_WIDTH, BOTTOM_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
+            backgroundPanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the top panel
+            backgroundPanel.SetStyleProperty("Opacity", new StyleProperty(100));
+            UserInterface.Active.AddEntity(backgroundPanel);
 
-        public Overlay()
+            this.CreateTopPanel(simulation);
+            this.CreateBottomPanel(simulation);
+        }
+
+        private void CreateTopPanel(Simulation simulation)
         {
-            // All temporary
-            var panel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.CenterRight);
-            panel.Padding = new Vector2(10);
-            panel.SetStyleProperty("Opacity", new StyleProperty(100));
-            UserInterface.Active.AddEntity(panel);
+            this.topPanel = new Panel(new Vector2(PANEL_WIDTH, TOP_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
+            this.topPanel.Padding = new Vector2(10);
+            UserInterface.Active.AddEntity(this.topPanel);
+
+            // Add organism/food through text input
 
             var addObjectsText = new Paragraph("Randomly Add Objects");
 
-            OrganismCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
-            OrganismCountInput.PlaceholderText = "0";
-            OrganismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
+            var organismCountInput = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            organismCountInput.PlaceholderText = "0";
 
-            FoodCountInput = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
-            FoodCountInput.PlaceholderText = "0";
-            FoodCreateButton = new Button("Food", ButtonSkin.Default, Anchor.AutoInline, new Vector2(170, 40));
+            var organismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
+            organismCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(organismCountInput.Value, out input))
+                {
+                    simulation.AddOrganisms(input);
+                }
+            };
+
+            var foodCountInput = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            foodCountInput.PlaceholderText = "0";
+
+            var foodCreateButton = new Button("Food", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
+            foodCreateButton.OnClick = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(foodCountInput.Value, out input))
+                {
+                    simulation.AddFoods(input);
+                }
+            };
+
+            // Terrain/object drawing
 
             var addAtCursorText = new Paragraph("Add Objects At Cursor");
 
-            NothingRadio = new RadioButton("None", Anchor.AutoCenter);
-            NothingRadio.Checked = true;
-            MountainRadio = new RadioButton("Mountain", Anchor.AutoCenter);
-            WaterRadio = new RadioButton("Water", Anchor.AutoCenter);
-            OrganismRadio = new RadioButton("Organism", Anchor.AutoCenter);
-            FoodRadio = new RadioButton("Food", Anchor.AutoCenter);
+            var nothingRadio = new RadioButton("None", Anchor.AutoCenter);
+            nothingRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Grass;
+
+            var mountainRadio = new RadioButton("Mountain", Anchor.AutoCenter);
+            mountainRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Mountain;
+
+            var waterRadio = new RadioButton("Water", Anchor.AutoCenter);
+            waterRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Water;
+
+            var organismRadio = new RadioButton("Organism", Anchor.AutoCenter);
+            organismRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Organism;
+
+            var foodRadio = new RadioButton("Food", Anchor.AutoCenter);
+            foodRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Food;
+
+            nothingRadio.Checked = true;
+
+            // Simulation speed manipulation
 
             var simulationSpeedText = new Paragraph("Set Simulation Speed");
 
-            NormalRadio = new RadioButton("Normal", Anchor.AutoCenter);
-            NormalRadio.Checked = true;
-            FastRadio = new RadioButton("Fast", Anchor.AutoCenter);
-            PauseRadio = new RadioButton("Pause", Anchor.AutoCenter);
+            var normalRadio = new RadioButton("Normal", Anchor.AutoCenter);
+            normalRadio.OnClick = (Entity btn) => simulation.TimeManager.SetSpeed(1);
 
-            panel.AddChild(addObjectsText);
-            panel.AddChild(OrganismCountInput);
-            panel.AddChild(OrganismCreateButton);
-            panel.AddChild(FoodCountInput);
-            panel.AddChild(FoodCreateButton);
+            var fastRadio = new RadioButton("Fast", Anchor.AutoCenter);
+            fastRadio.OnClick = (Entity btn) => simulation.TimeManager.SetSpeed(4);
 
-            panel.AddChild(addAtCursorText);
-            panel.AddChild(NothingRadio);
-            panel.AddChild(MountainRadio);
-            panel.AddChild(WaterRadio);
-            panel.AddChild(OrganismRadio);
-            panel.AddChild(FoodRadio);
+            var pauseRadio = new RadioButton("Pause", Anchor.AutoCenter);
+            pauseRadio.OnClick = (Entity btn) => simulation.TimeManager.Paused = true;
 
-            panel.AddChild(simulationSpeedText);
-            panel.AddChild(NormalRadio);
-            panel.AddChild(FastRadio);
-            panel.AddChild(PauseRadio);
+            normalRadio.Checked = true;
 
-            this.editAttributesText = new Paragraph("Edit Attributes");
+            // Draw order
 
-            this.organismSpeciesText = new Paragraph("Species:", Anchor.AutoInline, new Vector2(110, 40));
-            this.OrganismSpeciesValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.topPanel.AddChild(addObjectsText);
+            this.topPanel.AddChild(organismCountInput);
+            this.topPanel.AddChild(organismCreateButton);
+            this.topPanel.AddChild(foodCountInput);
+            this.topPanel.AddChild(foodCreateButton);
 
-            this.organismHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(110, 40));
-            this.OrganismHungerValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.topPanel.AddChild(addAtCursorText);
+            this.topPanel.AddChild(nothingRadio);
+            this.topPanel.AddChild(mountainRadio);
+            this.topPanel.AddChild(waterRadio);
+            this.topPanel.AddChild(organismRadio);
+            this.topPanel.AddChild(foodRadio);
 
-            this.organismAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(110, 40));
-            this.OrganismAgeValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.topPanel.AddChild(simulationSpeedText);
+            this.topPanel.AddChild(normalRadio);
+            this.topPanel.AddChild(fastRadio);
+            this.topPanel.AddChild(pauseRadio);
+        }
 
-            this.organismStrengthText = new Paragraph("Strength:", Anchor.AutoInline, new Vector2(110, 40));
-            this.OrganismStrengthValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+        private void CreateBottomPanel(Simulation simulation)
+        {
+            this.bottomPanel = new Panel(new Vector2(PANEL_WIDTH, BOTTOM_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
+            this.bottomPanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the top panel
+            this.bottomPanel.SetStyleProperty("Opacity", new StyleProperty(100));
+            UserInterface.Active.AddEntity(this.bottomPanel);
 
-            this.organismSpeedText = new Paragraph("Speed:", Anchor.AutoInline, new Vector2(110, 40));
-            this.OrganismSpeedValue = new TextInput(false, new Vector2(110, 40), Anchor.AutoInline, null, PanelSkin.Fancy);
+            // Create elements
 
-            panel.AddChild(this.editAttributesText);
-            panel.AddChild(this.organismSpeciesText);
-            panel.AddChild(this.OrganismSpeciesValue);
-            panel.AddChild(this.organismHungerText);
-            panel.AddChild(this.OrganismHungerValue);
-            panel.AddChild(this.organismAgeText);
-            panel.AddChild(this.OrganismAgeValue);
-            panel.AddChild(this.organismStrengthText);
-            panel.AddChild(this.OrganismStrengthValue);
-            panel.AddChild(this.organismSpeedText);
-            panel.AddChild(this.OrganismSpeedValue);
+            var editAttributesText = new Paragraph("Edit Attributes");
+
+            var editSpeciesText = new Paragraph("Species:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editSpeciesValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            var editHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editHungerValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            editHungerValue.OnValueChange = (Entity btn) =>
+            {
+                int input;
+                if (int.TryParse(((TextInput)btn).Value, out input))
+                {
+                    simulation.TileHighlight.SelectedOrganism.Attributes.Hunger = input;
+                }
+            };
+
+            var editAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editAgeValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            var editStrengthText = new Paragraph("Strength:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editStrengthValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            var editSpeedText = new Paragraph("Speed:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editSpeedValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+
+            // Draw order
+
+            this.bottomPanel.AddChild(editAttributesText);
+            this.bottomPanel.AddChild(editSpeciesText);
+            this.bottomPanel.AddChild(this.editSpeciesValue);
+            this.bottomPanel.AddChild(editHungerText);
+            this.bottomPanel.AddChild(this.editHungerValue);
+            this.bottomPanel.AddChild(editAgeText);
+            this.bottomPanel.AddChild(this.editAgeValue);
+            this.bottomPanel.AddChild(editStrengthText);
+            this.bottomPanel.AddChild(this.editStrengthValue);
+            this.bottomPanel.AddChild(editSpeedText);
+            this.bottomPanel.AddChild(this.editSpeedValue);
         }
 
         /// <summary>
@@ -143,38 +204,18 @@ namespace EvolutionSim.UI
             
             if (tileHighlight.SelectedOrganism == null)
             {
-                this.OrganismHungerValue.Value = "";
-                this.editAttributesText.Visible = false;
-                this.organismSpeciesText.Visible = false;
-                this.OrganismSpeciesValue.Visible = false;
-                this.organismHungerText.Visible = false;
-                this.OrganismHungerValue.Visible = false;
-                this.organismAgeText.Visible = false;
-                this.OrganismAgeValue.Visible = false;
-                this.organismStrengthText.Visible = false;
-                this.OrganismStrengthValue.Visible = false;
-                this.organismSpeedText.Visible = false;
-                this.OrganismSpeedValue.Visible = false;
+                this.editHungerValue.Value = "";
+                this.bottomPanel.Visible = false;
             }
             else
             {
-                this.OrganismSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Species;
-                this.OrganismHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Hunger, 2).ToString();
-                this.OrganismAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Age.ToString();
-                this.OrganismStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Strength, 2).ToString();
-                this.OrganismSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
+                this.editSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Species;
+                this.editHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Hunger, 2).ToString();
+                this.editAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Age.ToString();
+                this.editStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Strength, 2).ToString();
+                this.editSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
 
-                this.editAttributesText.Visible = true;
-                this.organismSpeciesText.Visible = true;
-                this.OrganismSpeciesValue.Visible = true;
-                this.organismHungerText.Visible = true;
-                this.OrganismHungerValue.Visible = true;
-                this.organismAgeText.Visible = true;
-                this.OrganismAgeValue.Visible = true;
-                this.organismStrengthText.Visible = true;
-                this.OrganismStrengthValue.Visible = true;
-                this.organismSpeedText.Visible = true;
-                this.OrganismSpeedValue.Visible = true;
+                this.bottomPanel.Visible = true;
             }
         }
 

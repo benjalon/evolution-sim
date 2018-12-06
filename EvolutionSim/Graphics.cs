@@ -14,8 +14,9 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
-        public static int WINDOW_WIDTH { get; } = 1920;
-        public static int WINDOW_HEIGHT { get; } = 1080;
+        public const int WINDOW_WIDTH = 1920;
+        public const int WINDOW_HEIGHT = 1080;
+
         public static Random RANDOM { get; private set; } = new Random();
 
         private GraphicsDeviceManager graphics;
@@ -44,8 +45,6 @@ namespace EvolutionSim
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
-
-            this.overlay = new Overlay();
             
             base.Initialize();
         }
@@ -77,7 +76,7 @@ namespace EvolutionSim
 
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.CreateUIHandlers();
+            this.overlay = new Overlay(this.simulation);
         }
         
         /// <summary>
@@ -132,46 +131,6 @@ namespace EvolutionSim
             this.overlay.Draw(this.spriteBatch);
             
             base.Draw(gameTime);
-        }
-
-        private void CreateUIHandlers()
-        {
-            this.overlay.OrganismCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.OrganismCountInput.Value, out input))
-                {
-                    this.simulation.AddOrganisms(input);
-                }
-            };
-
-            this.overlay.FoodCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.FoodCountInput.Value, out input))
-                {
-                    this.simulation.AddFoods(input);
-                }
-            };
-
-            this.overlay.NothingRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Grass;
-            this.overlay.MountainRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Mountain;
-            this.overlay.WaterRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Water;
-            this.overlay.OrganismRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Organism;
-            this.overlay.FoodRadio.OnClick = (Entity btn) => this.simulation.SelectedRadioItem = RadioItems.Food;
-
-            this.overlay.NormalRadio.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(1);
-            this.overlay.FastRadio.OnClick = (Entity btn) => this.simulation.TimeManager.SetSpeed(4);
-            this.overlay.PauseRadio.OnClick = (Entity btn) => this.simulation.TimeManager.Paused = true;
-
-            this.overlay.OrganismHungerValue.OnValueChange = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(((TextInput)btn).Value, out input))
-                {
-                    this.simulation.TileHighlight.SelectedOrganism.Attributes.Hunger = input;
-                }
-            };
         }
     }
 }

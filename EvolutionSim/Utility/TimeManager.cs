@@ -6,7 +6,7 @@ namespace EvolutionSim.Utility
 {
     public class TimeManager
     {
-        public static float MOVE_SPEED { get; } = 0.01f;
+        public const float MOVE_SPEED = 0.01f;
 
         private int deltaMs;
 
@@ -16,7 +16,7 @@ namespace EvolutionSim.Utility
         private static int MS_SINCE_LAST_TICK = 0;
         public static bool HAS_SIMULATION_TICKED { get => MS_SINCE_LAST_TICK > SIMULATION_TICK_COOLDOWN + PAUSED_ELAPSED; }
 
-        private const int DEFAULT_MATING_COOLDOWN = 10000;
+        private const int DEFAULT_MATING_COOLDOWN = 20000;
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;
 
         public bool Paused { get; set; } = false;

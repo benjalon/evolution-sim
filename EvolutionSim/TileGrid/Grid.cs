@@ -13,8 +13,8 @@ namespace EvolutionSim.TileGrid
     /// </summary>
     public class Grid
     {
-        public static int TILE_COUNT_X { get; private set; }
-        public static int TILE_COUNT_Y { get; private set; }
+        public const int TILE_COUNT_X = Graphics.WINDOW_WIDTH / Tile.TILE_SIZE;
+        public const int TILE_COUNT_Y = Graphics.WINDOW_HEIGHT / Tile.TILE_SIZE;
 
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
@@ -30,11 +30,8 @@ namespace EvolutionSim.TileGrid
         /// <param name="waterTexture">Terrain texture for water terrain.</param>
         /// <param name="width">The width of the grid.</param>
         /// <param name="height">The height of the grid.</param>
-        public Grid(Texture2D highlightTexture, Texture2D mountainTexture, Texture2D waterTexture, int width, int height)
+        public Grid(Texture2D highlightTexture, Texture2D mountainTexture, Texture2D waterTexture)
         {
-            TILE_COUNT_X = width / Tile.TILE_SIZE;
-            TILE_COUNT_Y = height / Tile.TILE_SIZE;
-
             this.tiles = new Tile[TILE_COUNT_X][];
 
             // Create the jagged tile array by creating a new tile at each index
@@ -204,7 +201,7 @@ namespace EvolutionSim.TileGrid
             {
                 return false; // The organism is checking itself, so it isn't a mate.
             }
-            return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).State == PotentialStates.SeekMate;
+            return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).State == States.SeekMate;
         }
 
         public bool IsAdjacent(Point StartPosition, Point EndPosition)

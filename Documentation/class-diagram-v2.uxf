@@ -5,7 +5,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>28</x>
-      <y>36</y>
+      <y>24</y>
       <w>136</w>
       <h>68</h>
     </coordinates>
@@ -19,42 +19,42 @@
 +Previous: Node { get; }
 --
 +Node(current: Tile, goal: Tile, previous: Node)
--static CalculateDistance(goal: Tile, location: Tile): int</panel_attributes>
+_-CalculateDistance(goal: Tile, location: Tile): int_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>132</x>
-      <y>132</y>
-      <w>208</w>
+      <y>112</y>
+      <w>188</w>
       <h>24</h>
     </coordinates>
-    <panel_attributes>static NodeExpander
+    <panel_attributes>_NodeExpander_
 --
 --
-+static Expand(grid: Grid, center: Tile, goal: Tile, previous: Node): List&lt;Node&gt;</panel_attributes>
+_+Expand(grid: Grid, center: Tile, goal: Tile, previous: Node): List&lt;Node&gt;_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>20</x>
-      <y>172</y>
+      <y>152</y>
       <w>232</w>
       <h>28</h>
     </coordinates>
-    <panel_attributes>static PathFinding
+    <panel_attributes>_PathFinding_
 --
 --
-+static FindShortestPath(startPosition: Tile, endPosition: Tile, grid: Grid): List&lt;Tile&gt;</panel_attributes>
+_+FindShortestPath(startPosition: Tile, endPosition: Tile, grid: Grid): List&lt;Tile&gt;_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLPackage</id>
     <coordinates>
       <x>692</x>
-      <y>336</y>
+      <y>284</y>
       <w>728</w>
       <h>624</h>
     </coordinates>
@@ -67,9 +67,9 @@ fg=green</panel_attributes>
     <id>UMLPackage</id>
     <coordinates>
       <x>0</x>
-      <y>8</y>
+      <y>0</y>
       <w>356</w>
-      <h>212</h>
+      <h>192</h>
     </coordinates>
     <panel_attributes>EvolutionSim.Pathfinding
 --
@@ -81,12 +81,12 @@ fg=blue
     <id>UMLClass</id>
     <coordinates>
       <x>56</x>
-      <y>528</y>
+      <y>476</y>
       <w>60</w>
       <h>84</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-PotentialStates
+States
 --
 Roaming
 Eating
@@ -102,12 +102,12 @@ MovingToMate</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>52</x>
-      <y>672</y>
+      <y>620</y>
       <w>60</w>
       <h>84</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
-Action
+Actions
 --
 NotHungry
 HungryRoam
@@ -125,16 +125,16 @@ Bang</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>192</x>
-      <y>644</y>
+      <y>592</y>
       <w>160</w>
       <h>52</h>
     </coordinates>
     <panel_attributes>StateTransition
 --
--currentState: PotentialStates
+-currentState: States
 -action: Action
 --
-+StateTransition(currentState: PotentialState, action: Action)
++StateTransition(currentState: States, action: Actions)
 +GetHashCode(): int
 +Equals(obj: Object): bool
 </panel_attributes>
@@ -144,7 +144,7 @@ Bang</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>288</x>
-      <y>588</y>
+      <y>536</y>
       <w>32</w>
       <h>64</h>
     </coordinates>
@@ -156,24 +156,24 @@ Bang</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>136</x>
-      <y>544</y>
+      <y>492</y>
       <w>232</w>
       <h>48</h>
     </coordinates>
     <panel_attributes>State
 --
--transitions: Dictionary&lt;StateTransition, PotentialStates&gt;
+-transitions: Dictionary&lt;StateTransition, States&gt;
 --
 +State()
-+GetNext(currentState: PotentialStates, action: Action): PotentialStates
-+MoveState(determinedState: PotentialStates, action: Action): PotentialStates</panel_attributes>
++GetNext(currentState: States, action: Actions): States
++MoveState(determinedState: States, action: Actions): States</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>108</x>
-      <y>620</y>
+      <y>568</y>
       <w>472</w>
       <h>108</h>
     </coordinates>
@@ -184,7 +184,7 @@ Bang</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>84</x>
-      <y>608</y>
+      <y>556</y>
       <w>116</w>
       <h>48</h>
     </coordinates>
@@ -195,7 +195,7 @@ Bang</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>32</x>
-      <y>516</y>
+      <y>464</y>
       <w>180</w>
       <h>200</h>
     </coordinates>
@@ -206,29 +206,29 @@ Bang</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>152</x>
-      <y>100</y>
+      <y>88</y>
       <w>12</w>
-      <h>40</h>
+      <h>32</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>40</x>
-      <y>100</y>
+      <y>88</y>
       <w>12</w>
-      <h>80</h>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;180.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;160.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>44</x>
-      <y>780</y>
+      <y>728</y>
       <w>60</w>
       <h>56</h>
     </coordinates>
@@ -245,33 +245,33 @@ Right</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>136</x>
-      <y>788</y>
+      <y>736</y>
       <w>220</w>
       <h>56</h>
     </coordinates>
-    <panel_attributes>static StateActions
+    <panel_attributes>_StateActions_
 --
 --
-+static GetPointsInRange(organism: Organism): List&lt;Point&gt;
-+static Roam(organism: Organism, grid: Grid): void
--static PickRandomTileToExplore(organism: Organism, grid: Grid): Tile
--static MoveTowards(organism: Organism, destination: Tile, grid: Grid): bool
--static PerformValidFoodCheck(x: int, y: int, firstX: int, firstY: int, grid: Grid): bool</panel_attributes>
+_+GetPointsInRange(organism: Organism): List&lt;Point&gt;_
+_+Roam(organism: Organism, grid: Grid): void_
+_-PickRandomTileToExplore(organism: Organism, grid: Grid): Tile_
+_-MoveTowards(organism: Organism, destination: Tile, grid: Grid): bool_
+_-PerformValidFoodCheck(x: int, y: int, firstX: int, firstY: int, grid: Grid): bool_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>432</x>
-      <y>800</y>
+      <y>748</y>
       <w>184</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>static SeekingFood
+    <panel_attributes>_SeekingFood_
 --
 --
-+static SeekFood(organism: Organism, grid: Grid): void
--static FoodInRange(organism: Organism, grid: Grid): Tile
+_+SeekFood(organism: Organism, grid: Grid): void_
+_-FoodInRange(organism: Organism, grid: Grid): Tile_
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -279,14 +279,14 @@ Right</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>40</x>
-      <y>892</y>
+      <y>840</y>
       <w>184</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>static EatingFood
+    <panel_attributes>_EatingFood_
 --
 --
-+static EatFood(organism: Organism, grid: Grid): void
+_+EatFood(organism: Organism, grid: Grid): void_
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -294,23 +294,23 @@ Right</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>252</x>
-      <y>892</y>
+      <y>840</y>
       <w>184</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>static SeekingMate
+    <panel_attributes>_SeekingMate_
 --
 --
-+static SeekMate(organism: Organism, grid: Grid): void
-+static WaitForMate(organism: Organism, grid: Grid) void
--static MatesInRange(organism: Organism, grid: Grid): Tile</panel_attributes>
+_+SeekMate(organism: Organism, grid: Grid): void_
+_+WaitForMate(organism: Organism, grid: Grid) void_
+_-MatesInRange(organism: Organism, grid: Grid): Tile_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>180</x>
-      <y>840</y>
+      <y>788</y>
       <w>32</w>
       <h>60</h>
     </coordinates>
@@ -322,7 +322,7 @@ Right</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>292</x>
-      <y>840</y>
+      <y>788</y>
       <w>32</w>
       <h>60</h>
     </coordinates>
@@ -334,7 +334,7 @@ Right</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>352</x>
-      <y>820</y>
+      <y>768</y>
       <w>88</w>
       <h>16</h>
     </coordinates>
@@ -346,7 +346,7 @@ Right</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>500</x>
-      <y>552</y>
+      <y>500</y>
       <w>152</w>
       <h>72</h>
     </coordinates>
@@ -367,7 +367,7 @@ Right</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>112</x>
-      <y>528</y>
+      <y>476</y>
       <w>480</w>
       <h>32</h>
     </coordinates>
@@ -378,7 +378,7 @@ Right</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>328</x>
-      <y>620</y>
+      <y>568</y>
       <w>296</w>
       <h>176</h>
     </coordinates>
@@ -389,7 +389,7 @@ Right</panel_attributes>
     <id>UMLPackage</id>
     <coordinates>
       <x>0</x>
-      <y>468</y>
+      <y>416</y>
       <w>668</w>
       <h>492</h>
     </coordinates>
@@ -402,19 +402,19 @@ fg=orange</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>880</x>
-      <y>612</y>
+      <y>560</y>
       <w>132</w>
       <h>144</h>
     </coordinates>
     <panel_attributes>Organism
 --
-+static TOTAL_POPULATION: int
+_+TOTAL_POPULATION: int_
 +Attributes: OrganismAttributes { get; } 
 +DietTypes: OrganismPref { get; -set; }
 +Computing: bool { get; set; }
 +Path: List&lt;Tile&gt; { get; set; }
 +DestinationTile: Tile { get; set; }
-+PotentialStates: State { get; set; }
++State: States { get; set; }
 +MsSinceLastMate: int { get; set; }
 +IsSelected: bool { get; set; }
 --
@@ -428,9 +428,9 @@ fg=orange</panel_attributes>
     <id>UMLPackage</id>
     <coordinates>
       <x>1172</x>
-      <y>8</y>
+      <y>0</y>
       <w>248</w>
-      <h>280</h>
+      <h>236</h>
     </coordinates>
     <panel_attributes>EvolutionSim.UI
 --
@@ -441,7 +441,7 @@ fg=cyan</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>984</x>
-      <y>152</y>
+      <y>120</y>
       <w>136</w>
       <h>64</h>
     </coordinates>
@@ -461,7 +461,7 @@ fg=cyan</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>956</x>
-      <y>848</y>
+      <y>796</y>
       <w>204</w>
       <h>92</h>
     </coordinates>
@@ -486,7 +486,7 @@ fg=cyan</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>896</x>
-      <y>516</y>
+      <y>464</y>
       <w>136</w>
       <h>76</h>
     </coordinates>
@@ -508,18 +508,18 @@ fg=cyan</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1012</x>
-      <y>212</y>
+      <y>180</y>
       <w>12</w>
-      <h>312</h>
+      <h>292</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;760.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;710.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>780</x>
-      <y>692</y>
+      <y>640</y>
       <w>56</w>
       <h>40</h>
     </coordinates>
@@ -535,7 +535,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>936</x>
-      <y>588</y>
+      <y>536</y>
       <w>12</w>
       <h>32</h>
     </coordinates>
@@ -546,7 +546,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1300</x>
-      <y>244</y>
+      <y>192</y>
       <w>84</w>
       <h>624</h>
     </coordinates>
@@ -557,7 +557,7 @@ Carnivore</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1144</x>
-      <y>652</y>
+      <y>600</y>
       <w>204</w>
       <h>112</h>
     </coordinates>
@@ -585,7 +585,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>980</x>
-      <y>752</y>
+      <y>700</y>
       <w>32</w>
       <h>104</h>
     </coordinates>
@@ -597,7 +597,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>200</x>
-      <y>740</y>
+      <y>688</y>
       <w>688</w>
       <h>56</h>
     </coordinates>
@@ -608,7 +608,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>520</x>
-      <y>752</y>
+      <y>700</y>
       <w>376</w>
       <h>56</h>
     </coordinates>
@@ -619,7 +619,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>136</x>
-      <y>752</y>
+      <y>700</y>
       <w>820</w>
       <h>208</h>
     </coordinates>
@@ -630,7 +630,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>432</x>
-      <y>752</y>
+      <y>700</y>
       <w>492</w>
       <h>176</h>
     </coordinates>
@@ -641,7 +641,7 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>624</x>
-      <y>620</y>
+      <y>568</y>
       <w>340</w>
       <h>288</h>
     </coordinates>
@@ -652,7 +652,7 @@ Carnivore</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1064</x>
-      <y>504</y>
+      <y>452</y>
       <w>116</w>
       <h>64</h>
     </coordinates>
@@ -673,18 +673,18 @@ Carnivore</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1068</x>
-      <y>212</y>
+      <y>180</y>
       <w>12</w>
-      <h>300</h>
+      <h>280</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;730.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;680.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1156</x>
-      <y>564</y>
+      <y>512</y>
       <w>12</w>
       <h>96</h>
     </coordinates>
@@ -696,7 +696,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>804</x>
-      <y>648</y>
+      <y>596</y>
       <w>84</w>
       <h>52</h>
     </coordinates>
@@ -708,7 +708,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>364</x>
-      <y>564</y>
+      <y>512</y>
       <w>144</w>
       <h>12</h>
     </coordinates>
@@ -720,7 +720,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>112</x>
-      <y>572</y>
+      <y>520</y>
       <w>32</w>
       <h>12</h>
     </coordinates>
@@ -732,7 +732,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>108</x>
-      <y>680</y>
+      <y>628</y>
       <w>92</w>
       <h>12</h>
     </coordinates>
@@ -744,7 +744,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>100</x>
-      <y>816</y>
+      <y>764</y>
       <w>44</w>
       <h>12</h>
     </coordinates>
@@ -756,7 +756,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>112</x>
-      <y>600</y>
+      <y>548</y>
       <w>776</w>
       <h>88</h>
     </coordinates>
@@ -768,7 +768,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1020</x>
-      <y>588</y>
+      <y>536</y>
       <w>132</w>
       <h>104</h>
     </coordinates>
@@ -780,7 +780,7 @@ fg=black</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1248</x>
-      <y>224</y>
+      <y>172</y>
       <w>56</w>
       <h>52</h>
     </coordinates>
@@ -798,7 +798,7 @@ Food</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1268</x>
-      <y>272</y>
+      <y>220</y>
       <w>12</w>
       <h>388</h>
     </coordinates>
@@ -810,7 +810,7 @@ fg=black</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1172</x>
-      <y>860</y>
+      <y>808</y>
       <w>232</w>
       <h>76</h>
     </coordinates>
@@ -832,7 +832,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1292</x>
-      <y>760</y>
+      <y>708</y>
       <w>12</w>
       <h>108</h>
     </coordinates>
@@ -844,7 +844,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1008</x>
-      <y>716</y>
+      <y>664</y>
       <w>224</w>
       <h>152</h>
     </coordinates>
@@ -856,20 +856,20 @@ fg=black</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>712</x>
-      <y>356</y>
-      <w>280</w>
+      <y>304</y>
+      <w>240</w>
       <h>140</h>
     </coordinates>
     <panel_attributes>Grid
 --
-+static TILE_COUNT_X: int { get; -set; }
-+static TILE_COUNT_Y: int { get; -set; }
++TILE_COUNT_X: int
++TILE_COUNT_Y: int
 +Organisms: List&lt;Organism&gt; { get; -set; }
 +Foods: List&lt;Organism&gt; { get; -set; }
 +Terrains: List&lt;Terrain&gt; { get; -set; }
 -tiles: Tile[][]
 --
-+Grid(highlightTexture: Texture2D, mountainTexture: Texture2D, waterTexture: Texture2D, width: int, height: int)
++Grid(highlightTexture: Texture2D, mountainTexture: Texture2D, waterTexture: Texture2D)
 +Draw(spriteBatch: SpriteBatch): void
 +AttemptToPositionAt(item: GridItem, x: int, y: int): bool
 +SetTerrainAt(type: RadioItems, x: int, y: int): void
@@ -889,19 +889,19 @@ fg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>988</x>
-      <y>272</y>
-      <w>276</w>
+      <x>948</x>
+      <y>220</y>
+      <w>316</w>
       <h>144</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;340.0;670.0;340.0;670.0;10.0</additional_attributes>
+    <additional_attributes>10.0;340.0;770.0;340.0;770.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>724</x>
-      <y>588</y>
+      <y>536</y>
       <w>144</w>
       <h>48</h>
     </coordinates>
@@ -918,7 +918,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>812</x>
-      <y>544</y>
+      <y>492</y>
       <w>92</w>
       <h>52</h>
     </coordinates>
@@ -929,7 +929,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>736</x>
-      <y>492</y>
+      <y>440</y>
       <w>12</w>
       <h>104</h>
     </coordinates>
@@ -941,7 +941,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>880</x>
-      <y>492</y>
+      <y>440</y>
       <w>12</w>
       <h>128</h>
     </coordinates>
@@ -952,26 +952,26 @@ fg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>988</x>
-      <y>380</y>
-      <w>340</w>
+      <x>948</x>
+      <y>328</y>
+      <w>380</w>
       <h>280</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 fg=black</panel_attributes>
-    <additional_attributes>10.0;10.0;830.0;10.0;830.0;680.0</additional_attributes>
+    <additional_attributes>10.0;10.0;930.0;10.0;930.0;680.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>988</x>
-      <y>432</y>
-      <w>156</w>
+      <x>948</x>
+      <y>380</y>
+      <w>196</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 fg=black</panel_attributes>
-    <additional_attributes>10.0;10.0;370.0;10.0;370.0;180.0</additional_attributes>
+    <additional_attributes>10.0;10.0;470.0;10.0;470.0;180.0</additional_attributes>
   </element>
   <element>
     <id>UMLPackage</id>
@@ -979,7 +979,7 @@ fg=black</panel_attributes>
       <x>632</x>
       <y>0</y>
       <w>520</w>
-      <h>280</h>
+      <h>228</h>
     </coordinates>
     <panel_attributes>EvolutionSim.Utility
 --
@@ -990,47 +990,38 @@ fg=red</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1180</x>
-      <y>24</y>
+      <y>16</y>
       <w>172</w>
-      <h>196</h>
+      <h>136</h>
     </coordinates>
     <panel_attributes>Overlay
 --
-+static PANEL_WIDTH: int { get; }
-+OrganismCountInput: TextInput { get; -set; }
-+OrganismCreateButton: Button { get; -set; }
-+FoodCountInput: TextInput { get; -set; }
-+FoodCreateButton: Button { get; -set; }
-+NothingRadio: RadioButton { get; -set; }
-+MountainRadio: RadioButton { get; -set; }
-+WaterRadio: RadioButton { get; -set; }
-+OrganismRadio: RadioButton { get; -set; }
-+FoodRadio: RadioButton { get; -set; }
-+PauseButton: RadioButton { get; -set; }
-+NormalRadio: RadioButton { get; -set; }
-+FastRadio: RadioButton { get; -set; }
-+OrganismSpeciesValue: TextInput { get; -set; }
-+OrganismHungerValue: TextInput { get; -set; }
-+OrganismAgeValue: TextInput { get; -set; }
-+OrganismStrengthValue: TextInput { get; -set; }
-+OrganismSpeedValue: TextInput { get; -set; }
--editAttributesText: Paragraph
--organismSpeciesText: Paragraph
--organismHungerText: Paragraph
--organismAgeText: Paragraph
--organismStrengthText: Paragraph
--organismSpeedText: Paragraph
++PANEL_WIDTH: int
+-TOP_PANEL_HEIGHT: int
+-BOTTOM_PANEL_HEIGHT: int
+-TEXT_WIDTH: int
+-BUTTON_WIDTH: int
+-ELEMENT_HEIGHT: 40
+-topPanel: Panel
+-bottomPnael: Panel
+-organismSpeciesValue: TextInput
+-organismHungerValue: TextInput
+-organismAgeValue: TextInput
+-organismStrengthValue: TextInput
+-organismSpeedValue: TextInput
 --
-+Overlay()
++Overlay(simulation: Simulation)
 +Update(gameTime: GameTime, tileHighlight: TileHighlight): void
-+Draw(spriteBatch: SpriteBatch): void</panel_attributes>
++Draw(spriteBatch: SpriteBatch): void
+-CreateTopPanel(simulation: Simulation): void
+-CreateBottomPanel(simulation: Simulation): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1348</x>
-      <y>160</y>
+      <y>108</y>
       <w>60</w>
       <h>708</h>
     </coordinates>
@@ -1042,7 +1033,7 @@ fg=black</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>812</x>
-      <y>244</y>
+      <y>192</y>
       <w>180</w>
       <h>32</h>
     </coordinates>
@@ -1056,7 +1047,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>948</x>
-      <y>192</y>
+      <y>140</y>
       <w>44</w>
       <h>60</h>
     </coordinates>
@@ -1067,29 +1058,29 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>44</x>
-      <y>196</y>
+      <y>176</y>
       <w>360</w>
-      <h>624</h>
+      <h>592</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;650.0;880.0;650.0;880.0;1540.0;780.0;1540.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;570.0;880.0;570.0;880.0;1460.0;780.0;1460.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>352</x>
-      <y>224</y>
+      <y>200</y>
       <w>328</w>
-      <h>576</h>
+      <h>548</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;1420.0;320.0;1420.0;320.0;600.0;800.0;600.0;800.0;10.0</additional_attributes>
+    <additional_attributes>10.0;1350.0;320.0;1350.0;320.0;530.0;800.0;530.0;800.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>648</x>
-      <y>148</y>
+      <y>124</y>
       <w>136</w>
       <h>80</h>
     </coordinates>
@@ -1111,7 +1102,7 @@ fg=black</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>688</x>
+      <x>672</x>
       <y>68</y>
       <w>104</w>
       <h>32</h>
@@ -1128,17 +1119,17 @@ fg=black</panel_attributes>
     <coordinates>
       <x>604</x>
       <y>80</y>
-      <w>92</w>
-      <h>480</h>
+      <w>76</w>
+      <h>428</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;1180.0;10.0;10.0;210.0;10.0</additional_attributes>
+    <additional_attributes>10.0;1050.0;10.0;10.0;170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1032</x>
-      <y>48</y>
+      <x>1028</x>
+      <y>24</y>
       <w>92</w>
       <h>80</h>
     </coordinates>
@@ -1160,32 +1151,32 @@ fg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1120</x>
-      <y>92</y>
-      <w>252</w>
-      <h>776</h>
+      <x>1116</x>
+      <y>68</y>
+      <w>256</w>
+      <h>748</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 fg=black</panel_attributes>
-    <additional_attributes>610.0;1920.0;610.0;580.0;100.0;580.0;100.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>620.0;1850.0;620.0;510.0;110.0;510.0;110.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>820</x>
-      <y>40</y>
+      <y>36</y>
       <w>148</w>
       <h>100</h>
     </coordinates>
     <panel_attributes>TimeManager
 --
-+static MOVE_SPEED: float { get; }
-+static HAS_SIMULATION_TICKED: bool { get; }
++MOVE_SPEED: float
+_+HAS_SIMULATION_TICKED: bool { get; }_
+_-SIMULATION_TICK_COOLDOWN: int_
+_-MS_SINCE_LAST_TICK: int_
+_-PAUSED_ELAPSED: int_
 +Paused: bool { get; set; }
 -deltaMS: int
--static SIMULATION_TICK_COOLDOWN: int
--static MS_SINCE_LAST_TICK: int
--static PAUSED_ELAPSED: int
 -DEFAULT_SIMULATION_TICK_COOLDOWN: int
 -DEFAULT_MATING_COOLDOWN: int
 -matingCooldown: int
@@ -1200,38 +1191,38 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>780</x>
-      <y>136</y>
-      <w>68</w>
-      <h>44</h>
+      <y>124</y>
+      <w>48</w>
+      <h>12</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>150.0;10.0;150.0;90.0;10.0;90.0</additional_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>592</x>
-      <y>56</y>
+      <y>52</y>
       <w>236</w>
-      <h>504</h>
+      <h>456</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 fg=black</panel_attributes>
-    <additional_attributes>10.0;1240.0;10.0;10.0;570.0;10.0</additional_attributes>
+    <additional_attributes>10.0;1120.0;10.0;10.0;570.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>204</x>
-      <y>260</y>
+      <y>208</y>
       <w>112</w>
       <h>128</h>
     </coordinates>
     <panel_attributes>Graphics
 --
-+static WINDOW_WIDTH: int { get; }
-+static WINDOW_HEIGHT: int { get; }
-+static RANDOM: Random { get; -set; }
++WINDOW_WIDTH: int
++WINDOW_HEIGHT: in
+_+RANDOM: Random { get; -set; }_
 -graphics: GraphicsDeviceManager
 -spriteBatch: SpriteBatch
 -background: Background
@@ -1246,7 +1237,6 @@ fg=black</panel_attributes>
 #UnloadContent(): void
 #Update(gameTime: GameTime): void
 #Draw(gameTime: GameTime): void
--CreateUIHandlers(): void
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -1254,7 +1244,7 @@ fg=black</panel_attributes>
     <id>UMLPackage</id>
     <coordinates>
       <x>1080</x>
-      <y>312</y>
+      <y>260</y>
       <w>56</w>
       <h>28</h>
     </coordinates>
@@ -1267,19 +1257,19 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1132</x>
-      <y>216</y>
+      <y>148</y>
       <w>76</w>
-      <h>128</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 fg=black</panel_attributes>
-    <additional_attributes>170.0;10.0;170.0;300.0;10.0;300.0</additional_attributes>
+    <additional_attributes>170.0;10.0;170.0;340.0;10.0;340.0</additional_attributes>
   </element>
   <element>
     <id>UMLPackage</id>
     <coordinates>
       <x>68</x>
-      <y>256</y>
+      <y>204</y>
       <w>56</w>
       <h>28</h>
     </coordinates>
@@ -1292,7 +1282,7 @@ bg=orange</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>120</x>
-      <y>272</y>
+      <y>220</y>
       <w>92</w>
       <h>12</h>
     </coordinates>
@@ -1303,21 +1293,21 @@ bg=orange</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>60</x>
-      <y>312</y>
+      <y>260</y>
       <w>104</w>
       <h>32</h>
     </coordinates>
     <panel_attributes>Program
 --
 --
-+static Main(): void</panel_attributes>
+_+Main(): void_</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>160</x>
-      <y>324</y>
+      <y>272</y>
       <w>52</w>
       <h>12</h>
     </coordinates>
@@ -1329,19 +1319,19 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>312</x>
-      <y>216</y>
+      <y>148</y>
       <w>932</w>
-      <h>84</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 fg=black</panel_attributes>
-    <additional_attributes>10.0;190.0;2310.0;190.0;2310.0;10.0</additional_attributes>
+    <additional_attributes>10.0;230.0;2310.0;230.0;2310.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>312</x>
-      <y>264</y>
+      <y>212</y>
       <w>508</w>
       <h>12</h>
     </coordinates>
@@ -1353,7 +1343,7 @@ fg=black</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>64</x>
-      <y>348</y>
+      <y>296</y>
       <w>64</w>
       <h>20</h>
     </coordinates>
@@ -1365,7 +1355,7 @@ bg=blue</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>360</x>
-      <y>296</y>
+      <y>244</y>
       <w>136</w>
       <h>120</h>
     </coordinates>
@@ -1394,7 +1384,7 @@ bg=blue</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>492</x>
-      <y>304</y>
+      <y>252</y>
       <w>904</w>
       <h>564</h>
     </coordinates>
@@ -1406,7 +1396,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>492</x>
-      <y>272</y>
+      <y>220</y>
       <w>804</w>
       <h>36</h>
     </coordinates>
@@ -1418,19 +1408,19 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>492</x>
-      <y>20</y>
-      <w>384</w>
-      <h>340</h>
+      <y>44</y>
+      <w>336</w>
+      <h>264</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 fg=black</panel_attributes>
-    <additional_attributes>10.0;830.0;120.0;830.0;120.0;10.0;940.0;10.0;940.0;50.0</additional_attributes>
+    <additional_attributes>10.0;640.0;120.0;640.0;120.0;10.0;820.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>492</x>
-      <y>372</y>
+      <y>320</y>
       <w>228</w>
       <h>12</h>
     </coordinates>
@@ -1442,7 +1432,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>288</x>
-      <y>432</y>
+      <y>380</y>
       <w>432</w>
       <h>364</h>
     </coordinates>
@@ -1453,7 +1443,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>612</x>
-      <y>492</y>
+      <y>440</y>
       <w>112</w>
       <h>340</h>
     </coordinates>
@@ -1464,7 +1454,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>180</x>
-      <y>472</y>
+      <y>420</y>
       <w>540</w>
       <h>480</h>
     </coordinates>
@@ -1475,7 +1465,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>432</x>
-      <y>464</y>
+      <y>412</y>
       <w>288</w>
       <h>452</h>
     </coordinates>
@@ -1486,7 +1476,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>648</x>
-      <y>492</y>
+      <y>440</y>
       <w>148</w>
       <h>84</h>
     </coordinates>
@@ -1497,7 +1487,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>588</x>
-      <y>760</y>
+      <y>708</y>
       <w>576</w>
       <h>48</h>
     </coordinates>
@@ -1508,7 +1498,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>336</x>
-      <y>760</y>
+      <y>708</y>
       <w>940</w>
       <h>104</h>
     </coordinates>
@@ -1519,7 +1509,7 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>372</x>
-      <y>760</y>
+      <y>708</y>
       <w>912</w>
       <h>140</h>
     </coordinates>
@@ -1530,11 +1520,44 @@ fg=black</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>928</x>
-      <y>492</y>
+      <y>440</y>
       <w>12</w>
       <h>32</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>148</y>
+      <w>736</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>1820.0;10.0;1820.0;160.0;1370.0;160.0;1370.0;310.0;10.0;310.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>304</y>
+      <w>56</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>336</y>
+      <w>64</w>
+      <h>172</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0;140.0;410.0</additional_attributes>
   </element>
 </diagram>

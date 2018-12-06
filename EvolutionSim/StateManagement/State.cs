@@ -5,7 +5,7 @@ namespace EvolutionSim.StateManagement
 {
 
     //these represent states
-    public enum PotentialStates
+    public enum States
     {
         Roaming,
         Eating,
@@ -18,7 +18,7 @@ namespace EvolutionSim.StateManagement
     }
 
     //these represent the transition paths between states
-    public enum Action
+    public enum Actions
     {
         NotHungry,
         HungryRoam,
@@ -43,11 +43,11 @@ namespace EvolutionSim.StateManagement
         //a nested and publically avaliable class to determine behaviour of organsim when changing states
         class StateTransition
         {
-            private readonly PotentialStates currentState;
-            private readonly Action action;
+            private readonly States currentState;
+            private readonly Actions action;
 
             //StateTransition object constructor 
-            public StateTransition(PotentialStates currentState, Action action)
+            public StateTransition(States currentState, Actions action)
             {
                 this.currentState = currentState;
                 this.action = action;
@@ -73,7 +73,7 @@ namespace EvolutionSim.StateManagement
         }
 
         // represent a transition table as a dictonary
-        private Dictionary<StateTransition, PotentialStates> transitions;
+        private Dictionary<StateTransition, States> transitions;
         
         //Sets each state to roaming by default
         public State()
@@ -81,54 +81,54 @@ namespace EvolutionSim.StateManagement
             //CurrentState = PotentialStates.Roaming;
 
             //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
-            this.transitions = new Dictionary<StateTransition, PotentialStates>
+            this.transitions = new Dictionary<StateTransition, States>
             {
                 //here we add all of the possible state transitions in
 
                 //if organism is in roam state and isn't hungry then remain in roaming
-                { new StateTransition (PotentialStates.Roaming, Action.NotHungry), PotentialStates.Roaming},
+                { new StateTransition (States.Roaming, Actions.NotHungry), States.Roaming},
 
                 //if organism is in roaming state and wants to mate then place into seekMate state
-                { new StateTransition (PotentialStates.Roaming, Action.HungryMate), PotentialStates.SeekMate},
+                { new StateTransition (States.Roaming, Actions.HungryMate), States.SeekMate},
 
-                { new StateTransition (PotentialStates.Roaming, Action.HungryRoam), PotentialStates.SeekFood},
+                { new StateTransition (States.Roaming, Actions.HungryRoam), States.SeekFood},
 
                 // if the organism is seeking a mate but becomes too hungry then switch to seek food
-                { new StateTransition (PotentialStates.SeekMate, Action.HungryRoam), PotentialStates.SeekFood},
+                { new StateTransition (States.SeekMate, Actions.HungryRoam), States.SeekFood},
 
                 //once the organism has finished mating place back into the roaming state
-                { new StateTransition(PotentialStates.Mating, Action.FinishedMating), PotentialStates.Roaming},
+                { new StateTransition(States.Mating, Actions.FinishedMating), States.Roaming},
 
                 //when the organism finds food place into the eating state
-                { new StateTransition(PotentialStates.SeekFood, Action.FoodDetected), PotentialStates.MovingToFood},
+                { new StateTransition(States.SeekFood, Actions.FoodDetected), States.MovingToFood},
 
-                { new StateTransition(PotentialStates.MovingToFood,Action.FoodFound),PotentialStates.Eating },
+                { new StateTransition(States.MovingToFood,Actions.FoodFound),States.Eating },
 
-                { new StateTransition(PotentialStates.MovingToFood,Action.NotHungry),PotentialStates.Roaming }, // Food has disappeared
+                { new StateTransition(States.MovingToFood,Actions.NotHungry),States.Roaming }, // Food has disappeared
 
-                {new StateTransition(PotentialStates.Eating,Action.NotHungry),PotentialStates.Roaming },
+                {new StateTransition(States.Eating,Actions.NotHungry),States.Roaming },
                 
-                { new StateTransition(PotentialStates.SeekMate, Action.MateFound), PotentialStates.MovingToMate},
+                { new StateTransition(States.SeekMate, Actions.MateFound), States.MovingToMate},
 
                 //now if an organism is waiting for a mate and takes the action move to go over to partner
-                {new StateTransition(PotentialStates.SeekMate, Action.Waiting), PotentialStates.WaitingForMate},
+                {new StateTransition(States.SeekMate, Actions.Waiting), States.WaitingForMate},
 
                 //we are finished with mating, so now go back to roaming!
-                {new StateTransition(PotentialStates.WaitingForMate, Action.Move), PotentialStates.Roaming},
+                {new StateTransition(States.WaitingForMate, Actions.Move), States.Roaming},
 
-                {new StateTransition(PotentialStates.MovingToMate, Action.Bang), PotentialStates.Mating},
+                {new StateTransition(States.MovingToMate, Actions.Bang), States.Mating},
                 
-                { new StateTransition(PotentialStates.MovingToMate,Action.FinishedMating),PotentialStates.Roaming }, // Mate has disappeared
+                { new StateTransition(States.MovingToMate,Actions.FinishedMating),States.Roaming }, // Mate has disappeared
 
             };
         }
 
 
         //return the next state deterministically
-        public PotentialStates GetNext(PotentialStates currentState, Action action)
+        public States GetNext(States currentState, Actions action)
         {
             StateTransition transition = new StateTransition(currentState, action);
-            PotentialStates nextState;
+            States nextState;
 
             if (!this.transitions.TryGetValue(transition, out nextState))
             {
@@ -139,7 +139,7 @@ namespace EvolutionSim.StateManagement
         }
 
         //handles the moving of states.
-        public PotentialStates MoveState(PotentialStates determinedState, Action action)
+        public States MoveState(States determinedState, Actions action)
         {
             determinedState = GetNext(determinedState, action);
             return determinedState;

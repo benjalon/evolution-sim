@@ -7,8 +7,6 @@ using EvolutionSim.UI;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Threading;
-
 
 namespace EvolutionSim.Logic
 {
@@ -31,7 +29,7 @@ namespace EvolutionSim.Logic
             this.textures = textures;
             this.bearTextures = new Texture2D[] { textures["bear_0"], textures["bear_1"], textures["bear_2"], textures["bear_3"], textures["bear_4"] };
 
-            this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"], screenWidth - Overlay.PANEL_WIDTH, screenHeight);
+            this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"]);
             this.TimeManager = new TimeManager();
 
             this.fsm = new StateMachine(this.grid, this.TimeManager);

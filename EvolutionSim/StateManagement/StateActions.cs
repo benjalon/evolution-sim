@@ -190,7 +190,7 @@ namespace EvolutionSim.StateManagement
             /// <returns></returns>
             public static Tile FoodInRange(Organism organism, Grid grid)
             {
-                PotentialStates organismState = organism.State;
+                States organismState = organism.State;
                 var max_depth = organism.Attributes.DetectionRadius;
                 var depth = 0;
 
