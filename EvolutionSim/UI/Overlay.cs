@@ -32,6 +32,7 @@ namespace EvolutionSim.UI
         private const int BOTTOM_PANEL_OFFSET = 30;
         private const int BOTTOM_PANEL_HEIGHT = Graphics.WINDOW_HEIGHT - TOP_PANEL_HEIGHT - MIDDLE_PANEL_CONTRACTED_HEIGHT + BOTTOM_PANEL_OFFSET;
         private const int TEXT_WIDTH = 110;
+        private const int EDIT_TEXT_WIDTH = 180;
         private const int BUTTON_WIDTH = 170;
         private const int ELEMENT_HEIGHT = 40;
 
@@ -106,7 +107,7 @@ namespace EvolutionSim.UI
         {
             this.middlePanel = new Panel(new Vector2(PANEL_WIDTH, MIDDLE_PANEL_EXPANDED_HEIGHT), PanelSkin.None, Anchor.TopRight);
             this.middlePanel.Padding = new Vector2(10);
-            this.middlePanel.PanelOverflowBehavior = PanelOverflowBehavior.Clipped;
+            this.middlePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
             this.middlePanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the middle panel
             UserInterface.Active.AddEntity(this.middlePanel);
 
@@ -216,10 +217,10 @@ namespace EvolutionSim.UI
             var editAttributesText = new Paragraph("Edit Attributes");
 
             var editSpeciesText = new Paragraph("Species:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.editSpeciesValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editSpeciesValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
             var editHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.editHungerValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editHungerValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
             editHungerValue.OnValueChange = (Entity btn) =>
             {
                 if (int.TryParse(((TextInput)btn).Value, out var input))
@@ -228,14 +229,14 @@ namespace EvolutionSim.UI
                 }
             };
 
-            var editAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.editAgeValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            var editAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editAgeValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
             var editStrengthText = new Paragraph("Strength:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.editStrengthValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editStrengthValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
             var editSpeedText = new Paragraph("Speed:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
-            this.editSpeedValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editSpeedValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
 
             // Draw order
 
@@ -264,7 +265,6 @@ namespace EvolutionSim.UI
             {
                 this.editHungerValue.Value = "";
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_EXPANDED_HEIGHT);
-                this.middlePanel.PanelOverflowBehavior = PanelOverflowBehavior.Clipped;
                 this.bottomPanel.Visible = false;
             }
             else
@@ -276,7 +276,6 @@ namespace EvolutionSim.UI
                 this.editSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
 
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_CONTRACTED_HEIGHT);
-                this.middlePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
                 this.bottomPanel.Visible = true;
             }
         }

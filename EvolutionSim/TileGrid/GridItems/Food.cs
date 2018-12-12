@@ -14,26 +14,12 @@ namespace EvolutionSim.TileGrid.GridItems
 
     public class Food : GridItem
     {
-        public bool HerbivoreFriendly { get; private set; }
+        public bool IsHerbivoreFood { get; private set; }
 
-        public Food(Texture2D texture) : base(texture, Graphics.RANDOM.Next(3, 6))
+        public Food(Texture2D texture, bool herbivoreFood, int health) : base(texture, health)
         {
-
-            this.HerbivoreFriendly = true;
-
+            this.IsHerbivoreFood = herbivoreFood;
         }
-
-        /// <summary>
-        /// this can be called to specify if the spawned food cannont be consumed by an omnivore.
-        /// </summary>
-        /// <param name="texture"></param>
-        /// <param name="omnivoreFriendly"></param>
-        public Food(Texture2D texture, bool herbivoreFriendly) : base(texture, Graphics.RANDOM.Next(3, 6))
-        {
-
-            this.HerbivoreFriendly = herbivoreFriendly;
-        }
-
 
         /// <summary>
         /// Eats the food, lowering its health over time

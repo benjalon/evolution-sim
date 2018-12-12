@@ -13,7 +13,6 @@ namespace EvolutionSim.Logic
     public class Simulation
     {
         private readonly Dictionary<string, Texture2D> textures;
-        private readonly Texture2D[] bearTextures;
         private readonly Tuple<Texture2D, Texture2D> healthbarTextures;
 
         private readonly StateMachine fsm;
@@ -26,15 +25,28 @@ namespace EvolutionSim.Logic
 
         public RadioAddSprites SelectedRadioItem { private get; set; } = RadioAddSprites.Grass;
 
+        private List<Breed> bearBreeds;
+
         public Simulation(Dictionary<string, Texture2D> textures)
         {
             this.textures = textures;
-            this.bearTextures = new Texture2D[] { textures["bear_0"], textures["bear_1"], textures["bear_2"], textures["bear_3"], textures["bear_4"] };
+
+            this.bearBreeds = new List<Breed>()
+            {
+                new Breed() { Species = "MiniGreen", Texture = textures["bear_0"], DietType = DietTypes.Herbivore, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
+                new Breed() { Species = "MysteryPurp", Texture = textures["bear_1"], DietType = DietTypes.Herbivore, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
+                new Breed() { Species = "Blastoise", Texture = textures["bear_2"], DietType = DietTypes.Omnivore, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
+                new Breed() { Species = "AngryRed", Texture = textures["bear_3"], DietType = DietTypes.Canivore, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
+                new Breed() { Species = "YellowBoi", Texture = textures["bear_4"], DietType = DietTypes.Omnivore, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
+            };
+
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(textures["healthbar_red"], textures["healthbar_green"]);
             
             this.background = new FullScreenSprite(textures["grass_background"]);
 
             this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"]);
+            this.grid.ShouldSpawnCorpse += SpawnCorpseHandler;
+
             this.TimeManager = new TimeManager();
 
             this.fsm = new StateMachine(this.grid, this.TimeManager);
@@ -77,13 +89,24 @@ namespace EvolutionSim.Logic
             
             this.TileHighlight.Draw(spriteBatch);
         }
-        
+
         public void BirthHandler(object sender, EventArgs args)
         {
             var mother = ((MatingArgs)args).Mother;
             var positioned = false;
 
-            var child = new Organism(this.bearTextures, this.healthbarTextures);
+            var simpleCrossbreed = new Breed()
+            {
+                Species = mother.Attributes.Species,
+                Texture = mother.Texture,
+                DietType = mother.Attributes.DietType,
+                Strength = mother.Attributes.Strength,
+                Speed = mother.Attributes.Speed,
+                ResistCold = mother.Attributes.ResistCold,
+                ResistHeat = mother.Attributes.ResistHeat
+            };
+
+            var child = new Organism(simpleCrossbreed, this.healthbarTextures);
 
             // Top left corner
             var birthSpot = mother.GridIndex;
@@ -117,7 +140,7 @@ namespace EvolutionSim.Logic
         {
             for (var i = 0; i < amount; i++)
             {
-                PositionAtRandom(new Organism(this.bearTextures, this.healthbarTextures));
+                PositionAtRandom(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures));
             }
         }
 
@@ -125,18 +148,18 @@ namespace EvolutionSim.Logic
         {
             for (var i = 0; i < amount; i++)
             {
-                PositionAtRandom(new Food(this.textures["food"]));
+                PositionAtRandom(new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, 6)));
             }
         }
 
         public void AddOrganism(int x, int y)
         {
-            this.grid.AttemptToPositionAt(new Organism(this.bearTextures, this.healthbarTextures), x, y);
+            this.grid.AttemptToPositionAt(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures), x, y);
         }
 
         public void AddFood(int x, int y)
         {
-            this.grid.AttemptToPositionAt(new Food(this.textures["food"]), x, y);
+            this.grid.AttemptToPositionAt(new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, 6)), x, y);
         }
 
         private void PositionAtRandom(GridItem item)
@@ -146,5 +169,18 @@ namespace EvolutionSim.Logic
                 PositionAtRandom(item); // Try again
             }
         }
+
+
+        /// <summary>
+        /// Handle death by removing the organism from the grid and removing its reference from the list of organisms.
+        /// </summary>
+        /// <param name="sender">The organism in question.</param>
+        /// <param name="e">Event arguments.</param>
+        private void SpawnCorpseHandler(object sender, EventArgs e)
+        {
+            var tile = (Tile)sender;
+            this.grid.AttemptToPositionAt(new Food(this.textures["meat"], false, 20), tile.GridIndex.X, tile.GridIndex.Y);
+        }
+
     }
 }

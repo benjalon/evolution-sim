@@ -70,14 +70,14 @@ namespace EvolutionSim.Utility
             switch (setting)
             {
                 case WeatherSettings.Cold:
-                    this.texture = this.coldTexture;
+                    this.Texture = this.coldTexture;
                     break;
                 case WeatherSettings.Hot:
-                    this.texture = this.hotTexture;
+                    this.Texture = this.hotTexture;
                     break;
                 case WeatherSettings.Warm:
                 default:
-                    this.texture = null;
+                    this.Texture = null;
                     break;
             }
         }

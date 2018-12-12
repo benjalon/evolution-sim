@@ -86,6 +86,7 @@
     <Compile Include="TileGrid\GridItems\Healthbar.cs" />
     <Compile Include="TileGrid\GridItems\Terrain.cs" />
     <Compile Include="TileGrid\GridItems\TileHighlight.cs" />
+    <Compile Include="Utility\Breed.cs" />
     <Compile Include="Utility\FullScreenSprite.cs" />
     <Compile Include="Utility\Lerper.cs" />
     <Compile Include="TileGrid\GridItems\Food.cs" />

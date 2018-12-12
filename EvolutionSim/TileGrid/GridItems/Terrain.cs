@@ -21,7 +21,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (texture != null)
+            if (Texture != null)
             {
                 base.Draw(spriteBatch);
             }
@@ -37,7 +37,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
             var terrainIndex = (int)terrainType;
             this.MovementDifficulty = terrainIndex * DIFFICULTY_MODIFIER;
-            this.texture = this.textures[terrainIndex];
+            this.Texture = this.textures[terrainIndex];
         }
     }
 }

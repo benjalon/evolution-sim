@@ -131,7 +131,7 @@ namespace EvolutionSim.StateManagement
                     {
                         organism.State = this.state.MoveState(organismState, Actions.MateFound); // Mate found, move towards them
                     }
-                    else if (organism.Attributes.WaitingForMate)
+                    else if (organism.WaitingForMate)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.Waiting); // A mate has found this organism, wait for them
                     }
@@ -157,7 +157,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.WaitingForMate: // When an organism is waiting for their mate to approach them
-                    if (!organism.Attributes.WaitingForMate)
+                    if (!organism.WaitingForMate)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.Move); //mating is over, so go back into roaming.
                     }
@@ -204,7 +204,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.Mating:
-                    ((Organism)(organism.DestinationTile.Inhabitant)).Attributes.WaitingForMate = false;
+                    ((Organism)(organism.DestinationTile.Inhabitant)).WaitingForMate = false;
                     MatingOccurred?.Invoke(this, new MatingArgs(organism));
                     
                     break;

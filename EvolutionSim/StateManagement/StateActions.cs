@@ -143,9 +143,20 @@ namespace EvolutionSim.StateManagement
         /// <param name="grid"></param>
         /// <param name="organism"></param>
         /// <returns></returns>
-        private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Grid grid)
+        private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Organism organism, Grid grid)
         {
-            return (grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY));
+            if (!(grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY)))
+            {
+                return false; // The tile is out of bounds or there's no food there
+            }
+
+            // Does the food type match the organism's diet type
+            var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
+            var validFood = organism.Attributes.DietType == DietTypes.Omnivore || 
+                            (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) || 
+                            (organism.Attributes.DietType == DietTypes.Canivore && !food.IsHerbivoreFood);
+
+            return validFood;
         }
 
 
@@ -221,7 +232,7 @@ namespace EvolutionSim.StateManagement
                         i++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), organism, grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -233,7 +244,7 @@ namespace EvolutionSim.StateManagement
                         j++;
                         x = firstX + i;
                         y = firstY + j;
-                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), organism, grid))
                         {
 
                             return grid.GetTileAt(firstX + i, firstY + j);
@@ -246,7 +257,7 @@ namespace EvolutionSim.StateManagement
                         i--;
                         x = firstX + i;
                         y = firstY + j;
-                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), organism, grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -258,7 +269,7 @@ namespace EvolutionSim.StateManagement
                         j--;
                         x = firstX + i;
                         y = firstY + j;
-                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), grid))
+                        if (PerformValidFoodCheck(x, y, (firstX + i), (firstY + j), organism, grid))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -278,14 +289,9 @@ namespace EvolutionSim.StateManagement
         {
             public static void EatFood(Organism organism, Grid grid)
             {
-                bool validFood;
-                Food food = organism.DestinationTile.Inhabitant as Food;
-                //this combines two checks
-
-                //this check determines if the organism can eat the current food source
-                validFood = organism.OrganismPref == DietTypes.Omnivore || organism.OrganismPref == DietTypes.Herbivore;
+                var food = organism.DestinationTile.Inhabitant as Food;
                 
-                if (food != null && validFood && food.HerbivoreFriendly && TimeManager.HAS_SIMULATION_TICKED) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
+                if (TimeManager.HAS_SIMULATION_TICKED) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
                 {
                     food.BeEaten();
                     organism.Eat(); //organism gets fuller after eating
@@ -305,7 +311,7 @@ namespace EvolutionSim.StateManagement
                 if (potentialMate != null)
                 {
                     //ping the potential mate in the given position and get them to move into the waitingForMateState.
-                    ((Organism)potentialMate.Inhabitant).Attributes.WaitingForMate = true;
+                    ((Organism)potentialMate.Inhabitant).WaitingForMate = true;
 
 
                     //shouldn't be calling the A* for mating probably
@@ -324,7 +330,7 @@ namespace EvolutionSim.StateManagement
 
                 }
                 //this check wont work. Organisms have no way of entering the waiting for mate state
-                else if (!organism.Attributes.WaitingForMate)
+                else if (!organism.WaitingForMate)
                 {
                     Roam(organism, grid);
                 }

@@ -22,6 +22,8 @@ namespace EvolutionSim.TileGrid
 
         private readonly Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
+        public event EventHandler ShouldSpawnCorpse;
+
         /// <summary>
         /// Create a Grid with given attributes.
         /// </summary>
@@ -229,9 +231,12 @@ namespace EvolutionSim.TileGrid
         private void OrganismDeathHandler(object sender, EventArgs e)
         {
             var organism = (Organism)sender;
-            this.GetTileAt(organism).RemoveInhabitant();
+            var tile = this.GetTileAt(organism);
+            tile.RemoveInhabitant();
             this.Organisms.Remove(organism);
-        }
+
+            ShouldSpawnCorpse?.Invoke(tile, EventArgs.Empty);
+    }
 
         /// <summary>
         /// Handle food being eaten by removing the food from the grid and removing its reference from the list of food.

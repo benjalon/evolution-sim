@@ -24,32 +24,28 @@ namespace EvolutionSim.TileGrid.GridItems
 
         // Attributes
         public OrganismAttributes Attributes { get; }
-        public DietTypes OrganismPref { get; private set; }
 
         // Pathfinding 
         public bool Computing { get; set; } = false;
-        public List<Tile> Path { get; set; }
+        public List<Tile> Path { get; set; } = new List<Tile>();
         public Tile DestinationTile { get; set; } // The next tile along after the path
-        
+
         // State management
-        public States State { get; set; }
+        public States State { get; set; } = States.Roaming;
         public int MsSinceLastMate { get; set; } = 0;
+        public bool JustMated { get; set; } = false;
+        public bool WaitingForMate { get; set; }
+        public bool MateFound { get; set; }
 
         // Misc
-        public bool IsSelected { get; set; } = false;
-
         private readonly Healthbar healthbar;
-
-        public Organism(Texture2D[] organismTextures, Tuple<Texture2D, Texture2D> healthbarTextures) : base(organismTextures[Graphics.RANDOM.Next(0, organismTextures.Length - 1)], Graphics.RANDOM.Next(10, 30))
+        public bool IsSelected { get; set; } = false;
+        
+        public Organism(Breed breed, Tuple<Texture2D, Texture2D> healthbarTextures) : base(breed.Texture, Graphics.RANDOM.Next(10, 30))
         {
-            this.Attributes = new OrganismAttributes(0, 0.2f, 500, 50);
             TOTAL_POPULATION++;
-            State = States.Roaming;
-            Path = new List<Tile>();
 
-            //by default set the organism to be a herbivore
-            this.OrganismPref = DietTypes.Herbivore;
-
+            this.Attributes = new OrganismAttributes(breed);
             this.healthbar = new Healthbar(healthbarTextures, rectangle, defaultHealth);
         }
 
@@ -59,11 +55,11 @@ namespace EvolutionSim.TileGrid.GridItems
 
             if (IsSelected)
             {
-                spriteBatch.Draw(this.texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.Purple, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.Purple, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
             }
             else
             {
-                spriteBatch.Draw(this.texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.White, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.White, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
             }
 
             this.healthbar.Draw(spriteBatch);
@@ -72,6 +68,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public void Eat()
         {
             this.Attributes.Hunger += 0.04f;
+
+            IncreaseHealth(1);
         }
         
         public override void SetScreenPosition(int x, int y)
@@ -92,38 +90,34 @@ namespace EvolutionSim.TileGrid.GridItems
             this.healthbar.CurrentHealth = this.Health;
         }
     }
-
-
+    
     public class OrganismAttributes
     {
         public string Species { get; set; }
-        public int Age { get; set; }
-        public float Hunger { get; set; }
+        public DietTypes DietType { get; set; }
         public float Speed { get; set; }
         public float Strength { get; set; }
-        public int DetectionRadius { get; set; }
-        public int DetectionDiameter { get; set; }
-        public bool WaitingForMate { get; set; }
-        public bool MateFound { get; set; }
-        public bool JustMated { get; set; }
         public bool ResistCold { get; set; }
         public bool ResistHeat { get; set; }
 
-        public OrganismAttributes(int age,
-                                  float hunger,
-                                  float speed,
-                                  float strength)
+        public int Age { get; set; }
+        public float Hunger { get; set; }
+        public int DetectionRadius { get; set; }
+        public int DetectionDiameter { get; set; }
+
+        public OrganismAttributes(Breed breed)
         {
-            Species = "Bear";
+            Species = breed.Species;
+            DietType = breed.DietType;
+            Speed = breed.Speed;
+            Strength = breed.Strength;
+            ResistCold = breed.ResistCold;
+            ResistHeat = breed.ResistHeat;
+
+            Age = 0;
+            Hunger = 0.2f;
             DetectionRadius = 3;
             DetectionDiameter = DetectionRadius * 2;
-            Age = age;
-            Hunger = hunger;
-            Speed = speed;
-            Strength = (Graphics.RANDOM.Next(8) + 3) * 0.1f;
-            JustMated = false;
-            ResistCold = Graphics.RANDOM.NextDouble() >= 0.5; // TODO: This shouldnt be random
-            ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5; // TODO: This shouldnt be random
         }
     }
 }
