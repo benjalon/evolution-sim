@@ -7,8 +7,6 @@ using EvolutionSim.UI;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Threading;
-
 
 namespace EvolutionSim.Logic
 {
@@ -20,36 +18,43 @@ namespace EvolutionSim.Logic
         private StateMachine fsm;
         private Grid grid;
         
-        public TileHighlight TileHighlight;
+        public TileHighlight TileHighlight { get; private set; }
 
-        public TerrainTypes SelectedTerrainType { private get; set; } = TerrainTypes.Grass;
+        public TimeManager TimeManager { get; private set; }
 
-        private Random random = new Random();
+        public RadioItems SelectedRadioItem { private get; set; } = RadioItems.Grass;
 
         public Simulation(Dictionary<string, Texture2D> textures, int screenWidth, int screenHeight)
         {
             this.textures = textures;
             this.bearTextures = new Texture2D[] { textures["bear_0"], textures["bear_1"], textures["bear_2"], textures["bear_3"], textures["bear_4"] };
 
-            this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"], screenWidth - Overlay.PANEL_WIDTH, screenHeight);
+            this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"]);
+            this.TimeManager = new TimeManager();
 
-            this.fsm = new StateMachine(this.grid);
-            this.fsm.MatingOccurred += this.CreateOrganismHandler;
+            this.fsm = new StateMachine(this.grid, this.TimeManager);
+            this.fsm.MatingOccurred += this.BirthHandler;
 
             this.TileHighlight = new TileHighlight(textures["tile"]);
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            this.TileHighlight.Update(this.grid, SelectedTerrainType);
+            this.TimeManager.Update(gameTime);
+            this.TileHighlight.Update(this, this.grid, SelectedRadioItem);
+            
+            if (this.TimeManager.Paused)
+            {
+                return;
+            }
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;
-            for (var i = 0; i < organismsCount; i++)
+            for (var i = organismsCount - 1; i >= 0; i--)
             {
                 organism = this.grid.Organisms[i];
-                this.fsm.checkState(organism);
-                this.fsm.determineBehaviour(organism);
+                this.fsm.CheckState(organism);
+                this.fsm.DetermineBehaviour(organism);
                 this.fsm.UpdateOrganismAttributes(organism);
             }
         }
@@ -61,7 +66,7 @@ namespace EvolutionSim.Logic
             this.TileHighlight.Draw(spriteBatch);
         }
         
-        public void CreateOrganismHandler(object sender, EventArgs args)
+        public void BirthHandler(object sender, EventArgs args)
         {
             var mother = ((MatingArgs)args).Mother;
             var positioned = false;
@@ -96,7 +101,7 @@ namespace EvolutionSim.Logic
             }
         }
         
-        public void AddOrganism(int amount)
+        public void AddOrganisms(int amount)
         {
             for (var i = 0; i < amount; i++)
             {
@@ -104,7 +109,7 @@ namespace EvolutionSim.Logic
             }
         }
 
-        public void AddFood(int amount)
+        public void AddFoods(int amount)
         {
             for (var i = 0; i < amount; i++)
             {
@@ -112,9 +117,19 @@ namespace EvolutionSim.Logic
             }
         }
 
+        public void AddOrganism(int x, int y)
+        {
+            this.grid.AttemptToPositionAt(new Organism(this.bearTextures), x, y);
+        }
+
+        public void AddFood(int x, int y)
+        {
+            this.grid.AttemptToPositionAt(new Food(this.textures["food"]), x, y);
+        }
+
         private void PositionAtRandom(GridItem item)
         {
-            if (!this.grid.AttemptToPositionAt(item, this.random.Next(0, Grid.TileCountX), this.random.Next(0, Grid.TileCountY)))
+            if (!this.grid.AttemptToPositionAt(item, Graphics.RANDOM.Next(0, Grid.TILE_COUNT_X), Graphics.RANDOM.Next(0, Grid.TILE_COUNT_Y)))
             {
                 PositionAtRandom(item); // Try again
             }

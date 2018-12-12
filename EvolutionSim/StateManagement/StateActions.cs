@@ -20,31 +20,18 @@ namespace EvolutionSim.StateManagement
 
     public static class StateActions
     {
-
-        public static int Distance(Point StartPosition, Point EndPosition)
-        {
-            return Math.Abs(StartPosition.X - EndPosition.X) + Math.Abs(EndPosition.Y - EndPosition.Y);
-        }
-
-        public static Boolean AdjacencyCheck(Point StartPosition, Point EndPosition)
-        {
-            double distance = Math.Floor(Math.Sqrt((StartPosition.X - EndPosition.X) * (StartPosition.X - EndPosition.X) + (StartPosition.Y - EndPosition.Y) * (StartPosition.Y - EndPosition.Y)));
-            return distance == 1;
-        }
-
         public static List<Point> GetPointsInRange(Organism organism)
         {
             List<Point> toRet = new List<Point>();
 
-            var firstX = organism.GridIndex.X - organism.attributes.DetectionRadius;
-            var firstY = organism.GridIndex.Y - organism.attributes.DetectionRadius;
+            var firstX = organism.GridIndex.X - organism.Attributes.DetectionRadius;
+            var firstY = organism.GridIndex.Y - organism.Attributes.DetectionRadius;
 
-            for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
+            for (int i = 0; i < organism.Attributes.DetectionDiameter; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
                     toRet.Add(new Point(firstX + i, firstY + j));
-
                 }
 
             }
@@ -52,158 +39,115 @@ namespace EvolutionSim.StateManagement
 
         }
 
-        private static Random _random = new Random();
-
         public static void Roam(Organism organism, Grid grid)
         {
-            Boolean FoundFreeTile = false;
-            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
-
-
-            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
-            {   //decide destination
-
-                if (organism.DestinationTile is null)
-                {
-                    int _destinationTileX = organism.GridIndex.X;
-                    int _destinationTileY = organism.GridIndex.Y;
-                    organism.MilliSecondsSinceLastMovement = 0;
-                    while (!FoundFreeTile)
-                    {
-                        Directions _num = (Directions)_random.Next(0, 4);
-
-
-                        switch (_num)
-                        {
-                            case Directions.Up:
-                                if (_destinationTileY > 0)
-                                {
-                                    _destinationTileY -= 1;
-                                }
-                                break;
-                            case Directions.Left:
-                                if (_destinationTileX > 0)
-                                {
-                                    _destinationTileX -= 1;
-                                }
-                                break;
-                            case Directions.Down:
-                                if (_destinationTileY < Grid.TileCountY - 1)
-                                {
-                                    _destinationTileY += 1;
-                                }
-                                break;
-                            case Directions.Right:
-                                if (_destinationTileX < Grid.TileCountX - 1)
-                                {
-                                    _destinationTileX += 1;
-                                }
-                                break;
-                        }
-                        if (!grid.GetTileAt(_destinationTileX, _destinationTileY).HasInhabitant())
-                        {
-                            organism.DestinationTile = grid.GetTileAt(_destinationTileX, _destinationTileY);
-                            //grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
-                            FoundFreeTile = true;
-
-                        }
-                    }
-
-                }
-                else
-                {
-
-                    if (organism.Rectangle.X == organism.DestinationTile.ScreenPositionX && organism.Rectangle.Y == organism.DestinationTile.ScreenPositionY)
-                    {
-                        grid.ReparentOrganism(organism, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y);
-                        organism.DestinationTile = null;
-                        //organism.MilliSecondsSinceLastMovement = 0;
-
-                    }
-                    else
-                    {
-                        //now search for food with the adjacent tiles
-
-                        Lerper lerp = new Lerper();
-
-
-                        ////then go to that food tile
-                        //if (foodTile != null)
-                        //{
-                        //    //set the destinaion tile to be the food tile, then call the eat food method
-                        //    organism.DestinationTile = foodTile;
-
-                        //    EatingFood.EatFood(organism, grid);
-
-                        //}
-
-
-                        var newX = (int)lerp.Lerp(organism.Rectangle.X, organism.DestinationTile.ScreenPositionX);
-                        var newY = (int)lerp.Lerp(organism.Rectangle.Y, organism.DestinationTile.ScreenPositionY);
-                        organism.SetScreenPosition(newX, newY);
-
-
-                    }
-
-                }
-
-                // organism.moveTowardstile
-
-                //grid.MoveOrganism(organism, _destinationTileX, _destinationTileY);
-            }
-
-
-        }
-        // Returns true if reached tile, false if not.
-        private static bool Move(Organism organism, Tile Destination, Grid grid)
-        {
-            if (organism.Rectangle.X == Destination.ScreenPositionX && organism.Rectangle.Y == Destination.ScreenPositionY)
+            // If we don't have a set destination, pick a random tile to explore
+            if (organism.DestinationTile is null)
             {
-                grid.ReparentOrganism(organism, Destination.GridIndex.X, Destination.GridIndex.Y);
-                //organism.DestinationTile = null;
-
-                return true;
+                organism.DestinationTile = PickRandomTileToExplore(organism, grid);
             }
             else
             {
-                //MoveTowardsTile
-                Lerper lerp = new Lerper();
-
-
-                var newX = (int)lerp.Lerp(organism.Rectangle.X, Destination.ScreenPositionX);
-                var newY = (int)lerp.Lerp(organism.Rectangle.Y, Destination.ScreenPositionY);
-                organism.SetScreenPosition(newX, newY);
-
-                return false;
+                if (MoveTowards(organism, organism.DestinationTile, grid))
+                {
+                    organism.DestinationTile = null;
+                }
             }
-
         }
 
-
-
-        public static void MoveAlongPath(Organism organism, Grid grid, List<Tile> Path)
+        // TODO: this should pick globally rather than just random adjacents
+        private static Tile PickRandomTileToExplore(Organism organism, Grid grid)
         {
-            organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
-
-            if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+            Tile destination = null;
+            var _destinationTileX = organism.GridIndex.X;
+            var _destinationTileY = organism.GridIndex.Y;
+            while (destination == null)
             {
-
-                if (Path.Any() && !Path.First().HasInhabitant())
+                var _num = (Directions)Graphics.RANDOM.Next(0, 4);
+                switch (_num)
                 {
-                    if (Move(organism, Path.ElementAt(0), grid))
-                    {
-                        Path.RemoveAt(0);
-                    }
+                    case Directions.Up:
+                        if (_destinationTileY > 0)
+                        {
+                            _destinationTileY -= 1;
+                        }
+                        break;
+                    case Directions.Left:
+                        if (_destinationTileX > 0)
+                        {
+                            _destinationTileX -= 1;
+                        }
+                        break;
+                    case Directions.Down:
+                        if (_destinationTileY < Grid.TILE_COUNT_Y - 1)
+                        {
+                            _destinationTileY += 1;
+                        }
+                        break;
+                    case Directions.Right:
+                        if (_destinationTileX < Grid.TILE_COUNT_X - 1)
+                        {
+                            _destinationTileX += 1;
+                        }
+                        break;
+                }
+
+                if (!grid.GetTileAt(_destinationTileX, _destinationTileY).HasInhabitant)
+                {
+                    destination = grid.GetTileAt(_destinationTileX, _destinationTileY);
                 }
             }
 
-            if (!Path.Any())
+            return destination;
+        }
+
+        // Returns true if reached tile, false if not.
+        private static bool MoveTowards(Organism organism, Tile destination, Grid grid)
+        {
+            if (organism.Rectangle.X == destination.ScreenPositionX && organism.Rectangle.Y == destination.ScreenPositionY)
             {
-                organism.MovingOnPath = false;
+                grid.ReparentOrganism(organism, destination.GridIndex.X, destination.GridIndex.Y);
+                return true;
             }
 
+            var lerp = new Lerper();
+            var newX = (int)lerp.Lerp(organism.Rectangle.X, destination.ScreenPositionX);
+            var newY = (int)lerp.Lerp(organism.Rectangle.Y, destination.ScreenPositionY);
+            organism.SetScreenPosition(newX, newY);
 
+            return false;
         }
+
+        public static void MoveAlongPath(Organism organism, Grid grid, List<Tile> Path)
+        {
+            if (Path.Any() && !Path.First().HasInhabitant)
+            {
+                if (MoveTowards(organism, Path.ElementAt(0), grid))
+                {
+                    Path.RemoveAt(0);
+                }
+            }
+            else if (!Path.Any())
+            {
+                organism.DestinationTile = null;
+            }
+        }
+
+        /// <summary>
+        /// This check will be used in the seek food to determine if the food source is valid at the searched destination
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="firstX"></param>
+        /// <param name="firstY"></param>
+        /// <param name="grid"></param>
+        /// <param name="organism"></param>
+        /// <returns></returns>
+        private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Grid grid)
+        {
+            return (grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY));
+        }
+
 
         public static class SeekingFood
         {
@@ -228,18 +172,7 @@ namespace EvolutionSim.StateManagement
                     {
                         Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
                         organism.Path = Path;
-                        if (Path.Count == 0)
-                        {
-                            organism.DestinationTile = potentialFood;
-
-                        }
-                        else
-                        {
-                            organism.DestinationTile = potentialFood;
-                            //organism.Path.RemoveAt(organism.Path.Count - 1);
-
-                        }
-                        organism.MovingOnPath = true;
+                        organism.DestinationTile = potentialFood;
                     }), null);
                 }
                 else
@@ -257,23 +190,9 @@ namespace EvolutionSim.StateManagement
             /// <returns></returns>
             public static Tile FoodInRange(Organism organism, Grid grid)
             {
-
-
-                PotentialStates organismState = organism.OrganismState;
-                var max_depth = organism.attributes.DetectionRadius;
+                States organismState = organism.State;
+                var max_depth = organism.Attributes.DetectionRadius;
                 var depth = 0;
-
-
-                //else // the organism is in roaming
-                //{
-                //    max_depth = 1;
-
-                //}
-
-                //assign the organism state to a variable
-
-
-                //bool herbivore = (food.herbivoreFriendly && food != null);
 
                 int firstX;
                 int firstY;
@@ -352,75 +271,41 @@ namespace EvolutionSim.StateManagement
             }
         }
 
-
-
-
-        /// <summary>
-        /// This check will be used in the seek food to determine if the food source is valid at the searched destination
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="firstX"></param>
-        /// <param name="firstY"></param>
-        /// <param name="grid"></param>
-        /// <param name="organism"></param>
-        /// <returns></returns>
-        private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Grid grid)
-        {
-
-            return (Grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY));
-
-        }
-
-
         /// <summary>
         /// This class should now be checking an organim's food preference
         /// </summary>
         public static class EatingFood
         {
-
             public static void EatFood(Organism organism, Grid grid)
             {
                 bool validFood;
-                //organism.MovingOnPath = false;
-                organism.MilliSecondsSinceLastMovement += Graphics.ELAPSED_TIME.Milliseconds;
-                if (organism.MilliSecondsSinceLastMovement > Organism.MS_PER_DIRECTION_CHANGE)
+                Food food = organism.DestinationTile.Inhabitant as Food;
+                //this combines two checks
+
+                //this check determines if the organism can eat the current food source
+                validFood = organism.OrganismPref == DietTypes.Omnivore || organism.OrganismPref == DietTypes.Herbivore;
+                
+                if (food != null && validFood && food.HerbivoreFriendly && TimeManager.HAS_SIMULATION_TICKED) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
                 {
-                    organism.MilliSecondsSinceLastMovement = 0;
-
-                    Food food = organism.DestinationTile.Inhabitant as Food;
-                    //this combines two checks
-
-                    //this check determines if the organism can eat the current food source
-                    validFood = organism.OrganismPref == Organism.FoodType.Omnivore || organism.OrganismPref == Organism.FoodType.Herbivore;
-
-
-                    if (food != null && validFood && food.HerbivoreFriendly) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
-
-                    {
-                        food.Eat();
-
-                        //organism gets fuller after eating
-                        organism.incrementHunger();
-                    }
-
-                    organism.DestinationTile = null;
-                    organism.Path.Clear();
+                    food.BeEaten();
+                    organism.Eat(); //organism gets fuller after eating
                 }
+
+                organism.DestinationTile = null;
+                organism.Path.Clear();
             }
+
         }
         public static class SeekingMate
         {
-
             public static void SeekMate(Organism organism, Grid grid)
             {
-
                 Tile potentialMate = MatesInRange(organism, grid);
 
                 if (potentialMate != null)
                 {
                     //ping the potential mate in the given position and get them to move into the waitingForMateState.
-                    ((Organism)potentialMate.Inhabitant).PingMate();
+                    ((Organism)potentialMate.Inhabitant).Attributes.WaitingForMate = true;
 
 
                     //shouldn't be calling the A* for mating probably
@@ -437,11 +322,9 @@ namespace EvolutionSim.StateManagement
                         organism.Path.RemoveAt(organism.Path.Count - 1);
                     }
 
-                    organism.MovingOnPath = true;
-
                 }
                 //this check wont work. Organisms have no way of entering the waiting for mate state
-                else if (!organism.attributes.WaitingForMate)
+                else if (!organism.Attributes.WaitingForMate)
                 {
                     Roam(organism, grid);
                 }
@@ -450,13 +333,13 @@ namespace EvolutionSim.StateManagement
 
             private static Tile MatesInRange(Organism organism, Grid grid)
             {
-                int firstX = organism.GridIndex.X - organism.attributes.DetectionRadius;
-                int firstY = organism.GridIndex.Y - organism.attributes.DetectionRadius;
-                for (int i = 0; i < organism.attributes.DetectionDiameter; i++)
+                int firstX = organism.GridIndex.X - organism.Attributes.DetectionRadius;
+                int firstY = organism.GridIndex.Y - organism.Attributes.DetectionRadius;
+                for (int i = 0; i < organism.Attributes.DetectionDiameter; i++)
                 {
-                    for (int j = 0; j < organism.attributes.DetectionDiameter; j++)
+                    for (int j = 0; j < organism.Attributes.DetectionDiameter; j++)
                     {
-                        if (Grid.InBounds(firstX + i, firstY + j) && grid.IsMateAt(organism, firstX + i, firstY + j))
+                        if (grid.InBounds(firstX + i, firstY + j) && grid.IsMateAt(organism, firstX + i, firstY + j))
                         {
                             return grid.GetTileAt(firstX + i, firstY + j);
                         }
@@ -469,11 +352,8 @@ namespace EvolutionSim.StateManagement
             //this handles the logic for when an organism is waiting for a mate
             public static void WaitForMate(Organism organism, Grid grid)
             {
-                System.Console.WriteLine("Waiting!");
-
+                //System.Console.WriteLine("Waiting!"); // TODO: Have a way of leaving this state after some time if a mate hasn't reached them
             }
-
-
         }
     }
 }

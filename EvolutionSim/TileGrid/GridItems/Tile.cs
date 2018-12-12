@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvolutionSim.UI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace EvolutionSim.TileGrid.GridItems
@@ -10,13 +11,17 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public Terrain Terrain { get; private set; }
 
-        public Point GridIndex; // The index of this tile on the grid, this is not the object's actual screen position
+        public Point GridIndex { get; private set; } // The index of this tile on the grid, this is not the object's actual screen position
         public int ScreenPositionX { get => GridIndex.X * TILE_SIZE; } // The actual screen position of the tile, this is not the grid index
         public int ScreenPositionY { get => GridIndex.Y * TILE_SIZE; } // The actual screen position of the tile, this is not the grid index
 
         public int MovementDifficulty { get => Terrain.MovementDifficulty; }
 
         public GridItem Inhabitant { get; private set; } // The inhabitant being managed by this tile, can be food or organisms
+        
+        public bool HasInhabitant { get => Inhabitant != null; }
+        public bool HasOrganismInhabitant { get => HasInhabitant && Inhabitant.GetType() == typeof(Organism); }
+        public bool HasFoodInhabitant { get => HasInhabitant && Inhabitant.GetType() == typeof(Food); }
 
         /// <summary>
         /// Create a new tile object.
@@ -56,7 +61,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// <param name="destination">The tile to move the item to.</param>
         public void MoveInhabitant(Tile destination)
         {
-            if (HasInhabitant())
+            if (HasInhabitant)
             {
                 // Move and reference the item to the destination tile
                 Inhabitant.SetGridIndex(destination);
@@ -70,36 +75,9 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Set the terrain of this tile to the given type.
         /// </summary>
         /// <param name="terrainType">The type of terrain to set.</param>
-        public void SetTerrain(TerrainTypes terrainType)
+        public void SetTerrain(RadioItems terrainType)
         {
             this.Terrain.SetTerrain(terrainType);
-        }
-
-        /// <summary>
-        /// Check if this tile is tracking an inhabitant.
-        /// </summary>
-        /// <returns>Whether this tile has an inhabitant or not.</returns>
-        public bool HasInhabitant()
-        {
-            return Inhabitant != null;
-        }
-
-        /// <summary>
-        /// Check if this tile is tracking an organism-type inhabitant.
-        /// </summary>
-        /// <returns>Whether this tile has an organism inhabitant or not.</returns>
-        public bool HasOrganismInhabitant()
-        {
-            return Inhabitant != null && Inhabitant.GetType() == typeof(Organism);
-        }
-
-        /// <summary>
-        /// Check if this tile is tracking an food-type inhabitant.
-        /// </summary>
-        /// <returns>Whether this tile has an food inhabitant or not.</returns>
-        public bool HasFoodInhabitant()
-        {
-            return Inhabitant != null && Inhabitant.GetType() == typeof(Food);
         }
     }
 }

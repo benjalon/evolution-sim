@@ -13,13 +13,16 @@ namespace EvolutionSim.StateManagement
         //initalise lookup table
         private State state;
         private Grid grid;
+        private TimeManager timeManager;
 
         // Grid _simGrid;
         public event EventHandler MatingOccurred;
 
-        public StateMachine(Grid grid)
+        public StateMachine(Grid grid, TimeManager timeManager)
         {
             this.grid = grid;
+            this.timeManager = timeManager;
+
             this.state = new State();
         }
 
@@ -29,15 +32,26 @@ namespace EvolutionSim.StateManagement
         /// <param name="organism"></param>
         public void UpdateOrganismAttributes(Organism organism)
         {
-
-            //hardcode a value that doesn't go down too fast
-            if (organism.attributes.Hunger > 0)
+            if (!TimeManager.HAS_SIMULATION_TICKED)
             {
-                organism.attributes.Hunger -= 0.0001;
+                return; // Wait a bit
+            }
+
+            organism.Attributes.Age += 1;
+
+            if (organism.Attributes.Age > 1000)
+            {
+                organism.DecreaseHealth(999);
+            }
+            else if (organism.Attributes.Hunger > 0)
+            {
+                organism.Attributes.Hunger -= 0.001;
+                organism.IncreaseHealth(1);
             }
             else
             {
-                organism.attributes.Hunger = 0;
+                organism.Attributes.Hunger = 0;
+                organism.DecreaseHealth(1);
             }
 
 
@@ -48,172 +62,122 @@ namespace EvolutionSim.StateManagement
         /// This method is used for testing which state an organism is in, should be called in the update method
         /// </summary>
         /// <param name="organism"></param>
-        public void checkState(Organism organism)
+        public void CheckState(Organism organism)
         {
             //test the organisms current attributes
             //by switching on the current state
 
-            PotentialStates organismState = organism.OrganismState;
+            States organismState = organism.State;
 
+            this.timeManager.UpdateOrganismTimers(organism);
 
             switch (organismState)
             {
+                #region Neutral States
 
-                case PotentialStates.Roaming:
-
-                    // the organisms hunger is low then go and seek food.
-                    if (organism.attributes.Hunger < 0.8)
+                case States.Roaming: // This is for when an organism is roaming randomly with no particular goal
+                    if (organism.Attributes.Hunger < 0.8) // Hungry so find some food
                     {
-
-                        //then move into the seek food state
-                        organism.OrganismState = this.state.MoveState(organismState, Action.HungryRoam);
-
-
+                        organism.State = this.state.MoveState(organismState, Actions.HungryRoam); //then move into the seek food state
                     }
-
-                    
-                    else if (organism.attributes.Hunger >= 0.8 && organism.readyToMate())
+                    else if (organism.Attributes.Hunger >= 0.8 && this.timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
                     {
-                        //sometimes an organism will 
-                        organism.MovingOnPath = false;
-                        //go find a mate
-                        organism.OrganismState = this.state.MoveState(organismState, Action.HungryMate);
-
-
+                        organism.DestinationTile = null;
+                        organism.State = this.state.MoveState(organismState, Actions.HungryMate); //go find a mate
                     }
-
-
 
                     break;
 
-                //this code block handles logic when organism is the middle of eating
-                case PotentialStates.Eating:
-                    if (organism.DestinationTile == null)
+                #endregion
+
+                #region Food States
+
+                case States.SeekFood: // When an organism is running a pathfinding algorithm to find food
+                    if (organism.DestinationTile != null && organism.DestinationTile.HasFoodInhabitant)
                     {
-                        organism.OrganismState = this.state.MoveState(organismState, Action.NotHungry);
-
+                        organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
                     }
-                    else if (!StateActions.AdjacencyCheck(organism.GridIndex, organism.DestinationTile.GridIndex))
-                    {
-                        // Change NotHungry?
-                        organism.OrganismState = this.state.MoveState(organismState, Action.NotHungry);
-                    }
-                    //if there is food in food source then contuine eating
-
-                    //if food hungry is maxed out (100) then stop eating && move back into roaming
-
 
                     break;
 
-                //organism needs way of tracking other organisms of the same species
-                //This needs revision.
-                //we have an error where an organism will transition state but the "Moving Along path value is set to true"
-                case PotentialStates.SeekMate:
-
-                    if (organism.MovingOnPath)
+                case States.MovingToFood:
+                    if (organism.DestinationTile != null && organism.DestinationTile.HasFoodInhabitant && this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
                     {
-                        organism.OrganismState = this.state.MoveState(organismState, Action.MateFound);
+                        organism.State = this.state.MoveState(organismState, Actions.FoodFound); // adjacent to food, eat it
                     }
 
-                    else if (organism.attributes.WaitingForMate)
+                    if (organism.DestinationTile == null || !organism.DestinationTile.HasFoodInhabitant)
                     {
-                        //then the organism has been pinged by the organism and will wait to get fkt
-                        organism.OrganismState = this.state.MoveState(organismState, Action.Waiting);
-
+                        organism.State = this.state.MoveState(organismState, Actions.NotHungry); // Food is gone, give up
                     }
-
-                    if(organism.attributes.Hunger < 0.4) // then stop searching for a mate and go back to searching for food
-                    {
-
-                        organism.OrganismState = this.state.MoveState(organismState, Action.HungryRoam);
-
-                    }
-
 
                     break;
 
-
-                //check if an organism should be moving to "Moving to Mate"
-                case PotentialStates.MovingToMate:
-                    if (organism.DestinationTile != null && StateActions.AdjacencyCheck(organism.GridIndex, organism.DestinationTile.GridIndex))
+                case States.Eating: //this code block handles logic when organism is the middle of eating
+                    if (organism.DestinationTile == null || !organism.DestinationTile.HasFoodInhabitant)
                     {
-                        //the organism is adjacent to mate, so go ahead and make love
-                        organism.OrganismState = this.state.MoveState(organismState, Action.Bang);
-
-
+                        organism.State = this.state.MoveState(organismState, Actions.NotHungry); // Food is gone, stop eating
                     }
-
-
 
                     break;
 
-                case PotentialStates.WaitingForMate:
-                    if (!organism.attributes.WaitingForMate)
+                #endregion
+
+                #region Mate States
+
+                case States.SeekMate: // When an organism is running pathfinding algorithm to find a mate
+                    if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant)
                     {
-
-                        //mating is over, so go back into roaming.
-                        organism.OrganismState = this.state.MoveState(organismState, Action.Move);
-
-
+                        organism.State = this.state.MoveState(organismState, Actions.MateFound); // Mate found, move towards them
+                    }
+                    else if (organism.Attributes.WaitingForMate)
+                    {
+                        organism.State = this.state.MoveState(organismState, Actions.Waiting); // A mate has found this organism, wait for them
                     }
 
+                    if (organism.Attributes.Hunger < 0.4)
+                    {
+                        organism.State = this.state.MoveState(organismState, Actions.HungryRoam); // hungry so stop looking for mate and go back to searching for food
+                    }
 
                     break;
 
-
-                case PotentialStates.SeekFood:
-
-                    if (organism.MovingOnPath)
+                case States.MovingToMate: // When an organism is moving on a path towards a mate
+                    if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant && this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
                     {
-                        organism.OrganismState = this.state.MoveState(organismState, Action.FoodDetected);
+                        organism.State = this.state.MoveState(organismState, Actions.Bang); //the organism is adjacent to a mate, so go ahead and make love
                     }
 
-
-
-                    break;
-                case PotentialStates.MovingToFood:
-                    if (organism.DestinationTile != null && StateActions.AdjacencyCheck(organism.GridIndex, organism.DestinationTile.GridIndex))
+                    if (organism.DestinationTile == null || !organism.DestinationTile.HasOrganismInhabitant)
                     {
-                        organism.OrganismState = this.state.MoveState(organismState, Action.FoodFound);
-
+                        organism.State = this.state.MoveState(organismState, Actions.FinishedMating); // Mate is gone, give up
                     }
-                    if (!organism.MovingOnPath)
-                    {
-                        organism.OrganismState = this.state.MoveState(organismState, Action.FoodFound);
-
-                    }
-
 
                     break;
 
-                //once an organism has begun mating it cannont stop or change state
-                //once a certain time has elasped move back to roaming
-
-                case PotentialStates.Mating:
-
-                    organism.OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
-
-                    //this line throws a null pointer in the senario where an organism moves over to anther organism's destination 
-                    //but it has moved away because because it didn't detect the organism coming over to mate with it
-                    //I'm not 100% sure how to fix this yet.
-                    if (organism.DestinationTile.HasOrganismInhabitant())
+                case States.WaitingForMate: // When an organism is waiting for their mate to approach them
+                    if (!organism.Attributes.WaitingForMate)
                     {
-                        ((Organism)(organism.DestinationTile.Inhabitant)).OrganismState = this.state.MoveState(organismState, Action.FinishedMating);
-
-                        //Sets the oganism back to not waiting for a mate
-                        //((Organism)(organism.DestinationTile.Inhabitant)).pingFinished();
-                        //MatingOccurred?.Invoke(this, new MatingArgs(organism));
+                        organism.State = this.state.MoveState(organismState, Actions.Move); //mating is over, so go back into roaming.
                     }
-                    //grid.AttemptToPositionAt(grid.AddOrganism, _passedOrganism.GridPosition.X, _passedOrganism.GridPosition.Y + 1);
 
+                    // TODO: its possible to starve to death in this state, its also possible their mate gets killed on the way and never arrives
 
                     break;
 
+                case States.Mating: // When an organism is mating
+                    organism.State = this.state.MoveState(organismState, Actions.FinishedMating); // Tell this organism the mating is done
+                    if (organism.DestinationTile.HasOrganismInhabitant)
+                    {
+                        ((Organism)(organism.DestinationTile.Inhabitant)).State = this.state.MoveState(organismState, Actions.FinishedMating); // Tell the mate the mating is done
+                    }
+
+                    break;
+
+                #endregion
 
                 default:
-
                     break;
-
             }
 
         }
@@ -221,62 +185,54 @@ namespace EvolutionSim.StateManagement
         /// <summary>
         /// This method controls how an organism goes about its buisness when in a given state
         /// </summary>
-        ///         public void determineBehaviour(Organism _passedOrganism, GameTime gameTime)
 
-        public void determineBehaviour(Organism _passedOrganism)
+        public void DetermineBehaviour(Organism organism)
         {
-
-            PotentialStates organismState = _passedOrganism.OrganismState;
-
+            States organismState = organism.State;
 
             switch (organismState)
             {
 
-                case PotentialStates.Roaming:
-                    StateActions.Roam(_passedOrganism, this.grid);
+                case States.Roaming:
+                    StateActions.Roam(organism, this.grid);
 
                     break;
 
-                case PotentialStates.Eating:
-                    StateActions.EatingFood.EatFood(_passedOrganism, this.grid);
+                case States.Eating:
+                    StateActions.EatingFood.EatFood(organism, this.grid);
                     break;
 
-                case PotentialStates.Mating:
+                case States.Mating:
+                    ((Organism)(organism.DestinationTile.Inhabitant)).Attributes.WaitingForMate = false;
+                    MatingOccurred?.Invoke(this, new MatingArgs(organism));
+                    
+                    break;
 
-                    ((Organism)(_passedOrganism.DestinationTile.Inhabitant)).pingFinished();
-                    MatingOccurred?.Invoke(this, new MatingArgs(_passedOrganism));
+                case States.SeekFood:
+
+                    StateActions.SeekingFood.SeekFood(organism, this.grid);
 
                     break;
 
-                case PotentialStates.SeekFood:
-
-                    StateActions.SeekingFood.SeekFood(_passedOrganism, this.grid);
-
-                    break;
-
-                case PotentialStates.MovingToMate:
-                    StateActions.MoveAlongPath(_passedOrganism, this.grid, _passedOrganism.Path);
+                case States.MovingToMate:
+                    StateActions.MoveAlongPath(organism, this.grid, organism.Path);
 
                     break;
 
                 //when in seaking mate scan for an organism who is also in the "SeekMate" State
-                case PotentialStates.SeekMate:
-
-                    StateActions.SeekingMate.SeekMate(_passedOrganism, this.grid);
-
-                    break;
-
-
-                case PotentialStates.WaitingForMate:
-
-                    StateActions.SeekingMate.WaitForMate(_passedOrganism, this.grid);
+                case States.SeekMate:
+                    StateActions.SeekingMate.SeekMate(organism, this.grid);
 
                     break;
 
+                case States.WaitingForMate:
 
+                    StateActions.SeekingMate.WaitForMate(organism, this.grid);
 
-                case PotentialStates.MovingToFood:
-                    StateActions.MoveAlongPath(_passedOrganism, this.grid, _passedOrganism.Path);
+                    break;
+
+                case States.MovingToFood:
+                    StateActions.MoveAlongPath(organism, this.grid, organism.Path);
                     break;
 
                 default:
@@ -284,12 +240,6 @@ namespace EvolutionSim.StateManagement
                     break;
 
             }
-
-
-
-
         }
-
-
     }
 }

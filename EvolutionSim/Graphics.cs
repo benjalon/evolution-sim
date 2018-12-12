@@ -14,9 +14,11 @@ namespace EvolutionSim
 {
     public class Graphics : Game
     {
-        public static int WINDOW_WIDTH = 1920;
-        public static int WINDOW_HEIGHT = 1080;
-        public static TimeSpan ELAPSED_TIME; 
+        public const int WINDOW_WIDTH = 1920;
+        public const int WINDOW_HEIGHT = 1080;
+
+        public static Random RANDOM { get; private set; } = new Random();
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
@@ -43,8 +45,6 @@ namespace EvolutionSim
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
-
-            this.overlay = new Overlay();
             
             base.Initialize();
         }
@@ -76,7 +76,7 @@ namespace EvolutionSim
 
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 
-            this.CreateUIHandlers();
+            this.overlay = new Overlay(this.simulation);
         }
         
         /// <summary>
@@ -92,7 +92,6 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-            ELAPSED_TIME = gameTime.ElapsedGameTime;
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
@@ -101,7 +100,7 @@ namespace EvolutionSim
             }
 
             // Update UI elements
-            this.simulation.Update();
+            this.simulation.Update(gameTime);
             this.overlay.Update(gameTime, this.simulation.TileHighlight);
 
             base.Update(gameTime);
@@ -132,40 +131,6 @@ namespace EvolutionSim
             this.overlay.Draw(this.spriteBatch);
             
             base.Draw(gameTime);
-        }
-
-        private void CreateUIHandlers()
-        {
-            this.overlay.OrganismCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.OrganismCountInput.Value, out input))
-                {
-                    this.simulation.AddOrganism(input);
-                }
-            };
-
-            this.overlay.FoodCreateButton.OnClick = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(this.overlay.FoodCountInput.Value, out input))
-                {
-                    this.simulation.AddFood(input);
-                }
-            };
-
-            this.overlay.NoTerrainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Grass;
-            this.overlay.MountainButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Mountain;
-            this.overlay.WaterButton.OnClick = (Entity btn) => this.simulation.SelectedTerrainType = TerrainTypes.Water;
-
-            this.overlay.OrganismHungerValue.OnValueChange = (Entity btn) =>
-            {
-                int input;
-                if (int.TryParse(((TextInput)btn).Value, out input))
-                {
-                    this.simulation.TileHighlight.SelectedOrganism.attributes.Hunger = input;
-                }
-            };
         }
     }
 }
