@@ -39,7 +39,7 @@ namespace EvolutionSim.Utility
         /// </summary>
         /// <param name="x">The x position to move to.</param>
         /// <param name="y">The y position to move to.</param>
-        public void SetScreenPosition(int x, int y)
+        public virtual void SetScreenPosition(int x, int y)
         {
             if (this.rectangle == null)
             {

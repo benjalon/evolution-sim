@@ -14,6 +14,7 @@ namespace EvolutionSim.Logic
     {
         private Dictionary<string, Texture2D> textures;
         private Texture2D[] bearTextures;
+        private Tuple<Texture2D, Texture2D> healthbarTextures;
 
         private StateMachine fsm;
         private Grid grid;
@@ -28,6 +29,7 @@ namespace EvolutionSim.Logic
         {
             this.textures = textures;
             this.bearTextures = new Texture2D[] { textures["bear_0"], textures["bear_1"], textures["bear_2"], textures["bear_3"], textures["bear_4"] };
+            this.healthbarTextures = new Tuple<Texture2D, Texture2D>(textures["healthbar_red"], textures["healthbar_green"]);
 
             this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"]);
             this.TimeManager = new TimeManager();
@@ -71,7 +73,7 @@ namespace EvolutionSim.Logic
             var mother = ((MatingArgs)args).Mother;
             var positioned = false;
 
-            var child = new Organism(this.bearTextures);
+            var child = new Organism(this.bearTextures, this.healthbarTextures);
 
             // Top left corner
             var birthSpot = mother.GridIndex;
@@ -105,7 +107,7 @@ namespace EvolutionSim.Logic
         {
             for (var i = 0; i < amount; i++)
             {
-                PositionAtRandom(new Organism(this.bearTextures));
+                PositionAtRandom(new Organism(this.bearTextures, this.healthbarTextures));
             }
         }
 
@@ -119,7 +121,7 @@ namespace EvolutionSim.Logic
 
         public void AddOrganism(int x, int y)
         {
-            this.grid.AttemptToPositionAt(new Organism(this.bearTextures), x, y);
+            this.grid.AttemptToPositionAt(new Organism(this.bearTextures, this.healthbarTextures), x, y);
         }
 
         public void AddFood(int x, int y)

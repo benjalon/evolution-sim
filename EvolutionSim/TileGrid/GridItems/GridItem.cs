@@ -12,7 +12,7 @@ namespace EvolutionSim.TileGrid.GridItems
     {
         public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
 
-        private const int DEFAULT_HEALTH = 5;
+        protected const int DEFAULT_HEALTH = 5;
         protected int Health { get; private set; } = DEFAULT_HEALTH;
         public event EventHandler DeathOccurred;
 
@@ -48,7 +48,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Increase health by the given amount, up to the default maximum
         /// </summary>
         /// <param name="value">The value to lower by</param>
-        public void IncreaseHealth(int value)
+        public virtual void IncreaseHealth(int value)
         {
             Health += value;
             if (Health >= DEFAULT_HEALTH)
@@ -61,7 +61,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Lower health by the given amount, handling death if it occurs
         /// </summary>
         /// <param name="value">The value to lower by</param>
-        public void DecreaseHealth(int value)
+        public virtual void DecreaseHealth(int value)
         {
             Health -= value;
             if (Health <= 0)

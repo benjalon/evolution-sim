@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TileGrid\GridItems\Healthbar.cs" />
     <Compile Include="TileGrid\GridItems\Terrain.cs" />
     <Compile Include="TileGrid\GridItems\TileHighlight.cs" />
     <Compile Include="Utility\Background.cs" />

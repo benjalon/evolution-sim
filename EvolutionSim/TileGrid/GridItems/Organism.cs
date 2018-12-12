@@ -38,7 +38,9 @@ namespace EvolutionSim.TileGrid.GridItems
         // Misc
         public bool IsSelected { get; set; } = false;
 
-        public Organism(Texture2D[] textures) : base(textures[Graphics.RANDOM.Next(0, textures.Length - 1)])
+        private Healthbar healthbar;
+
+        public Organism(Texture2D[] organismTextures, Tuple<Texture2D, Texture2D> healthbarTextures) : base(organismTextures[Graphics.RANDOM.Next(0, organismTextures.Length - 1)])
         {
             this.Attributes = new OrganismAttributes(0, 0.2, 500, 50);
             TOTAL_POPULATION++;
@@ -47,6 +49,8 @@ namespace EvolutionSim.TileGrid.GridItems
 
             //by default set the organism to be a herbivore
             this.OrganismPref = DietTypes.Herbivore;
+
+            this.healthbar = new Healthbar(healthbarTextures, rectangle, DEFAULT_HEALTH);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -59,11 +63,31 @@ namespace EvolutionSim.TileGrid.GridItems
             {
                 spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.Attributes.Size, SpriteEffects.None, 0.0f);
             }
+
+            this.healthbar.Draw(spriteBatch);
         }
         
         public void Eat()
         {
             this.Attributes.Hunger += 0.04;
+        }
+        
+        public override void SetScreenPosition(int x, int y)
+        {
+            base.SetScreenPosition(x, y);
+            this.healthbar.SetScreenPosition(x, y);
+        }
+
+        public override void IncreaseHealth(int value)
+        {
+            base.IncreaseHealth(value);
+            this.healthbar.CurrentHealth = this.Health;
+        }
+
+        public override void DecreaseHealth(int value)
+        {
+            base.DecreaseHealth(value);
+            this.healthbar.CurrentHealth = this.Health;
         }
     }
 

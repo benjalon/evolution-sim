@@ -69,10 +69,12 @@ namespace EvolutionSim
             textures.Add("bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2"));
             textures.Add("bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3"));
             textures.Add("bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4"));
-            textures.Add("food", Content.Load<Texture2D>("food"));
-            textures.Add("tile", Content.Load<Texture2D>("tile"));
-            textures.Add("mountain", Content.Load<Texture2D>("mountain"));
-            textures.Add("water", Content.Load<Texture2D>("water"));
+            textures.Add("food", Content.Load<Texture2D>("Food"));
+            textures.Add("tile", Content.Load<Texture2D>("Tile"));
+            textures.Add("mountain", Content.Load<Texture2D>("Mountain"));
+            textures.Add("water", Content.Load<Texture2D>("Water"));
+            textures.Add("healthbar_green", Content.Load<Texture2D>("Healthbar_Green"));
+            textures.Add("healthbar_red", Content.Load<Texture2D>("Healthbar_Red"));
 
             this.simulation = new Simulation(textures, screenWidth, screenHeight);
 

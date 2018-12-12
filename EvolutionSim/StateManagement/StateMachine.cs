@@ -46,10 +46,11 @@ namespace EvolutionSim.StateManagement
             else if (organism.Attributes.Hunger > 0)
             {
                 organism.Attributes.Hunger -= 0.001;
-                organism.IncreaseHealth(1);
+                //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?
             }
             else
             {
+
                 organism.Attributes.Hunger = 0;
                 organism.DecreaseHealth(1);
             }
