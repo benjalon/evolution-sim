@@ -90,20 +90,33 @@ namespace EvolutionSim.Logic
             this.TileHighlight.Draw(spriteBatch);
         }
 
+        private Tuple<int, int> MakeUseableValues(float rawX, float rawY)
+        {
+            var x = (int)(rawX * 10);
+            var y = (int)(rawY * 10);
+            var xIsHigher = x > y;
+            return xIsHigher ? new Tuple<int, int>(x, y) : new Tuple<int, int>(y, x);
+        }
+
         public void BirthHandler(object sender, EventArgs args)
         {
-            var mother = ((MatingArgs)args).Mother;
+            var matingArgs = (MatingArgs)args;
+            var mother = matingArgs.Mother;
+            var father = matingArgs.Father;
             var positioned = false;
+
+            var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
+            var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
 
             var simpleCrossbreed = new Breed()
             {
-                Species = mother.Attributes.Species,
-                Texture = mother.Texture,
-                DietType = mother.Attributes.DietType,
-                Strength = mother.Attributes.Strength,
-                Speed = mother.Attributes.Speed,
-                ResistCold = mother.Attributes.ResistCold,
-                ResistHeat = mother.Attributes.ResistHeat
+                Species = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.Species : mother.Attributes.Species,
+                Texture = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Texture : mother.Texture,
+                DietType = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.DietType : mother.Attributes.DietType,
+                Strength = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
+                Speed = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
+                ResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold,
+                ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistHeat : mother.Attributes.ResistHeat,
             };
 
             var child = new Organism(simpleCrossbreed, this.healthbarTextures);

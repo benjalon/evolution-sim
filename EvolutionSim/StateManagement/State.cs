@@ -102,6 +102,8 @@ namespace EvolutionSim.StateManagement
                 //when the organism finds food place into the eating state
                 { new StateTransition(States.SeekFood, Actions.FoodDetected), States.MovingToFood},
 
+                { new StateTransition(States.SeekFood, Actions.NotHungry), States.Roaming}, // The player has changed the organism's hunger level manually
+
                 { new StateTransition(States.MovingToFood,Actions.FoodFound),States.Eating },
 
                 { new StateTransition(States.MovingToFood,Actions.NotHungry),States.Roaming }, // Food has disappeared

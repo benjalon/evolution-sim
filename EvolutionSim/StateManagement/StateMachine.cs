@@ -94,6 +94,12 @@ namespace EvolutionSim.StateManagement
                 #region Food States
 
                 case States.SeekFood: // When an organism is running a pathfinding algorithm to find food
+                    if (organism.Attributes.Hunger >= 0.8)
+                    {
+                        organism.DestinationTile = null;
+                        organism.State = this.state.MoveState(organismState, Actions.NotHungry);
+                    }
+
                     if (organism.DestinationTile != null && organism.DestinationTile.HasFoodInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
@@ -204,8 +210,9 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.Mating:
-                    ((Organism)(organism.DestinationTile.Inhabitant)).WaitingForMate = false;
-                    MatingOccurred?.Invoke(this, new MatingArgs(organism));
+                    var mother = (Organism)organism.DestinationTile.Inhabitant;
+                    MatingOccurred?.Invoke(this, new MatingArgs(organism, mother));
+                    mother.WaitingForMate = false;
                     
                     break;
 
