@@ -26,13 +26,17 @@ namespace EvolutionSim.UI
     {
         public const int PANEL_WIDTH = 300;
 
-        private const int TOP_PANEL_HEIGHT = 660;
-        private const int BOTTOM_PANEL_HEIGHT = Graphics.WINDOW_HEIGHT - TOP_PANEL_HEIGHT;
+        private const int TOP_PANEL_HEIGHT = 130;
+        private const int MIDDLE_PANEL_EXPANDED_HEIGHT = Graphics.WINDOW_HEIGHT - TOP_PANEL_HEIGHT;
+        private const int MIDDLE_PANEL_CONTRACTED_HEIGHT = 590;
+        private const int BOTTOM_PANEL_OFFSET = 30;
+        private const int BOTTOM_PANEL_HEIGHT = Graphics.WINDOW_HEIGHT - TOP_PANEL_HEIGHT - MIDDLE_PANEL_CONTRACTED_HEIGHT + BOTTOM_PANEL_OFFSET;
         private const int TEXT_WIDTH = 110;
         private const int BUTTON_WIDTH = 170;
         private const int ELEMENT_HEIGHT = 40;
 
         private Panel topPanel;
+        private Panel middlePanel;
         private Panel bottomPanel;
 
         private TextInput editSpeciesValue;
@@ -44,20 +48,22 @@ namespace EvolutionSim.UI
         public Overlay(Simulation simulation)
         {
             UserInterface.Active.UseRenderTarget = true;
+            UserInterface.Active.CursorScale = 0.5f;
 
             // A panel which sits behind the bottom panel to prevent flickering when it's hidden or unhidden
-            var backgroundPanel = new Panel(new Vector2(PANEL_WIDTH, BOTTOM_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
-            backgroundPanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the top panel
+            var backgroundPanel = new Panel(new Vector2(PANEL_WIDTH, 0), PanelSkin.Simple, Anchor.TopRight);
+            backgroundPanel.SetPosition(Anchor.TopRight, new Vector2(0, 0)); // Offset it so it's positioned below the top panel
             backgroundPanel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(backgroundPanel);
 
             this.CreateTopPanel(simulation);
+            this.CreateMiddlePanel(simulation);
             this.CreateBottomPanel(simulation);
         }
 
         private void CreateTopPanel(Simulation simulation)
         {
-            this.topPanel = new Panel(new Vector2(PANEL_WIDTH, TOP_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
+            this.topPanel = new Panel(new Vector2(PANEL_WIDTH, TOP_PANEL_HEIGHT), PanelSkin.None, Anchor.TopRight);
             this.topPanel.Padding = new Vector2(10);
             UserInterface.Active.AddEntity(this.topPanel);
 
@@ -88,6 +94,21 @@ namespace EvolutionSim.UI
                     simulation.AddFoods(input);
                 }
             };
+            
+            this.topPanel.AddChild(addObjectsText);
+            this.topPanel.AddChild(organismCountInput);
+            this.topPanel.AddChild(organismCreateButton);
+            this.topPanel.AddChild(foodCountInput);
+            this.topPanel.AddChild(foodCreateButton);
+        }
+
+        private void CreateMiddlePanel(Simulation simulation)
+        {
+            this.middlePanel = new Panel(new Vector2(PANEL_WIDTH, MIDDLE_PANEL_EXPANDED_HEIGHT), PanelSkin.None, Anchor.TopRight);
+            this.middlePanel.Padding = new Vector2(10);
+            this.middlePanel.PanelOverflowBehavior = PanelOverflowBehavior.Clipped;
+            this.middlePanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the middle panel
+            UserInterface.Active.AddEntity(this.middlePanel);
 
             // Terrain/object drawing
 
@@ -161,38 +182,32 @@ namespace EvolutionSim.UI
             hotRadio.OnClick = (Entity btn) => simulation.WeatherManager.SetWeather(WeatherSettings.Hot);
 
             warmRadio.Checked = true;
-
+            
             // Draw order
 
-            this.topPanel.AddChild(addObjectsText);
-            this.topPanel.AddChild(organismCountInput);
-            this.topPanel.AddChild(organismCreateButton);
-            this.topPanel.AddChild(foodCountInput);
-            this.topPanel.AddChild(foodCreateButton);
+            this.middlePanel.AddChild(addAtCursorText);
+            this.middlePanel.AddChild(nothingRadio);
+            this.middlePanel.AddChild(mountainRadio);
+            this.middlePanel.AddChild(waterRadio);
+            this.middlePanel.AddChild(organismRadio);
+            this.middlePanel.AddChild(foodRadio);
 
-            this.topPanel.AddChild(addAtCursorText);
-            this.topPanel.AddChild(nothingRadio);
-            this.topPanel.AddChild(mountainRadio);
-            this.topPanel.AddChild(waterRadio);
-            this.topPanel.AddChild(organismRadio);
-            this.topPanel.AddChild(foodRadio);
+            this.middlePanel.AddChild(simulationSpeedText);
+            this.middlePanel.AddChild(normalRadio);
+            this.middlePanel.AddChild(fastRadio);
+            this.middlePanel.AddChild(pauseRadio);
 
-            this.topPanel.AddChild(simulationSpeedText);
-            this.topPanel.AddChild(normalRadio);
-            this.topPanel.AddChild(fastRadio);
-            this.topPanel.AddChild(pauseRadio);
-
-            this.topPanel.AddChild(WeatherText);
-            this.topPanel.AddChild(warmRadio);
-            this.topPanel.AddChild(coldRadio);
-            this.topPanel.AddChild(hotRadio);
+            this.middlePanel.AddChild(WeatherText);
+            this.middlePanel.AddChild(warmRadio);
+            this.middlePanel.AddChild(coldRadio);
+            this.middlePanel.AddChild(hotRadio);
         }
 
         private void CreateBottomPanel(Simulation simulation)
         {
             this.bottomPanel = new Panel(new Vector2(PANEL_WIDTH, BOTTOM_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
             this.bottomPanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
-            this.bottomPanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the top panel
+            this.bottomPanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT + MIDDLE_PANEL_CONTRACTED_HEIGHT - BOTTOM_PANEL_OFFSET)); // Offset it so it's positioned below the middle panel
             this.bottomPanel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(this.bottomPanel);
 
@@ -248,6 +263,8 @@ namespace EvolutionSim.UI
             if (tileHighlight.SelectedOrganism == null)
             {
                 this.editHungerValue.Value = "";
+                this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_EXPANDED_HEIGHT);
+                this.middlePanel.PanelOverflowBehavior = PanelOverflowBehavior.Clipped;
                 this.bottomPanel.Visible = false;
             }
             else
@@ -258,8 +275,19 @@ namespace EvolutionSim.UI
                 this.editStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Strength, 2).ToString();
                 this.editSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
 
+                this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_CONTRACTED_HEIGHT);
+                this.middlePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
                 this.bottomPanel.Visible = true;
             }
+        }
+
+        /// <summary>
+        /// Draw the UI to the screen
+        /// </summary>
+        /// <param name="spriteBatch">The spritebatch within which this should be drawn</param>
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            UserInterface.Active.Draw(spriteBatch);
         }
     }
 }
