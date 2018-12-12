@@ -24,7 +24,7 @@ namespace EvolutionSim.UI
     /// </summary>
     public class Overlay
     {
-        private const int PANEL_WIDTH = 300;
+        public const int PANEL_WIDTH = 300;
 
         private const int TOP_PANEL_HEIGHT = 660;
         private const int BOTTOM_PANEL_HEIGHT = Graphics.WINDOW_HEIGHT - TOP_PANEL_HEIGHT;

@@ -13,8 +13,8 @@ namespace EvolutionSim.TileGrid
     /// </summary>
     public class Grid
     {
-        public const int TILE_COUNT_X = Graphics.WINDOW_WIDTH / Tile.TILE_SIZE;
-        public const int TILE_COUNT_Y = Graphics.WINDOW_HEIGHT / Tile.TILE_SIZE;
+        public const int TILE_COUNT_X = Graphics.SIMULATION_WIDTH / Tile.TILE_SIZE;
+        public const int TILE_COUNT_Y = Graphics.SIMULATION_WIDTH / Tile.TILE_SIZE;
 
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();

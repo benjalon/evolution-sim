@@ -16,6 +16,7 @@ namespace EvolutionSim
     {
         public const int WINDOW_WIDTH = 1920;
         public const int WINDOW_HEIGHT = 1080;
+        public const int SIMULATION_WIDTH = WINDOW_WIDTH - Overlay.PANEL_WIDTH;
 
         public static Random RANDOM { get; private set; } = new Random();
 
