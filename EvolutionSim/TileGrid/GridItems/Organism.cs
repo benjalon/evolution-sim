@@ -42,7 +42,7 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public Organism(Texture2D[] organismTextures, Tuple<Texture2D, Texture2D> healthbarTextures) : base(organismTextures[Graphics.RANDOM.Next(0, organismTextures.Length - 1)], Graphics.RANDOM.Next(10, 30))
         {
-            this.Attributes = new OrganismAttributes(0, 0.2, 500, 50);
+            this.Attributes = new OrganismAttributes(0, 0.2f, 500, 50);
             TOTAL_POPULATION++;
             State = States.Roaming;
             Path = new List<Tile>();
@@ -55,13 +55,15 @@ namespace EvolutionSim.TileGrid.GridItems
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * 0.5f; // TODO: if organisms never get stronger, this can be pre-calculated at birth
+
             if (IsSelected)
             {
-                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.Attributes.Size, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.Purple, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
             }
             else
             {
-                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.Attributes.Size, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.White, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
             }
 
             this.healthbar.Draw(spriteBatch);
@@ -69,7 +71,7 @@ namespace EvolutionSim.TileGrid.GridItems
         
         public void Eat()
         {
-            this.Attributes.Hunger += 0.04;
+            this.Attributes.Hunger += 0.04f;
         }
         
         public override void SetScreenPosition(int x, int y)
@@ -96,22 +98,21 @@ namespace EvolutionSim.TileGrid.GridItems
     {
         public string Species { get; set; }
         public int Age { get; set; }
-        public double Hunger { get; set; }
-        public double Speed { get; set; }
-        public double Strength { get; set; }
+        public float Hunger { get; set; }
+        public float Speed { get; set; }
+        public float Strength { get; set; }
         public int DetectionRadius { get; set; }
         public int DetectionDiameter { get; set; }
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
         public bool JustMated { get; set; }
-        public float Size { get; set; }
         public bool ResistCold { get; set; }
         public bool ResistHeat { get; set; }
 
         public OrganismAttributes(int age,
-                                  double hunger,
-                                  double speed,
-                                  double strength)
+                                  float hunger,
+                                  float speed,
+                                  float strength)
         {
             Species = "Bear";
             DetectionRadius = 3;
@@ -119,9 +120,8 @@ namespace EvolutionSim.TileGrid.GridItems
             Age = age;
             Hunger = hunger;
             Speed = speed;
-            Strength = strength;
+            Strength = (Graphics.RANDOM.Next(8) + 3) * 0.1f;
             JustMated = false;
-            Size = (Graphics.RANDOM.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
             ResistCold = Graphics.RANDOM.NextDouble() >= 0.5; // TODO: This shouldnt be random
             ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5; // TODO: This shouldnt be random
         }
