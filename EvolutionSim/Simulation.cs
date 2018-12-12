@@ -12,24 +12,27 @@ namespace EvolutionSim.Logic
 {
     public class Simulation
     {
-        private Dictionary<string, Texture2D> textures;
-        private Texture2D[] bearTextures;
-        private Tuple<Texture2D, Texture2D> healthbarTextures;
+        private readonly Dictionary<string, Texture2D> textures;
+        private readonly Texture2D[] bearTextures;
+        private readonly Tuple<Texture2D, Texture2D> healthbarTextures;
 
-        private StateMachine fsm;
-        private Grid grid;
+        private readonly StateMachine fsm;
+        private readonly Grid grid;
+        private readonly FullScreenSprite background; 
         
         public TileHighlight TileHighlight { get; private set; }
-
         public TimeManager TimeManager { get; private set; }
+        public WeatherManager WeatherManager { get; private set; }
 
-        public RadioItems SelectedRadioItem { private get; set; } = RadioItems.Grass;
+        public RadioAddSprites SelectedRadioItem { private get; set; } = RadioAddSprites.Grass;
 
-        public Simulation(Dictionary<string, Texture2D> textures, int screenWidth, int screenHeight)
+        public Simulation(Dictionary<string, Texture2D> textures)
         {
             this.textures = textures;
             this.bearTextures = new Texture2D[] { textures["bear_0"], textures["bear_1"], textures["bear_2"], textures["bear_3"], textures["bear_4"] };
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(textures["healthbar_red"], textures["healthbar_green"]);
+            
+            this.background = new FullScreenSprite(textures["grass_background"]);
 
             this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"]);
             this.TimeManager = new TimeManager();
@@ -38,6 +41,8 @@ namespace EvolutionSim.Logic
             this.fsm.MatingOccurred += this.BirthHandler;
 
             this.TileHighlight = new TileHighlight(textures["tile"]);
+
+            this.WeatherManager = new WeatherManager(textures["cold_overlay"], textures["hot_overlay"]);
         }
 
         public void Update(GameTime gameTime)
@@ -49,6 +54,8 @@ namespace EvolutionSim.Logic
             {
                 return;
             }
+
+            this.WeatherManager.Update(this.grid.Organisms);
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;
@@ -63,8 +70,11 @@ namespace EvolutionSim.Logic
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            this.grid.Draw(spriteBatch);
+            this.background.Draw(spriteBatch);
+            this.WeatherManager.Draw(spriteBatch);
 
+            this.grid.Draw(spriteBatch);
+            
             this.TileHighlight.Draw(spriteBatch);
         }
         

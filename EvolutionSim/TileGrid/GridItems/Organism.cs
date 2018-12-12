@@ -21,7 +21,7 @@ namespace EvolutionSim.TileGrid.GridItems
     public class Organism : GridItem
     {
         public static int TOTAL_POPULATION = 0;
-        
+
         // Attributes
         public OrganismAttributes Attributes { get; }
         public DietTypes OrganismPref { get; private set; }
@@ -38,9 +38,9 @@ namespace EvolutionSim.TileGrid.GridItems
         // Misc
         public bool IsSelected { get; set; } = false;
 
-        private Healthbar healthbar;
+        private readonly Healthbar healthbar;
 
-        public Organism(Texture2D[] organismTextures, Tuple<Texture2D, Texture2D> healthbarTextures) : base(organismTextures[Graphics.RANDOM.Next(0, organismTextures.Length - 1)])
+        public Organism(Texture2D[] organismTextures, Tuple<Texture2D, Texture2D> healthbarTextures) : base(organismTextures[Graphics.RANDOM.Next(0, organismTextures.Length - 1)], Graphics.RANDOM.Next(10, 30))
         {
             this.Attributes = new OrganismAttributes(0, 0.2, 500, 50);
             TOTAL_POPULATION++;
@@ -50,7 +50,7 @@ namespace EvolutionSim.TileGrid.GridItems
             //by default set the organism to be a herbivore
             this.OrganismPref = DietTypes.Herbivore;
 
-            this.healthbar = new Healthbar(healthbarTextures, rectangle, DEFAULT_HEALTH);
+            this.healthbar = new Healthbar(healthbarTextures, rectangle, defaultHealth);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -105,6 +105,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool MateFound { get; set; }
         public bool JustMated { get; set; }
         public float Size { get; set; }
+        public bool ResistCold { get; set; }
+        public bool ResistHeat { get; set; }
 
         public OrganismAttributes(int age,
                                   double hunger,
@@ -120,6 +122,8 @@ namespace EvolutionSim.TileGrid.GridItems
             Strength = strength;
             JustMated = false;
             Size = (Graphics.RANDOM.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
+            ResistCold = Graphics.RANDOM.NextDouble() >= 0.5; // TODO: This shouldnt be random
+            ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5; // TODO: This shouldnt be random
         }
     }
 }

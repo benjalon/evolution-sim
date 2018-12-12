@@ -86,7 +86,7 @@
     <Compile Include="TileGrid\GridItems\Healthbar.cs" />
     <Compile Include="TileGrid\GridItems\Terrain.cs" />
     <Compile Include="TileGrid\GridItems\TileHighlight.cs" />
-    <Compile Include="Utility\Background.cs" />
+    <Compile Include="Utility\FullScreenSprite.cs" />
     <Compile Include="Utility\Lerper.cs" />
     <Compile Include="TileGrid\GridItems\Food.cs" />
     <Compile Include="TileGrid\GridItems\GridItem.cs" />
@@ -108,6 +108,7 @@
     <Compile Include="Utility\MouseManager.cs" />
     <Compile Include="Utility\Sprite.cs" />
     <Compile Include="Utility\TimeManager.cs" />
+    <Compile Include="Utility\WeatherManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

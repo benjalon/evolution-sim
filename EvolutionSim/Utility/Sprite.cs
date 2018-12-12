@@ -24,6 +24,16 @@ namespace EvolutionSim.Utility
         }
 
         /// <summary>
+        /// Create a static sprite from a given rectangle.
+        /// </summary>
+        /// <param name="rectangle">The position of the Sprite.</param
+        public Sprite(Rectangle rectangle)
+        {
+            this.rectangle = rectangle;
+        }
+
+
+        /// <summary>
         /// Create a static sprite from a given texture and rectangle.
         /// </summary>
         /// <param name="texture">The appearance of the Sprite.</param>
@@ -56,7 +66,7 @@ namespace EvolutionSim.Utility
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (this.rectangle == null)
+            if (this.rectangle == null || this.texture == null)
             {
                 return;
             }

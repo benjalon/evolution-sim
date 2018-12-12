@@ -19,10 +19,9 @@ namespace EvolutionSim
 
         public static Random RANDOM { get; private set; } = new Random();
 
-        private GraphicsDeviceManager graphics;
+        private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-
-        private Background background;
+        
         private Overlay overlay;
         private Simulation simulation;
 
@@ -56,14 +55,12 @@ namespace EvolutionSim
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            var screenWidth = GraphicsDevice.Viewport.Bounds.Width;
-            var screenHeight = GraphicsDevice.Viewport.Bounds.Height;
-
-            this.background = new Background(Content.Load<Texture2D>("grass"), screenWidth, screenHeight);
-
+            
             // Load textures
             var textures = new Dictionary<string, Texture2D>();
+            textures.Add("grass_background", Content.Load<Texture2D>("Grass"));
+            textures.Add("hot_overlay", Content.Load<Texture2D>("Hot"));
+            textures.Add("cold_overlay", Content.Load<Texture2D>("Cold"));
             textures.Add("bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0"));
             textures.Add("bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1"));
             textures.Add("bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2"));
@@ -76,7 +73,7 @@ namespace EvolutionSim
             textures.Add("healthbar_green", Content.Load<Texture2D>("Healthbar_Green"));
             textures.Add("healthbar_red", Content.Load<Texture2D>("Healthbar_Red"));
 
-            this.simulation = new Simulation(textures, screenWidth, screenHeight);
+            this.simulation = new Simulation(textures);
 
             this.overlay = new Overlay(this.simulation);
         }
@@ -114,18 +111,12 @@ namespace EvolutionSim
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)
         {
-            this.fps = 1 / gameTime.ElapsedGameTime.TotalSeconds;
-            if (this.fpsOld != this.fps)
-            {
-                Console.WriteLine(this.fps);
-                this.fpsOld = this.fps;
-            }
-
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
+
+            //this.WriteFPS(gameTime);
 
             // Draw graphical elements
             this.spriteBatch.Begin();
-            this.background.Draw(this.spriteBatch);
             this.simulation.Draw(this.spriteBatch);
             this.spriteBatch.End();
 
@@ -133,6 +124,16 @@ namespace EvolutionSim
             this.overlay.Draw(this.spriteBatch);
             
             base.Draw(gameTime);
+        }
+
+        private void WriteFPS(GameTime gameTime)
+        {
+            this.fps = 1 / gameTime.ElapsedGameTime.TotalSeconds;
+            if (this.fpsOld != this.fps)
+            {
+                Console.WriteLine(this.fps);
+                this.fpsOld = this.fps;
+            }
         }
     }
 }

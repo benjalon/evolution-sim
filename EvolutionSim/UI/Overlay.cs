@@ -1,5 +1,6 @@
 ﻿using EvolutionSim.Logic;
 using EvolutionSim.TileGrid.GridItems;
+using EvolutionSim.Utility;
 using GeonBit.UI;
 using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
@@ -9,7 +10,7 @@ using System;
 
 namespace EvolutionSim.UI
 {
-    public enum RadioItems
+    public enum RadioAddSprites
     {
         Grass,
         Mountain,
@@ -17,7 +18,7 @@ namespace EvolutionSim.UI
         Organism,
         Food
     }
-
+    
     /// <summary>
     /// The overlay which is displayed within the simulation itself.
     /// </summary>
@@ -93,19 +94,29 @@ namespace EvolutionSim.UI
             var addAtCursorText = new Paragraph("Add Objects At Cursor");
 
             var nothingRadio = new RadioButton("None", Anchor.AutoCenter);
-            nothingRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Grass;
+            nothingRadio.SpaceBefore = Vector2.Zero;
+            nothingRadio.SpaceAfter = Vector2.Zero;
+            nothingRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Grass;
 
             var mountainRadio = new RadioButton("Mountain", Anchor.AutoCenter);
-            mountainRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Mountain;
+            mountainRadio.SpaceBefore = Vector2.Zero;
+            mountainRadio.SpaceAfter = Vector2.Zero;
+            mountainRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Mountain;
 
             var waterRadio = new RadioButton("Water", Anchor.AutoCenter);
-            waterRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Water;
+            waterRadio.SpaceBefore = Vector2.Zero;
+            waterRadio.SpaceAfter = Vector2.Zero;
+            waterRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Water;
 
             var organismRadio = new RadioButton("Organism", Anchor.AutoCenter);
-            organismRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Organism;
+            organismRadio.SpaceBefore = Vector2.Zero;
+            organismRadio.SpaceAfter = Vector2.Zero;
+            organismRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Organism;
 
             var foodRadio = new RadioButton("Food", Anchor.AutoCenter);
-            foodRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioItems.Food;
+            foodRadio.SpaceBefore = Vector2.Zero;
+            foodRadio.SpaceAfter = Vector2.Zero;
+            foodRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Food;
 
             nothingRadio.Checked = true;
 
@@ -114,15 +125,42 @@ namespace EvolutionSim.UI
             var simulationSpeedText = new Paragraph("Set Simulation Speed");
 
             var normalRadio = new RadioButton("Normal", Anchor.AutoCenter);
+            normalRadio.SpaceBefore = Vector2.Zero;
+            normalRadio.SpaceAfter = Vector2.Zero;
             normalRadio.OnClick = (Entity btn) => simulation.TimeManager.SetSpeed(1);
 
             var fastRadio = new RadioButton("Fast", Anchor.AutoCenter);
+            fastRadio.SpaceBefore = Vector2.Zero;
+            fastRadio.SpaceAfter = Vector2.Zero;
             fastRadio.OnClick = (Entity btn) => simulation.TimeManager.SetSpeed(4);
 
             var pauseRadio = new RadioButton("Pause", Anchor.AutoCenter);
+            pauseRadio.SpaceBefore = Vector2.Zero;
+            pauseRadio.SpaceAfter = Vector2.Zero;
             pauseRadio.OnClick = (Entity btn) => simulation.TimeManager.Paused = true;
 
             normalRadio.Checked = true;
+
+            // Weather manipulation
+
+            var WeatherText = new Paragraph("Set Weather");
+
+            var warmRadio = new RadioButton("Warm", Anchor.AutoCenter);
+            warmRadio.SpaceBefore = Vector2.Zero;
+            warmRadio.SpaceAfter = Vector2.Zero;
+            warmRadio.OnClick = (Entity btn) => simulation.WeatherManager.SetWeather(WeatherSettings.Warm);
+
+            var coldRadio = new RadioButton("Cold", Anchor.AutoCenter);
+            coldRadio.SpaceBefore = Vector2.Zero;
+            coldRadio.SpaceAfter = Vector2.Zero;
+            coldRadio.OnClick = (Entity btn) => simulation.WeatherManager.SetWeather(WeatherSettings.Cold);
+
+            var hotRadio = new RadioButton("Hot", Anchor.AutoCenter);
+            hotRadio.SpaceBefore = Vector2.Zero;
+            hotRadio.SpaceAfter = Vector2.Zero;
+            hotRadio.OnClick = (Entity btn) => simulation.WeatherManager.SetWeather(WeatherSettings.Hot);
+
+            warmRadio.Checked = true;
 
             // Draw order
 
@@ -143,6 +181,11 @@ namespace EvolutionSim.UI
             this.topPanel.AddChild(normalRadio);
             this.topPanel.AddChild(fastRadio);
             this.topPanel.AddChild(pauseRadio);
+
+            this.topPanel.AddChild(WeatherText);
+            this.topPanel.AddChild(warmRadio);
+            this.topPanel.AddChild(coldRadio);
+            this.topPanel.AddChild(hotRadio);
         }
 
         private void CreateBottomPanel(Simulation simulation)

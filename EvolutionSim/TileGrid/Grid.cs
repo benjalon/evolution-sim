@@ -20,7 +20,7 @@ namespace EvolutionSim.TileGrid
         public List<Food> Foods { get; private set; } = new List<Food>();
         public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
 
-        private Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
+        private readonly Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
         /// <summary>
         /// Create a Grid with given attributes.
@@ -107,7 +107,7 @@ namespace EvolutionSim.TileGrid
         /// <param name="type">The type of terrain to position.</param>
         /// <param name="x">The x index of the tile to position at.</param>
         /// <param name="y">The y index of the tile to position at.</param>
-        public void SetTerrainAt(RadioItems type, int x, int y)
+        public void SetTerrainAt(RadioAddSprites type, int x, int y)
         {
             if (!InBounds(x, y))
             {
@@ -118,14 +118,14 @@ namespace EvolutionSim.TileGrid
 
             switch (type)
             {
-                case RadioItems.Grass:
+                case RadioAddSprites.Grass:
                     if (this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Remove(tile.Terrain);
                     }
                     break;
-                case RadioItems.Mountain:
-                case RadioItems.Water:
+                case RadioAddSprites.Mountain:
+                case RadioAddSprites.Water:
                     if (!this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Add(tile.Terrain);

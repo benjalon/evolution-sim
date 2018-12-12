@@ -14,6 +14,23 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin cold.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:cold.png
+
+#begin Content.mgcb
+/importer:
+/processor:
+/build:Content.mgcb
+
 #begin Food.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4828,6 +4845,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Healthbar_Red.png
+
+#begin hot.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:hot.png
 
 #begin Mountain.png
 /importer:TextureImporter

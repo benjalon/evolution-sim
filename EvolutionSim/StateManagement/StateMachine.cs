@@ -11,9 +11,9 @@ namespace EvolutionSim.StateManagement
     public class StateMachine
     {
         //initalise lookup table
-        private State state;
-        private Grid grid;
-        private TimeManager timeManager;
+        private readonly State state;
+        private readonly Grid grid;
+        private readonly TimeManager timeManager;
 
         // Grid _simGrid;
         public event EventHandler MatingOccurred;

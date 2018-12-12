@@ -75,7 +75,7 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Set the terrain of this tile to the given type.
         /// </summary>
         /// <param name="terrainType">The type of terrain to set.</param>
-        public void SetTerrain(RadioItems terrainType)
+        public void SetTerrain(RadioAddSprites terrainType)
         {
             this.Terrain.SetTerrain(terrainType);
         }
