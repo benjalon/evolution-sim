@@ -42,7 +42,9 @@ namespace EvolutionSim.UI
         private TextInput editSpeedValue;
 
         public Overlay(Simulation simulation)
-        {            
+        {
+            UserInterface.Active.UseRenderTarget = true;
+
             // A panel which sits behind the bottom panel to prevent flickering when it's hidden or unhidden
             var backgroundPanel = new Panel(new Vector2(PANEL_WIDTH, BOTTOM_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
             backgroundPanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the top panel
@@ -189,6 +191,7 @@ namespace EvolutionSim.UI
         private void CreateBottomPanel(Simulation simulation)
         {
             this.bottomPanel = new Panel(new Vector2(PANEL_WIDTH, BOTTOM_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
+            this.bottomPanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
             this.bottomPanel.SetPosition(Anchor.TopRight, new Vector2(0, TOP_PANEL_HEIGHT)); // Offset it so it's positioned below the top panel
             this.bottomPanel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(this.bottomPanel);
@@ -257,15 +260,6 @@ namespace EvolutionSim.UI
 
                 this.bottomPanel.Visible = true;
             }
-        }
-
-        /// <summary>
-        /// Draw the UI to the screen
-        /// </summary>
-        /// <param name="spriteBatch">The spritebatch within which this should be drawn</param>
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            UserInterface.Active.Draw(spriteBatch);
         }
     }
 }

@@ -113,6 +113,7 @@ namespace EvolutionSim
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
+            UserInterface.Active.Draw(spriteBatch); // Draw UI elements (doesn't affect draw order because it draws to a render target
 
             //this.WriteFPS(gameTime);
 
@@ -122,8 +123,8 @@ namespace EvolutionSim
             this.spriteBatch.End();
 
             // Draw UI elements on top
-            this.overlay.Draw(this.spriteBatch);
-            
+            UserInterface.Active.DrawMainRenderTarget(spriteBatch);
+
             base.Draw(gameTime);
         }
 
