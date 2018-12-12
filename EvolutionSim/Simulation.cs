@@ -33,11 +33,11 @@ namespace EvolutionSim.Logic
 
             this.bearBreeds = new List<Breed>()
             {
-                new Breed() { Species = "MiniGreen", Texture = textures["bear_0"], DietType = DietTypes.Herbivore, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
-                new Breed() { Species = "MysteryPurp", Texture = textures["bear_1"], DietType = DietTypes.Herbivore, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
-                new Breed() { Species = "Blastoise", Texture = textures["bear_2"], DietType = DietTypes.Omnivore, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
-                new Breed() { Species = "AngryRed", Texture = textures["bear_3"], DietType = DietTypes.Canivore, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
-                new Breed() { Species = "YellowBoi", Texture = textures["bear_4"], DietType = DietTypes.Omnivore, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
+                new Breed() { Species = "MiniGreen", Texture = textures["bear_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
+                new Breed() { Species = "MysteryPurp", Texture = textures["bear_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
+                new Breed() { Species = "Blastoise", Texture = textures["bear_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
+                new Breed() { Species = "AngryRed", Texture = textures["bear_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
+                new Breed() { Species = "YellowBoi", Texture = textures["bear_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
             };
 
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(textures["healthbar_red"], textures["healthbar_green"]);
@@ -98,6 +98,12 @@ namespace EvolutionSim.Logic
             return xIsHigher ? new Tuple<int, int>(x, y) : new Tuple<int, int>(y, x);
         }
 
+        private Tuple<int, int> MakeUseableValues(int x, int y)
+        {
+            var xIsHigher = x > y;
+            return xIsHigher ? new Tuple<int, int>(x, y) : new Tuple<int, int>(y, x);
+        }
+
         public void BirthHandler(object sender, EventArgs args)
         {
             var matingArgs = (MatingArgs)args;
@@ -105,6 +111,7 @@ namespace EvolutionSim.Logic
             var father = matingArgs.Father;
             var positioned = false;
 
+            var orderedMaxHealth = MakeUseableValues(mother.Attributes.MaxHealth, father.Attributes.MaxHealth);
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
             var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
 
@@ -113,6 +120,7 @@ namespace EvolutionSim.Logic
                 Species = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.Species : mother.Attributes.Species,
                 Texture = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Texture : mother.Texture,
                 DietType = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.DietType : mother.Attributes.DietType,
+                MaxHealth = Graphics.RANDOM.Next(orderedMaxHealth.Item1, orderedMaxHealth.Item2),
                 Strength = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
                 Speed = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
                 ResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold,
@@ -161,7 +169,7 @@ namespace EvolutionSim.Logic
         {
             for (var i = 0; i < amount; i++)
             {
-                PositionAtRandom(new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, 6)));
+                PositionAtRandom(new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, Food.MAX_GRASS_HEALTH)));
             }
         }
 
@@ -172,7 +180,7 @@ namespace EvolutionSim.Logic
 
         public void AddFood(int x, int y)
         {
-            this.grid.AttemptToPositionAt(new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, 6)), x, y);
+            this.grid.AttemptToPositionAt(new Food(this.textures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
         }
 
         private void PositionAtRandom(GridItem item)
@@ -191,8 +199,9 @@ namespace EvolutionSim.Logic
         /// <param name="e">Event arguments.</param>
         private void SpawnCorpseHandler(object sender, EventArgs e)
         {
-            var tile = (Tile)sender;
-            this.grid.AttemptToPositionAt(new Food(this.textures["meat"], false, 20), tile.GridIndex.X, tile.GridIndex.Y);
+            var organism = ((Organism)sender);
+            var tile = (Tile)grid.GetTileAt(organism);
+            this.grid.AttemptToPositionAt(new Food(this.textures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);
         }
 
     }

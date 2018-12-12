@@ -102,7 +102,10 @@ namespace EvolutionSim.Pathfinding
 
 
             }
-            ((Organism)startPosition.Inhabitant).Computing=false;
+            if (startPosition.Inhabitant.GetType() == typeof(Organism))
+            {
+                ((Organism)startPosition.Inhabitant).Computing = false;
+            }
             return path;
         }
     }

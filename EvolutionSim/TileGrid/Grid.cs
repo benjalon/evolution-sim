@@ -231,11 +231,10 @@ namespace EvolutionSim.TileGrid
         private void OrganismDeathHandler(object sender, EventArgs e)
         {
             var organism = (Organism)sender;
-            var tile = this.GetTileAt(organism);
-            tile.RemoveInhabitant();
+            this.GetTileAt(organism).RemoveInhabitant();
             this.Organisms.Remove(organism);
 
-            ShouldSpawnCorpse?.Invoke(tile, EventArgs.Empty);
+            ShouldSpawnCorpse?.Invoke(organism, EventArgs.Empty);
     }
 
         /// <summary>

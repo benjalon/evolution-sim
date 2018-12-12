@@ -41,12 +41,12 @@ namespace EvolutionSim.TileGrid.GridItems
         private readonly Healthbar healthbar;
         public bool IsSelected { get; set; } = false;
         
-        public Organism(Breed breed, Tuple<Texture2D, Texture2D> healthbarTextures) : base(breed.Texture, Graphics.RANDOM.Next(10, 30))
+        public Organism(Breed breed, Tuple<Texture2D, Texture2D> healthbarTextures) : base(breed.Texture, breed.MaxHealth)
         {
             TOTAL_POPULATION++;
 
             this.Attributes = new OrganismAttributes(breed);
-            this.healthbar = new Healthbar(healthbarTextures, rectangle, defaultHealth);
+            this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -95,6 +95,7 @@ namespace EvolutionSim.TileGrid.GridItems
     {
         public string Species { get; set; }
         public DietTypes DietType { get; set; }
+        public int MaxHealth { get; set; }
         public float Speed { get; set; }
         public float Strength { get; set; }
         public bool ResistCold { get; set; }
@@ -109,6 +110,7 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             Species = breed.Species;
             DietType = breed.DietType;
+            MaxHealth = breed.MaxHealth;
             Speed = breed.Speed;
             Strength = breed.Strength;
             ResistCold = breed.ResistCold;
