@@ -69,8 +69,7 @@ namespace EvolutionSim.UI
             var organismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
             organismCreateButton.OnClick = (Entity btn) =>
             {
-                int input;
-                if (int.TryParse(organismCountInput.Value, out input))
+                if (int.TryParse(organismCountInput.Value, out var input))
                 {
                     simulation.AddOrganisms(input);
                 }
@@ -82,8 +81,7 @@ namespace EvolutionSim.UI
             var foodCreateButton = new Button("Food", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
             foodCreateButton.OnClick = (Entity btn) =>
             {
-                int input;
-                if (int.TryParse(foodCountInput.Value, out input))
+                if (int.TryParse(foodCountInput.Value, out var input))
                 {
                     simulation.AddFoods(input);
                 }
@@ -206,8 +204,7 @@ namespace EvolutionSim.UI
             this.editHungerValue = new TextInput(false, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
             editHungerValue.OnValueChange = (Entity btn) =>
             {
-                int input;
-                if (int.TryParse(((TextInput)btn).Value, out input))
+                if (int.TryParse(((TextInput)btn).Value, out var input))
                 {
                     simulation.TileHighlight.SelectedOrganism.Attributes.Hunger = input;
                 }
@@ -241,7 +238,7 @@ namespace EvolutionSim.UI
         /// Take input from input devices
         /// </summary>
         /// <param name="gameTime">Time elapsed since last update call</param>
-        public void Update(GameTime gameTime, TileHighlight tileHighlight)
+        public void Update(GameTime gameTime, DrawingManager tileHighlight)
         {
             UserInterface.Active.Update(gameTime);
             

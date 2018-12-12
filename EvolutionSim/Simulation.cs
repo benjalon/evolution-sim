@@ -20,7 +20,7 @@ namespace EvolutionSim.Logic
         private readonly Grid grid;
         private readonly FullScreenSprite background; 
         
-        public TileHighlight TileHighlight { get; private set; }
+        public DrawingManager TileHighlight { get; private set; }
         public TimeManager TimeManager { get; private set; }
         public WeatherManager WeatherManager { get; private set; }
 
@@ -40,7 +40,7 @@ namespace EvolutionSim.Logic
             this.fsm = new StateMachine(this.grid, this.TimeManager);
             this.fsm.MatingOccurred += this.BirthHandler;
 
-            this.TileHighlight = new TileHighlight(textures["tile"]);
+            this.TileHighlight = new DrawingManager(textures["tile"]);
 
             this.WeatherManager = new WeatherManager(textures["cold_overlay"], textures["hot_overlay"]);
         }

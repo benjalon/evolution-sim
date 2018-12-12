@@ -6,20 +6,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EvolutionSim.TileGrid.GridItems
 {
-    public class TileHighlight : Sprite
+    public class DrawingManager
     {
         public Tile HighlightedTile { get; private set; }
         public Organism SelectedOrganism { get; private set; }
 
         private MouseManager mouseManager = new MouseManager();
+        private readonly Sprite tileHighlight;
 
-        public TileHighlight(Texture2D texture) : base(texture, new Rectangle(0, 0, Tile.TILE_SIZE, Tile.TILE_SIZE)) { }
+        public DrawingManager(Texture2D texture)
+        {
+            this.tileHighlight = new Sprite(texture, new Rectangle(0, 0, Tile.TILE_SIZE, Tile.TILE_SIZE));
+        }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (this.mouseManager.IsWithinGrid)
             {
-                base.Draw(spriteBatch);
+                this.tileHighlight.Draw(spriteBatch);
             }
         }
 
@@ -37,7 +41,7 @@ namespace EvolutionSim.TileGrid.GridItems
             {
                 this.UpdateHighlightedTile(grid);
 
-                if (this.mouseManager.IsClickedWithinGrid)
+                if (this.mouseManager.IsHeldWithinGrid)
                 {
                     if (this.HighlightedTile.HasOrganismInhabitant)
                     {
@@ -54,8 +58,7 @@ namespace EvolutionSim.TileGrid.GridItems
         private void UpdateHighlightedTile(Grid grid)
         {
             this.HighlightedTile = grid.GetTileAt(this.mouseManager.TileIndexX, this.mouseManager.TileIndexY);
-            this.rectangle.X = this.HighlightedTile.ScreenPositionX;
-            this.rectangle.Y = this.HighlightedTile.ScreenPositionY;
+            this.tileHighlight.SetScreenPosition(this.HighlightedTile.ScreenPositionX, this.HighlightedTile.ScreenPositionY);
         }
 
         private void UpdateOrganismSelection()
