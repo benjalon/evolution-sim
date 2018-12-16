@@ -24,9 +24,9 @@ namespace EvolutionSim.Utility
             this.hotTexture = hotTexture;
         }
 
-        public void Update(List<Organism> organisms)
+        public void Update(List<Organism> organisms, TimeManager timeManager)
         {
-            if (!TimeManager.HAS_SIMULATION_TICKED)
+            if (!timeManager.HasSimulationTicked)
             {
                 return; // Wait a bit
             }

@@ -23,7 +23,7 @@ namespace EvolutionSim.Logic
         public TimeManager TimeManager { get; private set; }
         public WeatherManager WeatherManager { get; private set; }
 
-        public RadioAddSprites SelectedRadioItem { private get; set; } = RadioAddSprites.Grass;
+        public TileItems SelectedRadioItem { private get; set; } = TileItems.Grass;
 
         private List<Breed> bearBreeds;
 
@@ -59,15 +59,15 @@ namespace EvolutionSim.Logic
 
         public void Update(GameTime gameTime)
         {
-            this.TimeManager.Update(gameTime);
-            this.TileHighlight.Update(this, this.grid, SelectedRadioItem);
+            TimeManager.Update(gameTime);
+            TileHighlight.Update(this, this.grid, SelectedRadioItem);
             
-            if (this.TimeManager.Paused)
+            if (TimeManager.Paused)
             {
                 return;
             }
 
-            this.WeatherManager.Update(this.grid.Organisms);
+            this.WeatherManager.Update(this.grid.Organisms, TimeManager);
 
             var organismsCount = this.grid.Organisms.Count;
             Organism organism;
@@ -76,7 +76,7 @@ namespace EvolutionSim.Logic
                 organism = this.grid.Organisms[i];
                 this.fsm.CheckState(organism);
                 this.fsm.DetermineBehaviour(organism);
-                this.fsm.UpdateOrganismAttributes(organism);
+                this.fsm.UpdateOrganismAttributes(organism, TimeManager);
             }
         }
 

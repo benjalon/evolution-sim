@@ -28,10 +28,11 @@ namespace EvolutionSim.TileGrid.GridItems
         // Pathfinding 
         public bool Computing { get; set; } = false;
         public List<Tile> Path { get; set; } = new List<Tile>();
-        public Tile DestinationTile { get; set; } // The next tile along after the path
+        public Tile DestinationTile { get => Path.Count > 0 ? Path[Path.Count - 1] : null; }
 
         // State management
         public States State { get; set; } = States.Roaming;
+        public int MsSinceLastRoam { get; set; } = 0;
         public int MsSinceLastMate { get; set; } = 0;
         public bool JustMated { get; set; } = false;
         public bool WaitingForMate { get; set; }

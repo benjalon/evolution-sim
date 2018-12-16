@@ -19,7 +19,7 @@ namespace EvolutionSim.Utility
 
         public int TileIndexX { get => this.mouseState.X / Tile.TILE_SIZE; }
         public int TileIndexY { get => this.mouseState.Y / Tile.TILE_SIZE; }
-        public bool IsWithinGrid { get => this.TileIndexX > 0 && this.TileIndexX < Grid.TILE_COUNT_X && this.TileIndexY > 0 && this.TileIndexY < Grid.TILE_COUNT_Y; }
+        public bool IsWithinGrid { get => this.TileIndexX >= 0 && this.TileIndexX < Grid.TILE_COUNT_X && this.TileIndexY >= 0 && this.TileIndexY < Grid.TILE_COUNT_Y; }
 
         public bool IsClicked { get => this.mouseState.LeftButton == ButtonState.Pressed && this.mouseStateOld.LeftButton == ButtonState.Released; }
         public bool IsClickedWithinGrid { get => this.IsClicked && this.IsWithinGrid; }

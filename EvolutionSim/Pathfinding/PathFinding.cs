@@ -60,6 +60,10 @@ namespace EvolutionSim.Pathfinding
                         goalNode = node;
                         break;
                     }
+                    else if (node.Current.HasInhabitant)
+                    {
+                        continue;
+                    }
                     else
                     {
                         //            if a node with the same position as 
@@ -97,8 +101,6 @@ namespace EvolutionSim.Pathfinding
                 path.Reverse();
                 // Remove first tile as its occupied by the organism being moved
                 path.RemoveAt(0);
-                // Remove last tile as its occupied by whatever the hell it's going to
-                //path.RemoveAt(path.Count-1);
 
 
             }
