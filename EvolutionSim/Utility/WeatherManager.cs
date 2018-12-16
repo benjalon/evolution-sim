@@ -24,9 +24,9 @@ namespace EvolutionSim.Utility
             this.hotTexture = hotTexture;
         }
 
-        public void Update(List<Organism> organisms)
+        public void Update(List<Organism> organisms, TimeManager timeManager)
         {
-            if (!TimeManager.HAS_SIMULATION_TICKED)
+            if (!timeManager.HasSimulationTicked)
             {
                 return; // Wait a bit
             }
@@ -36,8 +36,7 @@ namespace EvolutionSim.Utility
             switch (this.currentWeather)
             {
                 case WeatherSettings.Cold:
-                    organismsCount = organisms.Count;
-                    for (var i = organismsCount - 1; i >= 0; i--)
+                    for (var i = organisms.Count - 1; i >= 0; i--)
                     {
                         organism = organisms[i];
                         if (!organism.Attributes.ResistCold)
@@ -47,8 +46,7 @@ namespace EvolutionSim.Utility
                     }
                     break;
                 case WeatherSettings.Hot:
-                    organismsCount = organisms.Count;
-                    for (var i = organismsCount - 1; i >= 0; i--)
+                    for (var i = organisms.Count - 1; i >= 0; i--)
                     {
                         organism = organisms[i];
                         if (!organism.Attributes.ResistHeat)

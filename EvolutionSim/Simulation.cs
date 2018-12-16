@@ -17,19 +17,24 @@ namespace EvolutionSim.Logic
 
         private readonly StateMachine fsm;
         private readonly Grid grid;
-        private readonly FullScreenSprite background; 
-        
+        private readonly FullScreenSprite background;
+
         public DrawingManager TileHighlight { get; private set; }
         public TimeManager TimeManager { get; private set; }
         public WeatherManager WeatherManager { get; private set; }
 
-        public RadioAddSprites SelectedRadioItem { private get; set; } = RadioAddSprites.Grass;
+        private List<Texture2D> particleTextures;
+        private List<ParticleEffect> particleEffects = new List<ParticleEffect>();
+
+        public TileItems SelectedRadioItem { private get; set; } = TileItems.Grass;
 
         private List<Breed> bearBreeds;
 
         public Simulation(Dictionary<string, Texture2D> textures)
         {
             this.textures = textures;
+
+            this.particleTextures = new List<Texture2D>() { this.textures["star"], this.textures["diamond"], this.textures["circle"] };
 
             this.bearBreeds = new List<Breed>()
             {
@@ -41,7 +46,7 @@ namespace EvolutionSim.Logic
             };
 
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(textures["healthbar_red"], textures["healthbar_green"]);
-            
+
             this.background = new FullScreenSprite(textures["grass_background"]);
 
             this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"]);
@@ -59,24 +64,33 @@ namespace EvolutionSim.Logic
 
         public void Update(GameTime gameTime)
         {
-            this.TimeManager.Update(gameTime);
-            this.TileHighlight.Update(this, this.grid, SelectedRadioItem);
-            
-            if (this.TimeManager.Paused)
+            TimeManager.Update(gameTime);
+            TileHighlight.Update(this, this.grid, SelectedRadioItem);
+
+            if (TimeManager.Paused)
             {
                 return;
             }
 
-            this.WeatherManager.Update(this.grid.Organisms);
-
-            var organismsCount = this.grid.Organisms.Count;
+            this.WeatherManager.Update(this.grid.Organisms, TimeManager);
+            
             Organism organism;
-            for (var i = organismsCount - 1; i >= 0; i--)
+            for (var i = this.grid.Organisms.Count - 1; i >= 0; i--)
             {
                 organism = this.grid.Organisms[i];
                 this.fsm.CheckState(organism);
                 this.fsm.DetermineBehaviour(organism);
-                this.fsm.UpdateOrganismAttributes(organism);
+                this.fsm.UpdateOrganismAttributes(organism, TimeManager);
+            }
+            
+            for (var i = this.particleEffects.Count - 1; i >= 0; i--)
+            {
+                this.particleEffects[i].Update(gameTime);
+
+                if (this.particleEffects[i].Complete)
+                {
+                    this.particleEffects.RemoveAt(i);
+                }
             }
         }
 
@@ -86,8 +100,13 @@ namespace EvolutionSim.Logic
             this.WeatherManager.Draw(spriteBatch);
 
             this.grid.Draw(spriteBatch);
-            
+
             this.TileHighlight.Draw(spriteBatch);
+            
+            for (var i = this.particleEffects.Count - 1; i >= 0; i--)
+            {
+                this.particleEffects[i].Draw(spriteBatch);
+            }
         }
 
         private Tuple<int, int> MakeUseableValues(float rawX, float rawY)
@@ -135,17 +154,17 @@ namespace EvolutionSim.Logic
             birthSpot.Y -= 1;
 
             // Position the child adjacent to the mother on an empty square
-            for (var x = 0; x < 3; x++)
+            for (var x = 0; !positioned && x < 3; x++)
             {
                 birthSpot.X += x;
 
-                for (var y = 0; y < 3; y++)
+                for (var y = 0; !positioned && y < 3; y++)
                 {
                     birthSpot.Y += y;
 
                     if (this.grid.AttemptToPositionAt(child, birthSpot.X, birthSpot.Y))
                     {
-                        return; // We successfully positioned the child so we're done here
+                        positioned = true; // We successfully positioned the child so we're done here
                     }
                 }
             }
@@ -155,32 +174,49 @@ namespace EvolutionSim.Logic
             {
                 this.PositionAtRandom(child);
             }
+
+            particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(child).Center));
         }
-        
+
         public void AddOrganisms(int amount)
         {
+            Organism organism;
             for (var i = 0; i < amount; i++)
             {
-                PositionAtRandom(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures));
+                organism = new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures);
+                PositionAtRandom(organism);
+                particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(organism).Center));
             }
         }
 
         public void AddFoods(int amount)
         {
+            Food food;
             for (var i = 0; i < amount; i++)
             {
-                PositionAtRandom(new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, Food.MAX_GRASS_HEALTH)));
+                food = new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, Food.MAX_GRASS_HEALTH));
+                PositionAtRandom(food);
+                particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(food).Center));
             }
         }
 
         public void AddOrganism(int x, int y)
         {
-            this.grid.AttemptToPositionAt(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures), x, y);
+            var positioned = this.grid.AttemptToPositionAt(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures), x, y);
+            if (positioned)
+            {
+                particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(x, y).Center));
+            }
+
         }
 
         public void AddFood(int x, int y)
         {
-            this.grid.AttemptToPositionAt(new Food(this.textures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
+            var positioned = this.grid.AttemptToPositionAt(new Food(this.textures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
+            if (positioned)
+            {
+                particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(x, y).Center));
+            }
         }
 
         private void PositionAtRandom(GridItem item)

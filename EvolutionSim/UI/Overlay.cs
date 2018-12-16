@@ -10,7 +10,7 @@ using System;
 
 namespace EvolutionSim.UI
 {
-    public enum RadioAddSprites
+    public enum TileItems
     {
         Grass,
         Mountain,
@@ -118,27 +118,27 @@ namespace EvolutionSim.UI
             var nothingRadio = new RadioButton("None", Anchor.AutoCenter);
             nothingRadio.SpaceBefore = Vector2.Zero;
             nothingRadio.SpaceAfter = Vector2.Zero;
-            nothingRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Grass;
+            nothingRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Grass;
 
             var mountainRadio = new RadioButton("Mountain", Anchor.AutoCenter);
             mountainRadio.SpaceBefore = Vector2.Zero;
             mountainRadio.SpaceAfter = Vector2.Zero;
-            mountainRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Mountain;
+            mountainRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Mountain;
 
             var waterRadio = new RadioButton("Water", Anchor.AutoCenter);
             waterRadio.SpaceBefore = Vector2.Zero;
             waterRadio.SpaceAfter = Vector2.Zero;
-            waterRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Water;
+            waterRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Water;
 
             var organismRadio = new RadioButton("Organism", Anchor.AutoCenter);
             organismRadio.SpaceBefore = Vector2.Zero;
             organismRadio.SpaceAfter = Vector2.Zero;
-            organismRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Organism;
+            organismRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Organism;
 
             var foodRadio = new RadioButton("Food", Anchor.AutoCenter);
             foodRadio.SpaceBefore = Vector2.Zero;
             foodRadio.SpaceAfter = Vector2.Zero;
-            foodRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = RadioAddSprites.Food;
+            foodRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Food;
 
             nothingRadio.Checked = true;
 

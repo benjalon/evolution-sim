@@ -27,7 +27,7 @@ namespace EvolutionSim.TileGrid.GridItems
             }
         }
 
-        public void Update(Simulation simulation, Grid grid, RadioAddSprites selectedRadioItem)
+        public void Update(Simulation simulation, Grid grid, TileItems selectedRadioItem)
         {
             this.mouseManager.Update();
             
@@ -72,13 +72,13 @@ namespace EvolutionSim.TileGrid.GridItems
             this.SelectedOrganism.IsSelected = true;
         }
 
-        private void PlaceGridItem(Simulation simulation, Grid grid, RadioAddSprites selectedRadioItem)
+        private void PlaceGridItem(Simulation simulation, Grid grid, TileItems selectedRadioItem)
         {
             switch (selectedRadioItem)
             {
-                case RadioAddSprites.Grass:
-                case RadioAddSprites.Mountain:
-                case RadioAddSprites.Water:
+                case TileItems.Grass:
+                case TileItems.Mountain:
+                case TileItems.Water:
                     // Draw terrain in a 3 by 3 around the mouse position tile
                     for (var x = -1; x <= 1; x++)
                     {
@@ -88,10 +88,10 @@ namespace EvolutionSim.TileGrid.GridItems
                         }
                     }
                     break;
-                case RadioAddSprites.Organism:
+                case TileItems.Organism:
                     simulation.AddOrganism(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
                     break;
-                case RadioAddSprites.Food:
+                case TileItems.Food:
                     simulation.AddFood(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
                     break;
                 default:

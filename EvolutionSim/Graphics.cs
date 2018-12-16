@@ -74,6 +74,9 @@ namespace EvolutionSim
             textures.Add("water", Content.Load<Texture2D>("Water"));
             textures.Add("healthbar_green", Content.Load<Texture2D>("Healthbar_Green"));
             textures.Add("healthbar_red", Content.Load<Texture2D>("Healthbar_Red"));
+            textures.Add("circle", Content.Load<Texture2D>("Circle"));
+            textures.Add("star", Content.Load<Texture2D>("Star"));
+            textures.Add("diamond", Content.Load<Texture2D>("Diamond"));
 
             this.simulation = new Simulation(textures);
 

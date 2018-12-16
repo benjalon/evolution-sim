@@ -39,66 +39,18 @@ namespace EvolutionSim.StateManagement
 
         }
 
-        public static void Roam(Organism organism, Grid grid)
+        public static void Roam(Organism organism, Grid grid, TimeManager timeManager)
         {
             // If we don't have a set destination, pick a random tile to explore
-            if (organism.DestinationTile is null)
+            if (timeManager.HasRoamingCooldownExpired(organism))
             {
-                organism.DestinationTile = PickRandomTileToExplore(organism, grid);
+                organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), grid.FindRandomNearbyEmptyTile(organism), grid);
+
             }
-            else
+            else if (organism.DestinationTile != null)
             {
-                if (MoveTowards(organism, organism.DestinationTile, grid))
-                {
-                    organism.DestinationTile = null;
-                }
+                MoveAlongRoamPath(organism, grid);
             }
-        }
-
-        // TODO: this should pick globally rather than just random adjacents
-        private static Tile PickRandomTileToExplore(Organism organism, Grid grid)
-        {
-            Tile destination = null;
-            var _destinationTileX = organism.GridIndex.X;
-            var _destinationTileY = organism.GridIndex.Y;
-            while (destination == null)
-            {
-                var _num = (Directions)Graphics.RANDOM.Next(0, 4);
-                switch (_num)
-                {
-                    case Directions.Up:
-                        if (_destinationTileY > 0)
-                        {
-                            _destinationTileY -= 1;
-                        }
-                        break;
-                    case Directions.Left:
-                        if (_destinationTileX > 0)
-                        {
-                            _destinationTileX -= 1;
-                        }
-                        break;
-                    case Directions.Down:
-                        if (_destinationTileY < Grid.TILE_COUNT_Y - 1)
-                        {
-                            _destinationTileY += 1;
-                        }
-                        break;
-                    case Directions.Right:
-                        if (_destinationTileX < Grid.TILE_COUNT_X - 1)
-                        {
-                            _destinationTileX += 1;
-                        }
-                        break;
-                }
-
-                if (!grid.GetTileAt(_destinationTileX, _destinationTileY).HasInhabitant)
-                {
-                    destination = grid.GetTileAt(_destinationTileX, _destinationTileY);
-                }
-            }
-
-            return destination;
         }
 
         // Returns true if reached tile, false if not.
@@ -118,18 +70,52 @@ namespace EvolutionSim.StateManagement
             return false;
         }
 
-        public static void MoveAlongPath(Organism organism, Grid grid, List<Tile> Path)
+        public static void MoveAlongRoamPath(Organism organism, Grid grid)
         {
-            if (Path.Any() && !Path.First().HasInhabitant)
+            var isPathBlocked = organism.Path.Count > 0 && organism.Path[0].HasInhabitant;
+            if (isPathBlocked)
             {
-                if (MoveTowards(organism, Path.ElementAt(0), grid))
-                {
-                    Path.RemoveAt(0);
-                }
+                organism.Path.Clear(); // The path is blocked so it will need recalculating
             }
-            else if (!Path.Any())
+            else if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
             {
-                organism.DestinationTile = null;
+                organism.Path.RemoveAt(0);
+            }
+        }
+
+        public static void MoveAlongFoodPath(Organism organism, Grid grid)
+        {
+            var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant ||
+                                organism.Path.Count == 1 && organism.Path[0].HasOrganismInhabitant; // If the path has only one tile, it should only contain the target food
+
+            if (isPathBlocked)
+            {
+                organism.Path.Clear(); // The path is blocked so it will need recalculating
+            }
+            else if (organism.Path.Count > 1)
+            {
+                if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
+                {
+                    organism.Path.RemoveAt(0);
+                }
+            } 
+        }
+
+        public static void MoveAlongMatePath(Organism organism, Grid grid)
+        {
+            var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant || 
+                                organism.Path.Count == 1 && organism.Path[0].HasFoodInhabitant; // If the path has only one tile, it should only contain the target organism
+
+            if (isPathBlocked)
+            {
+                organism.Path.Clear(); // The path is blocked so it will need recalculating
+            }
+            else if (organism.Path.Count > 1)
+            {
+                if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
+                {
+                    organism.Path.RemoveAt(0);
+                }
             }
         }
 
@@ -152,8 +138,8 @@ namespace EvolutionSim.StateManagement
 
             // Does the food type match the organism's diet type
             var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
-            var validFood = organism.Attributes.DietType == DietTypes.Omnivore || 
-                            (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) || 
+            var validFood = organism.Attributes.DietType == DietTypes.Omnivore ||
+                            (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) ||
                             (organism.Attributes.DietType == DietTypes.Canivore && !food.IsHerbivoreFood);
 
             return validFood;
@@ -162,7 +148,7 @@ namespace EvolutionSim.StateManagement
 
         public static class SeekingFood
         {
-            public static void SeekFood(Organism organism, Grid grid)
+            public static void SeekFood(Organism organism, Grid grid, TimeManager timeManager)
             {
                 if (organism.Computing)
                 {
@@ -176,19 +162,16 @@ namespace EvolutionSim.StateManagement
                 {
                     // Path to food
                     organism.Computing = true;
-                    List<Tile> Path = null;
 
                     //ThreadPool.QueueUserWorkItem(new WaitCallback(Eek));
                     ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
                     {
-                        Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
-                        organism.Path = Path;
-                        organism.DestinationTile = potentialFood;
+                        organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
                     }), null);
                 }
                 else
                 {
-                    Roam(organism, grid);
+                    Roam(organism, grid, timeManager);
                 }
 
             }
@@ -287,24 +270,21 @@ namespace EvolutionSim.StateManagement
         /// </summary>
         public static class EatingFood
         {
-            public static void EatFood(Organism organism, Grid grid)
+            public static void EatFood(Organism organism, Grid grid, TimeManager timeManager)
             {
                 var food = organism.DestinationTile.Inhabitant as Food;
-                
-                if (TimeManager.HAS_SIMULATION_TICKED) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
+
+                if (timeManager.HasSimulationTicked) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
                 {
                     food.BeEaten();
                     organism.Eat(); //organism gets fuller after eating
                 }
-
-                organism.DestinationTile = null;
-                organism.Path.Clear();
             }
 
         }
         public static class SeekingMate
         {
-            public static void SeekMate(Organism organism, Grid grid)
+            public static void SeekMate(Organism organism, Grid grid, TimeManager timeManager)
             {
                 Tile potentialMate = MatesInRange(organism, grid);
 
@@ -315,24 +295,12 @@ namespace EvolutionSim.StateManagement
 
 
                     //shouldn't be calling the A* for mating probably
-                    List<Tile> Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialMate, grid);
-
-                    organism.Path = Path;
-                    if (Path.Count == 0)
-                    {
-                        organism.DestinationTile = potentialMate;
-                    }
-                    else
-                    {
-                        organism.DestinationTile = potentialMate;
-                        organism.Path.RemoveAt(organism.Path.Count - 1);
-                    }
-
+                    organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialMate, grid);
                 }
                 //this check wont work. Organisms have no way of entering the waiting for mate state
                 else if (!organism.WaitingForMate)
                 {
-                    Roam(organism, grid);
+                    Roam(organism, grid, timeManager);
                 }
 
             }

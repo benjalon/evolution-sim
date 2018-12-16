@@ -7,7 +7,19 @@ namespace EvolutionSim.TileGrid.GridItems
 {
     public class Terrain : Sprite
     {
-        private RadioAddSprites currentTerrain = RadioAddSprites.Grass;
+        private TileItems terrainType = TileItems.Grass;
+        public TileItems TerrainType
+        {
+            get => this.terrainType;
+            set
+            {
+                this.terrainType = value;
+
+                var terrainIndex = (int)value;
+                this.MovementDifficulty = terrainIndex * DIFFICULTY_MODIFIER;
+                this.Texture = this.textures[terrainIndex];
+            }
+        }
 
         private readonly Texture2D[] textures;
 
@@ -25,19 +37,6 @@ namespace EvolutionSim.TileGrid.GridItems
             {
                 base.Draw(spriteBatch);
             }
-        }
-
-        /// <summary>
-        /// Set the terrain of this tile to the given type.
-        /// </summary>
-        /// <param name="terrainType">The type of terrain to set.</param>
-        public void SetTerrain(RadioAddSprites terrainType)
-        {
-            this.currentTerrain = terrainType;
-
-            var terrainIndex = (int)terrainType;
-            this.MovementDifficulty = terrainIndex * DIFFICULTY_MODIFIER;
-            this.Texture = this.textures[terrainIndex];
         }
     }
 }
