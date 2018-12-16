@@ -262,15 +262,8 @@ namespace EvolutionSim.StateManagement
 
 
                     //shouldn't be calling the A* for mating probably
-                    List<Tile> Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialMate, grid);
-
-                    organism.Path = Path;
-                    if (Path.Count == 0)
-                    {
-                        organism.Path.Add(potentialMate);
-                    }
-
-                }
+                    organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialMate, grid);
+                                    }
                 //this check wont work. Organisms have no way of entering the waiting for mate state
                 else if (!organism.WaitingForMate)
                 {

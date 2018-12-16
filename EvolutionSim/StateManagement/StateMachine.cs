@@ -150,7 +150,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToMate: // When an organism is moving on a path towards a mate
-                    if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant && this.grid.IsAdjacent(organism.GridIndex, organism.Path[0].GridIndex))
+                    if (organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.Bang); //the organism is adjacent to a mate, so go ahead and make love
                     }
@@ -201,10 +201,7 @@ namespace EvolutionSim.StateManagement
             {
 
                 case States.Roaming:
-                    if (this.timeManager.HasRoamingCooldownExpired(organism))
-                    {
-                        StateActions.Roam(organism, this.grid, this.timeManager);
-                    }
+                    StateActions.Roam(organism, this.grid, this.timeManager);
 
                     break;
 
@@ -214,7 +211,11 @@ namespace EvolutionSim.StateManagement
 
                 case States.Mating:
                     var mother = (Organism)organism.DestinationTile.Inhabitant;
+
                     MatingOccurred?.Invoke(this, new MatingArgs(organism, mother));
+
+                    organism.MsSinceLastMate = 0;
+                    mother.MsSinceLastMate = 0;
                     mother.WaitingForMate = false;
                     
                     break;
