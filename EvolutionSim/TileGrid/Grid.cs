@@ -254,14 +254,14 @@ namespace EvolutionSim.TileGrid
             var organismTile = GetTileAt(organism);
             var minX = organismTile.GridIndex.X - organism.Attributes.DetectionRadius;
             var minY = organismTile.GridIndex.Y - organism.Attributes.DetectionRadius;
-            var maxX = organismTile.GridIndex.X + organism.Attributes.DetectionRadius;
-            var maxY = organismTile.GridIndex.Y + organism.Attributes.DetectionRadius;
+            var maxX = organismTile.GridIndex.X + organism.Attributes.DetectionRadius + 1; // +1 because random is exclusive on upper limit
+            var maxY = organismTile.GridIndex.Y + organism.Attributes.DetectionRadius + 1;
 
             if (minX < 0)
             {
                 minX = 0;
             }
-            else if (maxX >= TILE_COUNT_X)
+            else if (maxX > TILE_COUNT_X)
             { 
                 maxX = TILE_COUNT_X;
             }
@@ -270,7 +270,7 @@ namespace EvolutionSim.TileGrid
             {
                 minY = 0;
             }
-            else if (maxY >= TILE_COUNT_X)
+            else if (maxY > TILE_COUNT_X)
             {
                 maxY = TILE_COUNT_Y;
             }

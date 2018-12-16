@@ -49,7 +49,7 @@ namespace EvolutionSim.StateManagement
             }
             else if (organism.DestinationTile != null)
             {
-                MoveAlongPath(organism, grid);
+                MoveAlongRoamPath(organism, grid);
             }
         }
 
@@ -70,16 +70,49 @@ namespace EvolutionSim.StateManagement
             return false;
         }
 
-        public static void MoveAlongPath(Organism organism, Grid grid)
+        public static void MoveAlongRoamPath(Organism organism, Grid grid)
         {
-            var pathToDestinationBlocked = organism.Path.Count > 0 && (organism.Path[0].HasInhabitant && organism.Path[0].Inhabitant != organism);
-            if (pathToDestinationBlocked)
+            var isPathBlocked = organism.Path.Count > 0 && organism.Path[0].HasInhabitant;
+            if (isPathBlocked)
             {
                 organism.Path.Clear(); // The path is blocked so it will need recalculating
             }
-            else
+            else if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
             {
-                if (MoveTowards(organism, organism.Path.ElementAt(0), grid)) // Wait for the lerp
+                organism.Path.RemoveAt(0);
+            }
+        }
+
+        public static void MoveAlongFoodPath(Organism organism, Grid grid)
+        {
+            var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant ||
+                                organism.Path.Count == 1 && organism.Path[0].HasOrganismInhabitant; // If the path has only one tile, it should only contain the target food
+
+            if (isPathBlocked)
+            {
+                organism.Path.Clear(); // The path is blocked so it will need recalculating
+            }
+            else if (organism.Path.Count > 1)
+            {
+                if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
+                {
+                    organism.Path.RemoveAt(0);
+                }
+            } 
+        }
+
+        public static void MoveAlongMatePath(Organism organism, Grid grid)
+        {
+            var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant || 
+                                organism.Path.Count == 1 && organism.Path[0].HasFoodInhabitant; // If the path has only one tile, it should only contain the target organism
+
+            if (isPathBlocked)
+            {
+                organism.Path.Clear(); // The path is blocked so it will need recalculating
+            }
+            else if (organism.Path.Count > 1)
+            {
+                if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
                 {
                     organism.Path.RemoveAt(0);
                 }
@@ -263,7 +296,7 @@ namespace EvolutionSim.StateManagement
 
                     //shouldn't be calling the A* for mating probably
                     organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialMate, grid);
-                                    }
+                }
                 //this check wont work. Organisms have no way of entering the waiting for mate state
                 else if (!organism.WaitingForMate)
                 {

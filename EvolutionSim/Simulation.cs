@@ -154,17 +154,17 @@ namespace EvolutionSim.Logic
             birthSpot.Y -= 1;
 
             // Position the child adjacent to the mother on an empty square
-            for (var x = 0; x < 3; x++)
+            for (var x = 0; !positioned && x < 3; x++)
             {
                 birthSpot.X += x;
 
-                for (var y = 0; y < 3; y++)
+                for (var y = 0; !positioned && y < 3; y++)
                 {
                     birthSpot.Y += y;
 
                     if (this.grid.AttemptToPositionAt(child, birthSpot.X, birthSpot.Y))
                     {
-                        break; // We successfully positioned the child so we're done here
+                        positioned = true; // We successfully positioned the child so we're done here
                     }
                 }
             }

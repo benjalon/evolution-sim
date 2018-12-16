@@ -227,7 +227,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToMate:
-                    StateActions.MoveAlongPath(organism, this.grid);
+                    StateActions.MoveAlongMatePath(organism, this.grid);
 
                     break;
 
@@ -244,7 +244,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToFood:
-                    StateActions.MoveAlongPath(organism, this.grid);
+                    StateActions.MoveAlongFoodPath(organism, this.grid);
                     break;
 
                 default:
