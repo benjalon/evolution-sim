@@ -10,7 +10,7 @@ namespace EvolutionSim.Utility
     /// </summary>
     public class Sprite
     {
-        protected Texture2D texture;
+        public Texture2D Texture { get; protected set; }
         protected Rectangle rectangle;
         public Rectangle Rectangle { get => this.rectangle; } // Alias for the rectangle because structs and properties don't play nice
 
@@ -20,8 +20,18 @@ namespace EvolutionSim.Utility
         /// <param name="texture">The appearance of the Sprite.</param>
         public Sprite(Texture2D texture)
         {
-            this.texture = texture;
+            this.Texture = texture;
         }
+
+        /// <summary>
+        /// Create a static sprite from a given rectangle.
+        /// </summary>
+        /// <param name="rectangle">The position of the Sprite.</param
+        public Sprite(Rectangle rectangle)
+        {
+            this.rectangle = rectangle;
+        }
+
 
         /// <summary>
         /// Create a static sprite from a given texture and rectangle.
@@ -30,7 +40,7 @@ namespace EvolutionSim.Utility
         /// <param name="rectangle">The position of the Sprite.</param>
         public Sprite(Texture2D texture, Rectangle rectangle)
         {
-            this.texture = texture;
+            this.Texture = texture;
             this.rectangle = rectangle;
         }
         
@@ -39,7 +49,7 @@ namespace EvolutionSim.Utility
         /// </summary>
         /// <param name="x">The x position to move to.</param>
         /// <param name="y">The y position to move to.</param>
-        public void SetScreenPosition(int x, int y)
+        public virtual void SetScreenPosition(int x, int y)
         {
             if (this.rectangle == null)
             {
@@ -56,12 +66,12 @@ namespace EvolutionSim.Utility
         /// <param name="spriteBatch">The spritebatch to draw this sprite within</param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (this.rectangle == null)
+            if (this.rectangle == null || this.Texture == null)
             {
                 return;
             }
 
-            spriteBatch.Draw(this.texture, Rectangle, Color.White);
+            spriteBatch.Draw(this.Texture, Rectangle, Color.White);
         }
     }
 }

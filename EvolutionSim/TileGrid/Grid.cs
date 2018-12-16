@@ -13,14 +13,16 @@ namespace EvolutionSim.TileGrid
     /// </summary>
     public class Grid
     {
-        public const int TILE_COUNT_X = Graphics.WINDOW_WIDTH / Tile.TILE_SIZE;
-        public const int TILE_COUNT_Y = Graphics.WINDOW_HEIGHT / Tile.TILE_SIZE;
+        public const int TILE_COUNT_X = Graphics.SIMULATION_WIDTH / Tile.TILE_SIZE;
+        public const int TILE_COUNT_Y = Graphics.SIMULATION_WIDTH / Tile.TILE_SIZE;
 
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
         public List<Food> Foods { get; private set; } = new List<Food>();
         public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
 
-        private Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
+        private readonly Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
+
+        public event EventHandler ShouldSpawnCorpse;
 
         /// <summary>
         /// Create a Grid with given attributes.
@@ -107,7 +109,7 @@ namespace EvolutionSim.TileGrid
         /// <param name="type">The type of terrain to position.</param>
         /// <param name="x">The x index of the tile to position at.</param>
         /// <param name="y">The y index of the tile to position at.</param>
-        public void SetTerrainAt(RadioItems type, int x, int y)
+        public void SetTerrainAt(TileItems type, int x, int y)
         {
             if (!InBounds(x, y))
             {
@@ -118,14 +120,14 @@ namespace EvolutionSim.TileGrid
 
             switch (type)
             {
-                case RadioItems.Grass:
+                case TileItems.Grass:
                     if (this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Remove(tile.Terrain);
                     }
                     break;
-                case RadioItems.Mountain:
-                case RadioItems.Water:
+                case TileItems.Mountain:
+                case TileItems.Water:
                     if (!this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Add(tile.Terrain);
@@ -218,7 +220,7 @@ namespace EvolutionSim.TileGrid
         /// <returns>True if it is, false if it is not.</returns>
         public bool InBounds(int x, int y)
         {
-            return x > 0 && y > 0 && x < TILE_COUNT_X && y < TILE_COUNT_Y;
+            return x >= 0 && y >= 0 && x < TILE_COUNT_X && y < TILE_COUNT_Y;
         }
 
         /// <summary>
@@ -231,7 +233,9 @@ namespace EvolutionSim.TileGrid
             var organism = (Organism)sender;
             this.GetTileAt(organism).RemoveInhabitant();
             this.Organisms.Remove(organism);
-        }
+
+            ShouldSpawnCorpse?.Invoke(organism, EventArgs.Empty);
+    }
 
         /// <summary>
         /// Handle food being eaten by removing the food from the grid and removing its reference from the list of food.
@@ -243,6 +247,41 @@ namespace EvolutionSim.TileGrid
             var food = (Food)sender;
             this.GetTileAt(food).RemoveInhabitant();
             this.Foods.Remove(food);
+        }
+
+        public Tile FindRandomNearbyEmptyTile(Organism organism)
+        {
+            var organismTile = GetTileAt(organism);
+            var minX = organismTile.GridIndex.X - organism.Attributes.DetectionRadius;
+            var minY = organismTile.GridIndex.Y - organism.Attributes.DetectionRadius;
+            var maxX = organismTile.GridIndex.X + organism.Attributes.DetectionRadius + 1; // +1 because random is exclusive on upper limit
+            var maxY = organismTile.GridIndex.Y + organism.Attributes.DetectionRadius + 1;
+
+            if (minX < 0)
+            {
+                minX = 0;
+            }
+            else if (maxX > TILE_COUNT_X)
+            { 
+                maxX = TILE_COUNT_X;
+            }
+
+            if (minY < 0)
+            {
+                minY = 0;
+            }
+            else if (maxY > TILE_COUNT_X)
+            {
+                maxY = TILE_COUNT_Y;
+            }
+
+            var tile = this.tiles[Graphics.RANDOM.Next(minX, maxX)][Graphics.RANDOM.Next(minY, maxY)];
+            if (tile.HasInhabitant)
+            {
+                return FindRandomNearbyEmptyTile(organism);
+            }
+
+            return tile;
         }
     }
 }

@@ -6,24 +6,28 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace EvolutionSim.TileGrid.GridItems
 {
-    public class TileHighlight : Sprite
+    public class DrawingManager
     {
         public Tile HighlightedTile { get; private set; }
         public Organism SelectedOrganism { get; private set; }
 
         private MouseManager mouseManager = new MouseManager();
+        private readonly Sprite tileHighlight;
 
-        public TileHighlight(Texture2D texture) : base(texture, new Rectangle(0, 0, Tile.TILE_SIZE, Tile.TILE_SIZE)) { }
+        public DrawingManager(Texture2D texture)
+        {
+            this.tileHighlight = new Sprite(texture, new Rectangle(0, 0, Tile.TILE_SIZE, Tile.TILE_SIZE));
+        }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (this.mouseManager.IsWithinGrid)
             {
-                base.Draw(spriteBatch);
+                this.tileHighlight.Draw(spriteBatch);
             }
         }
 
-        public void Update(Simulation simulation, Grid grid, RadioItems selectedRadioItem)
+        public void Update(Simulation simulation, Grid grid, TileItems selectedRadioItem)
         {
             this.mouseManager.Update();
             
@@ -37,7 +41,7 @@ namespace EvolutionSim.TileGrid.GridItems
             {
                 this.UpdateHighlightedTile(grid);
 
-                if (this.mouseManager.IsClickedWithinGrid)
+                if (this.mouseManager.IsHeldWithinGrid)
                 {
                     if (this.HighlightedTile.HasOrganismInhabitant)
                     {
@@ -54,8 +58,7 @@ namespace EvolutionSim.TileGrid.GridItems
         private void UpdateHighlightedTile(Grid grid)
         {
             this.HighlightedTile = grid.GetTileAt(this.mouseManager.TileIndexX, this.mouseManager.TileIndexY);
-            this.rectangle.X = this.HighlightedTile.ScreenPositionX;
-            this.rectangle.Y = this.HighlightedTile.ScreenPositionY;
+            this.tileHighlight.SetScreenPosition(this.HighlightedTile.ScreenPositionX, this.HighlightedTile.ScreenPositionY);
         }
 
         private void UpdateOrganismSelection()
@@ -69,13 +72,13 @@ namespace EvolutionSim.TileGrid.GridItems
             this.SelectedOrganism.IsSelected = true;
         }
 
-        private void PlaceGridItem(Simulation simulation, Grid grid, RadioItems selectedRadioItem)
+        private void PlaceGridItem(Simulation simulation, Grid grid, TileItems selectedRadioItem)
         {
             switch (selectedRadioItem)
             {
-                case RadioItems.Grass:
-                case RadioItems.Mountain:
-                case RadioItems.Water:
+                case TileItems.Grass:
+                case TileItems.Mountain:
+                case TileItems.Water:
                     // Draw terrain in a 3 by 3 around the mouse position tile
                     for (var x = -1; x <= 1; x++)
                     {
@@ -85,10 +88,10 @@ namespace EvolutionSim.TileGrid.GridItems
                         }
                     }
                     break;
-                case RadioItems.Organism:
+                case TileItems.Organism:
                     simulation.AddOrganism(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
                     break;
-                case RadioItems.Food:
+                case TileItems.Food:
                     simulation.AddFood(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
                     break;
                 default:

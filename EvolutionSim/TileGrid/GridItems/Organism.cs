@@ -21,81 +21,106 @@ namespace EvolutionSim.TileGrid.GridItems
     public class Organism : GridItem
     {
         public static int TOTAL_POPULATION = 0;
-        
+
         // Attributes
         public OrganismAttributes Attributes { get; }
-        public DietTypes OrganismPref { get; private set; }
 
         // Pathfinding 
         public bool Computing { get; set; } = false;
-        public List<Tile> Path { get; set; }
-        public Tile DestinationTile { get; set; } // The next tile along after the path
-        
+        public List<Tile> Path { get; set; } = new List<Tile>();
+        public Tile DestinationTile { get => Path.Count > 0 ? Path[Path.Count - 1] : null; }
+
         // State management
-        public States State { get; set; }
+        public States State { get; set; } = States.Roaming;
+        public int MsSinceLastRoam { get; set; } = 0;
         public int MsSinceLastMate { get; set; } = 0;
+        public bool JustMated { get; set; } = false;
+        public bool WaitingForMate { get; set; }
+        public bool MateFound { get; set; }
 
         // Misc
+        private readonly Healthbar healthbar;
         public bool IsSelected { get; set; } = false;
-
-        public Organism(Texture2D[] textures) : base(textures[Graphics.RANDOM.Next(0, textures.Length - 1)])
+        
+        public Organism(Breed breed, Tuple<Texture2D, Texture2D> healthbarTextures) : base(breed.Texture, breed.MaxHealth)
         {
-            this.Attributes = new OrganismAttributes(0, 0.2, 500, 50);
             TOTAL_POPULATION++;
-            State = States.Roaming;
-            Path = new List<Tile>();
 
-            //by default set the organism to be a herbivore
-            this.OrganismPref = DietTypes.Herbivore;
+            this.Attributes = new OrganismAttributes(breed);
+            this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * 0.5f; // TODO: if organisms never get stronger, this can be pre-calculated at birth
+
             if (IsSelected)
             {
-                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.Yellow, 0, Vector2.Zero, this.Attributes.Size, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.Purple, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
             }
             else
             {
-                spriteBatch.Draw(this.texture, this.rectangle.Location.ToVector2(), null, Color.White, 0, Vector2.Zero, this.Attributes.Size, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.White, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
             }
+
+            this.healthbar.Draw(spriteBatch);
         }
         
         public void Eat()
         {
-            this.Attributes.Hunger += 0.04;
+            this.Attributes.Hunger += 0.04f;
+
+            IncreaseHealth(1);
+        }
+        
+        public override void SetScreenPosition(int x, int y)
+        {
+            base.SetScreenPosition(x, y);
+            this.healthbar.SetScreenPosition(x, y);
+        }
+
+        public override void IncreaseHealth(int value)
+        {
+            base.IncreaseHealth(value);
+            this.healthbar.CurrentHealth = this.Health;
+        }
+
+        public override void DecreaseHealth(int value)
+        {
+            base.DecreaseHealth(value);
+            this.healthbar.CurrentHealth = this.Health;
         }
     }
-
-
+    
     public class OrganismAttributes
     {
         public string Species { get; set; }
+        public DietTypes DietType { get; set; }
+        public int MaxHealth { get; set; }
+        public float Speed { get; set; }
+        public float Strength { get; set; }
+        public bool ResistCold { get; set; }
+        public bool ResistHeat { get; set; }
+
         public int Age { get; set; }
-        public double Hunger { get; set; }
-        public double Speed { get; set; }
-        public double Strength { get; set; }
+        public float Hunger { get; set; }
         public int DetectionRadius { get; set; }
         public int DetectionDiameter { get; set; }
-        public bool WaitingForMate { get; set; }
-        public bool MateFound { get; set; }
-        public bool JustMated { get; set; }
-        public float Size { get; set; }
 
-        public OrganismAttributes(int age,
-                                  double hunger,
-                                  double speed,
-                                  double strength)
+        public OrganismAttributes(Breed breed)
         {
-            Species = "Bear";
+            Species = breed.Species;
+            DietType = breed.DietType;
+            MaxHealth = breed.MaxHealth;
+            Speed = breed.Speed;
+            Strength = breed.Strength;
+            ResistCold = breed.ResistCold;
+            ResistHeat = breed.ResistHeat;
+
+            Age = 0;
+            Hunger = 0.2f;
             DetectionRadius = 3;
             DetectionDiameter = DetectionRadius * 2;
-            Age = age;
-            Hunger = hunger;
-            Speed = speed;
-            Strength = strength;
-            JustMated = false;
-            Size = (Graphics.RANDOM.Next(8) + 3) * 0.1f; // TODO: This should be based off the strength attribute rather than random
         }
     }
 }

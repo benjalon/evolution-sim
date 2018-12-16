@@ -83,9 +83,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TileGrid\GridItems\Healthbar.cs" />
     <Compile Include="TileGrid\GridItems\Terrain.cs" />
     <Compile Include="TileGrid\GridItems\TileHighlight.cs" />
-    <Compile Include="Utility\Background.cs" />
+    <Compile Include="Utility\Breed.cs" />
+    <Compile Include="Utility\FullScreenSprite.cs" />
     <Compile Include="Utility\Lerper.cs" />
     <Compile Include="TileGrid\GridItems\Food.cs" />
     <Compile Include="TileGrid\GridItems\GridItem.cs" />
@@ -105,8 +107,11 @@
     <Compile Include="UI\Overlay.cs" />
     <Compile Include="Utility\MatingArgs.cs" />
     <Compile Include="Utility\MouseManager.cs" />
+    <Compile Include="Utility\Particle.cs" />
+    <Compile Include="Utility\ParticleEffect.cs" />
     <Compile Include="Utility\Sprite.cs" />
     <Compile Include="Utility\TimeManager.cs" />
+    <Compile Include="Utility\WeatherManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

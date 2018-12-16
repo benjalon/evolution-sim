@@ -12,59 +12,81 @@ namespace EvolutionSim.Utility
 
         // A simulation tick is a global progression of events. Each time this happens food gets eaten slightly, mating progresses, organisms get slightly more hungry etc.
         private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 1000;
-        private static int SIMULATION_TICK_COOLDOWN = DEFAULT_SIMULATION_TICK_COOLDOWN;
-        private static int MS_SINCE_LAST_TICK = 0;
-        public static bool HAS_SIMULATION_TICKED { get => MS_SINCE_LAST_TICK > SIMULATION_TICK_COOLDOWN + PAUSED_ELAPSED; }
+        private int simulationTickCooldown = DEFAULT_SIMULATION_TICK_COOLDOWN;
+        private int msSinceLastTick = 0;
+        public bool HasSimulationTicked { get => msSinceLastTick > simulationTickCooldown + pausedElapsed; }
 
         private const int DEFAULT_MATING_COOLDOWN = 20000;
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;
 
+        private const int DEFAULT_ROAM_COOLDOWN = 3000;
+        private int roamCooldown = DEFAULT_ROAM_COOLDOWN;
+
         public bool Paused { get; set; } = false;
-        private static int PAUSED_ELAPSED = 0;
+        private int pausedElapsed = 0;
 
         public void Update(GameTime gameTime)
         {
             this.deltaMs = gameTime.ElapsedGameTime.Milliseconds;
 
-            if (HAS_SIMULATION_TICKED)
+            if (HasSimulationTicked)
             {
                 //Console.WriteLine("tick");
-                MS_SINCE_LAST_TICK = 0;
+                msSinceLastTick = 0;
             }
             else
             {
-                MS_SINCE_LAST_TICK += this.deltaMs;
+                msSinceLastTick += this.deltaMs;
             }
-         
+
             if (Paused)
             {
-                PAUSED_ELAPSED += this.deltaMs;
+                pausedElapsed += this.deltaMs;
             }
-            else if (PAUSED_ELAPSED > 0)
+            else if (pausedElapsed > 0)
             {
-                PAUSED_ELAPSED -= this.deltaMs;
+                pausedElapsed -= this.deltaMs;
             }
         }
 
         public void UpdateOrganismTimers(Organism organism)
         {
             organism.MsSinceLastMate += this.deltaMs;
+
+            if (organism.DestinationTile == null)
+            {
+                organism.MsSinceLastRoam += this.deltaMs;
+
+            }
         }
 
         public void SetSpeed(int multiplier)
         {
             Paused = false;
             matingCooldown = (int)DEFAULT_MATING_COOLDOWN / multiplier;
-            SIMULATION_TICK_COOLDOWN = (int)DEFAULT_SIMULATION_TICK_COOLDOWN / multiplier;
+            roamCooldown = (int)DEFAULT_ROAM_COOLDOWN / multiplier;
+            simulationTickCooldown = (int)DEFAULT_SIMULATION_TICK_COOLDOWN / multiplier;
         }
 
         public bool HasMatingCooldownExpired(Organism organism)
         {
-            var cooldownExpired = organism.MsSinceLastMate > matingCooldown + PAUSED_ELAPSED;
+            var cooldownExpired = organism.MsSinceLastMate > matingCooldown + pausedElapsed;
 
             if (cooldownExpired)
             {
                 organism.MsSinceLastMate = 0;
+            }
+
+            return cooldownExpired;
+        }
+
+        public bool HasRoamingCooldownExpired(Organism organism)
+        {
+            var cooldownExpired = organism.MsSinceLastRoam > roamCooldown + pausedElapsed;
+
+            if (cooldownExpired)
+            {
+                organism.MsSinceLastRoam = 0;
             }
 
             return cooldownExpired;

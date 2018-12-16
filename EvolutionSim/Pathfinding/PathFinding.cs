@@ -7,6 +7,8 @@ namespace EvolutionSim.Pathfinding
 {
     public static class PathFinding
     {
+        private const int OPEN_LIMIT = 100; // We can get stuck calculating 10k+ nodes when too many organisms group in a corner, better to just let them sit and slowly shuffle away/starve it out
+
         /// <summary>
         /// Adadpted from pseudocode at https://www.geeksforgeeks.org/a-search-algorithm/
         /// </summary>
@@ -33,7 +35,7 @@ namespace EvolutionSim.Pathfinding
             Node current;
             List<Node> expanded;
             //3.  while the open list is not empty
-            while (open.Any() && goalNode == null)
+            while (open.Count > 0 && goalNode == null && open.Count < OPEN_LIMIT)
             {
                 //    a) find the node with the least f on 
                 //       the open list, call it current
@@ -59,6 +61,10 @@ namespace EvolutionSim.Pathfinding
                     {
                         goalNode = node;
                         break;
+                    }
+                    else if (node.Current.HasInhabitant)
+                    {
+                        continue;
                     }
                     else
                     {
@@ -97,12 +103,13 @@ namespace EvolutionSim.Pathfinding
                 path.Reverse();
                 // Remove first tile as its occupied by the organism being moved
                 path.RemoveAt(0);
-                // Remove last tile as its occupied by whatever the hell it's going to
-                //path.RemoveAt(path.Count-1);
 
 
             }
-            ((Organism)startPosition.Inhabitant).Computing=false;
+            if (startPosition.Inhabitant.GetType() == typeof(Organism))
+            {
+                ((Organism)startPosition.Inhabitant).Computing = false;
+            }
             return path;
         }
     }

@@ -11,9 +11,9 @@ namespace EvolutionSim.StateManagement
     public class StateMachine
     {
         //initalise lookup table
-        private State state;
-        private Grid grid;
-        private TimeManager timeManager;
+        private readonly State state;
+        private readonly Grid grid;
+        private readonly TimeManager timeManager;
 
         // Grid _simGrid;
         public event EventHandler MatingOccurred;
@@ -30,9 +30,9 @@ namespace EvolutionSim.StateManagement
         /// as time marches on make the organism hungrey
         /// </summary>
         /// <param name="organism"></param>
-        public void UpdateOrganismAttributes(Organism organism)
+        public void UpdateOrganismAttributes(Organism organism, TimeManager timeManager)
         {
-            if (!TimeManager.HAS_SIMULATION_TICKED)
+            if (!timeManager.HasSimulationTicked)
             {
                 return; // Wait a bit
             }
@@ -45,11 +45,12 @@ namespace EvolutionSim.StateManagement
             }
             else if (organism.Attributes.Hunger > 0)
             {
-                organism.Attributes.Hunger -= 0.001;
-                organism.IncreaseHealth(1);
+                organism.Attributes.Hunger -= 0.001f;
+                //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?
             }
             else
             {
+
                 organism.Attributes.Hunger = 0;
                 organism.DecreaseHealth(1);
             }
@@ -82,7 +83,7 @@ namespace EvolutionSim.StateManagement
                     }
                     else if (organism.Attributes.Hunger >= 0.8 && this.timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
                     {
-                        organism.DestinationTile = null;
+                        organism.Path.Clear(); // TODO unneeeded?
                         organism.State = this.state.MoveState(organismState, Actions.HungryMate); //go find a mate
                     }
 
@@ -93,6 +94,12 @@ namespace EvolutionSim.StateManagement
                 #region Food States
 
                 case States.SeekFood: // When an organism is running a pathfinding algorithm to find food
+                    if (organism.Attributes.Hunger >= 0.8)
+                    {
+                        organism.Path.Clear();
+                        organism.State = this.state.MoveState(organismState, Actions.NotHungry);
+                    }
+
                     if (organism.DestinationTile != null && organism.DestinationTile.HasFoodInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
@@ -101,7 +108,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToFood:
-                    if (organism.DestinationTile != null && organism.DestinationTile.HasFoodInhabitant && this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
+                    if (organism.Path.Count == 1 && organism.DestinationTile.HasFoodInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoodFound); // adjacent to food, eat it
                     }
@@ -130,7 +137,7 @@ namespace EvolutionSim.StateManagement
                     {
                         organism.State = this.state.MoveState(organismState, Actions.MateFound); // Mate found, move towards them
                     }
-                    else if (organism.Attributes.WaitingForMate)
+                    else if (organism.WaitingForMate)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.Waiting); // A mate has found this organism, wait for them
                     }
@@ -143,7 +150,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToMate: // When an organism is moving on a path towards a mate
-                    if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant && this.grid.IsAdjacent(organism.GridIndex, organism.DestinationTile.GridIndex))
+                    if (organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.Bang); //the organism is adjacent to a mate, so go ahead and make love
                     }
@@ -156,7 +163,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.WaitingForMate: // When an organism is waiting for their mate to approach them
-                    if (!organism.Attributes.WaitingForMate)
+                    if (!organism.WaitingForMate)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.Move); //mating is over, so go back into roaming.
                     }
@@ -194,34 +201,39 @@ namespace EvolutionSim.StateManagement
             {
 
                 case States.Roaming:
-                    StateActions.Roam(organism, this.grid);
+                    StateActions.Roam(organism, this.grid, this.timeManager);
 
                     break;
 
                 case States.Eating:
-                    StateActions.EatingFood.EatFood(organism, this.grid);
+                    StateActions.EatingFood.EatFood(organism, this.grid, this.timeManager);
                     break;
 
                 case States.Mating:
-                    ((Organism)(organism.DestinationTile.Inhabitant)).Attributes.WaitingForMate = false;
-                    MatingOccurred?.Invoke(this, new MatingArgs(organism));
+                    var mother = (Organism)organism.DestinationTile.Inhabitant;
+
+                    MatingOccurred?.Invoke(this, new MatingArgs(organism, mother));
+
+                    organism.MsSinceLastMate = 0;
+                    mother.MsSinceLastMate = 0;
+                    mother.WaitingForMate = false;
                     
                     break;
 
                 case States.SeekFood:
 
-                    StateActions.SeekingFood.SeekFood(organism, this.grid);
+                    StateActions.SeekingFood.SeekFood(organism, this.grid, this.timeManager);
 
                     break;
 
                 case States.MovingToMate:
-                    StateActions.MoveAlongPath(organism, this.grid, organism.Path);
+                    StateActions.MoveAlongMatePath(organism, this.grid);
 
                     break;
 
                 //when in seaking mate scan for an organism who is also in the "SeekMate" State
                 case States.SeekMate:
-                    StateActions.SeekingMate.SeekMate(organism, this.grid);
+                    StateActions.SeekingMate.SeekMate(organism, this.grid, this.timeManager);
 
                     break;
 
@@ -232,7 +244,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToFood:
-                    StateActions.MoveAlongPath(organism, this.grid, organism.Path);
+                    StateActions.MoveAlongFoodPath(organism, this.grid);
                     break;
 
                 default:
