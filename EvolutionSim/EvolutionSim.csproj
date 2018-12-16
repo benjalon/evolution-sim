@@ -107,6 +107,8 @@
     <Compile Include="UI\Overlay.cs" />
     <Compile Include="Utility\MatingArgs.cs" />
     <Compile Include="Utility\MouseManager.cs" />
+    <Compile Include="Utility\Particle.cs" />
+    <Compile Include="Utility\ParticleEffect.cs" />
     <Compile Include="Utility\Sprite.cs" />
     <Compile Include="Utility\TimeManager.cs" />
     <Compile Include="Utility\WeatherManager.cs" />

@@ -23,6 +23,8 @@ namespace EvolutionSim.TileGrid.GridItems
         public bool HasOrganismInhabitant { get => HasInhabitant && Inhabitant.GetType() == typeof(Organism); }
         public bool HasFoodInhabitant { get => HasInhabitant && Inhabitant.GetType() == typeof(Food); }
 
+        public Vector2 Center { get => new Vector2(ScreenPositionX + TILE_SIZE * 0.5f, ScreenPositionY + TILE_SIZE * 0.5f); }
+
         /// <summary>
         /// Create a new tile object.
         /// </summary>

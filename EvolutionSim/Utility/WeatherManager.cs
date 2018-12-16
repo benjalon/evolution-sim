@@ -36,8 +36,7 @@ namespace EvolutionSim.Utility
             switch (this.currentWeather)
             {
                 case WeatherSettings.Cold:
-                    organismsCount = organisms.Count;
-                    for (var i = organismsCount - 1; i >= 0; i--)
+                    for (var i = organisms.Count - 1; i >= 0; i--)
                     {
                         organism = organisms[i];
                         if (!organism.Attributes.ResistCold)
@@ -47,8 +46,7 @@ namespace EvolutionSim.Utility
                     }
                     break;
                 case WeatherSettings.Hot:
-                    organismsCount = organisms.Count;
-                    for (var i = organismsCount - 1; i >= 0; i--)
+                    for (var i = organisms.Count - 1; i >= 0; i--)
                     {
                         organism = organisms[i];
                         if (!organism.Attributes.ResistHeat)
