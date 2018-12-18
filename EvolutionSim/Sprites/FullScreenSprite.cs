@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EvolutionSim.Utility
+namespace EvolutionSim.Sprites
 {
     /// <summary>
     /// A full screen sprite.

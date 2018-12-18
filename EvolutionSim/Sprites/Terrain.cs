@@ -1,14 +1,13 @@
-﻿using EvolutionSim.UI;
-using EvolutionSim.Utility;
+﻿using EvolutionSim.Data;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EvolutionSim.TileGrid.GridItems
+namespace EvolutionSim.Sprites
 {
     public class Terrain : Sprite
     {
-        private TileItems terrainType = TileItems.Grass;
-        public TileItems TerrainType
+        private TerrainTypes terrainType = TerrainTypes.Grass;
+        public TerrainTypes Type
         {
             get => this.terrainType;
             set

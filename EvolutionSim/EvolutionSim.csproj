@@ -83,35 +83,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TileGrid\GridItems\Healthbar.cs" />
-    <Compile Include="TileGrid\GridItems\Terrain.cs" />
-    <Compile Include="TileGrid\GridItems\TileHighlight.cs" />
-    <Compile Include="Utility\Breed.cs" />
-    <Compile Include="Utility\FullScreenSprite.cs" />
+    <Compile Include="Data\Attributes.cs" />
+    <Compile Include="Data\DietTypes.cs" />
+    <Compile Include="Data\DrawingArgs.cs" />
+    <Compile Include="Data\States.cs" />
+    <Compile Include="Data\TerrainTypes.cs" />
+    <Compile Include="Data\TimeArgs.cs" />
+    <Compile Include="Data\WeatherArgs.cs" />
+    <Compile Include="Sprites\Healthbar.cs" />
+    <Compile Include="Sprites\Terrain.cs" />
+    <Compile Include="TileGrid\GridInteractionManager.cs" />
+    <Compile Include="Sprites\FullScreenSprite.cs" />
     <Compile Include="Utility\Lerper.cs" />
-    <Compile Include="TileGrid\GridItems\Food.cs" />
-    <Compile Include="TileGrid\GridItems\GridItem.cs" />
+    <Compile Include="Sprites\Food.cs" />
+    <Compile Include="Sprites\GridItem.cs" />
     <Compile Include="TileGrid\Grid.cs" />
-    <Compile Include="Pathfinding\Node.cs" />
-    <Compile Include="Pathfinding\NodeExpander.cs" />
-    <Compile Include="Pathfinding\PathFinding.cs" />
+    <Compile Include="TileGrid\Pathfinding\Node.cs" />
+    <Compile Include="TileGrid\Pathfinding\NodeExpander.cs" />
+    <Compile Include="TileGrid\Pathfinding\PathFinding.cs" />
     <Compile Include="Simulation.cs" />
     <Compile Include="StateManagement\StateActions.cs" />
-    <Compile Include="TileGrid\GridItems\Organism.cs" />
+    <Compile Include="Sprites\Organism.cs" />
     <Compile Include="Graphics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateManagement\State.cs" />
     <Compile Include="StateManagement\StateMachine.cs" />
-    <Compile Include="TileGrid\GridItems\Tile.cs" />
+    <Compile Include="TileGrid\Tile.cs" />
     <Compile Include="UI\Overlay.cs" />
-    <Compile Include="Utility\MatingArgs.cs" />
-    <Compile Include="Utility\MouseManager.cs" />
+    <Compile Include="Data\MatingArgs.cs" />
+    <Compile Include="Utility\MouseStateManager.cs" />
     <Compile Include="Utility\Particle.cs" />
     <Compile Include="Utility\ParticleEffect.cs" />
-    <Compile Include="Utility\Sprite.cs" />
+    <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Utility\TimeManager.cs" />
-    <Compile Include="Utility\WeatherManager.cs" />
+    <Compile Include="Sprites\WeatherOverlay.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

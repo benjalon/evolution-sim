@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvolutionSim.TileGrid;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using EvolutionSim.Utility;
 
-namespace EvolutionSim.TileGrid.GridItems
+namespace EvolutionSim.Sprites
 {
     /// <summary>
     /// Herbivore food sources which can grow on Tiles.

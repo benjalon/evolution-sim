@@ -1,9 +1,6 @@
-﻿using EvolutionSim.Logic;
-using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.Data;
 using EvolutionSim.UI;
-using EvolutionSim.Utility;
 using GeonBit.UI;
-using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -56,7 +53,7 @@ namespace EvolutionSim
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             // Load textures
             var textures = new Dictionary<string, Texture2D>();
             textures.Add("grass_background", Content.Load<Texture2D>("Grass"));
@@ -77,10 +74,12 @@ namespace EvolutionSim
             textures.Add("circle", Content.Load<Texture2D>("Circle"));
             textures.Add("star", Content.Load<Texture2D>("Star"));
             textures.Add("diamond", Content.Load<Texture2D>("Diamond"));
-
             this.simulation = new Simulation(textures);
 
             this.overlay = new Overlay(this.simulation);
+            this.overlay.DrawingSettingChanged += DrawingSettingChangedHandler;
+            this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
+            this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
         }
         
         /// <summary>
@@ -103,9 +102,8 @@ namespace EvolutionSim
                 Exit();
             }
 
-            // Update UI elements
             this.simulation.Update(gameTime);
-            this.overlay.Update(gameTime, this.simulation.TileHighlight);
+            this.overlay.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -140,6 +138,21 @@ namespace EvolutionSim
                 Console.WriteLine(this.fps);
                 this.fpsOld = this.fps;
             }
+        }
+
+        private void DrawingSettingChangedHandler(object sender, EventArgs e)
+        {
+            this.simulation.GridDrawer.DrawingSetting = ((DrawingArgs)e).DrawingSetting;
+        }
+
+        private void TimeSettingChangedHandler(object sender, EventArgs e)
+        {
+            this.simulation.TimeManager.TimeSetting = ((TimeArgs)e).TimeSetting;
+        }
+
+        private void WeatherSettingChangedHandler(object sender, EventArgs e)
+        {
+            this.simulation.WeatherOverlay.WeatherSetting = ((WeatherArgs)e).weatherSetting;
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using EvolutionSim.TileGrid;
-using EvolutionSim.TileGrid.GridItems;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace EvolutionSim.Pathfinding
+namespace EvolutionSim.TileGrid.Pathfinding
 {
     public static class NodeExpander
     {

@@ -1,21 +1,9 @@
-﻿using System;
+﻿using EvolutionSim.Data;
+using System;
 using System.Collections.Generic;
 
 namespace EvolutionSim.StateManagement
 {
-
-    //these represent states
-    public enum States
-    {
-        Roaming,
-        Eating,
-        SeekMate,
-        SeekFood,
-        Mating,
-        MovingToFood,
-        WaitingForMate,
-        MovingToMate,
-    }
 
     //these represent the transition paths between states
     public enum Actions

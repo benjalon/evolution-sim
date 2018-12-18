@@ -1,9 +1,8 @@
-﻿using EvolutionSim.Utility;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace EvolutionSim.TileGrid.GridItems
+namespace EvolutionSim.Sprites
 {
     public class Healthbar : Sprite
     {

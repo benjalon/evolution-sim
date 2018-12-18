@@ -1,8 +1,9 @@
-﻿using EvolutionSim.UI;
+﻿using EvolutionSim.Data;
+using EvolutionSim.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EvolutionSim.TileGrid.GridItems
+namespace EvolutionSim.TileGrid
 {
 
     public class Tile
@@ -46,7 +47,7 @@ namespace EvolutionSim.TileGrid.GridItems
         public void AddInhabitant(GridItem gridItem)
         {
             Inhabitant = gridItem;
-            gridItem.SetGridIndex(this);
+            gridItem.SetGridIndex(GridIndex.X, GridIndex.Y);
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace EvolutionSim.TileGrid.GridItems
             if (HasInhabitant)
             {
                 // Move and reference the item to the destination tile
-                Inhabitant.SetGridIndex(destination);
+                Inhabitant.SetGridIndex(destination.GridIndex.X, destination.GridIndex.Y);
                 destination.Inhabitant = Inhabitant;
 
                 Inhabitant = null; // This tile is no longer managing the item
@@ -77,9 +78,9 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Set the terrain of this tile to the given type.
         /// </summary>
         /// <param name="terrainType">The type of terrain to set.</param>
-        public void SetTerrain(TileItems terrainType)
+        public void SetTerrain(TerrainTypes terrainTypes)
         {
-            this.Terrain.TerrainType = terrainType;
+            Terrain.Type = terrainTypes;
         }
     }
 }

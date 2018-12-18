@@ -1,9 +1,8 @@
-﻿using EvolutionSim.TileGrid.GridItems;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace EvolutionSim.Utility
+namespace EvolutionSim.Data
 {
-    public struct Breed
+    public struct Attributes
     {
         public string Species { get; set; }
         public Texture2D Texture { get; set; }

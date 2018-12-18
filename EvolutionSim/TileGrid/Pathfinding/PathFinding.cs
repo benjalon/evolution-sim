@@ -1,9 +1,7 @@
-﻿using EvolutionSim.TileGrid;
-using EvolutionSim.TileGrid.GridItems;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace EvolutionSim.Pathfinding
+namespace EvolutionSim.TileGrid.Pathfinding
 {
     public static class PathFinding
     {
@@ -105,10 +103,6 @@ namespace EvolutionSim.Pathfinding
                 path.RemoveAt(0);
 
 
-            }
-            if (startPosition.Inhabitant.GetType() == typeof(Organism))
-            {
-                ((Organism)startPosition.Inhabitant).Computing = false;
             }
             return path;
         }

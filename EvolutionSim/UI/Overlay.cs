@@ -1,6 +1,4 @@
-﻿using EvolutionSim.Logic;
-using EvolutionSim.TileGrid.GridItems;
-using EvolutionSim.Utility;
+﻿using EvolutionSim.Data;
 using GeonBit.UI;
 using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
@@ -9,16 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace EvolutionSim.UI
-{
-    public enum TileItems
-    {
-        Grass,
-        Mountain,
-        Water,
-        Organism,
-        Food
-    }
-    
+{    
     /// <summary>
     /// The overlay which is displayed within the simulation itself.
     /// </summary>
@@ -36,6 +25,10 @@ namespace EvolutionSim.UI
         private const int BUTTON_WIDTH = 170;
         private const int ELEMENT_HEIGHT = 40;
 
+        public event EventHandler DrawingSettingChanged;
+        public event EventHandler TimeSettingChanged;
+        public event EventHandler WeatherSettingChanged;
+
         private Panel topPanel;
         private Panel middlePanel;
         private Panel bottomPanel;
@@ -46,8 +39,12 @@ namespace EvolutionSim.UI
         private TextInput editStrengthValue;
         private TextInput editSpeedValue;
 
+        private Simulation simulation;
+
         public Overlay(Simulation simulation)
         {
+            this.simulation = simulation;
+
             UserInterface.Active.UseRenderTarget = true;
             UserInterface.Active.CursorScale = 0.5f;
 
@@ -57,12 +54,12 @@ namespace EvolutionSim.UI
             backgroundPanel.SetStyleProperty("Opacity", new StyleProperty(100));
             UserInterface.Active.AddEntity(backgroundPanel);
 
-            this.CreateTopPanel(simulation);
-            this.CreateMiddlePanel(simulation);
-            this.CreateBottomPanel(simulation);
+            this.CreateTopPanel();
+            this.CreateMiddlePanel();
+            this.CreateBottomPanel();
         }
 
-        private void CreateTopPanel(Simulation simulation)
+        private void CreateTopPanel()
         {
             this.topPanel = new Panel(new Vector2(PANEL_WIDTH, TOP_PANEL_HEIGHT), PanelSkin.None, Anchor.TopRight);
             this.topPanel.Padding = new Vector2(10);
@@ -80,7 +77,7 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(organismCountInput.Value, out var input))
                 {
-                    simulation.AddOrganisms(input);
+                    this.simulation.AddOrganisms(input);
                 }
             };
 
@@ -92,7 +89,7 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(foodCountInput.Value, out var input))
                 {
-                    simulation.AddFoods(input);
+                    this.simulation.AddFoods(input);
                 }
             };
             
@@ -103,7 +100,7 @@ namespace EvolutionSim.UI
             this.topPanel.AddChild(foodCreateButton);
         }
 
-        private void CreateMiddlePanel(Simulation simulation)
+        private void CreateMiddlePanel()
         {
             this.middlePanel = new Panel(new Vector2(PANEL_WIDTH, MIDDLE_PANEL_EXPANDED_HEIGHT), PanelSkin.None, Anchor.TopRight);
             this.middlePanel.Padding = new Vector2(10);
@@ -114,31 +111,31 @@ namespace EvolutionSim.UI
             // Terrain/object drawing
 
             var addAtCursorText = new Paragraph("Add Objects At Cursor");
-
+            
             var nothingRadio = new RadioButton("None", Anchor.AutoCenter);
             nothingRadio.SpaceBefore = Vector2.Zero;
             nothingRadio.SpaceAfter = Vector2.Zero;
-            nothingRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Grass;
+            nothingRadio.OnClick = (Entity btn) => DrawingSettingChanged?.Invoke(this, new DrawingArgs(DrawingSettings.Grass));
 
             var mountainRadio = new RadioButton("Mountain", Anchor.AutoCenter);
             mountainRadio.SpaceBefore = Vector2.Zero;
             mountainRadio.SpaceAfter = Vector2.Zero;
-            mountainRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Mountain;
+            mountainRadio.OnClick = (Entity btn) => DrawingSettingChanged?.Invoke(this, new DrawingArgs(DrawingSettings.Mountain));
 
             var waterRadio = new RadioButton("Water", Anchor.AutoCenter);
             waterRadio.SpaceBefore = Vector2.Zero;
             waterRadio.SpaceAfter = Vector2.Zero;
-            waterRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Water;
+            waterRadio.OnClick = (Entity btn) => DrawingSettingChanged?.Invoke(this, new DrawingArgs(DrawingSettings.Water));
 
             var organismRadio = new RadioButton("Organism", Anchor.AutoCenter);
             organismRadio.SpaceBefore = Vector2.Zero;
             organismRadio.SpaceAfter = Vector2.Zero;
-            organismRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Organism;
+            organismRadio.OnClick = (Entity btn) => DrawingSettingChanged?.Invoke(this, new DrawingArgs(DrawingSettings.Organism));
 
             var foodRadio = new RadioButton("Food", Anchor.AutoCenter);
             foodRadio.SpaceBefore = Vector2.Zero;
             foodRadio.SpaceAfter = Vector2.Zero;
-            foodRadio.OnClick = (Entity btn) => simulation.SelectedRadioItem = TileItems.Food;
+            foodRadio.OnClick = (Entity btn) => DrawingSettingChanged?.Invoke(this, new DrawingArgs(DrawingSettings.Food));
 
             nothingRadio.Checked = true;
 
@@ -149,17 +146,17 @@ namespace EvolutionSim.UI
             var normalRadio = new RadioButton("Normal", Anchor.AutoCenter);
             normalRadio.SpaceBefore = Vector2.Zero;
             normalRadio.SpaceAfter = Vector2.Zero;
-            normalRadio.OnClick = (Entity btn) => simulation.TimeManager.SetSpeed(1);
+            normalRadio.OnClick = (Entity btn) => TimeSettingChanged?.Invoke(this, new TimeArgs(TimeSettings.Normal));
 
             var fastRadio = new RadioButton("Fast", Anchor.AutoCenter);
             fastRadio.SpaceBefore = Vector2.Zero;
             fastRadio.SpaceAfter = Vector2.Zero;
-            fastRadio.OnClick = (Entity btn) => simulation.TimeManager.SetSpeed(4);
+            fastRadio.OnClick = (Entity btn) => TimeSettingChanged?.Invoke(this, new TimeArgs(TimeSettings.Fast));
 
             var pauseRadio = new RadioButton("Pause", Anchor.AutoCenter);
             pauseRadio.SpaceBefore = Vector2.Zero;
             pauseRadio.SpaceAfter = Vector2.Zero;
-            pauseRadio.OnClick = (Entity btn) => simulation.TimeManager.Paused = true;
+            pauseRadio.OnClick = (Entity btn) => TimeSettingChanged?.Invoke(this, new TimeArgs(TimeSettings.Paused));
 
             normalRadio.Checked = true;
 
@@ -170,17 +167,17 @@ namespace EvolutionSim.UI
             var warmRadio = new RadioButton("Warm", Anchor.AutoCenter);
             warmRadio.SpaceBefore = Vector2.Zero;
             warmRadio.SpaceAfter = Vector2.Zero;
-            warmRadio.OnClick = (Entity btn) => simulation.WeatherManager.SetWeather(WeatherSettings.Warm);
+            warmRadio.OnClick = (Entity btn) => WeatherSettingChanged?.Invoke(this, new WeatherArgs(WeatherSettings.Warm));
 
             var coldRadio = new RadioButton("Cold", Anchor.AutoCenter);
             coldRadio.SpaceBefore = Vector2.Zero;
             coldRadio.SpaceAfter = Vector2.Zero;
-            coldRadio.OnClick = (Entity btn) => simulation.WeatherManager.SetWeather(WeatherSettings.Cold);
+            coldRadio.OnClick = (Entity btn) => WeatherSettingChanged?.Invoke(this, new WeatherArgs(WeatherSettings.Cold));
 
             var hotRadio = new RadioButton("Hot", Anchor.AutoCenter);
             hotRadio.SpaceBefore = Vector2.Zero;
             hotRadio.SpaceAfter = Vector2.Zero;
-            hotRadio.OnClick = (Entity btn) => simulation.WeatherManager.SetWeather(WeatherSettings.Hot);
+            hotRadio.OnClick = (Entity btn) => WeatherSettingChanged?.Invoke(this, new WeatherArgs(WeatherSettings.Hot));
 
             warmRadio.Checked = true;
             
@@ -204,7 +201,7 @@ namespace EvolutionSim.UI
             this.middlePanel.AddChild(hotRadio);
         }
 
-        private void CreateBottomPanel(Simulation simulation)
+        private void CreateBottomPanel()
         {
             this.bottomPanel = new Panel(new Vector2(PANEL_WIDTH, BOTTOM_PANEL_HEIGHT), PanelSkin.Simple, Anchor.TopRight);
             this.bottomPanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
@@ -225,7 +222,7 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(((TextInput)btn).Value, out var input))
                 {
-                    simulation.TileHighlight.SelectedOrganism.Attributes.Hunger = input;
+                    this.simulation.GridDrawer.SelectedOrganism.Hunger = input;
                 }
             };
 
@@ -257,11 +254,11 @@ namespace EvolutionSim.UI
         /// Take input from input devices
         /// </summary>
         /// <param name="gameTime">Time elapsed since last update call</param>
-        public void Update(GameTime gameTime, DrawingManager tileHighlight)
+        public void Update(GameTime gameTime)
         {
             UserInterface.Active.Update(gameTime);
             
-            if (tileHighlight.SelectedOrganism == null)
+            if (simulation.GridDrawer.SelectedOrganism == null)
             {
                 this.editHungerValue.Value = "";
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_EXPANDED_HEIGHT);
@@ -269,11 +266,11 @@ namespace EvolutionSim.UI
             }
             else
             {
-                this.editSpeciesValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Species;
-                this.editHungerValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Hunger, 2).ToString();
-                this.editAgeValue.PlaceholderText = tileHighlight.SelectedOrganism.Attributes.Age.ToString();
-                this.editStrengthValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Strength, 2).ToString();
-                this.editSpeedValue.PlaceholderText = Math.Round(tileHighlight.SelectedOrganism.Attributes.Speed, 2).ToString();
+                this.editSpeciesValue.PlaceholderText = simulation.GridDrawer.SelectedOrganism.Attributes.Species;
+                this.editHungerValue.PlaceholderText = Math.Round(simulation.GridDrawer.SelectedOrganism.Hunger, 2).ToString();
+                this.editAgeValue.PlaceholderText = simulation.GridDrawer.SelectedOrganism.Age.ToString();
+                this.editStrengthValue.PlaceholderText = Math.Round(simulation.GridDrawer.SelectedOrganism.Attributes.Strength, 2).ToString();
+                this.editSpeedValue.PlaceholderText = Math.Round(simulation.GridDrawer.SelectedOrganism.Attributes.Speed, 2).ToString();
 
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_CONTRACTED_HEIGHT);
                 this.bottomPanel.Visible = true;

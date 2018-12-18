@@ -1,11 +1,10 @@
-﻿using EvolutionSim.Pathfinding;
+﻿using EvolutionSim.Data;
+using EvolutionSim.Sprites;
 using EvolutionSim.TileGrid;
-using EvolutionSim.TileGrid.GridItems;
+using EvolutionSim.TileGrid.Pathfinding;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace EvolutionSim.StateManagement
@@ -24,10 +23,10 @@ namespace EvolutionSim.StateManagement
         {
             List<Point> toRet = new List<Point>();
 
-            var firstX = organism.GridIndex.X - organism.Attributes.DetectionRadius;
-            var firstY = organism.GridIndex.Y - organism.Attributes.DetectionRadius;
+            var firstX = organism.GridIndex.X - Organism.DETECTION_RADIUS;
+            var firstY = organism.GridIndex.Y - Organism.DETECTION_RADIUS;
 
-            for (int i = 0; i < organism.Attributes.DetectionDiameter; i++)
+            for (int i = 0; i < Organism.DETECTION_DIAMETER; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
@@ -45,7 +44,7 @@ namespace EvolutionSim.StateManagement
             if (timeManager.HasRoamingCooldownExpired(organism))
             {
                 organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), grid.FindRandomNearbyEmptyTile(organism), grid);
-
+                organism.Computing = false;
             }
             else if (organism.DestinationTile != null)
             {
@@ -167,6 +166,7 @@ namespace EvolutionSim.StateManagement
                     ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
                     {
                         organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialFood, grid);
+                        organism.Computing = false;
                     }), null);
                 }
                 else
@@ -185,7 +185,7 @@ namespace EvolutionSim.StateManagement
             public static Tile FoodInRange(Organism organism, Grid grid)
             {
                 States organismState = organism.State;
-                var max_depth = organism.Attributes.DetectionRadius;
+                var max_depth = Organism.DETECTION_RADIUS;
                 var depth = 0;
 
                 int firstX;
@@ -296,6 +296,7 @@ namespace EvolutionSim.StateManagement
 
                     //shouldn't be calling the A* for mating probably
                     organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialMate, grid);
+                    organism.Computing = false;
                 }
                 //this check wont work. Organisms have no way of entering the waiting for mate state
                 else if (!organism.WaitingForMate)
@@ -307,11 +308,11 @@ namespace EvolutionSim.StateManagement
 
             private static Tile MatesInRange(Organism organism, Grid grid)
             {
-                int firstX = organism.GridIndex.X - organism.Attributes.DetectionRadius;
-                int firstY = organism.GridIndex.Y - organism.Attributes.DetectionRadius;
-                for (int i = 0; i < organism.Attributes.DetectionDiameter; i++)
+                int firstX = organism.GridIndex.X - Organism.DETECTION_RADIUS;
+                int firstY = organism.GridIndex.Y - Organism.DETECTION_RADIUS;
+                for (int i = 0; i < Organism.DETECTION_DIAMETER; i++)
                 {
-                    for (int j = 0; j < organism.Attributes.DetectionDiameter; j++)
+                    for (int j = 0; j < Organism.DETECTION_DIAMETER; j++)
                     {
                         if (grid.InBounds(firstX + i, firstY + j) && grid.IsMateAt(organism, firstX + i, firstY + j))
                         {

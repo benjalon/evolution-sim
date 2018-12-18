@@ -1,6 +1,6 @@
-﻿using EvolutionSim.StateManagement;
+﻿using EvolutionSim.Data;
+using EvolutionSim.Sprites;
 using EvolutionSim.TileGrid;
-using EvolutionSim.TileGrid.GridItems;
 using EvolutionSim.Utility;
 using System;
 
@@ -12,46 +12,53 @@ namespace EvolutionSim.StateManagement
     {
         //initalise lookup table
         private readonly State state;
-        private readonly Grid grid;
-        private readonly TimeManager timeManager;
-
-        // Grid _simGrid;
+        
         public event EventHandler MatingOccurred;
 
-        public StateMachine(Grid grid, TimeManager timeManager)
+        public StateMachine()
         {
-            this.grid = grid;
-            this.timeManager = timeManager;
-
             this.state = new State();
+        }
+
+        public void Update(Grid grid, TimeManager timeManager)
+        {
+            Organism organism;
+            for (var i = grid.Organisms.Count - 1; i >= 0; i--)
+            {
+                organism = grid.Organisms[i];
+                timeManager.UpdateOrganismTimers(organism);
+                CheckState(timeManager, organism);
+                DetermineBehaviour(grid, timeManager, organism);
+                UpdateOrganismAttributes(timeManager, organism);
+            }
         }
 
         /// <summary>
         /// as time marches on make the organism hungrey
         /// </summary>
         /// <param name="organism"></param>
-        public void UpdateOrganismAttributes(Organism organism, TimeManager timeManager)
+        private void UpdateOrganismAttributes(TimeManager timeManager, Organism organism)
         {
             if (!timeManager.HasSimulationTicked)
             {
                 return; // Wait a bit
             }
 
-            organism.Attributes.Age += 1;
+            organism.Age += 1;
 
-            if (organism.Attributes.Age > 1000)
+            if (organism.Age > 1000)
             {
                 organism.DecreaseHealth(999);
             }
-            else if (organism.Attributes.Hunger > 0)
+            else if (organism.Hunger > 0)
             {
-                organism.Attributes.Hunger -= 0.001f;
+                organism.Hunger -= 0.001f;
                 //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?
             }
             else
             {
 
-                organism.Attributes.Hunger = 0;
+                organism.Hunger = 0;
                 organism.DecreaseHealth(1);
             }
 
@@ -63,25 +70,23 @@ namespace EvolutionSim.StateManagement
         /// This method is used for testing which state an organism is in, should be called in the update method
         /// </summary>
         /// <param name="organism"></param>
-        public void CheckState(Organism organism)
+        private void CheckState(TimeManager timeManager, Organism organism)
         {
             //test the organisms current attributes
             //by switching on the current state
 
             States organismState = organism.State;
 
-            this.timeManager.UpdateOrganismTimers(organism);
-
             switch (organismState)
             {
                 #region Neutral States
 
                 case States.Roaming: // This is for when an organism is roaming randomly with no particular goal
-                    if (organism.Attributes.Hunger < 0.8) // Hungry so find some food
+                    if (organism.Hunger < 0.8) // Hungry so find some food
                     {
                         organism.State = this.state.MoveState(organismState, Actions.HungryRoam); //then move into the seek food state
                     }
-                    else if (organism.Attributes.Hunger >= 0.8 && this.timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
+                    else if (organism.Hunger >= 0.8 && timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
                     {
                         organism.Path.Clear(); // TODO unneeeded?
                         organism.State = this.state.MoveState(organismState, Actions.HungryMate); //go find a mate
@@ -94,7 +99,7 @@ namespace EvolutionSim.StateManagement
                 #region Food States
 
                 case States.SeekFood: // When an organism is running a pathfinding algorithm to find food
-                    if (organism.Attributes.Hunger >= 0.8)
+                    if (organism.Hunger >= 0.8)
                     {
                         organism.Path.Clear();
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry);
@@ -142,7 +147,7 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.Waiting); // A mate has found this organism, wait for them
                     }
 
-                    if (organism.Attributes.Hunger < 0.4)
+                    if (organism.Hunger < 0.4)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.HungryRoam); // hungry so stop looking for mate and go back to searching for food
                     }
@@ -193,7 +198,7 @@ namespace EvolutionSim.StateManagement
         /// This method controls how an organism goes about its buisness when in a given state
         /// </summary>
 
-        public void DetermineBehaviour(Organism organism)
+        private void DetermineBehaviour(Grid grid, TimeManager timeManager, Organism organism)
         {
             States organismState = organism.State;
 
@@ -201,12 +206,12 @@ namespace EvolutionSim.StateManagement
             {
 
                 case States.Roaming:
-                    StateActions.Roam(organism, this.grid, this.timeManager);
+                    StateActions.Roam(organism, grid, timeManager);
 
                     break;
 
                 case States.Eating:
-                    StateActions.EatingFood.EatFood(organism, this.grid, this.timeManager);
+                    StateActions.EatingFood.EatFood(organism, grid, timeManager);
                     break;
 
                 case States.Mating:
@@ -222,29 +227,29 @@ namespace EvolutionSim.StateManagement
 
                 case States.SeekFood:
 
-                    StateActions.SeekingFood.SeekFood(organism, this.grid, this.timeManager);
+                    StateActions.SeekingFood.SeekFood(organism, grid, timeManager);
 
                     break;
 
                 case States.MovingToMate:
-                    StateActions.MoveAlongMatePath(organism, this.grid);
+                    StateActions.MoveAlongMatePath(organism, grid);
 
                     break;
 
                 //when in seaking mate scan for an organism who is also in the "SeekMate" State
                 case States.SeekMate:
-                    StateActions.SeekingMate.SeekMate(organism, this.grid, this.timeManager);
+                    StateActions.SeekingMate.SeekMate(organism, grid, timeManager);
 
                     break;
 
                 case States.WaitingForMate:
 
-                    StateActions.SeekingMate.WaitForMate(organism, this.grid);
+                    StateActions.SeekingMate.WaitForMate(organism, grid);
 
                     break;
 
                 case States.MovingToFood:
-                    StateActions.MoveAlongFoodPath(organism, this.grid);
+                    StateActions.MoveAlongFoodPath(organism, grid);
                     break;
 
                 default:

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using EvolutionSim.Data;
+using EvolutionSim.Sprites;
 using EvolutionSim.StateManagement;
 using EvolutionSim.TileGrid;
-using EvolutionSim.TileGrid.GridItems;
-using EvolutionSim.UI;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EvolutionSim.Logic
+namespace EvolutionSim
 {
     public class Simulation
     {
@@ -19,16 +19,14 @@ namespace EvolutionSim.Logic
         private readonly Grid grid;
         private readonly FullScreenSprite background;
 
-        public DrawingManager TileHighlight { get; private set; }
         public TimeManager TimeManager { get; private set; }
-        public WeatherManager WeatherManager { get; private set; }
+        public GridInteractionManager GridDrawer { get; private set; }
+        public WeatherOverlay WeatherOverlay { get; private set; }
 
         private List<Texture2D> particleTextures;
         private List<ParticleEffect> particleEffects = new List<ParticleEffect>();
 
-        public TileItems SelectedRadioItem { private get; set; } = TileItems.Grass;
-
-        private List<Breed> bearBreeds;
+        private List<Attributes> bearBreeds;
 
         public Simulation(Dictionary<string, Texture2D> textures)
         {
@@ -36,13 +34,13 @@ namespace EvolutionSim.Logic
 
             this.particleTextures = new List<Texture2D>() { this.textures["star"], this.textures["diamond"], this.textures["circle"] };
 
-            this.bearBreeds = new List<Breed>()
+            this.bearBreeds = new List<Attributes>()
             {
-                new Breed() { Species = "MiniGreen", Texture = textures["bear_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
-                new Breed() { Species = "MysteryPurp", Texture = textures["bear_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
-                new Breed() { Species = "Blastoise", Texture = textures["bear_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
-                new Breed() { Species = "AngryRed", Texture = textures["bear_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
-                new Breed() { Species = "YellowBoi", Texture = textures["bear_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
+                new Attributes() { Species = "MiniGreen", Texture = textures["bear_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
+                new Attributes() { Species = "MysteryPurp", Texture = textures["bear_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
+                new Attributes() { Species = "Blastoise", Texture = textures["bear_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
+                new Attributes() { Species = "AngryRed", Texture = textures["bear_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
+                new Attributes() { Species = "YellowBoi", Texture = textures["bear_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
             };
 
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(textures["healthbar_red"], textures["healthbar_green"]);
@@ -54,34 +52,30 @@ namespace EvolutionSim.Logic
 
             this.TimeManager = new TimeManager();
 
-            this.fsm = new StateMachine(this.grid, this.TimeManager);
+            this.fsm = new StateMachine();
             this.fsm.MatingOccurred += this.BirthHandler;
 
-            this.TileHighlight = new DrawingManager(textures["tile"]);
+            this.GridDrawer = new GridInteractionManager(textures["tile"]);
 
-            this.WeatherManager = new WeatherManager(textures["cold_overlay"], textures["hot_overlay"]);
+            this.WeatherOverlay = new WeatherOverlay(textures["cold_overlay"], textures["hot_overlay"]);
         }
 
         public void Update(GameTime gameTime)
         {
             TimeManager.Update(gameTime);
-            TileHighlight.Update(this, this.grid, SelectedRadioItem);
+            GridDrawer.Update(this, this.grid);
 
             if (TimeManager.Paused)
             {
                 return;
             }
 
-            this.WeatherManager.Update(this.grid.Organisms, TimeManager);
-            
-            Organism organism;
-            for (var i = this.grid.Organisms.Count - 1; i >= 0; i--)
+            if (TimeManager.HasSimulationTicked) 
             {
-                organism = this.grid.Organisms[i];
-                this.fsm.CheckState(organism);
-                this.fsm.DetermineBehaviour(organism);
-                this.fsm.UpdateOrganismAttributes(organism, TimeManager);
+                this.WeatherOverlay.Update(this.grid.Organisms);
             }
+
+            this.fsm.Update(this.grid, TimeManager);
             
             for (var i = this.particleEffects.Count - 1; i >= 0; i--)
             {
@@ -97,11 +91,11 @@ namespace EvolutionSim.Logic
         public void Draw(SpriteBatch spriteBatch)
         {
             this.background.Draw(spriteBatch);
-            this.WeatherManager.Draw(spriteBatch);
+            this.WeatherOverlay.Draw(spriteBatch);
 
             this.grid.Draw(spriteBatch);
 
-            this.TileHighlight.Draw(spriteBatch);
+            this.GridDrawer.Draw(spriteBatch);
             
             for (var i = this.particleEffects.Count - 1; i >= 0; i--)
             {
@@ -114,13 +108,13 @@ namespace EvolutionSim.Logic
             var x = (int)(rawX * 10);
             var y = (int)(rawY * 10);
             var xIsHigher = x > y;
-            return xIsHigher ? new Tuple<int, int>(x, y) : new Tuple<int, int>(y, x);
+            return xIsHigher ? new Tuple<int, int>(y, x) : new Tuple<int, int>(x, y);
         }
 
         private Tuple<int, int> MakeUseableValues(int x, int y)
         {
             var xIsHigher = x > y;
-            return xIsHigher ? new Tuple<int, int>(x, y) : new Tuple<int, int>(y, x);
+            return xIsHigher ? new Tuple<int, int>(y, x) : new Tuple<int, int>(x, y);
         }
 
         public void BirthHandler(object sender, EventArgs args)
@@ -134,7 +128,7 @@ namespace EvolutionSim.Logic
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
             var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
 
-            var simpleCrossbreed = new Breed()
+            var simpleCrossbreed = new Attributes()
             {
                 Species = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.Species : mother.Attributes.Species,
                 Texture = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Texture : mother.Texture,
@@ -226,8 +220,7 @@ namespace EvolutionSim.Logic
                 PositionAtRandom(item); // Try again
             }
         }
-
-
+        
         /// <summary>
         /// Handle death by removing the organism from the grid and removing its reference from the list of organisms.
         /// </summary>
@@ -239,6 +232,5 @@ namespace EvolutionSim.Logic
             var tile = (Tile)grid.GetTileAt(organism);
             this.grid.AttemptToPositionAt(new Food(this.textures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);
         }
-
     }
 }

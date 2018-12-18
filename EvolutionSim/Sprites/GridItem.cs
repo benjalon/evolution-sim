@@ -1,9 +1,8 @@
-﻿using EvolutionSim.Utility;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace EvolutionSim.TileGrid.GridItems
+namespace EvolutionSim.Sprites
 {
     /// <summary>
     /// A Sprite object which needs to be constrained to the Grid.
@@ -42,10 +41,10 @@ namespace EvolutionSim.TileGrid.GridItems
         /// Reparents the sprite to the given tile (i.e. makes it an inhabitant of the tile).
         /// </summary>
         /// <param name="tile">The tile to move to</param>
-        public void SetGridIndex(Tile tile)
+        public void SetGridIndex(int x, int y)
         {
-            this.GridIndex.X = tile.GridIndex.X;
-            this.GridIndex.Y = tile.GridIndex.Y;
+            this.GridIndex.X = x;
+            this.GridIndex.Y = y;
         }
 
         /// <summary>

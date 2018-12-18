@@ -1,6 +1,5 @@
-﻿using EvolutionSim.StateManagement;
-using EvolutionSim.TileGrid.GridItems;
-using EvolutionSim.UI;
+﻿using EvolutionSim.Data;
+using EvolutionSim.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -109,7 +108,7 @@ namespace EvolutionSim.TileGrid
         /// <param name="type">The type of terrain to position.</param>
         /// <param name="x">The x index of the tile to position at.</param>
         /// <param name="y">The y index of the tile to position at.</param>
-        public void SetTerrainAt(TileItems type, int x, int y)
+        public void SetTerrainAt(TerrainTypes terrainType, int x, int y)
         {
             if (!InBounds(x, y))
             {
@@ -118,26 +117,26 @@ namespace EvolutionSim.TileGrid
 
             var tile = this.tiles[x][y];
 
-            switch (type)
+            switch (terrainType)
             {
-                case TileItems.Grass:
+                case TerrainTypes.Grass:
                     if (this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Remove(tile.Terrain);
                     }
                     break;
-                case TileItems.Mountain:
-                case TileItems.Water:
+                case TerrainTypes.Mountain:
+                case TerrainTypes.Water:
                     if (!this.Terrains.Contains(tile.Terrain))
                     {
                         this.Terrains.Add(tile.Terrain);
                     }
                     break;
                 default:
-                    return; // Type not valid, do not attempt to place
+                    return;
             }
 
-            tile.SetTerrain(type);
+            tile.SetTerrain(terrainType);
         }
 
         /// <summary>
@@ -252,10 +251,10 @@ namespace EvolutionSim.TileGrid
         public Tile FindRandomNearbyEmptyTile(Organism organism)
         {
             var organismTile = GetTileAt(organism);
-            var minX = organismTile.GridIndex.X - organism.Attributes.DetectionRadius;
-            var minY = organismTile.GridIndex.Y - organism.Attributes.DetectionRadius;
-            var maxX = organismTile.GridIndex.X + organism.Attributes.DetectionRadius + 1; // +1 because random is exclusive on upper limit
-            var maxY = organismTile.GridIndex.Y + organism.Attributes.DetectionRadius + 1;
+            var minX = organismTile.GridIndex.X - Organism.DETECTION_RADIUS;
+            var minY = organismTile.GridIndex.Y - Organism.DETECTION_RADIUS;
+            var maxX = organismTile.GridIndex.X + Organism.DETECTION_RADIUS + 1; // +1 because random is exclusive on upper limit
+            var maxY = organismTile.GridIndex.Y + Organism.DETECTION_RADIUS + 1;
 
             if (minX < 0)
             {
