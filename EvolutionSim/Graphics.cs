@@ -76,7 +76,9 @@ namespace EvolutionSim
             textures.Add("diamond", Content.Load<Texture2D>("Diamond"));
             this.simulation = new Simulation(textures);
 
-            this.overlay = new Overlay(this.simulation);
+            this.overlay = new Overlay();
+            this.overlay.OrganismsAdded += OrganismsAddedHandler;
+            this.overlay.FoodsAdded += FoodsAddedHandler;
             this.overlay.DrawingSettingChanged += DrawingSettingChangedHandler;
             this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
             this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
@@ -103,7 +105,7 @@ namespace EvolutionSim
             }
 
             this.simulation.Update(gameTime);
-            this.overlay.Update(gameTime);
+            this.overlay.Update(gameTime, simulation.GridDrawer.SelectedOrganism);
 
             base.Update(gameTime);
         }
@@ -138,6 +140,16 @@ namespace EvolutionSim
                 Console.WriteLine(this.fps);
                 this.fpsOld = this.fps;
             }
+        }
+
+        private void OrganismsAddedHandler(object sender, EventArgs e)
+        {
+            this.simulation.AddOrganisms(((CreationArgs)e).Count);
+        }
+
+        private void FoodsAddedHandler(object sender, EventArgs e)
+        {
+            this.simulation.AddFoods(((CreationArgs)e).Count);
         }
 
         private void DrawingSettingChangedHandler(object sender, EventArgs e)

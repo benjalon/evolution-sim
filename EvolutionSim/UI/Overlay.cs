@@ -1,4 +1,5 @@
 ﻿using EvolutionSim.Data;
+using EvolutionSim.Sprites;
 using GeonBit.UI;
 using GeonBit.UI.DataTypes;
 using GeonBit.UI.Entities;
@@ -25,6 +26,8 @@ namespace EvolutionSim.UI
         private const int BUTTON_WIDTH = 170;
         private const int ELEMENT_HEIGHT = 40;
 
+        public event EventHandler OrganismsAdded;
+        public event EventHandler FoodsAdded;
         public event EventHandler DrawingSettingChanged;
         public event EventHandler TimeSettingChanged;
         public event EventHandler WeatherSettingChanged;
@@ -39,12 +42,10 @@ namespace EvolutionSim.UI
         private TextInput editStrengthValue;
         private TextInput editSpeedValue;
 
-        private Simulation simulation;
+        private Organism selectedOrganism;
 
-        public Overlay(Simulation simulation)
+        public Overlay()
         {
-            this.simulation = simulation;
-
             UserInterface.Active.UseRenderTarget = true;
             UserInterface.Active.CursorScale = 0.5f;
 
@@ -77,7 +78,7 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(organismCountInput.Value, out var input))
                 {
-                    this.simulation.AddOrganisms(input);
+                    OrganismsAdded?.Invoke(this, new CreationArgs(input));
                 }
             };
 
@@ -89,7 +90,7 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(foodCountInput.Value, out var input))
                 {
-                    this.simulation.AddFoods(input);
+                    FoodsAdded?.Invoke(this, new CreationArgs(input));
                 }
             };
             
@@ -222,7 +223,7 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(((TextInput)btn).Value, out var input))
                 {
-                    this.simulation.GridDrawer.SelectedOrganism.Hunger = input;
+                    this.selectedOrganism.Hunger = input;
                 }
             };
 
@@ -254,11 +255,13 @@ namespace EvolutionSim.UI
         /// Take input from input devices
         /// </summary>
         /// <param name="gameTime">Time elapsed since last update call</param>
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Organism selectedOrganism)
         {
+            this.selectedOrganism = selectedOrganism;
+
             UserInterface.Active.Update(gameTime);
             
-            if (simulation.GridDrawer.SelectedOrganism == null)
+            if (selectedOrganism == null)
             {
                 this.editHungerValue.Value = "";
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_EXPANDED_HEIGHT);
@@ -266,11 +269,11 @@ namespace EvolutionSim.UI
             }
             else
             {
-                this.editSpeciesValue.PlaceholderText = simulation.GridDrawer.SelectedOrganism.Attributes.Species;
-                this.editHungerValue.PlaceholderText = Math.Round(simulation.GridDrawer.SelectedOrganism.Hunger, 2).ToString();
-                this.editAgeValue.PlaceholderText = simulation.GridDrawer.SelectedOrganism.Age.ToString();
-                this.editStrengthValue.PlaceholderText = Math.Round(simulation.GridDrawer.SelectedOrganism.Attributes.Strength, 2).ToString();
-                this.editSpeedValue.PlaceholderText = Math.Round(simulation.GridDrawer.SelectedOrganism.Attributes.Speed, 2).ToString();
+                this.editSpeciesValue.PlaceholderText = selectedOrganism.Attributes.Species;
+                this.editHungerValue.PlaceholderText = Math.Round(selectedOrganism.Hunger, 2).ToString();
+                this.editAgeValue.PlaceholderText = selectedOrganism.Age.ToString();
+                this.editStrengthValue.PlaceholderText = Math.Round(selectedOrganism.Attributes.Strength, 2).ToString();
+                this.editSpeedValue.PlaceholderText = Math.Round(selectedOrganism.Attributes.Speed, 2).ToString();
 
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_CONTRACTED_HEIGHT);
                 this.bottomPanel.Visible = true;
