@@ -1,7 +1,6 @@
-﻿using EvolutionSim.TileGrid.GridItems;
-using System;
+﻿using System;
 
-namespace EvolutionSim.Pathfinding
+namespace EvolutionSim.TileGrid.Pathfinding
 {
     public class Node
     {

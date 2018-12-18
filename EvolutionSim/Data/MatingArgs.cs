@@ -1,7 +1,7 @@
-﻿using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.Sprites;
 using System;
 
-namespace EvolutionSim.Utility
+namespace EvolutionSim.Data
 {
     public class MatingArgs : EventArgs
     {
@@ -10,7 +10,7 @@ namespace EvolutionSim.Utility
 
         public MatingArgs(Organism father, Organism organism) : base()
         {
-            Father = organism;
+            Father = father;
             Mother = organism;
         }
     }

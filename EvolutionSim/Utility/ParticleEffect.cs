@@ -7,10 +7,10 @@ namespace EvolutionSim.Utility
 {
     class ParticleEffect
     {
-        private List<Particle> particles = new List<Particle>();
+        private readonly List<Particle> particles = new List<Particle>();
 
         private int msSinceSpawn = 0;
-        private int msLifeSpan;
+        private readonly int msLifeSpan;
 
         public bool Complete { get => this.msSinceSpawn >= this.msLifeSpan; }
 

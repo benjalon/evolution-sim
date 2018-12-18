@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EvolutionSim.Utility
+namespace EvolutionSim.Sprites
 {
     /// <summary>
     /// A combination of a texture and rectangle form a sprite, where the texture is drawn on top of the rectangle.

@@ -1,12 +1,40 @@
-﻿using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.Data;
+using EvolutionSim.Sprites;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace EvolutionSim.Utility
 {
     public class TimeManager
     {
         public const float MOVE_SPEED = 0.01f;
+        private const int FAST_SPEED = 4;
+
+        public TimeSettings TimeSetting
+        {
+            set
+            {
+                switch (value)
+                {
+                    case TimeSettings.Normal:
+                        matingCooldown = DEFAULT_MATING_COOLDOWN;
+                        roamCooldown = DEFAULT_ROAM_COOLDOWN;
+                        simulationTickCooldown = DEFAULT_SIMULATION_TICK_COOLDOWN;
+                        Paused = false;
+                        break;
+                    case TimeSettings.Fast:
+                        matingCooldown = DEFAULT_MATING_COOLDOWN / FAST_SPEED;
+                        roamCooldown = DEFAULT_ROAM_COOLDOWN / FAST_SPEED;
+                        simulationTickCooldown = DEFAULT_SIMULATION_TICK_COOLDOWN / FAST_SPEED;
+                        Paused = false;
+                        break;
+                    case TimeSettings.Paused:
+                        Paused = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         private int deltaMs;
 
@@ -31,7 +59,6 @@ namespace EvolutionSim.Utility
 
             if (HasSimulationTicked)
             {
-                //Console.WriteLine("tick");
                 msSinceLastTick = 0;
             }
             else
@@ -58,14 +85,6 @@ namespace EvolutionSim.Utility
                 organism.MsSinceLastRoam += this.deltaMs;
 
             }
-        }
-
-        public void SetSpeed(int multiplier)
-        {
-            Paused = false;
-            matingCooldown = (int)DEFAULT_MATING_COOLDOWN / multiplier;
-            roamCooldown = (int)DEFAULT_ROAM_COOLDOWN / multiplier;
-            simulationTickCooldown = (int)DEFAULT_SIMULATION_TICK_COOLDOWN / multiplier;
         }
 
         public bool HasMatingCooldownExpired(Organism organism)

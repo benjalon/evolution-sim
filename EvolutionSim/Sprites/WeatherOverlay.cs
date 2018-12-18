@@ -1,39 +1,48 @@
-﻿using EvolutionSim.TileGrid.GridItems;
+﻿using EvolutionSim.Data;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace EvolutionSim.Utility
+namespace EvolutionSim.Sprites
 {
-    public enum WeatherSettings
-    {
-        Warm,
-        Cold,
-        Hot
-    }
-
-    public class WeatherManager : FullScreenSprite
+    public class WeatherOverlay : FullScreenSprite
     {
         private readonly Texture2D coldTexture;
         private readonly Texture2D hotTexture;
 
-        private WeatherSettings currentWeather = WeatherSettings.Warm;
+        private WeatherSettings weatherSetting = WeatherSettings.Warm;
+        public WeatherSettings WeatherSetting
+        {
+            get => weatherSetting;
+            set
+            {
+                this.weatherSetting = value;
 
-        public WeatherManager(Texture2D coldTexture, Texture2D hotTexture): base()
+                switch (weatherSetting)
+                {
+                    case WeatherSettings.Cold:
+                        this.Texture = this.coldTexture;
+                        break;
+                    case WeatherSettings.Hot:
+                        this.Texture = this.hotTexture;
+                        break;
+                    case WeatherSettings.Warm:
+                    default:
+                        this.Texture = null;
+                        break;
+                }
+            }
+        }
+
+        public WeatherOverlay(Texture2D coldTexture, Texture2D hotTexture): base()
         {
             this.coldTexture = coldTexture;
             this.hotTexture = hotTexture;
         }
 
-        public void Update(List<Organism> organisms, TimeManager timeManager)
+        public void Update(List<Organism> organisms)
         {
-            if (!timeManager.HasSimulationTicked)
-            {
-                return; // Wait a bit
-            }
-
-            int organismsCount;
             Organism organism;
-            switch (this.currentWeather)
+            switch (this.weatherSetting)
             {
                 case WeatherSettings.Cold:
                     for (var i = organisms.Count - 1; i >= 0; i--)
@@ -57,25 +66,6 @@ namespace EvolutionSim.Utility
                     break;
                 case WeatherSettings.Warm:
                 default:
-                    break;
-            }
-        }
-        
-        public void SetWeather(WeatherSettings setting)
-        {
-            this.currentWeather = setting;
-
-            switch (setting)
-            {
-                case WeatherSettings.Cold:
-                    this.Texture = this.coldTexture;
-                    break;
-                case WeatherSettings.Hot:
-                    this.Texture = this.hotTexture;
-                    break;
-                case WeatherSettings.Warm:
-                default:
-                    this.Texture = null;
                     break;
             }
         }

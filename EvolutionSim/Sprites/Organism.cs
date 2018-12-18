@@ -1,29 +1,25 @@
-﻿using EvolutionSim.StateManagement;
-using EvolutionSim.Utility;
+﻿using EvolutionSim.Data;
+using EvolutionSim.TileGrid;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace EvolutionSim.TileGrid.GridItems
+namespace EvolutionSim.Sprites
 {
-    /// <summary>
-    /// Dictates the type of food the organism will be eating
-    /// </summary>
-    public enum DietTypes
-    {
-        Herbivore,
-        Omnivore,
-        Canivore
-    }
-
     public class Organism : GridItem
     {
         public static int TOTAL_POPULATION = 0;
 
-        // Attributes
-        public OrganismAttributes Attributes { get; }
+        public const int DETECTION_RADIUS = 5;
+        public const int DETECTION_DIAMETER = DETECTION_RADIUS * 2;
+
+        // Breed attributes
+        public Attributes Attributes { get; }
+
+        // Simulation Attributes
+        public int Age { get; set; } = 0;
+        public float Hunger { get; set; } = 0.2f;
 
         // Pathfinding 
         public bool Computing { get; set; } = false;
@@ -42,11 +38,11 @@ namespace EvolutionSim.TileGrid.GridItems
         private readonly Healthbar healthbar;
         public bool IsSelected { get; set; } = false;
         
-        public Organism(Breed breed, Tuple<Texture2D, Texture2D> healthbarTextures) : base(breed.Texture, breed.MaxHealth)
+        public Organism(Attributes attributes, Tuple<Texture2D, Texture2D> healthbarTextures) : base(attributes.Texture, attributes.MaxHealth)
         {
             TOTAL_POPULATION++;
 
-            this.Attributes = new OrganismAttributes(breed);
+            this.Attributes = attributes;
             this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
         }
 
@@ -68,7 +64,7 @@ namespace EvolutionSim.TileGrid.GridItems
         
         public void Eat()
         {
-            this.Attributes.Hunger += 0.04f;
+            Hunger += 0.04f;
 
             IncreaseHealth(1);
         }
@@ -89,38 +85,6 @@ namespace EvolutionSim.TileGrid.GridItems
         {
             base.DecreaseHealth(value);
             this.healthbar.CurrentHealth = this.Health;
-        }
-    }
-    
-    public class OrganismAttributes
-    {
-        public string Species { get; set; }
-        public DietTypes DietType { get; set; }
-        public int MaxHealth { get; set; }
-        public float Speed { get; set; }
-        public float Strength { get; set; }
-        public bool ResistCold { get; set; }
-        public bool ResistHeat { get; set; }
-
-        public int Age { get; set; }
-        public float Hunger { get; set; }
-        public int DetectionRadius { get; set; }
-        public int DetectionDiameter { get; set; }
-
-        public OrganismAttributes(Breed breed)
-        {
-            Species = breed.Species;
-            DietType = breed.DietType;
-            MaxHealth = breed.MaxHealth;
-            Speed = breed.Speed;
-            Strength = breed.Strength;
-            ResistCold = breed.ResistCold;
-            ResistHeat = breed.ResistHeat;
-
-            Age = 0;
-            Hunger = 0.2f;
-            DetectionRadius = 3;
-            DetectionDiameter = DetectionRadius * 2;
         }
     }
 }
