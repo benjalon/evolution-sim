@@ -62,6 +62,7 @@ namespace EvolutionSim.Logic
             this.WeatherManager = new WeatherManager(textures["cold_overlay"], textures["hot_overlay"]);
         }
 
+
         public void Update(GameTime gameTime)
         {
             TimeManager.Update(gameTime);

@@ -10,6 +10,15 @@ namespace EvolutionSim.StateManagement
     //this class is used for describing the conditions for which a change in state occurs and modeling organism behaviour
     public class StateMachine
     {
+        delegate bool checkPathPresent(Organism org);
+        checkPathPresent hasPath = organism => organism.Path.Count == 1;
+        private const double matingThreshold = 0.8;
+        private const double hungryThreshold = 0.4;
+        private const int  starvingThreshold = 0;
+        private const int dyingThreshold = 1000;
+        private const float hungryRate = 0.001f;
+
+
         //initalise lookup table
         private readonly State state;
         private readonly Grid grid;
@@ -24,6 +33,7 @@ namespace EvolutionSim.StateManagement
             this.timeManager = timeManager;
 
             this.state = new State();
+
         }
 
         /// <summary>
@@ -39,13 +49,13 @@ namespace EvolutionSim.StateManagement
 
             organism.Attributes.Age += 1;
 
-            if (organism.Attributes.Age > 1000)
+            if (organism.Attributes.Age > dyingThreshold)
             {
-                organism.DecreaseHealth(999);
+                organism.DecreaseHealth(dyingThreshold);
             }
-            else if (organism.Attributes.Hunger > 0)
+            else if (organism.Attributes.Hunger > starvingThreshold)
             {
-                organism.Attributes.Hunger -= 0.001f;
+                organism.Attributes.Hunger -= hungryRate;
                 //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?
             }
             else
@@ -67,21 +77,23 @@ namespace EvolutionSim.StateManagement
         {
             //test the organisms current attributes
             //by switching on the current state
+            
 
-            States organismState = organism.State;
+        States organismState = organism.State;
 
             this.timeManager.UpdateOrganismTimers(organism);
 
             switch (organismState)
             {
+                
                 #region Neutral States
 
                 case States.Roaming: // This is for when an organism is roaming randomly with no particular goal
-                    if (organism.Attributes.Hunger < 0.8) // Hungry so find some food
+                    if (organism.Attributes.Hunger < hungryThreshold) // Hungry so find some food
                     {
                         organism.State = this.state.MoveState(organismState, Actions.HungryRoam); //then move into the seek food state
                     }
-                    else if (organism.Attributes.Hunger >= 0.8 && this.timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
+                    else if (organism.Attributes.Hunger >= matingThreshold && this.timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
                     {
                         organism.Path.Clear(); // TODO unneeeded?
                         organism.State = this.state.MoveState(organismState, Actions.HungryMate); //go find a mate
@@ -94,7 +106,7 @@ namespace EvolutionSim.StateManagement
                 #region Food States
 
                 case States.SeekFood: // When an organism is running a pathfinding algorithm to find food
-                    if (organism.Attributes.Hunger >= 0.8)
+                    if (organism.Attributes.Hunger >= matingThreshold)
                     {
                         organism.Path.Clear();
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry);
@@ -108,7 +120,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToFood:
-                    if (organism.Path.Count == 1 && organism.DestinationTile.HasFoodInhabitant)
+                    if (hasPath(organism) && organism.DestinationTile.HasFoodInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoodFound); // adjacent to food, eat it
                     }
@@ -142,7 +154,7 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.Waiting); // A mate has found this organism, wait for them
                     }
 
-                    if (organism.Attributes.Hunger < 0.4)
+                    if (organism.Attributes.Hunger < hungryThreshold)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.HungryRoam); // hungry so stop looking for mate and go back to searching for food
                     }
@@ -150,7 +162,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.MovingToMate: // When an organism is moving on a path towards a mate
-                    if (organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant)
+                    if (hasPath(organism) && organism.DestinationTile.HasOrganismInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.Bang); //the organism is adjacent to a mate, so go ahead and make love
                     }
