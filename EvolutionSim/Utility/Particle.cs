@@ -5,7 +5,7 @@ namespace EvolutionSim.Utility
 {
     public abstract class Particle
     {
-        private Texture2D texture;
+        private readonly Texture2D texture;
         private Vector2 position;
         protected Vector2 velocity;
         protected float rotation;

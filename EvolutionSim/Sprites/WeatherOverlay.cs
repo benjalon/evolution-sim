@@ -41,7 +41,6 @@ namespace EvolutionSim.Sprites
 
         public void Update(List<Organism> organisms)
         {
-            int organismsCount;
             Organism organism;
             switch (this.weatherSetting)
             {

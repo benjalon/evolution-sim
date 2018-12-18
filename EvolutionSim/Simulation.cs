@@ -20,13 +20,13 @@ namespace EvolutionSim
         private readonly FullScreenSprite background;
 
         public TimeManager TimeManager { get; private set; }
-        public GridInteractionManager GridDrawer { get; private set; }
+        public GridInteractionManager GridInteractionManager { get; private set; }
         public WeatherOverlay WeatherOverlay { get; private set; }
 
-        private List<Texture2D> particleTextures;
+        private readonly List<Texture2D> particleTextures;
         private List<ParticleEffect> particleEffects = new List<ParticleEffect>();
 
-        private List<Attributes> bearBreeds;
+        private readonly List<Attributes> bearBreeds;
 
         public Simulation(Dictionary<string, Texture2D> textures)
         {
@@ -55,7 +55,7 @@ namespace EvolutionSim
             this.fsm = new StateMachine();
             this.fsm.MatingOccurred += this.BirthHandler;
 
-            this.GridDrawer = new GridInteractionManager(textures["tile"]);
+            this.GridInteractionManager = new GridInteractionManager(textures["tile"]);
 
             this.WeatherOverlay = new WeatherOverlay(textures["cold_overlay"], textures["hot_overlay"]);
         }
@@ -63,7 +63,7 @@ namespace EvolutionSim
         public void Update(GameTime gameTime)
         {
             TimeManager.Update(gameTime);
-            GridDrawer.Update(this, this.grid);
+            GridInteractionManager.Update(this, this.grid);
 
             if (TimeManager.Paused)
             {
@@ -95,7 +95,7 @@ namespace EvolutionSim
 
             this.grid.Draw(spriteBatch);
 
-            this.GridDrawer.Draw(spriteBatch);
+            this.GridInteractionManager.Draw(spriteBatch);
             
             for (var i = this.particleEffects.Count - 1; i >= 0; i--)
             {

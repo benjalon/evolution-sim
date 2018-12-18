@@ -14,7 +14,7 @@ namespace EvolutionSim.TileGrid
 
         public DrawingSettings DrawingSetting { get; set; }
 
-        private MouseStateManager mouseStateManager = new MouseStateManager();
+        private readonly MouseStateManager mouseStateManager = new MouseStateManager();
         private int TileIndexX { get => this.mouseStateManager.ScreenPositionX / Tile.TILE_SIZE; }
         private int TileIndexY { get => this.mouseStateManager.ScreenPositionY / Tile.TILE_SIZE; }
         private bool IsWithinGrid { get => TileIndexX >= 0 && TileIndexX < Grid.TILE_COUNT_X && TileIndexY >= 0 && TileIndexY < Grid.TILE_COUNT_Y; }
@@ -91,7 +91,6 @@ namespace EvolutionSim.TileGrid
                     break;
                 case DrawingSettings.Water:
                     PlaceTerrain(grid, TerrainTypes.Water);
-                    break;
                     break;
                 case DrawingSettings.Organism:
                     simulation.AddOrganism(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);

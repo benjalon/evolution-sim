@@ -55,25 +55,27 @@ namespace EvolutionSim
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load textures
-            var textures = new Dictionary<string, Texture2D>();
-            textures.Add("grass_background", Content.Load<Texture2D>("Grass"));
-            textures.Add("hot_overlay", Content.Load<Texture2D>("Hot"));
-            textures.Add("cold_overlay", Content.Load<Texture2D>("Cold"));
-            textures.Add("bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0"));
-            textures.Add("bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1"));
-            textures.Add("bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2"));
-            textures.Add("bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3"));
-            textures.Add("bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4"));
-            textures.Add("food", Content.Load<Texture2D>("Food"));
-            textures.Add("meat", Content.Load<Texture2D>("Meat"));
-            textures.Add("tile", Content.Load<Texture2D>("Tile"));
-            textures.Add("mountain", Content.Load<Texture2D>("Mountain"));
-            textures.Add("water", Content.Load<Texture2D>("Water"));
-            textures.Add("healthbar_green", Content.Load<Texture2D>("Healthbar_Green"));
-            textures.Add("healthbar_red", Content.Load<Texture2D>("Healthbar_Red"));
-            textures.Add("circle", Content.Load<Texture2D>("Circle"));
-            textures.Add("star", Content.Load<Texture2D>("Star"));
-            textures.Add("diamond", Content.Load<Texture2D>("Diamond"));
+            var textures = new Dictionary<string, Texture2D>
+            {
+                { "grass_background", Content.Load<Texture2D>("Grass") },
+                { "hot_overlay", Content.Load<Texture2D>("Hot") },
+                { "cold_overlay", Content.Load<Texture2D>("Cold") },
+                { "bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
+                { "bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
+                { "bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2") },
+                { "bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3") },
+                { "bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
+                { "food", Content.Load<Texture2D>("Food") },
+                { "meat", Content.Load<Texture2D>("Meat") },
+                { "tile", Content.Load<Texture2D>("Tile") },
+                { "mountain", Content.Load<Texture2D>("Mountain") },
+                { "water", Content.Load<Texture2D>("Water") },
+                { "healthbar_green", Content.Load<Texture2D>("Healthbar_Green") },
+                { "healthbar_red", Content.Load<Texture2D>("Healthbar_Red") },
+                { "circle", Content.Load<Texture2D>("Circle") },
+                { "star", Content.Load<Texture2D>("Star") },
+                { "diamond", Content.Load<Texture2D>("Diamond") }
+            };
             this.simulation = new Simulation(textures);
 
             this.overlay = new Overlay();
@@ -105,7 +107,7 @@ namespace EvolutionSim
             }
 
             this.simulation.Update(gameTime);
-            this.overlay.Update(gameTime, simulation.GridDrawer.SelectedOrganism);
+            this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
 
             base.Update(gameTime);
         }
@@ -154,7 +156,7 @@ namespace EvolutionSim
 
         private void DrawingSettingChangedHandler(object sender, EventArgs e)
         {
-            this.simulation.GridDrawer.DrawingSetting = ((DrawingArgs)e).DrawingSetting;
+            this.simulation.GridInteractionManager.DrawingSetting = ((DrawingArgs)e).DrawingSetting;
         }
 
         private void TimeSettingChangedHandler(object sender, EventArgs e)
