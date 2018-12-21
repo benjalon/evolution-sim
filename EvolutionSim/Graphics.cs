@@ -16,6 +16,7 @@ namespace EvolutionSim
         public const int WINDOW_HEIGHT = 1080;
         public const int SIMULATION_WIDTH = WINDOW_WIDTH - Overlay.PANEL_WIDTH;
 
+        public static Utility.GameState state = Utility.GameState.StartMenu;
 
         public static Random RANDOM { get; private set; } = new Random();
 
@@ -55,17 +56,19 @@ namespace EvolutionSim
         /// </summary>
         protected override void LoadContent()
         {
-            if (Program.state == Utility.GameState.Running)
+            switch (state)
             {
-                LoadSimulation();
+                case Utility.GameState.StartMenu:
+                    LoadStartMenu();
+                    break;
+                case Utility.GameState.Running:
+                    LoadSimulation();
+                    break;
+                case Utility.GameState.Exit:
+                    Exit();
+                    break;  
             }
-            else if(Program.state == Utility.GameState.StartMenu){
-                LoadStartMenu();
-            }
-            else
-            {
-                Exit();
-            }
+
         }
 
         private void LoadStartMenu()
@@ -82,13 +85,13 @@ namespace EvolutionSim
             Button create = new Button("Create", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50), new Vector2(0, WINDOW_HEIGHT / 8));
             Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50));
             create.OnClick = (Entity btn) => {
-                Program.state = Utility.GameState.Running;
+                state = Utility.GameState.Running;
                 UserInterface.Active.Clear();
                 LoadContent();
             };
             exit.OnClick = (Entity btn) => {
-                Program.state = Utility.GameState.Exit;
-                Exit();
+                state = Utility.GameState.Exit;
+                LoadContent();
             };
 
 
@@ -150,7 +153,7 @@ namespace EvolutionSim
         protected override void Update(GameTime gameTime)
         {
             UserInterface.Active.Update(gameTime);
-            if (Program.state == Utility.GameState.Running)
+            if (state == Utility.GameState.Running)
             {
                 this.simulation.Update(gameTime);
                 this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
@@ -159,7 +162,7 @@ namespace EvolutionSim
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
             {
-                Program.state = Utility.GameState.Exit;
+                state = Utility.GameState.Exit;
                 Exit();
             }
 
@@ -181,7 +184,7 @@ namespace EvolutionSim
 
             // Draw graphical elements
             this.spriteBatch.Begin();
-            if (Program.state == Utility.GameState.Running)
+            if (state == Utility.GameState.Running)
             {
                 this.simulation.Draw(this.spriteBatch);
             }
