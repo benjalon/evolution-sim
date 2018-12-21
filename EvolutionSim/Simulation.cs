@@ -30,6 +30,23 @@ namespace EvolutionSim.Logic
 
         private List<Breed> bearBreeds;
 
+
+        /// <summary>
+        /// this enum is used to show the severity of mutations based on the return from the probability class
+        /// </summary>
+        private enum Severity
+        {
+            ExtremelyBad,
+            MiddleBad,
+            MidBad,
+            MildGood, 
+            ExtremelyGood,
+           
+
+
+        }
+
+
         public Simulation(Dictionary<string, Texture2D> textures)
         {
             this.textures = textures;
@@ -118,12 +135,24 @@ namespace EvolutionSim.Logic
             return xIsHigher ? new Tuple<int, int>(x, y) : new Tuple<int, int>(y, x);
         }
 
+        /// <summary>
+        /// So I assume this tuple is going to store whatever value is higher/better over the mother or father
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private Tuple<int, int> MakeUseableValues(int x, int y)
         {
             var xIsHigher = x > y;
             return xIsHigher ? new Tuple<int, int>(x, y) : new Tuple<int, int>(y, x);
         }
 
+        /// <summary>
+        /// This method handles when two organisms mate
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void BirthHandler(object sender, EventArgs args)
         {
             var matingArgs = (MatingArgs)args;
@@ -179,6 +208,10 @@ namespace EvolutionSim.Logic
             particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(child).Center));
         }
 
+        /// <summary>
+        /// Handles the addition of organisms based on the buttons pressed from the UI
+        /// </summary>
+        /// <param name="amount"></param>
         public void AddOrganisms(int amount)
         {
             Organism organism;
