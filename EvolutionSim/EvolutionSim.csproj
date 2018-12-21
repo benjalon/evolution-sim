@@ -97,6 +97,7 @@
     <Compile Include="TileGrid\GridInteractionManager.cs" />
     <Compile Include="Sprites\FullScreenSprite.cs" />
     <Compile Include="Utility\AttributeUpdater.cs" />
+    <Compile Include="Utility\GameState.cs" />
     <Compile Include="Utility\Lerper.cs" />
     <Compile Include="Sprites\Food.cs" />
     <Compile Include="Sprites\GridItem.cs" />

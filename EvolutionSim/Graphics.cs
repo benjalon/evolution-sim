@@ -1,6 +1,7 @@
 ﻿using EvolutionSim.Data;
 using EvolutionSim.UI;
 using GeonBit.UI;
+using GeonBit.UI.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,8 +28,11 @@ namespace EvolutionSim
         private double fps = 0;
         private double fpsOld = 0;
 
+
+
         public Graphics()
         {
+
             this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -43,7 +47,6 @@ namespace EvolutionSim
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
-            
             base.Initialize();
         }
 
@@ -51,6 +54,50 @@ namespace EvolutionSim
         /// Asset loading (textures, sounds etc.)
         /// </summary>
         protected override void LoadContent()
+        {
+            if (Program.state == Utility.GameState.Running)
+            {
+                LoadSimulation();
+            }
+            else if(Program.state == Utility.GameState.StartMenu){
+                LoadStartMenu();
+            }
+            else
+            {
+                Exit();
+            }
+        }
+
+        private void LoadStartMenu()
+        {
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Paragraph header = new Header("Welcome to Evolution-Sim", Anchor.TopCenter, new Vector2(0, WINDOW_HEIGHT / 8));
+            header.FillColor = Color.White;
+            header.Scale = 5.0f;
+
+            HorizontalLine horizontalLine = new HorizontalLine(Anchor.TopCenter, new Vector2(0, WINDOW_HEIGHT / 4));
+            horizontalLine.Padding = new Vector2(10, 10);
+
+            Button create = new Button("Create", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50), new Vector2(0, WINDOW_HEIGHT / 8));
+            Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50));
+            create.OnClick = (Entity btn) => {
+                Program.state = Utility.GameState.Running;
+                UserInterface.Active.Clear();
+                LoadContent();
+            };
+            exit.OnClick = (Entity btn) => {
+                Program.state = Utility.GameState.Exit;
+                Exit();
+            };
+
+
+            UserInterface.Active.AddEntity(header);
+            UserInterface.Active.AddEntity(horizontalLine);
+            UserInterface.Active.AddEntity(create);
+            UserInterface.Active.AddEntity(exit);
+        }
+        private void LoadSimulation()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -88,7 +135,7 @@ namespace EvolutionSim
             this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
             this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
         }
-        
+
         /// <summary>
         /// Asset unloading
         /// </summary>
@@ -102,15 +149,21 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
+            UserInterface.Active.Update(gameTime);
+            if (Program.state == Utility.GameState.Running)
+            {
+                this.simulation.Update(gameTime);
+                this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
+            }
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
             {
+                Program.state = Utility.GameState.Exit;
                 Exit();
             }
 
-            this.simulation.Update(gameTime);
-            this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
+          
 
             base.Update(gameTime);
         }
@@ -123,12 +176,15 @@ namespace EvolutionSim
         {
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
             UserInterface.Active.Draw(spriteBatch); // Draw UI elements (doesn't affect draw order because it draws to a render target
-
+            
             //this.WriteFPS(gameTime);
 
             // Draw graphical elements
             this.spriteBatch.Begin();
-            this.simulation.Draw(this.spriteBatch);
+            if (Program.state == Utility.GameState.Running)
+            {
+                this.simulation.Draw(this.spriteBatch);
+            }
             this.spriteBatch.End();
 
             // Draw UI elements on top

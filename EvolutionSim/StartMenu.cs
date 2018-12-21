@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EvolutionSim.Data;
-using EvolutionSim.UI;
-using GeonBit.UI.DataTypes;
+
 using GeonBit.UI.Entities;
 using GeonBit.UI;
 using Microsoft.Xna.Framework;
@@ -20,10 +14,16 @@ namespace EvolutionSim
     {
         public const int WINDOW_WIDTH = 1920;
         public const int WINDOW_HEIGHT = 1080;
+
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
+
+
+
+
         public StartMenu()
         {
+
             this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -35,11 +35,17 @@ namespace EvolutionSim
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
+            //UserInterface.Active.UseRenderTarget = true;
 
             base.Initialize();
         }
         // create a panel and position in center of screen
-        
+
+        protected override void UnloadContent()
+        {
+
+            base.UnloadContent();
+        }
 
         protected override void LoadContent()
         {
@@ -55,7 +61,14 @@ namespace EvolutionSim
 
             Button create = new Button("Create", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50), new Vector2(0, WINDOW_HEIGHT / 8));
             Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter,new Vector2(WINDOW_WIDTH/8,50));
-           
+            create.OnClick = (Entity btn) => {
+                Program.state = Utility.GameState.Running;
+                Exit();
+            };
+            exit.OnClick = (Entity btn) => {
+                Program.state = Utility.GameState.Exit;
+                Exit();
+            };
 
 
             UserInterface.Active.AddEntity(header);
@@ -75,6 +88,7 @@ namespace EvolutionSim
         protected override void Update(GameTime gameTime)
         {
             UserInterface.Active.Update(gameTime);
+
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
@@ -83,6 +97,7 @@ namespace EvolutionSim
             }
 
             base.Update(gameTime);
+
         }
 
         /// <summary>
@@ -102,7 +117,7 @@ namespace EvolutionSim
             this.spriteBatch.End();
 
             // Draw UI elements on top
-            UserInterface.Active.DrawMainRenderTarget(spriteBatch);
+            //UserInterface.Active.DrawMainRenderTarget(spriteBatch);
 
             base.Draw(gameTime);
         }
