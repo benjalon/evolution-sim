@@ -29,7 +29,7 @@ namespace EvolutionSim.StateManagement
                 timeManager.UpdateOrganismTimers(organism);
                 CheckState(timeManager, organism);
                 DetermineBehaviour(grid, timeManager, organism);
-                UpdateOrganismAttributes(timeManager, organism);
+                //UpdateOrganismAttributes(timeManager, organism);
             }
         }
 
@@ -47,7 +47,7 @@ namespace EvolutionSim.StateManagement
             organism.Age += 1;
 
             if (organism.Age > 1000)
-            {
+            {   
                 organism.DecreaseHealth(999);
             }
             else if (organism.Hunger > 0)
