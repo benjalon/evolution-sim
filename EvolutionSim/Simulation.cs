@@ -70,11 +70,9 @@ namespace EvolutionSim
                 return;
             }
 
-            if (TimeManager.HasSimulationTicked) 
-            {
-                Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting);
-                //this.WeatherOverlay.Update(this.grid.Organisms);
-            }
+
+            Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
+
 
             this.fsm.Update(this.grid, TimeManager);
             

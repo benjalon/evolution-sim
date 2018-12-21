@@ -26,10 +26,8 @@ namespace EvolutionSim.StateManagement
             for (var i = grid.Organisms.Count - 1; i >= 0; i--)
             {
                 organism = grid.Organisms[i];
-                timeManager.UpdateOrganismTimers(organism);
                 CheckState(timeManager, organism);
                 DetermineBehaviour(grid, timeManager, organism);
-                //UpdateOrganismAttributes(timeManager, organism);
             }
         }
 

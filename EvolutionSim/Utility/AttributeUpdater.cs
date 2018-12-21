@@ -10,17 +10,23 @@ namespace EvolutionSim.Utility
 {
     public static class AttributeUpdater
     {
-        public static void UpdateAttributes(List<Organism> organisms, WeatherSettings weatherSettings)
+        public static void UpdateAttributes(List<Organism> organisms, WeatherSettings weatherSettings, Boolean SimulationTick, TimeManager timeManager)
         {
-            Organism organism;
+     
+        Organism organism;
 
             for (var i = organisms.Count - 1; i >= 0; i--)
             {
                 organism = organisms[i];
-                UpdateWeatherAttribute(organism, weatherSettings);
-                UpdateHungerAttribute(organism);
-                UpdateAgeAttribute(organism);
+                if (SimulationTick)
+                {
+                    UpdateWeatherAttribute(organism, weatherSettings);
+                    UpdateHungerAttribute(organism);
+                    UpdateAgeAttribute(organism);
+                }
+                timeManager.UpdateOrganismTimers(organism);
             }
+
 
         }
 
