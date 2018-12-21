@@ -6,6 +6,7 @@
         {
             var graphics = new Graphics();
             graphics.Run();
+            System.Console.WriteLine("YEET");
         }
     }
 }

@@ -15,6 +15,9 @@ namespace EvolutionSim
         public const int WINDOW_HEIGHT = 1080;
         public const int SIMULATION_WIDTH = WINDOW_WIDTH - Overlay.PANEL_WIDTH;
 
+        private Texture2D startButton;
+        private Texture2D exitButton;
+
         public static Random RANDOM { get; private set; } = new Random();
 
         private readonly GraphicsDeviceManager graphics;
@@ -77,7 +80,9 @@ namespace EvolutionSim
                 { "diamond", Content.Load<Texture2D>("Diamond") }
             };
             this.simulation = new Simulation(textures);
+            //var organismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
 
+            // Move this?
             this.overlay = new Overlay();
             this.overlay.OrganismsAdded += OrganismsAddedHandler;
             this.overlay.FoodsAdded += FoodsAddedHandler;
