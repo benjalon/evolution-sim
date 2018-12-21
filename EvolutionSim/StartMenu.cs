@@ -26,7 +26,6 @@ namespace EvolutionSim
         {
             this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            this.IsMouseVisible = true;
 
 
             this.graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
@@ -46,20 +45,36 @@ namespace EvolutionSim
         {
 
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
-            Panel panel = new Panel(new Vector2(400, 400), PanelSkin.Default, Anchor.Center);
-            UserInterface.Active.AddEntity(panel);
+
+            Paragraph header = new Header("Welcome to Evolution-Sim", Anchor.TopCenter,new Vector2(0,WINDOW_HEIGHT/8));
+            header.FillColor = Color.White;
+            header.Scale = 5.0f;
+
+            HorizontalLine horizontalLine = new HorizontalLine(Anchor.TopCenter, new Vector2(0, WINDOW_HEIGHT /4));
+            horizontalLine.Padding = new Vector2(10, 10);
+
+            Button create = new Button("Create", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50), new Vector2(0, WINDOW_HEIGHT / 8));
+            Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter,new Vector2(WINDOW_WIDTH/8,50));
+           
+
+
+            UserInterface.Active.AddEntity(header);
+            UserInterface.Active.AddEntity(horizontalLine);
+            UserInterface.Active.AddEntity(create);
+            UserInterface.Active.AddEntity(exit);
+
 
             // add title and text
-            panel.AddChild(new Header("Example Panel"));
-            panel.AddChild(new HorizontalLine());
-            panel.AddChild(new Paragraph("This is a simple panel with a button."));
+            //panel.AddChild(new Header(""));
+            //panel.AddChild(new HorizontalLine());
+            //panel.AddChild(new Paragraph("This is a simple panel with a button."));
 
             // add a button at the bottom
-            panel.AddChild(new Button("Click Me!", ButtonSkin.Default, Anchor.BottomCenter));
 
         }
         protected override void Update(GameTime gameTime)
         {
+            UserInterface.Active.Update(gameTime);
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
@@ -76,7 +91,7 @@ namespace EvolutionSim
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Aqua); // Set background color
+            GraphicsDevice.Clear(Color.DarkKhaki); // Set background color
             UserInterface.Active.Draw(spriteBatch); // Draw UI elements (doesn't affect draw order because it draws to a render target
 
             //this.WriteFPS(gameTime);
