@@ -62,11 +62,11 @@ namespace EvolutionSim
             Button create = new Button("Create", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50), new Vector2(0, WINDOW_HEIGHT / 8));
             Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter,new Vector2(WINDOW_WIDTH/8,50));
             create.OnClick = (Entity btn) => {
-                Program.state = Utility.GameState.Running;
+                state = Utility.GameState.Running;
                 Exit();
             };
             exit.OnClick = (Entity btn) => {
-                Program.state = Utility.GameState.Exit;
+                state = Utility.GameState.Exit;
                 Exit();
             };
 
