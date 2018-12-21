@@ -20,7 +20,7 @@ namespace EvolutionSim.StateManagement
             this.state = new State();
         }
 
-        public void Update(Grid grid, TimeManager timeManager)
+        public void UpdateStates(Grid grid, TimeManager timeManager)
         {
             Organism organism;
             for (var i = grid.Organisms.Count - 1; i >= 0; i--)
@@ -29,39 +29,6 @@ namespace EvolutionSim.StateManagement
                 CheckState(timeManager, organism);
                 DetermineBehaviour(grid, timeManager, organism);
             }
-        }
-
-        /// <summary>
-        /// as time marches on make the organism hungrey
-        /// </summary>
-        /// <param name="organism"></param>
-        private void UpdateOrganismAttributes(TimeManager timeManager, Organism organism)
-        {
-            if (!timeManager.HasSimulationTicked)
-            {
-                return; // Wait a bit
-            }
-
-            organism.Age += 1;
-
-            if (organism.Age > 1000)
-            {   
-                organism.DecreaseHealth(999);
-            }
-            else if (organism.Hunger > 0)
-            {
-                organism.Hunger -= 0.001f;
-                //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?
-            }
-            else
-            {
-
-                organism.Hunger = 0;
-                organism.DecreaseHealth(1);
-            }
-
-
-
         }
 
         /// <summary>
