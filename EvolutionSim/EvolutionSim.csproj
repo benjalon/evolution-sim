@@ -93,6 +93,7 @@
     <Compile Include="Data\WeatherArgs.cs" />
     <Compile Include="Sprites\Healthbar.cs" />
     <Compile Include="Sprites\Terrain.cs" />
+    <Compile Include="StateManagement\Probability.cs" />
     <Compile Include="TileGrid\GridInteractionManager.cs" />
     <Compile Include="Sprites\FullScreenSprite.cs" />
     <Compile Include="Utility\AttributeUpdater.cs" />

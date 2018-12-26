@@ -26,6 +26,8 @@ namespace EvolutionSim.StateManagement
     //Class used to represent the state of an organism
     public class State
     {
+        private const int HASHING_CONST_1 = 17;
+        private const int HASHING_CONST_2 = 31;
 
 
         //a nested and publically avaliable class to determine behaviour of organsim when changing states
@@ -47,7 +49,7 @@ namespace EvolutionSim.StateManagement
             public override int GetHashCode()
             {
 
-                return 17 + 31 * this.currentState.GetHashCode() + 31 * this.action.GetHashCode();
+                return HASHING_CONST_1 + HASHING_CONST_2 * this.currentState.GetHashCode() + HASHING_CONST_2 * this.action.GetHashCode();
 
             }
 

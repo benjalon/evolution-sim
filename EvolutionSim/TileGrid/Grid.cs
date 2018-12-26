@@ -250,24 +250,25 @@ namespace EvolutionSim.TileGrid
 
         public Tile FindRandomNearbyEmptyTile(Organism organism)
         {
+            const int MINIMUM_BOUND = 0;
             var organismTile = GetTileAt(organism);
             var minX = organismTile.GridIndex.X - Organism.DETECTION_RADIUS;
             var minY = organismTile.GridIndex.Y - Organism.DETECTION_RADIUS;
             var maxX = organismTile.GridIndex.X + Organism.DETECTION_RADIUS + 1; // +1 because random is exclusive on upper limit
             var maxY = organismTile.GridIndex.Y + Organism.DETECTION_RADIUS + 1;
 
-            if (minX < 0)
+            if (minX < MINIMUM_BOUND)
             {
-                minX = 0;
+                minX = MINIMUM_BOUND;
             }
             else if (maxX > TILE_COUNT_X)
             { 
                 maxX = TILE_COUNT_X;
             }
 
-            if (minY < 0)
+            if (minY < MINIMUM_BOUND)
             {
-                minY = 0;
+                minY = MINIMUM_BOUND;
             }
             else if (maxY > TILE_COUNT_X)
             {

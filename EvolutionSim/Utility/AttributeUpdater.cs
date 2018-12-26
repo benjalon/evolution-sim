@@ -10,6 +10,12 @@ namespace EvolutionSim.Utility
 {
     public static class AttributeUpdater
     {
+        private const int STARVING_THRESHOLD = 0;
+        private const int DYING_THRESHOLD = 1000;
+        private const float HUNGRY_RATE = 0.001f;
+      
+       
+
         public static void UpdateAttributes(List<Organism> organisms, WeatherSettings weatherSettings, Boolean SimulationTick, TimeManager timeManager)
         {
      
@@ -30,6 +36,11 @@ namespace EvolutionSim.Utility
 
         }
 
+        /// <summary>
+        /// This handles the decrementing of stats based on the weather conditions
+        /// </summary>
+        /// <param name="organism"></param>
+        /// <param name="weatherSettings"></param>
         private static void UpdateWeatherAttribute(Organism organism, WeatherSettings weatherSettings)
         {
             switch (weatherSettings)
@@ -56,21 +67,22 @@ namespace EvolutionSim.Utility
         private static void UpdateAgeAttribute(Organism organism)
         {
             organism.Age += 1;
-            if (organism.Age > 1000)
+            if (organism.Age > DYING_THRESHOLD)
             {
-                organism.DecreaseHealth(999);
+                //kill the organism
+                organism.DecreaseHealth(DYING_THRESHOLD);
             }
 
 
         }
         private static void UpdateHungerAttribute(Organism organism)
         {
-            if (organism.Hunger > 0)
+            if (organism.Hunger > STARVING_THRESHOLD)
             {
-                organism.Hunger -= 0.001f;
+                organism.Hunger -= HUNGRY_RATE;
                 //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?
             }
-            else
+            else //organism is starving so reduce health
             {
                 organism.Hunger = 0;
                 organism.DecreaseHealth(1);

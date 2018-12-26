@@ -39,6 +39,10 @@ namespace EvolutionSim.Sprites
             this.hotTexture = hotTexture;
         }
 
+        /// <summary>
+        /// this is coupled, should maybe be in the attribute updater?
+        /// </summary>
+        /// <param name="organisms"></param>
         public void Update(List<Organism> organisms)
         { 
             Organism organism;

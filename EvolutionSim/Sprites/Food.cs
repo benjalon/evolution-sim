@@ -17,10 +17,12 @@ namespace EvolutionSim.Sprites
         private const float MIN_SCALE = 0.4f;
         private const int MAX_MEAT_HEALTH = 40;
         public const int MAX_GRASS_HEALTH = 10;
+        private const float OFFSET_MULTIPLIER = 0.5f;
 
         public bool IsHerbivoreFood { get; private set; }
         private int MaxFoodHealth { get => IsHerbivoreFood ? MAX_GRASS_HEALTH : MAX_MEAT_HEALTH;  }
 
+        //this is where the scale is being  calculated for food based on how much health that food item has over the whole food item
         private readonly float scale;
         private readonly float scaleOffset;
 
@@ -40,7 +42,7 @@ namespace EvolutionSim.Sprites
             {
                 this.scale = MIN_SCALE; // Limit how small food can be drawn
             }
-            this.scaleOffset = (Tile.TILE_SIZE * (1.0f - this.scale)) * 0.5f;
+            this.scaleOffset = (Tile.TILE_SIZE * (1.0f - this.scale)) * OFFSET_MULTIPLIER;
         }
 
         /// <summary>
