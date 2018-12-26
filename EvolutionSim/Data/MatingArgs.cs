@@ -6,6 +6,8 @@ namespace EvolutionSim.Data
 {
     public class MatingArgs : EventArgs
     {
+        private const double TWO_STANDARD_DEVIATION = 2.0;
+        private const double ONE_STANDARD_DEVIATION = 1.0;
 
         /// <summary>
         /// this enum is used to show the severity of mutations based on the return from the probability class
@@ -51,20 +53,20 @@ namespace EvolutionSim.Data
         {
             //this is the tail end of our distribution, less than 5% of cases should appear with 
             //this sort of mutation
-            if (mutationRating <= -2)
+            if (mutationRating <= -TWO_STANDARD_DEVIATION)
             {
                 this.Mutation = Severity.ExtremelyBad;
 
 
             }
-            else if (mutationRating >= -2 && mutationRating < -1)
+            else if (mutationRating >= -TWO_STANDARD_DEVIATION && mutationRating < -ONE_STANDARD_DEVIATION)
             {
 
                 this.Mutation = Severity.MiddleBad;
 
             }
 
-            if(mutationRating >= -1 && mutationRating < 0)
+            if(mutationRating >= -ONE_STANDARD_DEVIATION && mutationRating < 0)
             {
 
                 this.Mutation = Severity.MildBad;
@@ -72,7 +74,7 @@ namespace EvolutionSim.Data
             }
 
             //If within a single positive standard devation of the mean
-            else if (mutationRating >= 0 && mutationRating < 1)
+            else if (mutationRating >= 0 && mutationRating < ONE_STANDARD_DEVIATION)
             {
 
 
@@ -82,7 +84,7 @@ namespace EvolutionSim.Data
             }
 
             //otherwise if the mutation is between 1 and 2 positive standard deviations of the mean
-            else if (mutationRating >= 1 && mutationRating < 2)
+            else if (mutationRating >= ONE_STANDARD_DEVIATION && mutationRating < TWO_STANDARD_DEVIATION)
             {
 
 

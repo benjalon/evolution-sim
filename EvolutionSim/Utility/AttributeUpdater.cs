@@ -13,6 +13,8 @@ namespace EvolutionSim.Utility
         private const int STARVING_THRESHOLD = 0;
         private const int DYING_THRESHOLD = 1000;
         private const float HUNGRY_RATE = 0.001f;
+      
+       
 
         public static void UpdateAttributes(List<Organism> organisms, WeatherSettings weatherSettings, Boolean SimulationTick, TimeManager timeManager)
         {
@@ -75,7 +77,7 @@ namespace EvolutionSim.Utility
         }
         private static void UpdateHungerAttribute(Organism organism)
         {
-            if (organism.Hunger > 0)
+            if (organism.Hunger > STARVING_THRESHOLD)
             {
                 organism.Hunger -= HUNGRY_RATE;
                 //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?

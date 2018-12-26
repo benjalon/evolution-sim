@@ -40,7 +40,9 @@ namespace EvolutionSim.StateManagement
 
         /// <summary>
         /// This method generates a guassian variable which lies between the range
-        /// of -3 and 3
+        /// of -3 and 3, 
+        /// Works by performing a Box-Muller transform on a pair of 
+        /// randomly generated doubles
         /// </summary>
         public double generateCrossoverMutationValue()
         {
@@ -48,10 +50,10 @@ namespace EvolutionSim.StateManagement
             double stdDev = 1;
 
             Random rand = new Random();
-            double u1 = 1.0 - rand.NextDouble();
-            double u2 = 1.0 - rand.NextDouble();
-            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
-                Math.Sin(2.0 * Math.PI * u2);
+            double sample1 = 1.0 - rand.NextDouble();
+            double sample2 = 1.0 - rand.NextDouble();
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(sample1)) *
+                Math.Sin(2.0 * Math.PI * sample2);
 
             double randNormal =
              crossoverMean + stdDev * randStdNormal; //random normal(mean,stdDev^2)

@@ -14,6 +14,7 @@ namespace EvolutionSim.Sprites
         protected int defaultHealth;
         protected int Health { get; set; }
         public event EventHandler DeathOccurred;
+        private const int DEATH_THRESHOLD = 0;
 
         /// <summary>
         /// Create a static sprite from a given texture and rectangle
@@ -67,7 +68,7 @@ namespace EvolutionSim.Sprites
         public virtual void DecreaseHealth(int value)
         {
             Health -= value;
-            if (Health <= 0)
+            if (Health <= DEATH_THRESHOLD)
             {
                 DeathOccurred?.Invoke(this, EventArgs.Empty);
             }

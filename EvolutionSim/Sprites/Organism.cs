@@ -13,6 +13,9 @@ namespace EvolutionSim.Sprites
 
         public const int DETECTION_RADIUS = 5;
         public const int DETECTION_DIAMETER = DETECTION_RADIUS * 2;
+        private const int INCREMENT_HEALTH = 1;
+        private const float EATING_REGEN = 0.4f;
+        private const float SCALE_MULTIPLIER = 0.2f;
 
         // Breed attributes
         public Attributes Attributes { get; }
@@ -48,7 +51,8 @@ namespace EvolutionSim.Sprites
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * 0.5f; // TODO: if organisms never get stronger, this can be pre-calculated at birth
+            //this is where the size of the organism is calculated based on strengh
+            var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
 
             if (IsSelected)
             {
@@ -64,9 +68,9 @@ namespace EvolutionSim.Sprites
         
         public void Eat()
         {
-            Hunger += 0.04f;
+            Hunger += EATING_REGEN;
 
-            IncreaseHealth(1);
+            IncreaseHealth(INCREMENT_HEALTH);
         }
         
         public override void SetScreenPosition(int x, int y)
