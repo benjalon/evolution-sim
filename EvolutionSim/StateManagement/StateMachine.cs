@@ -15,11 +15,24 @@ namespace EvolutionSim.StateManagement
         
         public event EventHandler MatingOccurred;
 
+        delegate bool checkPathPresent(Organism org);
+        checkPathPresent hasPath = organism => organism.Path.Count == 1;
+        private const double matingThreshold = 0.8;
+        private const double hungryThreshold = 0.4;
+        private const int starvingThreshold = 0;
+        private const int dyingThreshold = 1000;
+        private const float hungryRate = 0.001f;
+
         public StateMachine()
         {
             this.state = new State();
         }
 
+        /// <summary>
+        /// call statemachine methods for each tick of the timer
+        /// </summary>
+        /// <param name="grid"></param>
+        /// <param name="timeManager"></param>
         public void UpdateStates(Grid grid, TimeManager timeManager)
         {
             Organism organism;
