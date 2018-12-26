@@ -288,6 +288,19 @@ namespace EvolutionSim
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(organism).Center));
             }
         }
+        public void AddOrganisms(Attributes attributes, int amount)
+        {
+            Organism organism;
+            for (var i = 0; i < amount; i++)
+            {
+                organism = new Organism(attributes, this.healthbarTextures);
+                PositionAtRandom(organism);
+                particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(organism).Center));
+            }
+
+
+
+        }
 
         public void AddFoods(int amount)
         {

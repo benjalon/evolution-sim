@@ -29,6 +29,11 @@ namespace EvolutionSim
         private double fps = 0;
         private double fpsOld = 0;
 
+        // Need to figure out a way around this
+        private Dictionary<String, Texture2D> SetupSimulationTextures;
+        private Attributes startingArributes;
+        private int InitPopulation = 0;
+
 
 
         public Graphics()
@@ -48,6 +53,7 @@ namespace EvolutionSim
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
+
             base.Initialize();
         }
 
@@ -56,7 +62,7 @@ namespace EvolutionSim
         /// </summary>
         protected override void LoadContent()
         {
-            switch (state)
+             switch (state)
             {
                 case Utility.GameState.StartMenu:
                     LoadStartMenu();
@@ -64,9 +70,12 @@ namespace EvolutionSim
                 case Utility.GameState.Running:
                     LoadSimulation();
                     break;
+                case Utility.GameState.Setup:
+                    LoadSetupSimulation();
+                    break;
                 case Utility.GameState.Exit:
                     Exit();
-                    break;  
+                    break;
             }
 
         }
@@ -82,10 +91,16 @@ namespace EvolutionSim
             HorizontalLine horizontalLine = new HorizontalLine(Anchor.TopCenter, new Vector2(0, WINDOW_HEIGHT / 4));
             horizontalLine.Padding = new Vector2(10, 10);
 
-            Button create = new Button("Create", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50), new Vector2(0, WINDOW_HEIGHT / 8));
-            Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50));
-            create.OnClick = (Entity btn) => {
+            Button sandboxMode = new Button("Sandbox Mode", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50), new Vector2(0, WINDOW_HEIGHT / 8));
+            Button simulationSetup = new Button("Setup Simulation", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+            Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+            sandboxMode.OnClick = (Entity btn) => {
                 state = Utility.GameState.Running;
+                UserInterface.Active.Clear();
+                LoadContent();
+            };
+            simulationSetup.OnClick = (Entity btn) => {
+                state = Utility.GameState.Setup;
                 UserInterface.Active.Clear();
                 LoadContent();
             };
@@ -97,7 +112,8 @@ namespace EvolutionSim
 
             UserInterface.Active.AddEntity(header);
             UserInterface.Active.AddEntity(horizontalLine);
-            UserInterface.Active.AddEntity(create);
+            UserInterface.Active.AddEntity(sandboxMode);
+            UserInterface.Active.AddEntity(simulationSetup);
             UserInterface.Active.AddEntity(exit);
         }
         private void LoadSimulation()
@@ -137,6 +153,171 @@ namespace EvolutionSim
             this.overlay.DrawingSettingChanged += DrawingSettingChangedHandler;
             this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
             this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
+            this.simulation.AddOrganisms(startingArributes, InitPopulation);
+                }
+
+
+        private void LoadSetupSimulation()
+        {
+            UserInterface.Active.UseRenderTarget = true;
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Main Panel
+            Panel mainPanel = new Panel(new Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT/1.25f));
+       
+            Header title = new Header("Create Organism");
+            HorizontalLine titleLine = new HorizontalLine();
+            // Species Name Controls
+            Label input = new Label("Input Species Name:");
+            TextInput speciesName = new TextInput();
+            
+            // Species Appearance Controls
+            DropDown textureName = new DropDown();
+            textureName.AddItem("bear_0");
+            textureName.AddItem("bear_1");
+            textureName.AddItem("bear_2");
+            textureName.AddItem("bear_3");
+            textureName.AddItem("bear_4");
+            
+            HorizontalLine speciesLine = new HorizontalLine();
+
+            Panel speciesTexturePanel = new Panel(new Vector2(mainPanel.Size.X / 4, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterLeft, offset: new Vector2(0,mainPanel.Padding.Y*2)) ;
+            Panel attributePanel = new Panel(new Vector2(mainPanel.Size.X - speciesTexturePanel.Size.X - mainPanel.Padding.X*2, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterRight, offset: new Vector2(0, mainPanel.Padding.Y * 2));
+
+
+            Image textureImage = new Image(Content.Load<Texture2D>("Species_Obese_Bear_0"),drawMode: ImageDrawMode.Stretch);
+            speciesTexturePanel.AddChild(textureImage);
+
+            SetupSimulationTextures = new Dictionary<string, Texture2D>
+            {
+                { "bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
+                { "bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
+                { "bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2") },
+                { "bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3") },
+                { "bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
+
+            };
+            Paragraph attributeSelection = new Paragraph("Attribute Selection: ");
+
+            // Attributes
+            Label labelStartHealth = new Label("Start Health: ");
+            TextInput startHealth = new TextInput();
+            startHealth.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
+
+            Label labelStartSpeed = new Label("Start Speed: ");
+            TextInput startSpeed = new TextInput();
+            startSpeed.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
+
+
+            Label labelStartStrength = new Label("Start Strength: ");
+            TextInput startStrength = new TextInput();
+            startStrength.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
+
+
+            // Resist Cold DropDown
+            Label labelResistCold = new Label("Resist Cold: ");
+            DropDown resistColdChoice = new DropDown();
+            resistColdChoice.AddItem("True");
+            resistColdChoice.AddItem("False");
+
+            // Resist Heat DropDown
+            Label labelResistHeat = new Label("Resist Heat: ");
+            DropDown resistHeatChoice = new DropDown();
+            resistHeatChoice.AddItem("True");
+            resistHeatChoice.AddItem("False");
+
+            // Diet Type DropDown
+            Label labelDietType = new Label("Diet Type: ");
+            DropDown dietTypeChoice = new DropDown();
+            dietTypeChoice.AddItem("Herbivore");
+            dietTypeChoice.AddItem("Carnivore");
+            dietTypeChoice.AddItem("Omnivore");
+
+            
+
+            Label labelInitialPopulation = new Label("Initial Population: ");
+            TextInput initialPopulation = new TextInput();
+            initialPopulation.Size = new Vector2(mainPanel.Size.X / 2, mainPanel.Size.Y/15);
+            initialPopulation.Anchor = Anchor.AutoCenter;
+            initialPopulation.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
+
+
+            
+            // Adding elements to UI and panel
+            UserInterface.Active.AddEntity(mainPanel);
+            mainPanel.AddChild(title);
+            mainPanel.AddChild(titleLine);
+            mainPanel.AddChild(input);
+            mainPanel.AddChild(speciesName);
+            mainPanel.AddChild(speciesLine);
+            mainPanel.AddChild(textureName);
+            mainPanel.AddChild(speciesTexturePanel);
+            
+
+            // Attributes
+            attributePanel.AddChild(attributeSelection);
+            attributePanel.AddChild(labelStartHealth);
+            attributePanel.AddChild(startHealth);
+            attributePanel.AddChild(labelStartSpeed);
+            attributePanel.AddChild(startSpeed);
+            attributePanel.AddChild(labelStartStrength);
+            attributePanel.AddChild(startStrength);
+            attributePanel.AddChild(labelResistCold);
+            attributePanel.AddChild(resistColdChoice);
+            attributePanel.AddChild(labelResistHeat);
+            attributePanel.AddChild(resistHeatChoice);
+            attributePanel.AddChild(labelDietType);
+            attributePanel.AddChild(dietTypeChoice);
+
+
+
+            mainPanel.AddChild(attributePanel);
+            mainPanel.AddChild(labelInitialPopulation);
+            mainPanel.AddChild(initialPopulation);
+
+            Button finished = new Button("Finished!", size: new Vector2(mainPanel.Size.X / 2, mainPanel.Size.Y / 20), anchor: Anchor.AutoCenter);
+            finished.OnClick = (Entity btn) =>
+            {
+                startingArributes = new Attributes();
+                startingArributes.Species = speciesName.Value;
+                startingArributes.Texture = textureImage.Texture;
+                switch (dietTypeChoice.SelectedValue)
+                {
+                    case "Omnivore":
+                        startingArributes.DietType = DietTypes.Omnivore;
+                        break;
+                    case "Herbivore":
+                        startingArributes.DietType = DietTypes.Herbivore;
+                        break;
+                    case "Carnivore":
+                        startingArributes.DietType = DietTypes.Canivore;
+                        break;
+                }
+                startingArributes.MaxHealth = Convert.ToInt32(startHealth.Value);
+                startingArributes.Speed = Convert.ToInt32(startSpeed.Value);
+                startingArributes.Strength = Convert.ToInt32(startStrength.Value);
+                startingArributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
+                startingArributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
+                InitPopulation = Convert.ToInt32(initialPopulation.Value);
+                UserInterface.Active.Clear();
+                state = Utility.GameState.Running;
+                LoadContent();
+            };
+
+            mainPanel.AddChild(finished);
+
+
+            attributePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
+
+            textureName.OnValueChange = (Entity entity) =>
+            {
+                textureImage.Texture = SetupSimulationTextures[textureName.SelectedValue];
+            };
+
+            
+
+
+
+
         }
 
         /// <summary>
@@ -191,6 +372,7 @@ namespace EvolutionSim
             this.spriteBatch.End();
 
             // Draw UI elements on top
+
             UserInterface.Active.DrawMainRenderTarget(spriteBatch);
 
             base.Draw(gameTime);
