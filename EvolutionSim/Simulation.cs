@@ -122,6 +122,7 @@ namespace EvolutionSim
             var matingArgs = (MatingArgs)args;
             var mother = matingArgs.Mother;
             var father = matingArgs.Father;
+            var mutation = matingArgs.Mutation;
             var positioned = false;
 
             var orderedMaxHealth = MakeUseableValues(mother.Attributes.MaxHealth, father.Attributes.MaxHealth);
