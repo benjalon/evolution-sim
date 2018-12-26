@@ -171,6 +171,7 @@ namespace EvolutionSim
             textureName.AddItem("bear_2");
             textureName.AddItem("bear_3");
             textureName.AddItem("bear_4");
+            
             HorizontalLine speciesLine = new HorizontalLine();
 
             Panel speciesTexturePanel = new Panel(new Vector2(mainPanel.Size.X / 4, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterLeft, offset: new Vector2(0,mainPanel.Padding.Y*2)) ;
@@ -201,11 +202,18 @@ namespace EvolutionSim
             Label labelStartStrength = new Label("Start Strength: ");
             TextInput startStrength = new TextInput();
 
+            // Resist Cold DropDown
             Label labelResistCold = new Label("Resist Cold: ");
-            TextInput resistCold = new TextInput();
+            DropDown resistColdChoice = new DropDown();
+            resistColdChoice.AddItem("True");
+            resistColdChoice.AddItem("False");
 
+            // Resist Heat DropDown
             Label labelResistHeat = new Label("Resist Heat: ");
-            TextInput resistHeat = new TextInput();
+            DropDown resistHeatChoice = new DropDown();
+            resistHeatChoice.AddItem("True");
+            resistHeatChoice.AddItem("False");
+
 
 
 
@@ -230,16 +238,21 @@ namespace EvolutionSim
             attributePanel.AddChild(labelStartStrength);
             attributePanel.AddChild(startStrength);
             attributePanel.AddChild(labelResistCold);
-            attributePanel.AddChild(resistCold);
+            attributePanel.AddChild(resistColdChoice);
             attributePanel.AddChild(labelResistHeat);
-            attributePanel.AddChild(resistHeat);
+            attributePanel.AddChild(resistHeatChoice);
+            //attributePanel.AddChild(resistHeatTrue);
+            //attributePanel.AddChild(resistHeatFalse);
 
 
             mainPanel.AddChild(attributePanel);
 
             attributePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
 
-            // mainPanel.AddChild(textureImage);
+            textureName.OnValueChange = (Entity entity) =>
+            {
+                textureImage.Texture = testingText[textureName.SelectedValue];
+            };
 
         }
 
@@ -295,6 +308,7 @@ namespace EvolutionSim
             this.spriteBatch.End();
 
             // Draw UI elements on top
+
             UserInterface.Active.DrawMainRenderTarget(spriteBatch);
 
             base.Draw(gameTime);
