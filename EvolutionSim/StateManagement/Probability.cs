@@ -19,9 +19,6 @@ namespace EvolutionSim.StateManagement
     class Probability
     {
 
-        private Organism mother;
-        private Organism father;
-
         //histogram to hold species distribution
         private int speciesDistribution;
 
@@ -31,18 +28,6 @@ namespace EvolutionSim.StateManagement
         private const int stdDev = 1;
 
         Random random = new Random();
-
-        //need to call the probability constructor to return a 
-        //probability object to give the chances of mutation
-        public Probability(Organism organismFirst, Organism organismSecond)
-        {
-
-            mother = organismFirst;
-            father = organismSecond;
-
-
-
-        }
 
         /// <summary>
         /// default constructor

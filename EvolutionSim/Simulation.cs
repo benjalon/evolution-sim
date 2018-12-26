@@ -119,11 +119,22 @@ namespace EvolutionSim
 
         public void BirthHandler(object sender, EventArgs args)
         {
+
+
+            const float EXTREME = 0.4f;
+            const float MIDDLE = 0.2f;
+            const float MILD = 0.1f;
+   
             var matingArgs = (MatingArgs)args;
             var mother = matingArgs.Mother;
             var father = matingArgs.Father;
             var mutation = matingArgs.Mutation;
             var positioned = false;
+
+            bool ResistHeat;
+            bool ResistCold;
+            double newStrength;
+            double newSpeed;
 
             var orderedMaxHealth = MakeUseableValues(mother.Attributes.MaxHealth, father.Attributes.MaxHealth);
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
@@ -140,6 +151,86 @@ namespace EvolutionSim
                 ResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold,
                 ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistHeat : mother.Attributes.ResistHeat,
             };
+
+            //this takes into account the stdDeviation from the normal
+            //workout an average of the mother and father's attributes
+            //then offset the change based on the mutation variation
+            switch (mutation)
+            {
+                //organism is not resistant to cold or hot, and is crippled in both strength and speed (it will die fast)
+                case MatingArgs.Severity.ExtremelyBad:
+
+                    ResistCold = false;
+                    ResistHot = false;
+
+                    //take an average of the parents strength and speed then take away according to mutation category
+                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2)/2 - EXTREME;
+                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) - EXTREME;
+                    
+
+                    break;
+                case MatingArgs.Severity.MiddleBad:
+
+                    ResistCold = false;
+                    ResistHot = false;
+
+                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2) / 2 - MIDDLE;
+                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) - MIDDLE;
+
+                    break;
+
+                case MatingArgs.Severity.MildBad:
+
+                    ResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold;
+                    ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistHeat : mother.Attributes.ResistHeat;
+
+                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2) / 2 - MILD;
+                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) - MILD;
+
+                    break;
+
+                case MatingArgs.Severity.MildGood:
+
+                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2) / 2 + MILD;
+                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) + MILD;
+
+                    break;
+
+
+                case MatingArgs.Severity.MiddleGood:
+
+                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2) / 2 + MIDDLE;
+                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) + MIDDLE;
+
+                    break;
+
+
+                case MatingArgs.Severity.ExtremelyGood:
+
+                    ResistCold = true;
+                    ResistHot = true;
+
+
+                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2) / 2 + EXTREME;
+                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) + EXTREME;
+
+                    break;
+
+            }
+
+
+
+            var advancedCrossBreed = new Attributes()
+            {
+                //randomly pick between the mother and fathers for the following components:
+                Species = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.Species : mother.Attributes.Species,
+                Texture = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Texture : mother.Texture,
+                DietType = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.DietType : mother.Attributes.DietType,
+
+            };
+
+
+            
 
             var child = new Organism(simpleCrossbreed, this.healthbarTextures);
 
