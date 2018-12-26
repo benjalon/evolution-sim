@@ -29,6 +29,11 @@ namespace EvolutionSim
         private double fps = 0;
         private double fpsOld = 0;
 
+        // Need to figure out a way around this
+        private Dictionary<String, Texture2D> SetupSimulationTextures;
+        private Attributes startingArributes;
+        private int InitPopulation = 0;
+
 
 
         public Graphics()
@@ -57,7 +62,7 @@ namespace EvolutionSim
         /// </summary>
         protected override void LoadContent()
         {
-            switch (state)
+             switch (state)
             {
                 case Utility.GameState.StartMenu:
                     LoadStartMenu();
@@ -148,9 +153,10 @@ namespace EvolutionSim
             this.overlay.DrawingSettingChanged += DrawingSettingChangedHandler;
             this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
             this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
-        }
+            this.simulation.AddOrganisms(startingArributes, InitPopulation);
+                }
 
-        private Dictionary<String, Texture2D> testingText;
+
         private void LoadSetupSimulation()
         {
             UserInterface.Active.UseRenderTarget = true;
@@ -181,7 +187,7 @@ namespace EvolutionSim
             Image textureImage = new Image(Content.Load<Texture2D>("Species_Obese_Bear_0"),drawMode: ImageDrawMode.Stretch);
             speciesTexturePanel.AddChild(textureImage);
 
-            testingText = new Dictionary<string, Texture2D>
+            SetupSimulationTextures = new Dictionary<string, Texture2D>
             {
                 { "bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
                 { "bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
@@ -220,7 +226,7 @@ namespace EvolutionSim
             resistHeatChoice.AddItem("False");
 
             // Diet Type DropDown
-            Label labelDietType = new Label("Resist Heat: ");
+            Label labelDietType = new Label("Diet Type: ");
             DropDown dietTypeChoice = new DropDown();
             dietTypeChoice.AddItem("Herbivore");
             dietTypeChoice.AddItem("Carnivore");
@@ -235,7 +241,7 @@ namespace EvolutionSim
             initialPopulation.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
 
 
-            Button finished = new Button("Finished!",size: new Vector2(mainPanel.Size.X/2, mainPanel.Size.Y/20),anchor: Anchor.AutoCenter);
+            
             // Adding elements to UI and panel
             UserInterface.Active.AddEntity(mainPanel);
             mainPanel.AddChild(title);
@@ -259,12 +265,44 @@ namespace EvolutionSim
             attributePanel.AddChild(resistColdChoice);
             attributePanel.AddChild(labelResistHeat);
             attributePanel.AddChild(resistHeatChoice);
+            attributePanel.AddChild(labelDietType);
+            attributePanel.AddChild(dietTypeChoice);
 
 
 
             mainPanel.AddChild(attributePanel);
             mainPanel.AddChild(labelInitialPopulation);
             mainPanel.AddChild(initialPopulation);
+
+            Button finished = new Button("Finished!", size: new Vector2(mainPanel.Size.X / 2, mainPanel.Size.Y / 20), anchor: Anchor.AutoCenter);
+            finished.OnClick = (Entity btn) =>
+            {
+                startingArributes = new Attributes();
+                startingArributes.Species = speciesName.Value;
+                startingArributes.Texture = textureImage.Texture;
+                switch (dietTypeChoice.SelectedValue)
+                {
+                    case "Omnivore":
+                        startingArributes.DietType = DietTypes.Omnivore;
+                        break;
+                    case "Herbivore":
+                        startingArributes.DietType = DietTypes.Herbivore;
+                        break;
+                    case "Carnivore":
+                        startingArributes.DietType = DietTypes.Canivore;
+                        break;
+                }
+                startingArributes.MaxHealth = Convert.ToInt32(startHealth.Value);
+                startingArributes.Speed = Convert.ToInt32(startSpeed.Value);
+                startingArributes.Strength = Convert.ToInt32(startStrength.Value);
+                startingArributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
+                startingArributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
+                InitPopulation = Convert.ToInt32(initialPopulation.Value);
+                UserInterface.Active.Clear();
+                state = Utility.GameState.Running;
+                LoadContent();
+            };
+
             mainPanel.AddChild(finished);
 
 
@@ -272,8 +310,13 @@ namespace EvolutionSim
 
             textureName.OnValueChange = (Entity entity) =>
             {
-                textureImage.Texture = testingText[textureName.SelectedValue];
+                textureImage.Texture = SetupSimulationTextures[textureName.SelectedValue];
             };
+
+            
+
+
+
 
         }
 

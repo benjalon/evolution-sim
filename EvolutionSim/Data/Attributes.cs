@@ -12,5 +12,6 @@ namespace EvolutionSim.Data
         public float Strength { get; set; }
         public bool ResistCold { get; set; }
         public bool ResistHeat { get; set; }
+
     }
 }
