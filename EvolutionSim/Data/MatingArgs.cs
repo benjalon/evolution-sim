@@ -14,7 +14,7 @@ namespace EvolutionSim.Data
         {
             ExtremelyBad,
             MiddleBad,
-            MidBad,
+            MildBad,
             MildGood,
             MiddleGood,
             ExtremelyGood,
@@ -38,14 +38,10 @@ namespace EvolutionSim.Data
             //then calculate the severity of the mutation based on a guassian value
             Probability generateMutation = new Probability();
             double guassianValue = generateMutation.generateCrossoverMutationValue();
-
             calculateSeverity(guassianValue);
 
 
-
         }
-
-
 
         /// <summary>
         /// This method calculates how drastic the childs stats should be relative to the parents
@@ -55,7 +51,7 @@ namespace EvolutionSim.Data
         {
             //this is the tail end of our distribution, less than 5% of cases should appear with 
             //this sort of mutation
-            if (mutationRating < -2)
+            if (mutationRating <= -2)
             {
                 this.Mutation = Severity.ExtremelyBad;
 
@@ -65,6 +61,13 @@ namespace EvolutionSim.Data
             {
 
                 this.Mutation = Severity.MiddleBad;
+
+            }
+
+            if(mutationRating >= -1 && mutationRating < 0)
+            {
+
+                this.Mutation = Severity.MildBad;
 
             }
 
