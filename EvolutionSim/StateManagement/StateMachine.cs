@@ -3,7 +3,7 @@ using EvolutionSim.Sprites;
 using EvolutionSim.TileGrid;
 using EvolutionSim.Utility;
 using System;
-
+ 
 namespace EvolutionSim.StateManagement
 {
     //State Machine Class

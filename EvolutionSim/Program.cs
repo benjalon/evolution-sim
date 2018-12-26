@@ -2,6 +2,8 @@
 {
     public class Program
     {
+
+        
         static void Main()
         {
             var graphics = new Graphics();
