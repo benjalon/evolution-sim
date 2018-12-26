@@ -39,7 +39,7 @@ namespace EvolutionSim.Utility
             Probability generateMutation = new Probability();
             double guassianValue = generateMutation.generateCrossoverMutationValue();
 
-            matingArgs.calculateSeverity(guassianValue);
+            calculateSeverity(guassianValue);
 
 
 
