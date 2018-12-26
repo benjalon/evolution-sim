@@ -156,7 +156,7 @@ namespace EvolutionSim
             UserInterface.Active.UseRenderTarget = true;
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
             // Main Panel
-            Panel mainPanel = new Panel(new Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT/1.5f));
+            Panel mainPanel = new Panel(new Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT/1.25f));
        
             Header title = new Header("Create Organism");
             HorizontalLine titleLine = new HorizontalLine();
@@ -195,12 +195,17 @@ namespace EvolutionSim
             // Attributes
             Label labelStartHealth = new Label("Start Health: ");
             TextInput startHealth = new TextInput();
+            startHealth.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
 
             Label labelStartSpeed = new Label("Start Speed: ");
             TextInput startSpeed = new TextInput();
+            startSpeed.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
+
 
             Label labelStartStrength = new Label("Start Strength: ");
             TextInput startStrength = new TextInput();
+            startStrength.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
+
 
             // Resist Cold DropDown
             Label labelResistCold = new Label("Resist Cold: ");
@@ -214,10 +219,23 @@ namespace EvolutionSim
             resistHeatChoice.AddItem("True");
             resistHeatChoice.AddItem("False");
 
+            // Diet Type DropDown
+            Label labelDietType = new Label("Resist Heat: ");
+            DropDown dietTypeChoice = new DropDown();
+            dietTypeChoice.AddItem("Herbivore");
+            dietTypeChoice.AddItem("Carnivore");
+            dietTypeChoice.AddItem("Omnivore");
+
+            
+
+            Label labelInitialPopulation = new Label("Initial Population: ");
+            TextInput initialPopulation = new TextInput();
+            initialPopulation.Size = new Vector2(mainPanel.Size.X / 2, mainPanel.Size.Y/15);
+            initialPopulation.Anchor = Anchor.AutoCenter;
+            initialPopulation.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
 
 
-
-
+            Button finished = new Button("Finished!",size: new Vector2(mainPanel.Size.X/2, mainPanel.Size.Y/20),anchor: Anchor.AutoCenter);
             // Adding elements to UI and panel
             UserInterface.Active.AddEntity(mainPanel);
             mainPanel.AddChild(title);
@@ -241,11 +259,14 @@ namespace EvolutionSim
             attributePanel.AddChild(resistColdChoice);
             attributePanel.AddChild(labelResistHeat);
             attributePanel.AddChild(resistHeatChoice);
-            //attributePanel.AddChild(resistHeatTrue);
-            //attributePanel.AddChild(resistHeatFalse);
+
 
 
             mainPanel.AddChild(attributePanel);
+            mainPanel.AddChild(labelInitialPopulation);
+            mainPanel.AddChild(initialPopulation);
+            mainPanel.AddChild(finished);
+
 
             attributePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
 
