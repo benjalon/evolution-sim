@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EvolutionSim.TileGrid;
-using EvolutionSim.TileGrid.GridItems;
 
 /// <summary>
 /// This class is to return probabilites based on the distribution of organisms on screen 
