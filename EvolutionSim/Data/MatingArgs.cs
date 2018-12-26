@@ -33,7 +33,7 @@ namespace EvolutionSim.Data
 
         public MatingArgs(Organism father, Organism organism) : base()
         {
-            Father = organism;
+            Father = father;
             Mother = organism;
 
             //Generate a probability variable
