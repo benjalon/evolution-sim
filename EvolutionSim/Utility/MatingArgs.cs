@@ -21,6 +21,9 @@ namespace EvolutionSim.Utility
 
         }
 
+        //could be used later on to get rid of "magic numbers in code"
+        private int StdDeviation;
+
         public Organism Father { get; private set; }
         public Organism Mother { get; private set; }
 
@@ -35,11 +38,15 @@ namespace EvolutionSim.Utility
             //then calculate the severity of the mutation based on a guassian value
             Probability generateMutation = new Probability();
             double guassianValue = generateMutation.generateCrossoverMutationValue();
-            calculateSeverity(guassianValue);
+
+            matingArgs.calculateSeverity(guassianValue);
 
 
 
         }
+
+
+
 
         /// <summary>
         /// This method calculates how drastic the childs stats should be relative to the parents
@@ -66,6 +73,7 @@ namespace EvolutionSim.Utility
 
             }
 
+            //If within a single positive standard devation of the mean
             else if(mutationRating >= 0 && mutationRating < 1)
             {
 
@@ -75,6 +83,7 @@ namespace EvolutionSim.Utility
 
             }
 
+            //otherwise if the mutation is between 1 and 2 positive standard deviations of the mean
             else if(mutationRating >= 1 && mutationRating < 2)
             {
 
@@ -85,6 +94,7 @@ namespace EvolutionSim.Utility
 
             }
 
+            //else must be over 2 postitive standard deviations
             else
             {
 

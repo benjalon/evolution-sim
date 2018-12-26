@@ -31,20 +31,7 @@ namespace EvolutionSim.Logic
         private List<Breed> bearBreeds;
 
 
-        /// <summary>
-        /// this enum is used to show the severity of mutations based on the return from the probability class
-        /// </summary>
-        private enum Severity
-        {
-            ExtremelyBad,
-            MiddleBad,
-            MidBad,
-            MildGood, 
-            ExtremelyGood,
-           
 
-
-        }
 
 
         public Simulation(Dictionary<string, Texture2D> textures)
@@ -156,6 +143,8 @@ namespace EvolutionSim.Logic
         public void BirthHandler(object sender, EventArgs args)
         {
             var matingArgs = (MatingArgs)args;
+
+        
             var mother = matingArgs.Mother;
             var father = matingArgs.Father;
             var positioned = false;
@@ -163,6 +152,8 @@ namespace EvolutionSim.Logic
             var orderedMaxHealth = MakeUseableValues(mother.Attributes.MaxHealth, father.Attributes.MaxHealth);
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
             var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
+
+            //here we need to handle the mutation within the crossover
 
             var simpleCrossbreed = new Breed()
             {
