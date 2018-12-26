@@ -47,7 +47,6 @@ namespace EvolutionSim.Data
 
 
 
-
         /// <summary>
         /// This method calculates how drastic the childs stats should be relative to the parents
         /// </summary>
@@ -65,11 +64,7 @@ namespace EvolutionSim.Data
             else if (mutationRating >= -2 && mutationRating < -1)
             {
 
-
-
                 this.Mutation = Severity.MiddleBad;
-
-
 
             }
 
