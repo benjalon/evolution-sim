@@ -48,6 +48,7 @@ namespace EvolutionSim
         protected override void Initialize()
         {
             UserInterface.Initialize(Content, BuiltinThemes.hd);
+
             base.Initialize();
         }
 
@@ -64,9 +65,12 @@ namespace EvolutionSim
                 case Utility.GameState.Running:
                     LoadSimulation();
                     break;
+                case Utility.GameState.Setup:
+                    LoadSetupSimulation();
+                    break;
                 case Utility.GameState.Exit:
                     Exit();
-                    break;  
+                    break;
             }
 
         }
@@ -82,10 +86,16 @@ namespace EvolutionSim
             HorizontalLine horizontalLine = new HorizontalLine(Anchor.TopCenter, new Vector2(0, WINDOW_HEIGHT / 4));
             horizontalLine.Padding = new Vector2(10, 10);
 
-            Button create = new Button("Create", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50), new Vector2(0, WINDOW_HEIGHT / 8));
-            Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 8, 50));
-            create.OnClick = (Entity btn) => {
+            Button sandboxMode = new Button("Sandbox Mode", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50), new Vector2(0, WINDOW_HEIGHT / 8));
+            Button simulationSetup = new Button("Setup Simulation", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+            Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+            sandboxMode.OnClick = (Entity btn) => {
                 state = Utility.GameState.Running;
+                UserInterface.Active.Clear();
+                LoadContent();
+            };
+            simulationSetup.OnClick = (Entity btn) => {
+                state = Utility.GameState.Setup;
                 UserInterface.Active.Clear();
                 LoadContent();
             };
@@ -97,7 +107,8 @@ namespace EvolutionSim
 
             UserInterface.Active.AddEntity(header);
             UserInterface.Active.AddEntity(horizontalLine);
-            UserInterface.Active.AddEntity(create);
+            UserInterface.Active.AddEntity(sandboxMode);
+            UserInterface.Active.AddEntity(simulationSetup);
             UserInterface.Active.AddEntity(exit);
         }
         private void LoadSimulation()
@@ -137,6 +148,60 @@ namespace EvolutionSim
             this.overlay.DrawingSettingChanged += DrawingSettingChangedHandler;
             this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
             this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
+        }
+
+        private Dictionary<String, Texture2D> testingText;
+        private void LoadSetupSimulation()
+        {
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+            // Main Panel
+            Panel mainPanel = new Panel(new Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT/1.5f));
+       
+            Header title = new Header("Create Organism");
+            HorizontalLine titleLine = new HorizontalLine();
+            // Species Name Controls
+            Label input = new Label("Input Species Name:");
+            TextInput speciesName = new TextInput();
+
+            // Species Appearance Controls
+            DropDown textureName = new DropDown();
+            textureName.AddItem("bear_0");
+            textureName.AddItem("bear_1");
+            textureName.AddItem("bear_2");
+            textureName.AddItem("bear_3");
+            textureName.AddItem("bear_4");
+            HorizontalLine speciesLine = new HorizontalLine();
+
+            Panel speciesTexturePanel = new Panel(new Vector2(mainPanel.Size.X/4,mainPanel.Size.Y/2.5f),anchor: Anchor.AutoInline) ;
+
+            Image textureImage = new Image(Content.Load<Texture2D>("Species_Obese_Bear_0"),drawMode: ImageDrawMode.Stretch);
+            speciesTexturePanel.AddChild(textureImage);
+
+            testingText = new Dictionary<string, Texture2D>
+            {
+                { "bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
+                { "bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
+                { "bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2") },
+                { "bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3") },
+                { "bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
+
+            };
+           
+            // Attributes
+            //Label startHealth = new Label("StartHe")
+
+            // Adding elements to UI and panel
+            UserInterface.Active.AddEntity(mainPanel);
+            mainPanel.AddChild(title);
+            mainPanel.AddChild(titleLine);
+            mainPanel.AddChild(input);
+            mainPanel.AddChild(speciesName);
+            mainPanel.AddChild(speciesLine);
+            mainPanel.AddChild(textureName);
+            mainPanel.AddChild(speciesTexturePanel);
+
+            // mainPanel.AddChild(textureImage);
+
         }
 
         /// <summary>
