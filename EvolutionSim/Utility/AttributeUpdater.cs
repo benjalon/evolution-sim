@@ -10,9 +10,9 @@ namespace EvolutionSim.Utility
 {
     public static class AttributeUpdater
     {
-        private const int starvingThreshold = 0;
-        private const int dyingThreshold = 1000;
-        private const float hungryRate = 0.001f;
+        private const int STARVING_THRESHOLD = 0;
+        private const int DYING_THRESHOLD = 1000;
+        private const float HUNGRY_RATE = 0.001f;
 
         public static void UpdateAttributes(List<Organism> organisms, WeatherSettings weatherSettings, Boolean SimulationTick, TimeManager timeManager)
         {
@@ -65,10 +65,10 @@ namespace EvolutionSim.Utility
         private static void UpdateAgeAttribute(Organism organism)
         {
             organism.Age += 1;
-            if (organism.Age > dyingThreshold)
+            if (organism.Age > DYING_THRESHOLD)
             {
                 //kill the organism
-                organism.DecreaseHealth(dyingThreshold);
+                organism.DecreaseHealth(DYING_THRESHOLD);
             }
 
 
@@ -77,7 +77,7 @@ namespace EvolutionSim.Utility
         {
             if (organism.Hunger > 0)
             {
-                organism.Hunger -= hungryRate;
+                organism.Hunger -= HUNGRY_RATE;
                 //organism.IncreaseHealth(1); // TODO: Maybe organisms should heal up over time?
             }
             else //organism is starving so reduce health
