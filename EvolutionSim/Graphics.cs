@@ -153,6 +153,7 @@ namespace EvolutionSim
         private Dictionary<String, Texture2D> testingText;
         private void LoadSetupSimulation()
         {
+            UserInterface.Active.UseRenderTarget = true;
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
             // Main Panel
             Panel mainPanel = new Panel(new Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT/1.5f));
@@ -162,7 +163,7 @@ namespace EvolutionSim
             // Species Name Controls
             Label input = new Label("Input Species Name:");
             TextInput speciesName = new TextInput();
-
+            
             // Species Appearance Controls
             DropDown textureName = new DropDown();
             textureName.AddItem("bear_0");
@@ -172,7 +173,9 @@ namespace EvolutionSim
             textureName.AddItem("bear_4");
             HorizontalLine speciesLine = new HorizontalLine();
 
-            Panel speciesTexturePanel = new Panel(new Vector2(mainPanel.Size.X/4,mainPanel.Size.Y/2.5f),anchor: Anchor.AutoInline) ;
+            Panel speciesTexturePanel = new Panel(new Vector2(mainPanel.Size.X / 4, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterLeft, offset: new Vector2(0,mainPanel.Padding.Y*2)) ;
+            Panel attributePanel = new Panel(new Vector2(mainPanel.Size.X - speciesTexturePanel.Size.X - mainPanel.Padding.X*2, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterRight, offset: new Vector2(0, mainPanel.Padding.Y * 2));
+
 
             Image textureImage = new Image(Content.Load<Texture2D>("Species_Obese_Bear_0"),drawMode: ImageDrawMode.Stretch);
             speciesTexturePanel.AddChild(textureImage);
@@ -186,9 +189,26 @@ namespace EvolutionSim
                 { "bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
 
             };
-           
+            Paragraph attributeSelection = new Paragraph("Attribute Selection: ");
+
             // Attributes
-            //Label startHealth = new Label("StartHe")
+            Label labelStartHealth = new Label("Start Health: ");
+            TextInput startHealth = new TextInput();
+
+            Label labelStartSpeed = new Label("Start Speed: ");
+            TextInput startSpeed = new TextInput();
+
+            Label labelStartStrength = new Label("Start Strength: ");
+            TextInput startStrength = new TextInput();
+
+            Label labelResistCold = new Label("Resist Cold: ");
+            TextInput resistCold = new TextInput();
+
+            Label labelResistHeat = new Label("Resist Heat: ");
+            TextInput resistHeat = new TextInput();
+
+
+
 
             // Adding elements to UI and panel
             UserInterface.Active.AddEntity(mainPanel);
@@ -199,6 +219,25 @@ namespace EvolutionSim
             mainPanel.AddChild(speciesLine);
             mainPanel.AddChild(textureName);
             mainPanel.AddChild(speciesTexturePanel);
+            
+
+            // Attributes
+            attributePanel.AddChild(attributeSelection);
+            attributePanel.AddChild(labelStartHealth);
+            attributePanel.AddChild(startHealth);
+            attributePanel.AddChild(labelStartSpeed);
+            attributePanel.AddChild(startSpeed);
+            attributePanel.AddChild(labelStartStrength);
+            attributePanel.AddChild(startStrength);
+            attributePanel.AddChild(labelResistCold);
+            attributePanel.AddChild(resistCold);
+            attributePanel.AddChild(labelResistHeat);
+            attributePanel.AddChild(resistHeat);
+
+
+            mainPanel.AddChild(attributePanel);
+
+            attributePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
 
             // mainPanel.AddChild(textureImage);
 
