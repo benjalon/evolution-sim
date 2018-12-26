@@ -44,12 +44,13 @@ namespace EvolutionSim.StateManagement
 
         }
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
         public Probability()
         {
 
-
-
-
+     
         }
 
         /// <summary>
