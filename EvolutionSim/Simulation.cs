@@ -246,12 +246,7 @@ namespace EvolutionSim
             #endregion
 
 
-
-          
-
-            
-
-            var child = new Organism(advancedCrossBreed, this.healthbarTextures);
+            var child = new Organism(simpleCrossbreed, this.healthbarTextures);
 
             // Top left corner
             var birthSpot = mother.GridIndex;
