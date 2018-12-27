@@ -333,12 +333,20 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-            UserInterface.Active.Update(gameTime);
-            if (state == Utility.GameState.Running)
+
+            switch (state)
             {
-                this.simulation.Update(gameTime);
-                this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
+
+                case Utility.GameState.Running:
+                    this.simulation.Update(gameTime);
+                    this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
+                    break;
+                case Utility.GameState.StartMenu:
+                    break;
+
             }
+            UserInterface.Active.Update(gameTime);
+
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
@@ -365,10 +373,15 @@ namespace EvolutionSim
 
             // Draw graphical elements
             this.spriteBatch.Begin();
-            if (state == Utility.GameState.Running)
+            switch (state)
             {
-                this.simulation.Draw(this.spriteBatch);
+                case Utility.GameState.Running:
+                    this.simulation.Draw(this.spriteBatch);
+                    break;
+                case Utility.GameState.StartMenu:
+                    break;
             }
+
             this.spriteBatch.End();
 
             // Draw UI elements on top
