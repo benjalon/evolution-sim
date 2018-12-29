@@ -17,7 +17,7 @@ namespace EvolutionSim.UI
         private Panel speciesTexturePanel;
         private Panel attributePanel;
 
-        private TextInput speciesName;
+        public TextInput speciesName;
         private TextInput startHealth;
         private TextInput startSpeed;
         private TextInput startStrength;

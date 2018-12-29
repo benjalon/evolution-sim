@@ -19,7 +19,7 @@ namespace EvolutionSim.UI
     {
         private Panel mainPanel;
 
-
+        private Button setupComplete;
 
 
         public static Boolean SetupFinished = false;
@@ -29,7 +29,6 @@ namespace EvolutionSim.UI
         private TextInput numSpeciesInput;
         private int numSpecies = 0;
 
-        private List<String> textureNameList;
 
         public SetupSimulation()
         {
@@ -68,30 +67,43 @@ namespace EvolutionSim.UI
 
         private void CheckSpeciesNumber()
         {
-            if(numSpecies > 0 && numSpecies < 6)
+            if (numSpecies > 0 && numSpecies < 6)
             {
                 UserInterface.Active.Clear();
                 this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
-
+                setupComplete = new Button("Finish");
+ 
+                UserInterface.Active.AddEntity(setupComplete);
                 //this.mainPanel = new Panel();
 
                 PanelTabs tabs = new PanelTabs();
                 this.mainPanel.AddChild(tabs);
+                TabData tab;
 
-                TabData tab = tabs.AddTab("Organism 1", PanelSkin.Golden);
-                //tab.button.Offset = new Vector2(0,Graphics.WINDOW_HEIGHT/20);
-                //tab.button.Padding = new Vector2;
-                tab.panel.AddChild(new SetupSimulationPanel(tab.button.Size.Y));
-                tab = tabs.AddTab("+", PanelSkin.Golden);
-                tab.button.BringToFront();
-                tab.panel.AddChild(new Panel());
+                for (int i = 0; i < numSpecies; i++)
+                {
+                    tab = tabs.AddTab("Organism " + (i + 1), PanelSkin.Golden);
+                    tab.panel.AddChild(new SetupSimulationPanel(tab.button.Size.Y));
+
+                }
+                setupComplete.OnClick = (Entity button) =>
+                {
+                    TabData speciesTab;
+                    for (int i = 0; i < numSpecies; i++)
+                    {
+                       tabs.SelectTab("Organism " + (i + 1));
+                       speciesTab = tabs.ActiveTab;
+                       Console.WriteLine(((SetupSimulationPanel)speciesTab.panel.Children.First()).speciesName.Value);
+                       
+                    }
+
+                };
                 UserInterface.Active.AddEntity(mainPanel);
+  
 
 
             }
-           
         }
-
         /// <summary>
         /// Take input from input devices
         /// </summary>
