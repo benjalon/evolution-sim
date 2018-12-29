@@ -25,6 +25,9 @@ namespace EvolutionSim
         
         private Overlay overlay;
         private Simulation simulation;
+        private SetupSimulation setupSimulation;
+
+        public static Dictionary<String, Texture2D> SimulationTextures;
 
         private double fps = 0;
         private double fpsOld = 0;
@@ -55,6 +58,29 @@ namespace EvolutionSim
             UserInterface.Initialize(Content, BuiltinThemes.hd);
 
             base.Initialize();
+
+            // Load textures
+            SimulationTextures = new Dictionary<string, Texture2D>
+            {
+                { "grass_background", Content.Load<Texture2D>("Grass") },
+                { "hot_overlay", Content.Load<Texture2D>("Hot") },
+                { "cold_overlay", Content.Load<Texture2D>("Cold") },
+                { "organism_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
+                { "organism_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
+                { "organism_2", Content.Load<Texture2D>("Species_Obese_Bear_2") },
+                { "organism_3", Content.Load<Texture2D>("Species_Obese_Bear_3") },
+                { "organism_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
+                { "food", Content.Load<Texture2D>("Food") },
+                { "meat", Content.Load<Texture2D>("Meat") },
+                { "tile", Content.Load<Texture2D>("Tile") },
+                { "mountain", Content.Load<Texture2D>("Mountain") },
+                { "water", Content.Load<Texture2D>("Water") },
+                { "healthbar_green", Content.Load<Texture2D>("Healthbar_Green") },
+                { "healthbar_red", Content.Load<Texture2D>("Healthbar_Red") },
+                { "circle", Content.Load<Texture2D>("Circle") },
+                { "star", Content.Load<Texture2D>("Star") },
+                { "diamond", Content.Load<Texture2D>("Diamond") }
+            };
         }
 
         /// <summary>
@@ -71,7 +97,7 @@ namespace EvolutionSim
                     LoadSimulation();
                     break;
                 case Utility.GameState.Setup:
-                    LoadSetupSimulation();
+                     this.setupSimulation = new SetupSimulation();
                     break;
                 case Utility.GameState.Exit:
                     Exit();
@@ -121,29 +147,11 @@ namespace EvolutionSim
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Load textures
-            var textures = new Dictionary<string, Texture2D>
+            this.simulation = new Simulation();
+            if (this.setupSimulation != null)
             {
-                { "grass_background", Content.Load<Texture2D>("Grass") },
-                { "hot_overlay", Content.Load<Texture2D>("Hot") },
-                { "cold_overlay", Content.Load<Texture2D>("Cold") },
-                { "bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
-                { "bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
-                { "bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2") },
-                { "bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3") },
-                { "bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
-                { "food", Content.Load<Texture2D>("Food") },
-                { "meat", Content.Load<Texture2D>("Meat") },
-                { "tile", Content.Load<Texture2D>("Tile") },
-                { "mountain", Content.Load<Texture2D>("Mountain") },
-                { "water", Content.Load<Texture2D>("Water") },
-                { "healthbar_green", Content.Load<Texture2D>("Healthbar_Green") },
-                { "healthbar_red", Content.Load<Texture2D>("Healthbar_Red") },
-                { "circle", Content.Load<Texture2D>("Circle") },
-                { "star", Content.Load<Texture2D>("Star") },
-                { "diamond", Content.Load<Texture2D>("Diamond") }
-            };
-            this.simulation = new Simulation(textures);
+                this.simulation.AddOrganisms(this.setupSimulation.startingArributes,this.setupSimulation.InitPopulation);
+            }
             //var organismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
 
             // Move this?
@@ -157,168 +165,6 @@ namespace EvolutionSim
                 }
 
 
-        private void LoadSetupSimulation()
-        {
-            UserInterface.Active.UseRenderTarget = true;
-            this.spriteBatch = new SpriteBatch(GraphicsDevice);
-            // Main Panel
-            Panel mainPanel = new Panel(new Vector2(WINDOW_WIDTH/2, WINDOW_HEIGHT/1.25f));
-       
-            Header title = new Header("Create Organism");
-            HorizontalLine titleLine = new HorizontalLine();
-            // Species Name Controls
-            Label input = new Label("Input Species Name:");
-            TextInput speciesName = new TextInput();
-            
-            // Species Appearance Controls
-            DropDown textureName = new DropDown();
-            textureName.AddItem("bear_0");
-            textureName.AddItem("bear_1");
-            textureName.AddItem("bear_2");
-            textureName.AddItem("bear_3");
-            textureName.AddItem("bear_4");
-            
-            HorizontalLine speciesLine = new HorizontalLine();
-
-            Panel speciesTexturePanel = new Panel(new Vector2(mainPanel.Size.X / 4, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterLeft, offset: new Vector2(0,mainPanel.Padding.Y*2)) ;
-            Panel attributePanel = new Panel(new Vector2(mainPanel.Size.X - speciesTexturePanel.Size.X - mainPanel.Padding.X*2, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterRight, offset: new Vector2(0, mainPanel.Padding.Y * 2));
-
-
-            Image textureImage = new Image(Content.Load<Texture2D>("Species_Obese_Bear_0"),drawMode: ImageDrawMode.Stretch);
-            speciesTexturePanel.AddChild(textureImage);
-
-            SetupSimulationTextures = new Dictionary<string, Texture2D>
-            {
-                { "bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
-                { "bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
-                { "bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2") },
-                { "bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3") },
-                { "bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
-
-            };
-            Paragraph attributeSelection = new Paragraph("Attribute Selection: ");
-
-            // Attributes
-            Label labelStartHealth = new Label("Start Health: ");
-            TextInput startHealth = new TextInput();
-            startHealth.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
-
-            Label labelStartSpeed = new Label("Start Speed: ");
-            TextInput startSpeed = new TextInput();
-            startSpeed.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
-
-
-            Label labelStartStrength = new Label("Start Strength: ");
-            TextInput startStrength = new TextInput();
-            startStrength.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
-
-
-            // Resist Cold DropDown
-            Label labelResistCold = new Label("Resist Cold: ");
-            DropDown resistColdChoice = new DropDown();
-            resistColdChoice.AddItem("True");
-            resistColdChoice.AddItem("False");
-
-            // Resist Heat DropDown
-            Label labelResistHeat = new Label("Resist Heat: ");
-            DropDown resistHeatChoice = new DropDown();
-            resistHeatChoice.AddItem("True");
-            resistHeatChoice.AddItem("False");
-
-            // Diet Type DropDown
-            Label labelDietType = new Label("Diet Type: ");
-            DropDown dietTypeChoice = new DropDown();
-            dietTypeChoice.AddItem("Herbivore");
-            dietTypeChoice.AddItem("Carnivore");
-            dietTypeChoice.AddItem("Omnivore");
-
-            
-
-            Label labelInitialPopulation = new Label("Initial Population: ");
-            TextInput initialPopulation = new TextInput();
-            initialPopulation.Size = new Vector2(mainPanel.Size.X / 2, mainPanel.Size.Y/15);
-            initialPopulation.Anchor = Anchor.AutoCenter;
-            initialPopulation.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
-
-
-            
-            // Adding elements to UI and panel
-            UserInterface.Active.AddEntity(mainPanel);
-            mainPanel.AddChild(title);
-            mainPanel.AddChild(titleLine);
-            mainPanel.AddChild(input);
-            mainPanel.AddChild(speciesName);
-            mainPanel.AddChild(speciesLine);
-            mainPanel.AddChild(textureName);
-            mainPanel.AddChild(speciesTexturePanel);
-            
-
-            // Attributes
-            attributePanel.AddChild(attributeSelection);
-            attributePanel.AddChild(labelStartHealth);
-            attributePanel.AddChild(startHealth);
-            attributePanel.AddChild(labelStartSpeed);
-            attributePanel.AddChild(startSpeed);
-            attributePanel.AddChild(labelStartStrength);
-            attributePanel.AddChild(startStrength);
-            attributePanel.AddChild(labelResistCold);
-            attributePanel.AddChild(resistColdChoice);
-            attributePanel.AddChild(labelResistHeat);
-            attributePanel.AddChild(resistHeatChoice);
-            attributePanel.AddChild(labelDietType);
-            attributePanel.AddChild(dietTypeChoice);
-
-
-
-            mainPanel.AddChild(attributePanel);
-            mainPanel.AddChild(labelInitialPopulation);
-            mainPanel.AddChild(initialPopulation);
-
-            Button finished = new Button("Finished!", size: new Vector2(mainPanel.Size.X / 2, mainPanel.Size.Y / 20), anchor: Anchor.AutoCenter);
-            finished.OnClick = (Entity btn) =>
-            {
-                startingArributes = new Attributes();
-                startingArributes.Species = speciesName.Value;
-                startingArributes.Texture = textureImage.Texture;
-                switch (dietTypeChoice.SelectedValue)
-                {
-                    case "Omnivore":
-                        startingArributes.DietType = DietTypes.Omnivore;
-                        break;
-                    case "Herbivore":
-                        startingArributes.DietType = DietTypes.Herbivore;
-                        break;
-                    case "Carnivore":
-                        startingArributes.DietType = DietTypes.Canivore;
-                        break;
-                }
-                startingArributes.MaxHealth = Convert.ToInt32(startHealth.Value);
-                startingArributes.Speed = Convert.ToInt32(startSpeed.Value);
-                startingArributes.Strength = Convert.ToInt32(startStrength.Value);
-                startingArributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
-                startingArributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
-                InitPopulation = Convert.ToInt32(initialPopulation.Value);
-                UserInterface.Active.Clear();
-                state = Utility.GameState.Running;
-                LoadContent();
-            };
-
-            mainPanel.AddChild(finished);
-
-
-            attributePanel.PanelOverflowBehavior = PanelOverflowBehavior.VerticalScroll;
-
-            textureName.OnValueChange = (Entity entity) =>
-            {
-                textureImage.Texture = SetupSimulationTextures[textureName.SelectedValue];
-            };
-
-            
-
-
-
-
-        }
 
         /// <summary>
         /// Asset unloading
@@ -333,12 +179,33 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-            UserInterface.Active.Update(gameTime);
-            if (state == Utility.GameState.Running)
+
+            switch (state)
             {
-                this.simulation.Update(gameTime);
-                this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
+
+                case Utility.GameState.Running:
+                    this.simulation.Update(gameTime);
+                    this.overlay.Update(gameTime, simulation.GridInteractionManager.SelectedOrganism);
+                    break;
+                case Utility.GameState.Setup:
+                    if (SetupSimulation.SetupFinished)
+                    {
+                        state = Utility.GameState.Running;
+                        UserInterface.Active.Clear();
+                        LoadContent();
+                        
+
+                    }
+                    else
+                    {
+                        this.setupSimulation.Update(gameTime);
+                    }
+                    break;
+
+
             }
+            UserInterface.Active.Update(gameTime);
+
             // Take updates from input devices
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
@@ -359,17 +226,26 @@ namespace EvolutionSim
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
-            UserInterface.Active.Draw(spriteBatch); // Draw UI elements (doesn't affect draw order because it draws to a render target
-            
+            UserInterface.Active.Draw(spriteBatch);
             //this.WriteFPS(gameTime);
 
             // Draw graphical elements
             this.spriteBatch.Begin();
-            if (state == Utility.GameState.Running)
+            switch (state)
             {
-                this.simulation.Draw(this.spriteBatch);
+                case Utility.GameState.Running:
+                    this.simulation.Draw(this.spriteBatch);
+                    break;
+                case Utility.GameState.StartMenu:
+                    break;
+                case Utility.GameState.Setup:
+                    //this.setupSimulation.Draw(this.spriteBatch);
+                    break;
             }
+
             this.spriteBatch.End();
+             // Draw UI elements (doesn't affect draw order because it draws to a render target
+
 
             // Draw UI elements on top
 

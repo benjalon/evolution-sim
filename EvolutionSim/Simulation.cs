@@ -12,7 +12,7 @@ namespace EvolutionSim
 {
     public class Simulation
     {
-        private readonly Dictionary<string, Texture2D> textures;
+
         private readonly Tuple<Texture2D, Texture2D> healthbarTextures;
 
         private readonly StateMachine fsm;
@@ -28,26 +28,26 @@ namespace EvolutionSim
 
         private readonly List<Attributes> bearBreeds;
 
-        public Simulation(Dictionary<string, Texture2D> textures)
+        public Simulation()
         {
-            this.textures = textures;
 
-            this.particleTextures = new List<Texture2D>() { this.textures["star"], this.textures["diamond"], this.textures["circle"] };
+
+            this.particleTextures = new List<Texture2D>() { Graphics.SimulationTextures["star"], Graphics.SimulationTextures["diamond"], Graphics.SimulationTextures["circle"] };
 
             this.bearBreeds = new List<Attributes>()
             {
-                new Attributes() { Species = "MiniGreen", Texture = textures["bear_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
-                new Attributes() { Species = "MysteryPurp", Texture = textures["bear_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
-                new Attributes() { Species = "Blastoise", Texture = textures["bear_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
-                new Attributes() { Species = "AngryRed", Texture = textures["bear_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
-                new Attributes() { Species = "YellowBoi", Texture = textures["bear_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
+                new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
+                new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
+                new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
+                new Attributes() { Species = "AngryRed", Texture = Graphics.SimulationTextures["organism_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
+                new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
             };
 
-            this.healthbarTextures = new Tuple<Texture2D, Texture2D>(textures["healthbar_red"], textures["healthbar_green"]);
+            this.healthbarTextures = new Tuple<Texture2D, Texture2D>(Graphics.SimulationTextures["healthbar_red"], Graphics.SimulationTextures["healthbar_green"]);
 
-            this.background = new FullScreenSprite(textures["grass_background"]);
+            this.background = new FullScreenSprite(Graphics.SimulationTextures["grass_background"]);
 
-            this.grid = new Grid(textures["tile"], textures["mountain"], textures["water"]);
+            this.grid = new Grid(Graphics.SimulationTextures["tile"], Graphics.SimulationTextures["mountain"], Graphics.SimulationTextures["water"]);
             this.grid.ShouldSpawnCorpse += SpawnCorpseHandler;
 
             this.TimeManager = new TimeManager();
@@ -55,9 +55,9 @@ namespace EvolutionSim
             this.fsm = new StateMachine();
             this.fsm.MatingOccurred += this.BirthHandler;
 
-            this.GridInteractionManager = new GridInteractionManager(textures["tile"]);
+            this.GridInteractionManager = new GridInteractionManager(Graphics.SimulationTextures["tile"]);
 
-            this.WeatherOverlay = new WeatherOverlay(textures["cold_overlay"], textures["hot_overlay"]);
+            this.WeatherOverlay = new WeatherOverlay(Graphics.SimulationTextures["cold_overlay"], Graphics.SimulationTextures["hot_overlay"]);
         }
 
         public void Update(GameTime gameTime)
@@ -307,7 +307,7 @@ namespace EvolutionSim
             Food food;
             for (var i = 0; i < amount; i++)
             {
-                food = new Food(this.textures["food"], true, Graphics.RANDOM.Next(3, Food.MAX_GRASS_HEALTH));
+                food = new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(3, Food.MAX_GRASS_HEALTH));
                 PositionAtRandom(food);
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(food).Center));
             }
@@ -325,7 +325,7 @@ namespace EvolutionSim
 
         public void AddFood(int x, int y)
         {
-            var positioned = this.grid.AttemptToPositionAt(new Food(this.textures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
+            var positioned = this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
             if (positioned)
             {
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(x, y).Center));
@@ -349,7 +349,7 @@ namespace EvolutionSim
         {
             var organism = ((Organism)sender);
             var tile = (Tile)grid.GetTileAt(organism);
-            this.grid.AttemptToPositionAt(new Food(this.textures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);
+            this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);
         }
     }
 }
