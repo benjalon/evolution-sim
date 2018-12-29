@@ -56,6 +56,7 @@ namespace EvolutionSim.UI
             Label input = new Label("Input Species Name:");
             this.speciesName = new TextInput();
 
+
             // ---------------------------------------------------
             // Species Appearance Controls
             this.textureName = new DropDown();
