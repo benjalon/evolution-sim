@@ -38,7 +38,9 @@ namespace EvolutionSim.UI
         private Dictionary<string, Texture2D> SetupSimulationTextures;
 
         public static Boolean SetupFinished = false;
-        private Attributes startingArributes;
+        public Attributes startingArributes;
+        public int InitPopulation;
+
         private List<String> textureNameList;
 
         public SetupSimulation()
@@ -131,9 +133,9 @@ namespace EvolutionSim.UI
             this.finishedButton.OnClick = (Entity btn) =>
             {
                 SetupFinished = true;
-                startingArributes = new Attributes();
-                startingArributes.Species = speciesName.Value;
-                startingArributes.Texture = textureImage.Texture;
+                this.startingArributes = new Attributes();
+                this.startingArributes.Species = speciesName.Value;
+                this.startingArributes.Texture = textureImage.Texture;
                 switch (dietTypeChoice.SelectedValue)
                 {
                     case "Omnivore":
@@ -146,14 +148,12 @@ namespace EvolutionSim.UI
                         startingArributes.DietType = DietTypes.Canivore;
                         break;
                 }
-                startingArributes.MaxHealth = Convert.ToInt32(startHealth.Value);
-                startingArributes.Speed = Convert.ToInt32(startSpeed.Value);
-                startingArributes.Strength = Convert.ToInt32(startStrength.Value);
-                startingArributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
-                startingArributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
-                //InitPopulation = Convert.ToInt32(initialPopulation.Value);
-                UserInterface.Active.Clear();
-                //state = Utility.GameState.Running;
+                this.startingArributes.MaxHealth = Convert.ToInt32(startHealth.Value);
+                this.startingArributes.Speed = Convert.ToInt32(startSpeed.Value);
+                this.startingArributes.Strength = Convert.ToInt32(startStrength.Value);
+                this.startingArributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
+                this.startingArributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
+                this.InitPopulation = Convert.ToInt32(startPopulation.Value);
                 //LoadContent();
             };
         }
@@ -168,7 +168,7 @@ namespace EvolutionSim.UI
 
             textureName.OnValueChange = (Entity entity) =>
             {
-                textureImage.Texture = SetupSimulationTextures[textureName.SelectedValue];
+                textureImage.Texture = Graphics.SimulationTextures[textureName.SelectedValue];
             };
         }
         private void CreateAttributePanel()

@@ -147,8 +147,11 @@ namespace EvolutionSim
             // Create a new SpriteBatch, which can be used to draw textures.
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
-           
-            this.simulation = new Simulation(SimulationTextures);
+            this.simulation = new Simulation();
+            if (this.setupSimulation != null)
+            {
+                this.simulation.AddOrganisms(this.setupSimulation.startingArributes,this.setupSimulation.InitPopulation);
+            }
             //var organismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
 
             // Move this?
@@ -189,6 +192,8 @@ namespace EvolutionSim
                     {
                         state = Utility.GameState.Running;
                         UserInterface.Active.Clear();
+                        LoadContent();
+                        
 
                     }
                     else
@@ -221,7 +226,7 @@ namespace EvolutionSim
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
-            
+            UserInterface.Active.Draw(spriteBatch);
             //this.WriteFPS(gameTime);
 
             // Draw graphical elements
@@ -239,7 +244,7 @@ namespace EvolutionSim
             }
 
             this.spriteBatch.End();
-            UserInterface.Active.Draw(spriteBatch); // Draw UI elements (doesn't affect draw order because it draws to a render target
+             // Draw UI elements (doesn't affect draw order because it draws to a render target
 
 
             // Draw UI elements on top
