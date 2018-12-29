@@ -35,7 +35,6 @@ namespace EvolutionSim.UI
         private Button finishedButton;
 
         private Image textureImage;
-        private Dictionary<string, Texture2D> SetupSimulationTextures;
 
         public static Boolean SetupFinished = false;
         public Attributes startingArributes;
@@ -48,8 +47,28 @@ namespace EvolutionSim.UI
             UserInterface.Active.UseRenderTarget = true;
             UserInterface.Active.CursorScale = 0.5f;
 
-            this.CreatePanels();
-   
+            this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
+            //this.mainPanel = new Panel();
+
+            PanelTabs tabs = new PanelTabs();
+            this.mainPanel.AddChild(tabs);
+
+            TabData tab = tabs.AddTab("Organism 1",PanelSkin.Golden);
+            //tab.button.Offset = new Vector2(0,Graphics.WINDOW_HEIGHT/20);
+            //tab.button.Padding = new Vector2;
+            tab.panel.AddChild(new SetupSimulationPanel(tab.button.Size.Y));
+            tab = tabs.AddTab("Organism 2", PanelSkin.Golden);
+            tab.button.BringToFront();
+
+            tab.panel.AddChild(new SetupSimulationPanel(tab.button.Size.Y));
+
+            // tab = tabs.AddTab("Tab 2");
+            //tab.panel = new SetupSimulationPanel();
+
+            UserInterface.Active.AddEntity(mainPanel);
+
+            //this.CreatePanels();
+
 
         }
 
