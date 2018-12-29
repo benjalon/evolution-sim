@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace EvolutionSim.UI
@@ -36,11 +37,17 @@ namespace EvolutionSim.UI
         private Image textureImage;
         private Dictionary<string, Texture2D> SetupSimulationTextures;
 
+        public static Boolean SetupFinished = false;
+        private Attributes startingArributes;
+        private List<String> textureNameList;
+
         public SetupSimulation()
         {
             UserInterface.Active.UseRenderTarget = true;
             UserInterface.Active.CursorScale = 0.5f;
 
+            this.CreatePanels();
+   
 
         }
 
@@ -67,7 +74,7 @@ namespace EvolutionSim.UI
             UserInterface.Active.Draw(spriteBatch);
         }
 
-        private void CreateMainPanel()
+        private void CreatePanels()
         {
             this.mainPanel= new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
 
@@ -80,11 +87,11 @@ namespace EvolutionSim.UI
             // ---------------------------------------------------
             // Species Appearance Controls
             this.textureName = new DropDown();
-            this.textureName.AddItem("bear_0");
-            this.textureName.AddItem("bear_1");
-            this.textureName.AddItem("bear_2");
-            this.textureName.AddItem("bear_3");
-            this.textureName.AddItem("bear_4");
+
+
+            this.textureNameList =  Graphics.SimulationTextures.Keys.Where(name => name.Contains("organism_")).ToList();
+            textureNameList.ForEach(item => this.textureName.AddItem(item));
+
 
             HorizontalLine speciesLine = new HorizontalLine();
 
@@ -95,9 +102,10 @@ namespace EvolutionSim.UI
             mainPanel.AddChild(speciesName);
             mainPanel.AddChild(speciesLine);
             mainPanel.AddChild(textureName);
-            mainPanel.AddChild(speciesTexturePanel);
 
             CreateTexturePanel();
+            mainPanel.AddChild(speciesTexturePanel);
+
             CreateAttributePanel();
 
 
@@ -122,6 +130,7 @@ namespace EvolutionSim.UI
         {
             this.finishedButton.OnClick = (Entity btn) =>
             {
+                SetupFinished = true;
                 startingArributes = new Attributes();
                 startingArributes.Species = speciesName.Value;
                 startingArributes.Texture = textureImage.Texture;
@@ -142,10 +151,10 @@ namespace EvolutionSim.UI
                 startingArributes.Strength = Convert.ToInt32(startStrength.Value);
                 startingArributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
                 startingArributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
-                InitPopulation = Convert.ToInt32(initialPopulation.Value);
+                //InitPopulation = Convert.ToInt32(initialPopulation.Value);
                 UserInterface.Active.Clear();
-                state = Utility.GameState.Running;
-                LoadContent();
+                //state = Utility.GameState.Running;
+                //LoadContent();
             };
         }
 
@@ -153,16 +162,9 @@ namespace EvolutionSim.UI
         {
             this.speciesTexturePanel = new Panel(new Vector2(mainPanel.Size.X / 4, mainPanel.Size.Y / 2.5f), anchor: Anchor.CenterLeft, offset: new Vector2(0, mainPanel.Padding.Y * 2));
             //this.textureImage = new Image(Microsoft.Xna.Framework.Content.Conte.Load<Texture2D>("Species_Obese_Bear_0"), drawMode: ImageDrawMode.Stretch);
+            textureImage = new Image (Graphics.SimulationTextures[textureNameList.First()]);
             this.speciesTexturePanel.AddChild(textureImage);
-            SetupSimulationTextures = new Dictionary<string, Texture2D>
-            {
-                { "bear_0", Content.Load<Texture2D>("Species_Obese_Bear_0") },
-                { "bear_1", Content.Load<Texture2D>("Species_Obese_Bear_1") },
-                { "bear_2", Content.Load<Texture2D>("Species_Obese_Bear_2") },
-                { "bear_3", Content.Load<Texture2D>("Species_Obese_Bear_3") },
-                { "bear_4", Content.Load<Texture2D>("Species_Obese_Bear_4") },
 
-            };
 
             textureName.OnValueChange = (Entity entity) =>
             {
