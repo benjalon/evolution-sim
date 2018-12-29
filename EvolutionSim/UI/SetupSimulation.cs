@@ -23,7 +23,6 @@ namespace EvolutionSim.UI
 
 
         public static Boolean SetupFinished = false;
-        public Attributes startingArributes;
         public int InitPopulation;
 
         public List<Attributes> species;
@@ -100,9 +99,10 @@ namespace EvolutionSim.UI
                         Attributes starting;
                         starting = ((SetupSimulationPanel)speciesTab.panel.Children.First()).GetPanelData();
                         species.Add(starting);
+                        
                        
                     }
-
+                    SetupFinished = true;
                 };
                 UserInterface.Active.AddEntity(mainPanel);
   
