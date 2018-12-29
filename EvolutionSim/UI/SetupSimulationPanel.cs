@@ -31,7 +31,6 @@ namespace EvolutionSim.UI
         private Image textureImage;
 
 
-        public Attributes startingArributes;
         public int InitPopulation;
 
 
@@ -45,6 +44,34 @@ namespace EvolutionSim.UI
 
             CreatePanel();
             
+        }
+
+        public Attributes GetPanelData()
+        {
+            Attributes startingAttributes;
+            startingAttributes = new Attributes();
+            startingAttributes.Species = speciesName.Value;
+            startingAttributes.Texture = textureImage.Texture;
+            switch (dietTypeChoice.SelectedValue)
+            {
+                case "Omnivore":
+                    startingAttributes.DietType = DietTypes.Omnivore;
+                    break;
+                case "Herbivore":
+                    startingAttributes.DietType = DietTypes.Herbivore;
+                    break;
+                case "Carnivore":
+                    startingAttributes.DietType = DietTypes.Canivore;
+                    break;
+            }
+            startingAttributes.MaxHealth = Convert.ToInt32(startHealth.Value);
+            startingAttributes.Speed = Convert.ToInt32(startSpeed.Value);
+            startingAttributes.Strength = Convert.ToInt32(startStrength.Value);
+            startingAttributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
+            startingAttributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
+           // this.InitPopulation = Convert.ToInt32(startPopulation.Value);
+
+            return startingAttributes;
         }
 
         private void CreatePanel()

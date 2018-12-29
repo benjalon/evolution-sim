@@ -26,6 +26,8 @@ namespace EvolutionSim.UI
         public Attributes startingArributes;
         public int InitPopulation;
 
+        public List<Attributes> species;
+
         private TextInput numSpeciesInput;
         private int numSpecies = 0;
 
@@ -70,6 +72,8 @@ namespace EvolutionSim.UI
             if (numSpecies > 0 && numSpecies < 6)
             {
                 UserInterface.Active.Clear();
+                species = new List<Attributes>();
+
                 this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
                 setupComplete = new Button("Finish");
  
@@ -91,9 +95,11 @@ namespace EvolutionSim.UI
                     TabData speciesTab;
                     for (int i = 0; i < numSpecies; i++)
                     {
-                       tabs.SelectTab("Organism " + (i + 1));
-                       speciesTab = tabs.ActiveTab;
-                       Console.WriteLine(((SetupSimulationPanel)speciesTab.panel.Children.First()).speciesName.Value);
+                        tabs.SelectTab("Organism " + (i + 1));
+                        speciesTab = tabs.ActiveTab;
+                        Attributes starting;
+                        starting = ((SetupSimulationPanel)speciesTab.panel.Children.First()).GetPanelData();
+                        species.Add(starting);
                        
                     }
 
