@@ -40,7 +40,7 @@ namespace EvolutionSim.UI
 
                 this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
 
-                Label input = new Label("Number of different Species 1-10: ");
+                Label input = new Label("Number of different Species (1-5): ");
                 this.numSpeciesInput = new TextInput();
                 numSpeciesInput.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
 
