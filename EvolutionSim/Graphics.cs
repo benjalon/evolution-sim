@@ -150,7 +150,7 @@ namespace EvolutionSim
             this.simulation = new Simulation();
             if (this.setupSimulation != null)
             {
-                this.simulation.AddOrganisms(this.setupSimulation.startingArributes,this.setupSimulation.InitPopulation);
+                this.simulation.AddOrganisms(this.setupSimulation.species,10);
             }
             //var organismCreateButton = new Button("Organism", ButtonSkin.Default, Anchor.AutoInline, new Vector2(BUTTON_WIDTH, ELEMENT_HEIGHT));
 
@@ -161,7 +161,7 @@ namespace EvolutionSim
             this.overlay.DrawingSettingChanged += DrawingSettingChangedHandler;
             this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
             this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
-            this.simulation.AddOrganisms(startingArributes, InitPopulation);
+            //this.simulation.AddOrganisms(startingArributes, InitPopulation);
                 }
 
 
