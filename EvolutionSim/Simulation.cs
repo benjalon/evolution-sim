@@ -117,6 +117,16 @@ namespace EvolutionSim
             return xIsHigher ? new Tuple<int, int>(y, x) : new Tuple<int, int>(x, y);
         }
 
+
+        //private void calculationHandler(ref float attribute, Tuple attributeTuple)
+        //{
+
+
+
+
+
+        //}
+
         public void BirthHandler(object sender, EventArgs args)
         {
 
@@ -156,6 +166,9 @@ namespace EvolutionSim
             //workout an average of the mother and father's attributes
             //then offset the change based on the mutation variation
 
+
+         
+
             #region Handle Mutation
             switch (mutation)
             {
@@ -166,8 +179,8 @@ namespace EvolutionSim
                     newResistHeat = false;
 
                     //take an average of the parents strength and speed then take away according to mutation category
-                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2)/2 - EXTREME;
-                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) - EXTREME;
+                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - EXTREME;
+                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - EXTREME;
                     
 
                     break;
@@ -176,8 +189,8 @@ namespace EvolutionSim
                     newResistCold = false;
                     newResistHeat = false;
 
-                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2) / 2 - MIDDLE;
-                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) - MIDDLE;
+                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - MIDDLE;
+                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - MIDDLE;
 
                     break;
 
@@ -186,8 +199,8 @@ namespace EvolutionSim
                     newResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold;
                     newResistHeat = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistHeat : mother.Attributes.ResistHeat;
 
-                    newStrength = (orderedStrength.Item1 + orderedStrength.Item2) / 2 - MILD;
-                    newSpeed = (orderedSpeed.Item1 + orderedSpeed.Item2) - MILD;
+                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - MILD;
+                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - MILD;
 
                     break;
 
@@ -196,8 +209,8 @@ namespace EvolutionSim
                     newResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold;
                     newResistHeat = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistHeat : mother.Attributes.ResistHeat;
 
-                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2) / 2) + MILD;
-                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2) / 2) + MILD;
+                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + MILD;
+                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) + MILD;
 
                     break;
 
@@ -207,8 +220,8 @@ namespace EvolutionSim
                     newResistCold = true;
                     newResistHeat = true;
 
-                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2) / 2) + MIDDLE;
-                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)) /2 + MIDDLE;
+                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + MIDDLE;
+                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2) *0.1f /2) + MIDDLE;
 
                     break;
 
@@ -219,8 +232,8 @@ namespace EvolutionSim
                     newResistHeat = true;
 
 
-                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2) / 2) + EXTREME;
-                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2) / 2) + EXTREME;
+                    newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + EXTREME;
+                    newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) + EXTREME;
 
                     break;
 
@@ -246,7 +259,7 @@ namespace EvolutionSim
             #endregion
 
 
-            var child = new Organism(simpleCrossbreed, this.healthbarTextures);
+            var child = new Organism(advancedCrossBreed, this.healthbarTextures);
 
             // Top left corner
             var birthSpot = mother.GridIndex;

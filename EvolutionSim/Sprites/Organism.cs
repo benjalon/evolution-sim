@@ -16,6 +16,7 @@ namespace EvolutionSim.Sprites
         private const int INCREMENT_HEALTH = 1;
         private const float EATING_REGEN = 0.4f;
         private const float SCALE_MULTIPLIER = 0.2f;
+        private const float UPPER_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
 
         // Breed attributes
         public Attributes Attributes { get; }
@@ -53,6 +54,14 @@ namespace EvolutionSim.Sprites
         {
             //this is where the size of the organism is calculated based on strengh
             var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
+
+           if(scaleOffset > UPPER_LIMIT)
+            {
+
+                scaleOffset = UPPER_LIMIT;
+
+            }
+
 
             if (IsSelected)
             {
