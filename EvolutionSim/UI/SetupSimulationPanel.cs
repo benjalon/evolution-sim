@@ -72,12 +72,13 @@ namespace EvolutionSim.UI
                 startingAttributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
                 return startingAttributes;
             }
-            catch {
+            catch (Exception e){
                 return null;
-            }
-            
 
-           // this.InitPopulation = Convert.ToInt32(startPopulation.Value);
+            }
+
+
+            // this.InitPopulation = Convert.ToInt32(startPopulation.Value);
 
         }
 

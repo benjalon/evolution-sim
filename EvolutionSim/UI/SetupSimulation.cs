@@ -24,6 +24,8 @@ namespace EvolutionSim.UI
 
 
         public static Boolean SetupFinished = false;
+        private Boolean inputError = false;
+
         public int InitPopulation;
 
         public List<Attributes> species;
@@ -77,7 +79,7 @@ namespace EvolutionSim.UI
                 this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
                 setupComplete = new Button("Finish");
                 errorMessage = new Header("");
- 
+
                 //this.mainPanel = new Panel();
 
                 PanelTabs tabs = new PanelTabs();
@@ -100,43 +102,33 @@ namespace EvolutionSim.UI
                         speciesTab = tabs.ActiveTab;
                         Nullable<Attributes> starting;
                         starting = ((SetupSimulationPanel)speciesTab.panel.Children.First()).GetPanelData();
-                        Attributes toReturn;
-                        toReturn = starting.GetValueOrDefault();
-                        species.Add(toReturn);
-                        
-                       
-                    }
-                    SetupFinished = true;
-                };
-                UserInterface.Active.AddEntity(mainPanel);
-                UserInterface.Active.AddEntity(setupComplete);
-                UserInterface.Active.AddEntity(errorMessage);
+                        if (starting.HasValue)
+                        {
+                            Attributes toReturn;
+                            toReturn = starting.GetValueOrDefault();
+                            species.Add(toReturn);
+                        }
 
-                tabs.OnValueChange = (Entity panelTabs) =>
-                {
-                    TabData currentTab;
-                    currentTab = tabs.ActiveTab;
-                    Nullable<Attributes> starting;
-                    starting = ((SetupSimulationPanel)currentTab.panel.Children.First()).GetPanelData();
-                    if (!starting.HasValue)
-                    {
-                        tabs.SelectTab(currentTab.name);
-                        errorMessage.Text = "Invalid input";
+
+
+                    }
+                    if(species.Count != numSpecies){
+                        SetupFinished = false;
+                        species.Clear();
                     }
                     else
                     {
-                        errorMessage.Text = "";
-
+                        SetupFinished = true;
                     }
-
-
-
                 };
+                UserInterface.Active.AddEntity(setupComplete);
+
+                UserInterface.Active.AddEntity(mainPanel);
+                UserInterface.Active.AddEntity(errorMessage);
 
 
 
-
-            }
+                }
         }
         /// <summary>
         /// Take input from input devices
