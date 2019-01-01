@@ -39,39 +39,46 @@ namespace EvolutionSim.UI
         public SetupSimulationPanel(float tabButtonSIze)
         {
 
-            //base.Size = 
             this.Size = (new Vector2(Graphics.WINDOW_WIDTH/2.0f, (Graphics.WINDOW_HEIGHT / 1.25f)- tabButtonSIze));
 
             CreatePanel();
             
         }
 
-        public Attributes GetPanelData()
+        public Nullable<Attributes> GetPanelData()
         {
-            Attributes startingAttributes;
-            startingAttributes = new Attributes();
-            startingAttributes.Species = speciesName.Value;
-            startingAttributes.Texture = textureImage.Texture;
-            switch (dietTypeChoice.SelectedValue)
+            try
             {
-                case "Omnivore":
-                    startingAttributes.DietType = DietTypes.Omnivore;
-                    break;
-                case "Herbivore":
-                    startingAttributes.DietType = DietTypes.Herbivore;
-                    break;
-                case "Carnivore":
-                    startingAttributes.DietType = DietTypes.Canivore;
-                    break;
+                Attributes startingAttributes;
+                startingAttributes = new Attributes();
+                startingAttributes.Species = speciesName.Value;
+                startingAttributes.Texture = textureImage.Texture;
+                switch (dietTypeChoice.SelectedValue)
+                {
+                    case "Omnivore":
+                        startingAttributes.DietType = DietTypes.Omnivore;
+                        break;
+                    case "Herbivore":
+                        startingAttributes.DietType = DietTypes.Herbivore;
+                        break;
+                    case "Carnivore":
+                        startingAttributes.DietType = DietTypes.Canivore;
+                        break;
+                }
+                startingAttributes.MaxHealth = Convert.ToInt32(startHealth.Value);
+                startingAttributes.Speed = Convert.ToInt32(startSpeed.Value);
+                startingAttributes.Strength = Convert.ToInt32(startStrength.Value);
+                startingAttributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
+                startingAttributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
+                return startingAttributes;
             }
-            startingAttributes.MaxHealth = Convert.ToInt32(startHealth.Value);
-            startingAttributes.Speed = Convert.ToInt32(startSpeed.Value);
-            startingAttributes.Strength = Convert.ToInt32(startStrength.Value);
-            startingAttributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
-            startingAttributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
+            catch {
+                return null;
+            }
+            
+
            // this.InitPopulation = Convert.ToInt32(startPopulation.Value);
 
-            return startingAttributes;
         }
 
         private void CreatePanel()
@@ -108,15 +115,8 @@ namespace EvolutionSim.UI
             CreateAttributePanel();
 
 
-            Label labelStartPopulation = new Label("Initial Population: ");
-            this.startPopulation = new TextInput();
-            this.startPopulation.Size = new Vector2(this.Size.X / 2, this.Size.Y / 15);
-            this.startPopulation.Anchor = Anchor.AutoCenter;
-            this.startPopulation.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
-
+ 
             this.AddChild(attributePanel);
-            this.AddChild(labelStartPopulation);
-            this.AddChild(startPopulation);
         }
 
 

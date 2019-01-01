@@ -20,6 +20,7 @@ namespace EvolutionSim.UI
         private Panel mainPanel;
 
         private Button setupComplete;
+        private Header errorMessage;
 
 
         public static Boolean SetupFinished = false;
@@ -75,11 +76,12 @@ namespace EvolutionSim.UI
 
                 this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
                 setupComplete = new Button("Finish");
+                errorMessage = new Header("");
  
-                UserInterface.Active.AddEntity(setupComplete);
                 //this.mainPanel = new Panel();
 
                 PanelTabs tabs = new PanelTabs();
+
                 this.mainPanel.AddChild(tabs);
                 TabData tab;
 
@@ -96,16 +98,42 @@ namespace EvolutionSim.UI
                     {
                         tabs.SelectTab("Organism " + (i + 1));
                         speciesTab = tabs.ActiveTab;
-                        Attributes starting;
+                        Nullable<Attributes> starting;
                         starting = ((SetupSimulationPanel)speciesTab.panel.Children.First()).GetPanelData();
-                        species.Add(starting);
+                        Attributes toReturn;
+                        toReturn = starting.GetValueOrDefault();
+                        species.Add(toReturn);
                         
                        
                     }
                     SetupFinished = true;
                 };
                 UserInterface.Active.AddEntity(mainPanel);
-  
+                UserInterface.Active.AddEntity(setupComplete);
+                UserInterface.Active.AddEntity(errorMessage);
+
+                tabs.OnValueChange = (Entity panelTabs) =>
+                {
+                    TabData currentTab;
+                    currentTab = tabs.ActiveTab;
+                    Nullable<Attributes> starting;
+                    starting = ((SetupSimulationPanel)currentTab.panel.Children.First()).GetPanelData();
+                    if (!starting.HasValue)
+                    {
+                        tabs.SelectTab(currentTab.name);
+                        errorMessage.Text = "Invalid input";
+                    }
+                    else
+                    {
+                        errorMessage.Text = "";
+
+                    }
+
+
+
+                };
+
+
 
 
             }
@@ -131,37 +159,6 @@ namespace EvolutionSim.UI
             UserInterface.Active.Draw(spriteBatch);
         }
 
-
-
-        //private void SetFinishButton()
-        //{
-        //    this.finishedButton.OnClick = (Entity btn) =>
-        //    {
-        //        SetupFinished = true;
-        //        this.startingArributes = new Attributes();
-        //        this.startingArributes.Species = speciesName.Value;
-        //        this.startingArributes.Texture = textureImage.Texture;
-        //        switch (dietTypeChoice.SelectedValue)
-        //        {
-        //            case "Omnivore":
-        //                startingArributes.DietType = DietTypes.Omnivore;
-        //                break;
-        //            case "Herbivore":
-        //                startingArributes.DietType = DietTypes.Herbivore;
-        //                break;
-        //            case "Carnivore":
-        //                startingArributes.DietType = DietTypes.Canivore;
-        //                break;
-        //        }
-        //        this.startingArributes.MaxHealth = Convert.ToInt32(startHealth.Value);
-        //        this.startingArributes.Speed = Convert.ToInt32(startSpeed.Value);
-        //        this.startingArributes.Strength = Convert.ToInt32(startStrength.Value);
-        //        this.startingArributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
-        //        this.startingArributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
-        //        this.InitPopulation = Convert.ToInt32(startPopulation.Value);
-        //        //LoadContent();
-        //    };
-        //}
 
     }
 }
