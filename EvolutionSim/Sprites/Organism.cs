@@ -59,6 +59,7 @@ namespace EvolutionSim.Sprites
             //this is where the size of the organism is calculated based on strengh
             var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
 
+            //cap the scaleoffset to a certain size
            if(scaleOffset > UPPER_LIMIT)
             {
 
@@ -79,6 +80,9 @@ namespace EvolutionSim.Sprites
             this.healthbar.Draw(spriteBatch);
         }
         
+        /// <summary>
+        /// Called when organism is consuming food
+        /// </summary>
         public void Eat()
         {
             Hunger += EATING_REGEN;
@@ -92,6 +96,7 @@ namespace EvolutionSim.Sprites
             this.healthbar.SetScreenPosition(x, y);
         }
 
+ 
         public override void IncreaseHealth(int value)
         {
             base.IncreaseHealth(value);
