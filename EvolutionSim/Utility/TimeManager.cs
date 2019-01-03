@@ -45,7 +45,9 @@ namespace EvolutionSim.Utility
         public bool HasSimulationTicked { get => msSinceLastTick > simulationTickCooldown + pausedElapsed; }
 
         private const int DEFAULT_MATING_COOLDOWN = 20000;
+        private const int DEFAULT_HUNTING_COOLDOWN = 30000;
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;
+        private int huntingCooldown = DEFAULT_HUNTING_COOLDOWN;
 
         private const int DEFAULT_ROAM_COOLDOWN = 3000;
         private int roamCooldown = DEFAULT_ROAM_COOLDOWN;
@@ -85,6 +87,8 @@ namespace EvolutionSim.Utility
                 organism.MsSinceLastRoam += this.deltaMs;
 
             }
+
+            organism.MsSinceLastHunted += this.deltaMs;
         }
 
         public bool HasMatingCooldownExpired(Organism organism)
@@ -97,6 +101,23 @@ namespace EvolutionSim.Utility
             }
 
             return cooldownExpired;
+        }
+
+
+        public bool HasHuntingCooldownExpired(Organism organism)
+        {
+
+            var cooldownExpired = organism.MsSinceLastHunted > huntingCooldown + pausedElapsed;
+
+            if(cooldownExpired)
+            {
+                organism.MsSinceLastHunted = 0;
+            }
+
+            return cooldownExpired;
+
+
+
         }
 
         public bool HasRoamingCooldownExpired(Organism organism)

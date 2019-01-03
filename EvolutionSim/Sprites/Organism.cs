@@ -34,9 +34,13 @@ namespace EvolutionSim.Sprites
         public States State { get; set; } = States.Roaming;
         public int MsSinceLastRoam { get; set; } = 0;
         public int MsSinceLastMate { get; set; } = 0;
+        //not sure if I should move this
+        public int MsSinceLastHunted { get; set; } = 0;
         public bool JustMated { get; set; } = false;
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
+
+        public bool RecentlyHunted { get; set; } = false;
 
         // Misc
         private readonly Healthbar healthbar;
