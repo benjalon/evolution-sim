@@ -11,5 +11,6 @@
         MovingToFood,
         WaitingForMate,
         MovingToMate,
+        Hunting,
     }
 }

@@ -21,7 +21,7 @@ namespace EvolutionSim.StateManagement
     {
 
         delegate bool checkPathPresent(Organism org);
-        static checkPathPresent hasPath = organism => organism.Path.Count == 1;
+        static checkPathPresent hasPath = organism => organism.Path.Count > 0;
 
 
         public static List<Point> GetPointsInRange(Organism organism)
@@ -96,7 +96,9 @@ namespace EvolutionSim.StateManagement
             {
                 organism.Path.Clear(); // The path is blocked so it will need recalculating
             }
-            else if (hasPath(organism))
+
+            // path is not blocked so carry on as normal
+            else if (organism.Path.Count > 0)
             {
                 if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
                 {

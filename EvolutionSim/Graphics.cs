@@ -162,7 +162,7 @@ namespace EvolutionSim
             this.overlay.TimeSettingChanged += TimeSettingChangedHandler;
             this.overlay.WeatherSettingChanged += WeatherSettingChangedHandler;
             //this.simulation.AddOrganisms(startingArributes, InitPopulation);
-                }
+        }
 
 
 
