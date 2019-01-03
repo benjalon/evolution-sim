@@ -137,16 +137,34 @@ namespace EvolutionSim.StateManagement
         /// <returns></returns>
         private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Organism organism, Grid grid)
         {
+            var organismState = organism.State;
+
             if (!(grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY)))
             {
                 return false; // The tile is out of bounds or there's no food there
             }
 
-            // Does the food type match the organism's diet type
-            var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
-            var validFood = organism.Attributes.DietType == DietTypes.Omnivore ||
-                            (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) ||
-                            (organism.Attributes.DietType == DietTypes.Canivore && !food.IsHerbivoreFood);
+            bool validFood = false;
+            
+
+            //if the organism is seeking food then check food type
+            if (organismState == States.SeekFood)
+            {
+                // Does the food type match the organism's diet type
+                var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
+                validFood = organism.Attributes.DietType == DietTypes.Omnivore ||
+                                (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) ||
+                                (organism.Attributes.DietType == DietTypes.Canivore && !food.IsHerbivoreFood);
+
+            }
+
+
+            else // otherwise the organism isn't looking for dead meat or grass, it wants live prey
+            {
+
+
+            }
+
 
             return validFood;
         }
