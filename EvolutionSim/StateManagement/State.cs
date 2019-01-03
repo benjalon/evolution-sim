@@ -18,6 +18,8 @@ namespace EvolutionSim.StateManagement
         Move,
         Waiting,
         Bang,
+        Hunt,
+        finishedHunt
 
     }
 
@@ -99,7 +101,7 @@ namespace EvolutionSim.StateManagement
                 { new StateTransition(States.MovingToFood,Actions.NotHungry),States.Roaming }, // Food has disappeared
 
                 {new StateTransition(States.Eating,Actions.NotHungry),States.Roaming },
-                
+
                 { new StateTransition(States.SeekMate, Actions.MateFound), States.MovingToMate},
 
                 //now if an organism is waiting for a mate and takes the action move to go over to partner
@@ -109,9 +111,12 @@ namespace EvolutionSim.StateManagement
                 {new StateTransition(States.WaitingForMate, Actions.Move), States.Roaming},
 
                 {new StateTransition(States.MovingToMate, Actions.Bang), States.Mating},
-                
+
                 { new StateTransition(States.MovingToMate,Actions.FinishedMating),States.Roaming }, // Mate has disappeared
 
+                { new StateTransition(States.Roaming, Actions.Hunt), States.Hunting},  // predator is now hunting
+
+                { new StateTransition(States.Hunting, Actions.finishedHunt), States.SeekFood}
             };
         }
 

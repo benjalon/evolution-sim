@@ -117,7 +117,7 @@ namespace EvolutionSim
             return xIsHigher ? new Tuple<int, int>(y, x) : new Tuple<int, int>(x, y);
         }
 
-
+        //could be used to reduce repeated code
         //private void calculationHandler(ref float attribute, Tuple attributeTuple)
         //{
 
@@ -166,10 +166,8 @@ namespace EvolutionSim
             //workout an average of the mother and father's attributes
             //then offset the change based on the mutation variation
 
-
-         
-
             #region Handle Mutation
+
             switch (mutation)
             {
                 //organism is not resistant to cold or hot, and is crippled in both strength and speed (it will die fast)

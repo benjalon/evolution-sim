@@ -39,10 +39,13 @@ namespace EvolutionSim.StateManagement
         }
 
         /// <summary>
+        /// Code used from: https://stackoverflow.com/questions/218060/random-gaussian-variables
+        /// 
         /// This method generates a guassian variable which lies between the range
         /// of -3 and 3, 
-        /// Works by performing a Box-Muller transform on a pair of 
+        /// Works by performing a Box-Muller transform (single dimension) on a pair of 
         /// randomly generated doubles
+        /// 
         /// </summary>
         public double generateCrossoverMutationValue()
         {
@@ -56,7 +59,7 @@ namespace EvolutionSim.StateManagement
                 Math.Sin(2.0 * Math.PI * sample2);
 
             double randNormal =
-             crossoverMean + stdDev * randStdNormal; //random normal(mean,stdDev^2)
+             crossoverMean + stdDev * randStdNormal; 
 
             return randNormal;
 

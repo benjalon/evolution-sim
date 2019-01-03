@@ -183,8 +183,41 @@ namespace EvolutionSim.StateManagement
 
             }
 
+
+            /// <summary>
+            /// Locks onto an organism and tracks it for a period of time
+            /// </summary>
+            /// <param name="organism"></param>
+            /// <param name="grid"></param>
+            /// <param name="timeManager"></param>
+            public static void SeekPrey(Organism organism, Grid grid, TimeManager timeManager)
+            {
+
+                if (organism.Computing)
+                {
+                    return; // If the path to food has been computed, there's no need to do it again
+                }
+
+                // now here's the tricky bit, need to find an organism, create a location variable which updates with deltaT
+                // then calculate and traverse along the path until either:
+                // 1) we catch the prey
+                // 2) the chase time expires
+                // chasing speed should be based on the speed of the organism
+
+                Tile tile = FoodInRange(organism, grid); 
+
+
+
+
+
+
+            }
+
+
+
             /// <summary>
             /// This method handles the spiral search method for organims when they are in searching for food
+            /// (going to update to find organisms as well)
             /// </summary>
             /// <param name="organism"></param>
             /// <param name="grid"></param>
@@ -289,6 +322,18 @@ namespace EvolutionSim.StateManagement
             }
 
         }
+
+        /// <summary>
+        /// Handles behaviour for organisms searching out prey
+        /// </summary>
+        public static class HuntingOrganism
+        {
+         
+
+        }
+
+
+
         public static class SeekingMate
         {
             public static void SeekMate(Organism organism, Grid grid, TimeManager timeManager)

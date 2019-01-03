@@ -72,9 +72,23 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.HungryMate); //go find a mate
                     }
 
+                    //otherwise if the organism isn't hungry, doesn't want to mate and is of type carnivore
+                    else if(organism.Attributes.DietType == DietTypes.Canivore && timeManager.HasHuntingCooldownExpired(organism))
+                    {
+
+                        organism.State = this.state.MoveState(organismState, Actions.Hunt);
+
+
+                    }
+
+
+
+
                     break;
 
                 #endregion
+                    
+
 
                 #region Food States
 
@@ -171,11 +185,7 @@ namespace EvolutionSim.StateManagement
 
                 #region Hunt States
 
-                //case States.Roaming:
-                   // if(organism.Hunger > time)
-
-                        //break;
-
+                case States.Hunting:
 
 
 
@@ -246,6 +256,12 @@ namespace EvolutionSim.StateManagement
                     StateActions.MoveAlongFoodPath(organism, grid);
                     break;
 
+                case States.Hunting:
+            
+                    StateActions.SeekingFood.SeekPrey(organism, grid, timeManager);
+        
+
+                    break;
                 default:
 
                     break;
