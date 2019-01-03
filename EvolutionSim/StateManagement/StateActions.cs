@@ -127,6 +127,7 @@ namespace EvolutionSim.StateManagement
 
         /// <summary>
         /// This check will be used in the seek food to determine if the food source is valid at the searched destination
+        /// at this point we have already established that food exists within t
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -161,7 +162,7 @@ namespace EvolutionSim.StateManagement
 
             else // otherwise the organism isn't looking for dead meat or grass, it wants live prey
             {
-
+                var prey = grid.GetTileAt(firstX, firstY).Inhabitant as Organism;
 
             }
 
