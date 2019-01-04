@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Attributes.cs" />
+    <Compile Include="Data\OrganismLocation.cs" />
     <Compile Include="Data\CreationArgs.cs" />
     <Compile Include="Data\DietTypes.cs" />
     <Compile Include="Data\DrawingArgs.cs" />

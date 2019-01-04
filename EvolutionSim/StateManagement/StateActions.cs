@@ -138,36 +138,59 @@ namespace EvolutionSim.StateManagement
         /// <returns></returns>
         private static bool PerformValidFoodCheck(int x, int y, int firstX, int firstY, Organism organism, Grid grid)
         {
-            var organismState = organism.State;
+            States organismState = organism.State;
 
-            if (!(grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY)))
+            switch (organismState)
             {
-                return false; // The tile is out of bounds or there's no food there
+
+                case States.SeekFood:
+                    if (!(grid.InBounds(x, y) && grid.IsFoodAt(firstX, firstY)))
+                    {
+                        return false; // The tile is out of bounds or there's no food there
+                    }
+
+                    // Does the food type match the organism's diet type
+                    var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
+                    var validFood = organism.Attributes.DietType == DietTypes.Omnivore ||
+                                    (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) ||
+                                    (organism.Attributes.DietType == DietTypes.Canivore && !food.IsHerbivoreFood);
+
+                    return validFood;
+
+                    break;
+
+                case States.Hunting:
+                    //if there is valid prey at the location
+                    if(!(grid.InBounds(x,y) && grid.IsPreyAt(firstX, firstY))){
+
+                        return false;
+
+                    }
+
+                    //now check the diet type of the organism at the current location
+                    Organism huntedOrg = grid.GetTileAt(firstX, firstY).Inhabitant as Organism;
+
+                    //if the organism type is a herbivore then hunt it
+                    var validPrey = huntedOrg.Attributes.DietType == DietTypes.Herbivore;
+
+                    return validPrey;
+
+
+
+                    break;
+
+
+                default:
+                    break;
+
             }
 
-            bool validFood = false;
+
+            //this should never be reached as organism will never call this method if it isn't in seekFood or Hunt
+
+            return false;
+
             
-
-            //if the organism is seeking food then check food type
-            if (organismState == States.SeekFood)
-            {
-                // Does the food type match the organism's diet type
-                var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
-                validFood = organism.Attributes.DietType == DietTypes.Omnivore ||
-                                (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) ||
-                                (organism.Attributes.DietType == DietTypes.Canivore && !food.IsHerbivoreFood);
-
-            }
-
-
-            else // otherwise the organism isn't looking for dead meat or grass, it wants live prey
-            {
-                var prey = grid.GetTileAt(firstX, firstY).Inhabitant as Organism;
-
-            }
-
-
-            return validFood;
         }
 
 

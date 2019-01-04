@@ -188,6 +188,14 @@ namespace EvolutionSim.TileGrid
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
 
+        public bool IsPreyAt(int x, int y)
+        {
+            var inhabitant = this.tiles[x][y].Inhabitant;
+            return inhabitant != null && inhabitant.GetType() == typeof(Organism);
+
+
+        }
+
         /// <summary>
         /// Checks whether there is a mate at the given index.
         /// </summary>
