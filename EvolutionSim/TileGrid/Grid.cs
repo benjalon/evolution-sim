@@ -16,12 +16,17 @@ namespace EvolutionSim.TileGrid
         public const int TILE_COUNT_Y = Graphics.SIMULATION_WIDTH / Tile.TILE_SIZE;
 
         public List<Organism> Organisms { get; private set; } = new List<Organism>();
+
+        public List<OrganismLocation> HuntedOrganisms { get; private set; } = new List<OrganismLocation>();
+
         public List<Food> Foods { get; private set; } = new List<Food>();
         public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
 
         private readonly Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
         public event EventHandler ShouldSpawnCorpse;
+
+        public event EventHandler ShouldAddOrganism;
 
         /// <summary>
         /// Create a Grid with given attributes.
@@ -188,6 +193,12 @@ namespace EvolutionSim.TileGrid
             return inhabitant != null && inhabitant.GetType() == typeof(Food);
         }
 
+        /// <summary>
+        /// chcecks whether there is prey at a given index
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool IsPreyAt(int x, int y)
         {
             var inhabitant = this.tiles[x][y].Inhabitant;
@@ -242,7 +253,23 @@ namespace EvolutionSim.TileGrid
             this.Organisms.Remove(organism);
 
             ShouldSpawnCorpse?.Invoke(organism, EventArgs.Empty);
-    }
+        }
+
+        /// <summary>
+        /// handle being hunted by adding it to the list of organisms being hunted
+        /// event handler initalised in simulation constructor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OrganismHuntHandler(object sender, EventArgs e)
+        {
+
+            var organism = (Organism)sender;
+            var tileOccupied = this.GetTileAt(organism);
+
+            ShouldAddOrganism?.Invoke(new OrganismLocation(organism, tileOccupied.GridIndex.X, tileOccupied.GridIndex.Y), EventArgs.Empty);
+
+        }
 
         /// <summary>
         /// Handle food being eaten by removing the food from the grid and removing its reference from the list of food.

@@ -176,7 +176,6 @@ namespace EvolutionSim.StateManagement
                     return validPrey;
 
 
-
                     break;
 
 
@@ -246,11 +245,17 @@ namespace EvolutionSim.StateManagement
                 // 2) the chase time expires
                 // chasing speed should be based on the speed of the organism
 
-                Tile tile = FoodInRange(organism, grid); 
+                Tile potentialFood = FoodInRange(organism, grid);
 
+                //create an annoynomus type of the organism
+                Organism preyBeingHunted = potentialFood.Inhabitant as Organism;
 
+                //now here we fire a lambda which calls an event to place the object at position X, Y to be hunted
 
+                //call the invoke method on the grid to spawn a new organism in pursuit so it can be added to the
+                //list
 
+              
 
 
             }

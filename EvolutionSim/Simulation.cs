@@ -49,6 +49,7 @@ namespace EvolutionSim
 
             this.grid = new Grid(Graphics.SimulationTextures["tile"], Graphics.SimulationTextures["mountain"], Graphics.SimulationTextures["water"]);
             this.grid.ShouldSpawnCorpse += SpawnCorpseHandler;
+            this.grid.ShouldAddOrganism += SpawnPreyHandler;
 
             this.TimeManager = new TimeManager();
 
@@ -256,7 +257,7 @@ namespace EvolutionSim
 
             #endregion
 
-
+            //create the nre child
             var child = new Organism(advancedCrossBreed, this.healthbarTextures);
 
             // Top left corner
@@ -365,6 +366,23 @@ namespace EvolutionSim
             var organism = ((Organism)sender);
             var tile = (Tile)grid.GetTileAt(organism);
             this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);
+
+        }
+
+        /// <summary>
+        /// so here we need to nudge an event listener in grid, which then
+        /// adds an organism with co-ordinates into a list of pursued organisms
+        /// this is so the position of the hunted organism can be tracked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SpawnPreyHandler(object sender, EventArgs e)
+        {
+            var LocationOrganism = ((OrganismLocation)sender);
+
+            this.grid.HuntedOrganisms.Add(LocationOrganism);
+
+
         }
     }
 }

@@ -10,33 +10,47 @@ using EvolutionSim.TileGrid;
 namespace EvolutionSim.Data
 {
     /// <summary>
-    /// This class will be reposnisble for containing information related to organisms in pursuit by 
+    /// This class will be reposnsible for containing information related to organisms in pursuit by 
     /// a hunting organism
     /// </summary>
-    class OrganismLocation
+    public class OrganismLocation
     {
-        private int gridPositionX;
-        private int gridPositionY;
+
+        public Organism HuntedOrganism { get; private set;}
+
+
+        Coordinates corodinates { get; set; }
+
+
+        public OrganismLocation OrganismAndLocation { get; set; }
 
         //defines how often we can update the tracked organisms location
         public const int UPDATE_COOLDOWN = 1000;
 
-        /// <summary>
-        /// take a readonly instance of the grid and the
-        /// organism being hunted
-        /// </summary>
-        public OrganismLocation(int gridPositionX, int gridPositionY)
+        public OrganismLocation(Organism organism, int gridPositionX, int gridPositionY)
         {
-            this.gridPositionX = gridPositionX;
-            this.gridPositionY = gridPositionY;
-
-
-
+            this.corodinates = new Coordinates(gridPositionX, gridPositionY);
+            this.HuntedOrganism = organism;
 
         }
 
+        public class Coordinates
+        {
+
+            private int GridPositionX;
+            private int GridPositionY;
 
 
+            public Coordinates(int posX, int posY)
+            {
 
+                this.GridPositionX = posX;
+                this.GridPositionY = posY;
+
+
+            }
+
+        }
     }
+
 }
