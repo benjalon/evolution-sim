@@ -185,6 +185,10 @@ namespace EvolutionSim.StateManagement
 
                 #region Hunt States
 
+                case States.FindingPrey:
+
+                    break;
+
                 case States.Hunting:
 
 

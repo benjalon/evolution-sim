@@ -195,6 +195,9 @@ namespace EvolutionSim.StateManagement
 
         public static class SeekingFood
         {
+           
+
+
             public static void SeekFood(Organism organism, Grid grid, TimeManager timeManager)
             {
                 if (organism.Computing)
@@ -254,6 +257,8 @@ namespace EvolutionSim.StateManagement
 
                 //call the invoke method on the grid to spawn a new organism in pursuit so it can be added to the
                 //list
+
+                
 
               
 
@@ -353,7 +358,7 @@ namespace EvolutionSim.StateManagement
         }
 
         /// <summary>
-        /// This class should now be checking an organim's food preference
+        /// This class should now be checking an organism's food preference
         /// </summary>
         public static class EatingFood
         {

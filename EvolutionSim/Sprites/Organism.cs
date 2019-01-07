@@ -40,6 +40,10 @@ namespace EvolutionSim.Sprites
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
 
+        //this will be Null if the organism is a omnivore or herbivore
+        public bool? PreyFound { get; set; }
+
+
         public bool RecentlyHunted { get; set; } = false;
 
         // Misc
@@ -52,6 +56,14 @@ namespace EvolutionSim.Sprites
 
             this.Attributes = attributes;
             this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
+
+            //if the organism isn't a carnivore then make PreyFound null
+            if(attributes.DietType != DietTypes.Canivore)
+            {
+                PreyFound = null;
+            }
+
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
