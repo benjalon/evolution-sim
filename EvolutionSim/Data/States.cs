@@ -13,5 +13,6 @@
         MovingToMate,
         FindingPrey,
         Hunting,
+        KillingPrey,
     }
 }

@@ -18,8 +18,12 @@ namespace EvolutionSim.Sprites
         private const float SCALE_MULTIPLIER = 0.2f;
         private const float UPPER_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
 
+
+
         // Breed attributes
         public Attributes Attributes { get; }
+
+        public event EventHandler BeingHunted;
 
         // Simulation Attributes
         public int Age { get; set; } = 0;
@@ -119,6 +123,11 @@ namespace EvolutionSim.Sprites
         {
             base.DecreaseHealth(value);
             this.healthbar.CurrentHealth = this.Health;
+        }
+
+        public void killOrganism()
+        {
+            this.Health = 0;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace EvolutionSim.StateManagement
         LookingForPrey,
         FoundPrey,
         Hunt,
-        finishedHunt,
+        FinishedHunt,
 
     }
 
@@ -117,11 +117,10 @@ namespace EvolutionSim.StateManagement
                 { new StateTransition(States.MovingToMate,Actions.FinishedMating),States.Roaming }, // Mate has disappeared
 
                 { new StateTransition(States.Roaming, Actions.LookingForPrey), States.FindingPrey},
-                // predator is now hunting
 
-                { new StateTransition(States.FindingPrey, Actions.FoundPrey), States.Hunting },
+                { new StateTransition(States.FindingPrey, Actions.FoundPrey), States.Hunting },  // predator is now hunting
 
-                { new StateTransition(States.Hunting, Actions.finishedHunt), States.Roaming},
+                { new StateTransition(States.Hunting, Actions.KillPrey), States.KillingPrey},
 
               
             };

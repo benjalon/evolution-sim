@@ -107,6 +107,20 @@ namespace EvolutionSim.StateManagement
             } 
         }
 
+        /// <summary>
+        /// This method contains the implementation for organisms who are chasing a herbivore
+        /// do not want to run A* algorithm for this
+        /// </summary>
+        /// <param name="organism"></param>
+        /// <param name="grid"></param>
+        public static void MoveAlongPreyPath(Organism organism, Grid grid)
+        {
+
+    
+        }
+
+
+
         public static void MoveAlongMatePath(Organism organism, Grid grid)
         {
             var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant || 
@@ -160,6 +174,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 case States.Hunting:
+
                     //if there is valid prey at the location
                     if(!(grid.InBounds(x,y) && grid.IsPreyAt(firstX, firstY))){
 
@@ -213,6 +228,11 @@ namespace EvolutionSim.StateManagement
                     // Path to food
                     organism.Computing = true;
 
+                    if(organism.State == States.Hunting)
+                    {
+                        organism.PreyFound = true;
+                    }
+
                     //ThreadPool.QueueUserWorkItem(new WaitCallback(Eek));
                     ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
                     {
@@ -226,46 +246,6 @@ namespace EvolutionSim.StateManagement
                 }
 
             }
-
-
-            /// <summary>
-            /// Locks onto an organism and tracks it for a period of time
-            /// </summary>
-            /// <param name="organism"></param>
-            /// <param name="grid"></param>
-            /// <param name="timeManager"></param>
-            public static void SeekPrey(Organism organism, Grid grid, TimeManager timeManager)
-            {
-
-                if (organism.Computing)
-                {
-                    return; // If the path to food has been computed, there's no need to do it again
-                }
-
-                // now here's the tricky bit, need to find an organism, create a location variable which updates with deltaT
-                // then calculate and traverse along the path until either:
-                // 1) we catch the prey
-                // 2) the chase time expires
-                // chasing speed should be based on the speed of the organism
-
-                Tile potentialFood = FoodInRange(organism, grid);
-
-                //create an annoynomus type of the organism
-                Organism preyBeingHunted = potentialFood.Inhabitant as Organism;
-
-                //now here we fire a lambda which calls an event to place the object at position X, Y to be hunted
-
-                //call the invoke method on the grid to spawn a new organism in pursuit so it can be added to the
-                //list
-
-                
-
-              
-
-
-            }
-
-
 
             /// <summary>
             /// This method handles the spiral search method for organims when they are in searching for food

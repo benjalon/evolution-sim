@@ -14,6 +14,7 @@ namespace EvolutionSim.StateManagement
         private readonly State state;
         
         public event EventHandler MatingOccurred;
+        public event EventHandler PursuitOcurring;
 
       //  delegate bool checkPathPresent(Organism org);
        // checkPathPresent hasPath = organism => organism.Path.Count == 1;
@@ -80,9 +81,6 @@ namespace EvolutionSim.StateManagement
 
 
                     }
-
-
-
 
                     break;
 
@@ -174,33 +172,68 @@ namespace EvolutionSim.StateManagement
 
                 case States.Mating: // When an organism is mating
                     organism.State = this.state.MoveState(organismState, Actions.FinishedMating); // Tell this organism the mating is done
+
                     if (organism.DestinationTile.HasOrganismInhabitant)
                     {
-                        ((Organism)(organism.DestinationTile.Inhabitant)).State = this.state.MoveState(organismState, Actions.FinishedMating); // Tell the mate the mating is done
+                        ((Organism)(organism.DestinationTile.Inhabitant)).State = this.state.MoveState(organismState, Actions.FinishedMating); // Tell the mate that its mating is done
                     }
 
                     break;
 
                 #endregion
-
-                #region Hunt States
+                
+                //these states are only avaliable to carnivores, the preyFound bool will be null if organisms are omnivores or herbivores
+                #region Hunt States 
 
                 case States.FindingPrey:
+                    
+                    //then move into the Hunting state
+                    if ((bool)organism.PreyFound)
+                    {
+                        organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
+
+                    }
+                     
 
                     break;
 
+
+                // now here's the tricky bit, need to find an organism, create a location variable which updates with deltaT
+                // then calculate and traverse along the path until either:
+                // 1) we catch the prey
+                // 2) the chase time expires
+                // chasing speed should be based on the speed of the organism
                 case States.Hunting:
 
+                    //then we've found the target or time has expired so stop hunting
+                    if(organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant || timeManager.HasHuntingCooldownExpired(organism))
+                    {
+                        organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
+
+                    }
+                    else //the organism is pursuing it's prey
+                    {
 
 
+                    }
 
-                #endregion
+
+                    break;
+
+                case States.KillingPrey:
+
+                    //organism has finished hunting
+                    organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
+
+                    break;
 
                 default:
                     break;
             }
 
         }
+             #endregion
+
 
         /// <summary>
         /// This method controls how an organism goes about its buisness when in a given state
@@ -260,12 +293,29 @@ namespace EvolutionSim.StateManagement
                     StateActions.MoveAlongFoodPath(organism, grid);
                     break;
 
-                case States.Hunting:
-            
-                    StateActions.SeekingFood.SeekPrey(organism, grid, timeManager);
-        
+
+                case States.FindingPrey:
+
+                    StateActions.SeekingFood.SeekFood(organism, grid, timeManager);
 
                     break;
+
+
+                case States.Hunting: 
+
+                
+
+                    break;
+
+
+                case States.KillingPrey: //organism hunted, so kill it
+
+                    var prey = (Organism)organism.DestinationTile.Inhabitant;
+                    prey.killOrganism();
+
+                    break;
+
+
                 default:
 
                     break;
