@@ -116,8 +116,6 @@ namespace EvolutionSim.Utility
 
             return cooldownExpired;
 
-
-
         }
 
         public bool HasRoamingCooldownExpired(Organism organism)

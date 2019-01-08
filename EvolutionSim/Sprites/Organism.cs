@@ -62,7 +62,7 @@ namespace EvolutionSim.Sprites
             this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
 
             //if the organism isn't a carnivore then make PreyFound null
-            if(attributes.DietType != DietTypes.Canivore)
+            if(this.Attributes.DietType != DietTypes.Canivore)
             {
                 PreyFound = null;
             }
@@ -76,6 +76,7 @@ namespace EvolutionSim.Sprites
             var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
 
             //cap the scaleoffset to a certain size
+            //otherwise we get big issues 
            if(scaleOffset > UPPER_LIMIT)
             {
 
@@ -125,6 +126,9 @@ namespace EvolutionSim.Sprites
             this.healthbar.CurrentHealth = this.Health;
         }
 
+        /// <summary>
+        /// Mostly used for de-bugging Just kills an organism when called
+        /// </summary>
         public void killOrganism()
         {
             this.Health = 0;

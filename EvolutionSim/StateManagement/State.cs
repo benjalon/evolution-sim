@@ -19,9 +19,11 @@ namespace EvolutionSim.StateManagement
         Waiting,
         Bang,
         LookingForPrey,
+        GiveUpLooking,
         FoundPrey,
         Hunt,
         FinishedHunt,
+        CaughtPrey,
 
     }
 
@@ -120,7 +122,9 @@ namespace EvolutionSim.StateManagement
 
                 { new StateTransition(States.FindingPrey, Actions.FoundPrey), States.Hunting },  // predator is now hunting
 
-                { new StateTransition(States.Hunting, Actions.KillPrey), States.KillingPrey},
+                { new StateTransition(States.FindingPrey, Actions.GiveUpLooking), States.Roaming},
+
+                { new StateTransition(States.Hunting, Actions.CaughtPrey), States.KillingPrey},
 
               
             };

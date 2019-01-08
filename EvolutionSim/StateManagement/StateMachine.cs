@@ -193,6 +193,12 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
 
                     }
+
+                    if (timeManager.HasHuntingCooldownExpired(organism)) // if the cooldown has expired then give up looking
+                    {
+                        organism.State = this.state.MoveState(organismState, Actions.GiveUpLooking);
+
+                    }
                      
 
                     break;
