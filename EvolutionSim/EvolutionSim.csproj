@@ -97,6 +97,7 @@
     <Compile Include="StateManagement\Probability.cs" />
     <Compile Include="TileGrid\GridInteractionManager.cs" />
     <Compile Include="Sprites\FullScreenSprite.cs" />
+    <Compile Include="TileGrid\Pathfinding\RayPathfinding.cs" />
     <Compile Include="UI\SetupSimulation.cs" />
     <Compile Include="UI\SetupSimulationPanel.cs" />
     <Compile Include="Utility\AttributeUpdater.cs" />

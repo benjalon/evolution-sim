@@ -17,19 +17,14 @@ namespace EvolutionSim.Data
     {
 
         public Organism HuntedOrganism { get; private set;}
-
-
-        Coordinates corodinates { get; set; }
-
-
-        public OrganismLocation OrganismAndLocation { get; set; }
+        public Coordinates Corodinates { get; set; }
 
         //defines how often we can update the tracked organisms location
         public const int UPDATE_COOLDOWN = 1000;
 
         public OrganismLocation(Organism organism, int gridPositionX, int gridPositionY)
         {
-            this.corodinates = new Coordinates(gridPositionX, gridPositionY);
+            this.Corodinates = new Coordinates(gridPositionX, gridPositionY);
             this.HuntedOrganism = organism;
 
         }

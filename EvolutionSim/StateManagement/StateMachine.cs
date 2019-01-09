@@ -312,7 +312,7 @@ namespace EvolutionSim.StateManagement
                     //destination tile isn't null
                     //this will only work if this is checked once before moving onto the following state
                     //state upon the next call of checkState
-                    if(organism.DestinationTile != null)
+                    if(organism.DestinationTile != null && organism.PreyFound == true)
                     {
                         grid.addOrganismBeingHunted((Organism)organism.DestinationTile.Inhabitant);
 
@@ -331,7 +331,7 @@ namespace EvolutionSim.StateManagement
                     break;
 
 
-                case States.KillingPrey: //organism hunted, so kill it
+                case States.KillingPrey: //prey has been caught, so kill it
 
                     var prey = (Organism)organism.DestinationTile.Inhabitant;
                     prey.killOrganism();

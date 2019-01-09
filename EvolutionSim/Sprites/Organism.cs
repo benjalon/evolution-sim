@@ -32,6 +32,8 @@ namespace EvolutionSim.Sprites
         // Pathfinding 
         public bool Computing { get; set; } = false;
         public List<Tile> Path { get; set; } = new List<Tile>();
+
+        //this is just always the final tile in the path list
         public Tile DestinationTile { get => Path.Count > 0 ? Path[Path.Count - 1] : null; }
 
         // State management
