@@ -13,10 +13,11 @@ namespace EvolutionSim.TileGrid.Pathfinding
     /// <summary>
     /// This gives us simplified path finding
     /// </summary>
-    class RayPathfinding
+   public class RayPathfinding
     {
-       private OrganismLocation OrganismChased;
+       private Organism OrganismChased;
        private Organism Predator;
+        private readonly Grid grid;
     
         //tiles between predator and prey
        private List<Tile> Ray;
@@ -28,12 +29,17 @@ namespace EvolutionSim.TileGrid.Pathfinding
         /// </summary>
         /// <param name="huntedOrganism"></param>
         /// <param name="predator"></param>
-        public RayPathfinding(OrganismLocation huntedOrganism, Organism predator)
+        public RayPathfinding(Organism organismChased, Organism predator, Grid grid)
         {
 
-            this.OrganismChased = huntedOrganism;
+            this.OrganismChased = organismChased;
             this.Predator = predator;
 
+
+        }
+
+        private Tuple<int, int> OrgLocation(int posX, int posY)
+        {
 
         }
 
@@ -43,7 +49,26 @@ namespace EvolutionSim.TileGrid.Pathfinding
         /// <returns></returns>
         public List<Tile> CalculateRay()
         {
-            this.HuntedOrganism
+            
+            Tile huntedOrganismPos = grid.GetTileAt(this.OrganismChased);
+            Tile predatorOrganismPos = grid.GetTileAt(this.Predator);
+
+            Tuple desiredLocation = new Tuple(huntedOrganismPos.Inhabitant.GridIndex.X, huntedOrganismPos.GridIndex.Y);
+
+            //getting the absolute difference between the organism positions
+            int xMagnitude = Math.Abs(huntedOrganismPos.Inhabitant.GridIndex.X - predatorOrganismPos.Inhabitant.GridIndex.X);
+
+            int yMagnitude = Math.Abs(huntedOrganismPos.Inhabitant.GridIndex.Y - predatorOrganismPos.Inhabitant.GridIndex.Y);
+
+            //so we first want to take the difference between the tiles
+            for (int i = 0; i < xMagnitude)
+            {
+
+
+            }
+
+
+           return Ray;
 
 
         }
@@ -51,7 +76,7 @@ namespace EvolutionSim.TileGrid.Pathfinding
 
 
         /// <summary>
-        /// update the ray with each tick of the timer
+        /// update the ray object with each tick of the timer
         /// </summary>
         /// <param name="timeManager"></param>
         /// <param name="grid"></param>
