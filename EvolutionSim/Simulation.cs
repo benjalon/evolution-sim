@@ -55,7 +55,9 @@ namespace EvolutionSim
 
             this.fsm = new StateMachine();
             this.fsm.MatingOccurred += this.BirthHandler;
-           // this.fsm.PursuitOcurring += this.grid.ShouldAddOrganism;
+
+            //add the hunt handler method to pursuit occuring event
+            this.fsm.PursuitOcurring += this.grid.OrganismHuntHandler;
 
             this.GridInteractionManager = new GridInteractionManager(Graphics.SimulationTextures["tile"]);
 

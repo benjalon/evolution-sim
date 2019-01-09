@@ -261,7 +261,7 @@ namespace EvolutionSim.TileGrid
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OrganismHuntHandler(object sender, EventArgs e)
+        public void OrganismHuntHandler(object sender, EventArgs e)
         {
 
             var organism = (Organism)sender;

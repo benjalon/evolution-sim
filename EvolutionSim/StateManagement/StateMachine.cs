@@ -212,18 +212,20 @@ namespace EvolutionSim.StateManagement
                 case States.Hunting:
 
                     //then we've found the target or time has expired so stop hunting
-                    if(organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant || timeManager.HasHuntingCooldownExpired(organism))
+                    if(organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant)
                     {
+                        organism.State = this.state.MoveState(organismState, Actions.CaughtPrey);
+
+                    }
+
+                    else if (timeManager.HasHuntingCooldownExpired(organism)) // otherwise give the hunt up if time has expired
+                    {
+
                         organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
-
                     }
-                    else //the organism is pursuing it's prey
-                    {
+                  
 
-
-                    }
-
-
+                
                     break;
 
                 case States.KillingPrey:
@@ -303,6 +305,13 @@ namespace EvolutionSim.StateManagement
                 case States.FindingPrey:
 
                     StateActions.SeekingFood.SeekFood(organism, grid, timeManager);
+                    //should be called once as the organism will move out of this 
+                    //state upon the next call of checkState
+                    if(organism.Path.Count > 0)
+                    {
+                        PursuitOcurring?.Invoke(new OrganismLocation((Organism)organism.DestinationTile.Inhabitant, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y), EventArgs.Empty);
+
+                    }
 
                     break;
 
