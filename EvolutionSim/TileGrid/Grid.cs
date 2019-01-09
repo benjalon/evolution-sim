@@ -26,8 +26,6 @@ namespace EvolutionSim.TileGrid
 
         public event EventHandler ShouldSpawnCorpse;
 
-        public event EventHandler ShouldAddOrganism;
-
         /// <summary>
         /// Create a Grid with given attributes.
         /// </summary>
@@ -256,18 +254,18 @@ namespace EvolutionSim.TileGrid
         }
 
         /// <summary>
-        /// handle being hunted by adding it to the list of organisms being hunted
-        /// event handler initalised in simulation constructor
+        /// When an organism is being hunted add it to the list 
+        /// of things being purused
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void OrganismHuntHandler(object sender, EventArgs e)
+        public void addOrganismBeingHunted(Organism huntedOrg)
         {
 
-            var organism = (Organism)sender;
-            var tileOccupied = this.GetTileAt(organism);
 
-            ShouldAddOrganism?.Invoke(new OrganismLocation(organism, tileOccupied.GridIndex.X, tileOccupied.GridIndex.Y), EventArgs.Empty);
+            Tile tileOccupied = this.GetTileAt(huntedOrg);
+
+            HuntedOrganisms.Add(new OrganismLocation(huntedOrg, tileOccupied.GridIndex.X, tileOccupied.GridIndex.Y));
 
         }
 

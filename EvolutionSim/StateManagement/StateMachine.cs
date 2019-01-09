@@ -14,7 +14,6 @@ namespace EvolutionSim.StateManagement
         private readonly State state;
         
         public event EventHandler MatingOccurred;
-        public event EventHandler PursuitOcurring;
 
       //  delegate bool checkPathPresent(Organism org);
        // checkPathPresent hasPath = organism => organism.Path.Count == 1;
@@ -188,7 +187,7 @@ namespace EvolutionSim.StateManagement
                 case States.FindingPrey:
                     
                     //then move into the Hunting state
-                    if ((bool)organism.PreyFound)
+                    if ((bool)organism.PreyFound && organism.DestinationTile != null)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
 
@@ -232,6 +231,9 @@ namespace EvolutionSim.StateManagement
 
                     //organism has finished hunting
                     organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
+
+                    //set the prey found to be false
+                    organism.PreyFound = false;
 
                     break;
 
@@ -305,17 +307,23 @@ namespace EvolutionSim.StateManagement
                 case States.FindingPrey:
 
                     StateActions.SeekingFood.SeekFood(organism, grid, timeManager);
-                    //should be called once as the organism will move out of this 
+
+                    //should be called once as the organism will move out of state as soon as the
+                    //destination tile isn't null
+                    //this will only work if this is checked once before moving onto the following state
                     //state upon the next call of checkState
-                    if(organism.Path.Count > 0)
+                    if(organism.DestinationTile != null)
                     {
-                        PursuitOcurring?.Invoke(new OrganismLocation((Organism)organism.DestinationTile.Inhabitant, organism.DestinationTile.GridIndex.X, organism.DestinationTile.GridIndex.Y), EventArgs.Empty);
+                        grid.addOrganismBeingHunted((Organism)organism.DestinationTile.Inhabitant);
 
                     }
 
                     break;
 
-
+                    //this is where all the pathfinding will go, 
+                    //each tick of the system will re-calculate 
+                    //the destination tile and the path to the destination tile
+                    //with simplified path finding
                 case States.Hunting: 
 
                 

@@ -49,15 +49,12 @@ namespace EvolutionSim
 
             this.grid = new Grid(Graphics.SimulationTextures["tile"], Graphics.SimulationTextures["mountain"], Graphics.SimulationTextures["water"]);
             this.grid.ShouldSpawnCorpse += SpawnCorpseHandler;
-            this.grid.ShouldAddOrganism += SpawnPreyHandler;
 
             this.TimeManager = new TimeManager();
 
             this.fsm = new StateMachine();
             this.fsm.MatingOccurred += this.BirthHandler;
 
-            //add the hunt handler method to pursuit occuring event
-            this.fsm.PursuitOcurring += this.grid.OrganismHuntHandler;
 
             this.GridInteractionManager = new GridInteractionManager(Graphics.SimulationTextures["tile"]);
 
