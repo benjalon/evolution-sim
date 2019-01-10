@@ -50,10 +50,10 @@ namespace EvolutionSim.TileGrid.Pathfinding
 
         /// <summary>
         /// returns the path for the organism to follow to its prey
-        /// //needs to take into account potential obstructions
+        /// //is oblivious to potential obstructions
         /// </summary>
         /// <returns></returns>
-        public List<Tile> CalculateRay()
+        public void CalculateRay()
         {
             
             Tile huntedOrganismPos = grid.GetTileAt(this.OrganismChased);
@@ -73,31 +73,31 @@ namespace EvolutionSim.TileGrid.Pathfinding
             
         
             //while the co-ordinates aren't adjacent to the desired organisms location
-             while(predatorLocationX != desiredLocationX + 1 || predatorLocationX != desiredLocationX - 1
-                    || predatorLocationY != desiredLocationY + 1 || predatorLocationY != desiredLocationY - 1)
+             while((predatorLocationX != desiredLocationX + 1 || predatorLocationX != desiredLocationX - 1)
+                    && (predatorLocationY != desiredLocationY + 1 || predatorLocationY != desiredLocationY - 1))
             {
-                if(predatorLocationX > desiredLocationX && xMagnitude != 0)
+                if(predatorLocationX > desiredLocationX + 1 && xMagnitude != 0)
                 {
                     predatorLocationX--;
                     xMagnitude--;
 
                 }
 
-                else if(predatorLocationX < desiredLocationX && xMagnitude != 0)
+                else if(predatorLocationX < desiredLocationX - 1 && xMagnitude != 0)
                 {
                     predatorLocationX++;
                     xMagnitude--;
 
                 }
 
-                if (predatorLocationY > desiredLocationY && yMagnitude != 0)
+                if (predatorLocationY > desiredLocationY + 1 && yMagnitude != 0)
                 {
                     predatorLocationY--;
                     yMagnitude--;
 
                 }
 
-                else if (predatorLocationY < desiredLocationY && yMagnitude != 0)
+                else if (predatorLocationY < desiredLocationY - 1 && yMagnitude != 0)
                 {
                     predatorLocationY++;
                     yMagnitude--;
@@ -109,31 +109,27 @@ namespace EvolutionSim.TileGrid.Pathfinding
 
 
             }
-           
-                  return Ray;
+
+             //set the predator's path to this rey
+             //also assuming this carries a ref to OG orgamism
+            Predator.Path = this.Ray;
 
             }
 
 
-         
-
-
-        }
-
-
-
-        /// <summary>
+           /// <summary>
         /// update the ray object with each tick of the timer
         /// </summary>
         /// <param name="timeManager"></param>
         /// <param name="grid"></param>
         public void UpdateRay(TimeManager timeManager, Grid grid)
         {
+            this.CalculateRay();
 
 
         }
 
 
-
+        }
 
 }

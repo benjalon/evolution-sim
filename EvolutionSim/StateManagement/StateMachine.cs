@@ -76,7 +76,7 @@ namespace EvolutionSim.StateManagement
                     else if(organism.Attributes.DietType == DietTypes.Canivore && timeManager.HasHuntingCooldownExpired(organism))
                     {
 
-                        organism.State = this.state.MoveState(organismState, Actions.Hunt);
+                        organism.State = this.state.MoveState(organismState, Actions.LookingForPrey);
 
 
                     }
