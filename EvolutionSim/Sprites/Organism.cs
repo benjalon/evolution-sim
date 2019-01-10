@@ -104,9 +104,15 @@ namespace EvolutionSim.Sprites
         /// </summary>
         public void Eat()
         {
-            Hunger += EATING_REGEN;
+            //if the organism reaches 1.0 Hunger then stop eating as they are full
+            if (this.Hunger < 1.0)
+            {
+                Hunger += EATING_REGEN;
+                IncreaseHealth(INCREMENT_HEALTH);
 
-            IncreaseHealth(INCREMENT_HEALTH);
+            }
+
+            return;
         }
         
         public override void SetScreenPosition(int x, int y)
