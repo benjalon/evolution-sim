@@ -61,6 +61,11 @@ namespace EvolutionSim
             this.WeatherOverlay = new WeatherOverlay(Graphics.SimulationTextures["cold_overlay"], Graphics.SimulationTextures["hot_overlay"]);
         }
 
+        /// <summary>
+        /// Call all of the relevant update methods as
+        /// the simulation progresses (propergates deltaT through the system)
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
             TimeManager.Update(gameTime);
@@ -112,21 +117,20 @@ namespace EvolutionSim
             return xIsHigher ? new Tuple<int, int>(y, x) : new Tuple<int, int>(x, y);
         }
 
+        /// <summary>
+        /// provide a way of determining the highest value from parent's attributes, this is indexed 
+        /// in the first position of the tuple
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private Tuple<int, int> MakeUseableValues(int x, int y)
         {
             var xIsHigher = x > y;
             return xIsHigher ? new Tuple<int, int>(y, x) : new Tuple<int, int>(x, y);
         }
 
-        //could be used to reduce repeated code
-        //private void calculationHandler(ref float attribute, Tuple attributeTuple)
-        //{
 
-
-
-
-
-        //}
         /// <summary>
         /// The birth handler is a method attacthed to the mating occured event and listens to when it is trigged in the FSM object
         /// It handles the creation of a new organism based on the stats of the mating couple and then attempts to place the child adjacent to the parents
@@ -363,6 +367,11 @@ namespace EvolutionSim
 
         }
 
+        /// <summary>
+        /// Add food based on the mouse position of the user
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void AddFood(int x, int y)
         {
             var positioned = this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
@@ -393,20 +402,5 @@ namespace EvolutionSim
 
         }
 
-        /// <summary>
-        /// so here we need to nudge an event listener in grid, which then
-        /// adds an organism with co-ordinates into a list of pursued organisms
-        /// this is so the position of the hunted organism can be tracked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SpawnPreyHandler(object sender, EventArgs e)
-        {
-            var LocationOrganism = ((OrganismLocation)sender);
-
-            this.grid.HuntedOrganisms.Add(LocationOrganism);
-
-
-        }
     }
 }
