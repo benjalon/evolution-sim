@@ -5,7 +5,9 @@ using System.Collections.Generic;
 namespace EvolutionSim.StateManagement
 {
 
-    //these represent the transition paths between states
+    /// <summary>
+    /// these represent the actions an organism must take to change it's state
+    /// </summary>
     public enum Actions
     {
         NotHungry,
@@ -29,7 +31,11 @@ namespace EvolutionSim.StateManagement
 
 
 
-    //Class used to represent the state of an organism
+    /// <summary>
+    /// This class is responsible for acting as a lookup table for the finite state machine,
+    /// in other words this class facilitates the changing of states and gives an insight into the 
+    /// static behaviours possible from the organisms existing in the system
+    /// </summary>
     public class State
     {
         private const int HASHING_CONST_1 = 17;
@@ -59,6 +65,11 @@ namespace EvolutionSim.StateManagement
 
             }
 
+            /// <summary>
+            /// Just check if one state transition object is equal to another
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
             public override bool Equals(Object obj)
             {
                 StateTransition other = obj as StateTransition;
