@@ -309,6 +309,12 @@ namespace EvolutionSim
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(organism).Center));
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <param name="amount"></param>
         public void AddOrganisms(List<Attributes> attributes, int amount)
         {
             foreach(var attribute in attributes)
@@ -327,6 +333,10 @@ namespace EvolutionSim
 
         }
 
+        /// <summary>
+        /// Randomly add herbivore food based on the input from GUI
+        /// </summary>
+        /// <param name="amount"></param>
         public void AddFoods(int amount)
         {
             Food food;
@@ -338,6 +348,11 @@ namespace EvolutionSim
             }
         }
 
+        /// <summary>
+        /// Add an organism based on the mouse position of a user
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void AddOrganism(int x, int y)
         {
             var positioned = this.grid.AttemptToPositionAt(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures), x, y);
