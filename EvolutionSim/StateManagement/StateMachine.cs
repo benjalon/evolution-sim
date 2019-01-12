@@ -257,7 +257,7 @@ namespace EvolutionSim.StateManagement
 
             switch (organismState)
             {
-
+                
                 case States.Roaming:
                     StateActions.Roam(organism, grid, timeManager);
 
@@ -266,7 +266,9 @@ namespace EvolutionSim.StateManagement
                 case States.Eating:
                     StateActions.EatingFood.EatFood(organism, grid, timeManager);
                     break;
-
+                
+                //once an oraganism has mated we trigger the mating event, which passes both organisms to
+                //the birthhandler method exisiting at the top level of code
                 case States.Mating:
                     var mother = (Organism)organism.DestinationTile.Inhabitant;
 

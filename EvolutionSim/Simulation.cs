@@ -127,7 +127,12 @@ namespace EvolutionSim
 
 
         //}
-
+        /// <summary>
+        /// The birth handler is a method attacthed to the mating occured event and listens to when it is trigged in the FSM object
+        /// It handles the creation of a new organism based on the stats of the mating couple and then attempts to place the child adjacent to the parents
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void BirthHandler(object sender, EventArgs args)
         {
 
@@ -290,6 +295,10 @@ namespace EvolutionSim
             particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(child).Center));
         }
 
+        /// <summary>
+        /// Method to populate organisms randomly in the simulation based on user input
+        /// </summary>
+        /// <param name="amount"></param>
         public void AddOrganisms(int amount)
         {
             Organism organism;
