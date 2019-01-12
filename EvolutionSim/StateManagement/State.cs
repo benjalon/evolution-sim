@@ -147,7 +147,7 @@ namespace EvolutionSim.StateManagement
 
 
         /// <summary>
-        /// if the transition is legal then facilitate it...
+        /// lookup the transition in the dictonary, if it exisits then facilitate it...
         /// otherwise throw an exception
         /// </summary>
         /// <param name="currentState"></param>
