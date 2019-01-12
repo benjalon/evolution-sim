@@ -57,7 +57,6 @@ namespace EvolutionSim.StateManagement
 
             States organismState = organism.State;
 
-            timeManager.UpdateOrganismTimers(organism); //this is already called in the attribute updater
 
             switch (organismState)
             {
@@ -88,7 +87,6 @@ namespace EvolutionSim.StateManagement
 
                 #endregion
                     
-
 
                 #region Food States
 
