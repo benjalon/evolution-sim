@@ -6,15 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using EvolutionSim.TileGrid;
 
-/// <summary>
-/// This class is to return probabilites based on the distribution of organisms on screen 
-/// This way we can dynamically update thresholds to accomamte for the organisms in simulation
-/// </summary>
+
 namespace EvolutionSim.StateManagement
 {
 
     /// <summary>
-    /// this is needed for crossover as well
+    /// This class handles the use of probability in the simulation
     /// </summary>
     class Probability
     {
