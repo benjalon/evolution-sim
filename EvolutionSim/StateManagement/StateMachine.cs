@@ -43,7 +43,10 @@ namespace EvolutionSim.StateManagement
         }
 
         /// <summary>
-        /// This method is used for testing which state an organism is in, should be called in the update method
+        /// This method is used for testing which state an organism is in, essentially on each tick of the simulation the 
+        /// state variables are checked along with the organism attributes, when the organism falls into a certain
+        /// boundary or a specific condition is true we call the lookup table and facilitate the state transition 
+        /// if it is legal, otherwise an exception is thrown in the 'State' or lookup class
         /// </summary>
         /// <param name="organism"></param>
         public void CheckState(TimeManager timeManager, Organism organism)
@@ -126,7 +129,8 @@ namespace EvolutionSim.StateManagement
                     break;
 
                 #endregion
-
+                
+                
                 #region Mate States
 
                 case States.SeekMate: // When an organism is running pathfinding algorithm to find a mate
@@ -247,8 +251,8 @@ namespace EvolutionSim.StateManagement
 
         /// <summary>
         /// This method controls how an organism goes about its buisness when in a given state
+        /// it does this through a combonation of state variables and cooldowns
         /// </summary>
-
         private void DetermineBehaviour(Grid grid, TimeManager timeManager, Organism organism)
         {
             States organismState = organism.State;
