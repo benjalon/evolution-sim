@@ -82,10 +82,14 @@ namespace EvolutionSim.StateManagement
         // represent a transition table as a dictonary
         private Dictionary<StateTransition, States> transitions;
         
-        //Sets each state to roaming by default
+        /// <summary>
+        /// We initalise one state object in the simulation, 
+        /// which just consists of a list of possible 'State transitions'
+        /// This enables us to easily model and control organism behaviour
+        /// </summary>
         public State()
         {
-            //CurrentState = PotentialStates.Roaming;
+            
 
             //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
             this.transitions = new Dictionary<StateTransition, States>
@@ -142,7 +146,13 @@ namespace EvolutionSim.StateManagement
         }
 
 
-        //return the next state deterministically
+        /// <summary>
+        /// if the transition is legal then facilitate it...
+        /// otherwise throw an exception
+        /// </summary>
+        /// <param name="currentState"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public States GetNext(States currentState, Actions action)
         {
             StateTransition transition = new StateTransition(currentState, action);
@@ -156,7 +166,13 @@ namespace EvolutionSim.StateManagement
             return nextState;
         }
 
-        //handles the moving of states.
+        /// <summary>
+        /// We call this method in the body of FSM object,
+        /// attempts to take an action while in a given state
+        /// </summary>
+        /// <param name="determinedState"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public States MoveState(States determinedState, Actions action)
         {
             determinedState = GetNext(determinedState, action);
