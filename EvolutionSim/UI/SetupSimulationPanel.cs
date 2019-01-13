@@ -14,6 +14,8 @@ namespace EvolutionSim.UI
 {
     public class SetupSimulationPanel : Panel
     {
+        private float MAX_ATTRIBUTE_INPUT = 1.0f;
+
         private Panel speciesTexturePanel;
         private Panel attributePanel;
 
@@ -39,10 +41,10 @@ namespace EvolutionSim.UI
         public SetupSimulationPanel(float tabButtonSIze)
         {
 
-            this.Size = (new Vector2(Graphics.WINDOW_WIDTH/2.0f, (Graphics.WINDOW_HEIGHT / 1.25f)- tabButtonSIze));
+            this.Size = (new Vector2(Graphics.WINDOW_WIDTH / 2.0f, (Graphics.WINDOW_HEIGHT / 1.25f) - tabButtonSIze));
 
             CreatePanel();
-            
+
         }
 
         public Nullable<Attributes> GetPanelData()
@@ -66,13 +68,33 @@ namespace EvolutionSim.UI
                         break;
                 }
                 startingAttributes.MaxHealth = Convert.ToInt32(startHealth.Value);
-                startingAttributes.Speed = Convert.ToInt32(startSpeed.Value);
-                startingAttributes.Strength = Convert.ToInt32(startStrength.Value);
+
+                if (float.TryParse(startSpeed.Value, out var speedInput))
+                {
+                    if (speedInput > MAX_ATTRIBUTE_INPUT)
+                    {
+                        speedInput = MAX_ATTRIBUTE_INPUT;
+                    }
+
+                    startingAttributes.Speed = speedInput;
+                }
+
+                if (float.TryParse(startStrength.Value, out var strengthInput))
+                {
+                    if (strengthInput > MAX_ATTRIBUTE_INPUT)
+                    {
+                        strengthInput = MAX_ATTRIBUTE_INPUT;
+                    }
+
+                    startingAttributes.Strength = strengthInput;
+                }
+
                 startingAttributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
                 startingAttributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
                 return startingAttributes;
             }
-            catch (Exception e){
+            catch (Exception e)
+            {
                 return null;
 
             }
@@ -116,7 +138,7 @@ namespace EvolutionSim.UI
             CreateAttributePanel();
 
 
- 
+
             this.AddChild(attributePanel);
         }
 
@@ -146,12 +168,10 @@ namespace EvolutionSim.UI
 
             Label labelStartSpeed = new Label("Start Speed: ");
             this.startSpeed = new TextInput();
-            this.startSpeed.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
 
 
             Label labelStartStrength = new Label("Start Strength: ");
             this.startStrength = new TextInput();
-            this.startStrength.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
 
 
             // Resist Cold DropDown

@@ -14,6 +14,10 @@ namespace EvolutionSim.UI
     /// </summary>
     public class Overlay
     {
+        private const int MAX_ITEM_INPUT = 100;
+        private const int MAX_AGE_INPUT = 300;
+        private const float MAX_ATTRIBUTE_INPUT = 1.0f;
+
         public const int PANEL_WIDTH = 300;
 
         private const int TOP_PANEL_HEIGHT = 130;
@@ -78,6 +82,11 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(organismCountInput.Value, out var input))
                 {
+                    if (input > MAX_ITEM_INPUT)
+                    {
+                        input = MAX_ITEM_INPUT;
+                    }
+
                     OrganismsAdded?.Invoke(this, new CreationArgs(input));
                 }
             };
@@ -90,6 +99,11 @@ namespace EvolutionSim.UI
             {
                 if (int.TryParse(foodCountInput.Value, out var input))
                 {
+                    if (input > MAX_ITEM_INPUT)
+                    {
+                        input = MAX_ITEM_INPUT;
+                    }
+
                     FoodsAdded?.Invoke(this, new CreationArgs(input));
                 }
             };
@@ -219,22 +233,69 @@ namespace EvolutionSim.UI
 
             var editHungerText = new Paragraph("Hunger:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
             this.editHungerValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
-            editHungerValue.OnValueChange = (Entity btn) =>
+            this.editHungerValue.OnValueChange = (Entity btn) =>
             {
-                if (int.TryParse(((TextInput)btn).Value, out var input))
+                var button = (TextInput)btn;
+                if (float.TryParse(button.Value, out var input))
                 {
+                    if (input > MAX_ATTRIBUTE_INPUT)
+                    {
+                        input = MAX_ATTRIBUTE_INPUT;
+                    }
+
                     this.selectedOrganism.Hunger = input;
                 }
             };
 
             var editAgeText = new Paragraph("Age:", Anchor.AutoInline, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT));
             this.editAgeValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editAgeValue.OnValueChange = (Entity btn) =>
+            {
+                var button = (TextInput)btn;
+                if (int.TryParse(button.Value, out var input))
+                {
+                    if (input > MAX_AGE_INPUT)
+                    {
+                        input = MAX_AGE_INPUT;
+                    }
+
+                    this.selectedOrganism.Age = input;
+                }
+            };
 
             var editStrengthText = new Paragraph("Strength:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
             this.editStrengthValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editStrengthValue.OnValueChange = (Entity btn) =>
+            {
+                var button = (TextInput)btn;
+                if (float.TryParse(button.Value, out var input))
+                {
+                    if (input > MAX_ATTRIBUTE_INPUT)
+                    {
+                        input = MAX_ATTRIBUTE_INPUT;
+                    }
+
+                    var attributes = this.selectedOrganism.Attributes;
+                    attributes.Strength = input;
+                }
+            };
 
             var editSpeedText = new Paragraph("Speed:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
             this.editSpeedValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editSpeedValue.OnValueChange = (Entity btn) =>
+            {
+                var button = (TextInput)btn;
+                if (float.TryParse(button.Value, out var input))
+                {
+                    if (input > MAX_ATTRIBUTE_INPUT)
+                    {
+                        input = MAX_ATTRIBUTE_INPUT;
+                    }
+
+                    var attributes = this.selectedOrganism.Attributes;
+                    attributes.Speed = input;
+                }
+            };
 
             // Draw order
 
@@ -257,23 +318,30 @@ namespace EvolutionSim.UI
         /// <param name="gameTime">Time elapsed since last update call</param>
         public void Update(GameTime gameTime, Organism selectedOrganism)
         {
-            this.selectedOrganism = selectedOrganism;
-
             UserInterface.Active.Update(gameTime);
             
             if (selectedOrganism == null)
             {
+                this.selectedOrganism = null;
+
                 this.editHungerValue.Value = "";
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_EXPANDED_HEIGHT);
                 this.bottomPanel.Visible = false;
             }
-            else
+            else if (this.selectedOrganism != selectedOrganism)
             {
+                this.selectedOrganism = selectedOrganism;
+
                 this.editSpeciesValue.PlaceholderText = selectedOrganism.Attributes.Species;
                 this.editHungerValue.PlaceholderText = Math.Round(selectedOrganism.Hunger, 2).ToString();
                 this.editAgeValue.PlaceholderText = selectedOrganism.Age.ToString();
                 this.editStrengthValue.PlaceholderText = Math.Round(selectedOrganism.Attributes.Strength, 2).ToString();
                 this.editSpeedValue.PlaceholderText = Math.Round(selectedOrganism.Attributes.Speed, 2).ToString();
+                this.editSpeciesValue.Value = "";
+                this.editHungerValue.Value = "";
+                this.editAgeValue.Value = "";
+                this.editStrengthValue.Value = "";
+                this.editSpeedValue.Value = "";
 
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_CONTRACTED_HEIGHT);
                 this.bottomPanel.Visible = true;
