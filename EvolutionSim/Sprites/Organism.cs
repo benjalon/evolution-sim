@@ -66,11 +66,11 @@ namespace EvolutionSim.Sprites
             //if the organism isn't a carnivore then make PreyFound null
             if(this.Attributes.DietType == DietTypes.Canivore)
             {
-                this.PreyFound = null;
+               this.PreyFound = false; 
             }
             else
             {
-                this.PreyFound = false;
+                this.PreyFound = null;
             }
 
 
