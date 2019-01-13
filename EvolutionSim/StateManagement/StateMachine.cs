@@ -329,7 +329,8 @@ namespace EvolutionSim.StateManagement
                     //the destination tile and the path to the destination tile
                     //with simplified path finding
                 case States.Hunting:
-                    
+
+                    StateActions.MoveAlongPreyPath(organism, grid);
                 
 
                     break;

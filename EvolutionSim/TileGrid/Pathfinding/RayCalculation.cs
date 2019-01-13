@@ -17,9 +17,6 @@ namespace EvolutionSim.TileGrid.Pathfinding
     {
        private Organism OrganismChased;
        private Organism Predator;
-       private readonly Grid grid;
-    
-        //tiles between predator and prey
        private List<Tile> Ray;
 
 
@@ -29,31 +26,21 @@ namespace EvolutionSim.TileGrid.Pathfinding
         /// </summary>
         /// <param name="huntedOrganism"></param>
         /// <param name="predator"></param>
-        public RayCalculation(Organism organismChased, Organism predator, Grid grid)
+        public RayCalculation(Organism organismChased, Organism predator)
         {
 
             this.OrganismChased = organismChased;
             this.Predator = predator;
-            this.grid = grid;
+            Ray = new List<Tile>();
 
         }
-
-        //private Tuple<int, int> OrgLocation(int posX, int posY)
-        //{
-        //    var X = posX;
-        //    var Y = posY;
-
-        //    Tuple createdTuple;
-
-        //    return 
-        //}
 
         /// <summary>
         /// returns the path for the organism to follow to its prey
         /// //is oblivious to potential obstructions
         /// </summary>
         /// <returns></returns>
-        public void CalculateRay()
+        public void CalculateRay(Grid grid)
         {
             
 
@@ -122,8 +109,11 @@ namespace EvolutionSim.TileGrid.Pathfinding
         /// <param name="grid"></param>
         public void UpdateRay(TimeManager timeManager, Grid grid)
         {
-            this.CalculateRay();
-
+            if (timeManager.HasSimulationTicked)
+            {
+                this.CalculateRay(grid);
+            }
+               
 
         }
 
