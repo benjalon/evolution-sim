@@ -10,14 +10,15 @@ namespace EvolutionSim.StateManagement
     {
         NotHungry,
         HungryRoam,
-        HungryMate,
+        WantingMate,
         FoodDetected,
         FoodFound,
         MateFound,
         FinishedMating,
         Move,
         Waiting,
-        Bang,
+        Mating,
+
 
     }
 
@@ -79,7 +80,7 @@ namespace EvolutionSim.StateManagement
                 { new StateTransition (States.Roaming, Actions.NotHungry), States.Roaming},
 
                 //if organism is in roaming state and wants to mate then place into seekMate state
-                { new StateTransition (States.Roaming, Actions.HungryMate), States.SeekMate},
+                { new StateTransition (States.Roaming, Actions.WantingMate), States.SeekMate},
 
                 { new StateTransition (States.Roaming, Actions.HungryRoam), States.SeekFood},
 
@@ -102,13 +103,14 @@ namespace EvolutionSim.StateManagement
                 
                 { new StateTransition(States.SeekMate, Actions.MateFound), States.MovingToMate},
 
+
                 //now if an organism is waiting for a mate and takes the action move to go over to partner
                 {new StateTransition(States.SeekMate, Actions.Waiting), States.WaitingForMate},
 
                 //we are finished with mating, so now go back to roaming!
                 {new StateTransition(States.WaitingForMate, Actions.Move), States.Roaming},
 
-                {new StateTransition(States.MovingToMate, Actions.Bang), States.Mating},
+                {new StateTransition(States.MovingToMate, Actions.Mating), States.Mating},
                 
                 { new StateTransition(States.MovingToMate,Actions.FinishedMating),States.Roaming }, // Mate has disappeared
 

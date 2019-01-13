@@ -37,8 +37,14 @@ namespace EvolutionSim.StateManagement
             for (var i = grid.Organisms.Count - 1; i >= 0; i--)
             {
                 organism = grid.Organisms[i];
-                CheckState(timeManager, organism);
-                DetermineBehaviour(grid, timeManager, organism);
+
+                    CheckState(timeManager, organism);
+                if (!organism.Frozen)
+                    DetermineBehaviour(grid, timeManager, organism);
+
+
+
+
             }
         }
 
@@ -69,7 +75,7 @@ namespace EvolutionSim.StateManagement
                     else if (organism.Hunger >= MATING_THRESHOLD && timeManager.HasMatingCooldownExpired(organism)) // Not hungry so find a mate
                     {
                         organism.Path.Clear(); // Need to get rid of any exisiting path an organism may have
-                        organism.State = this.state.MoveState(organismState, Actions.HungryMate); //go find a mate
+                        organism.State = this.state.MoveState(organismState, Actions.WantingMate); //go find a mate
                     }
 
                     break;
@@ -85,21 +91,33 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry);
                     }
 
-                    if (organism.DestinationTile != null && organism.DestinationTile.HasFoodInhabitant)
+                    if (organism.DestinationTile != null)
+
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
                     }
+
+                    //if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant)
+                    //{
+                    //    organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
+                    //}
 
                     break;
 
                 case States.MovingToFood:
                     //organisms have a path count greater than 1 a lot of the time.
-                    if (organism.Path.Count == 1 && organism.DestinationTile.HasFoodInhabitant)
+                    if (organism.Path.Count == 1 && (organism.DestinationTile.HasFoodInhabitant || organism.DestinationTile.HasOrganismInhabitant))
                     {
+                        if (organism.DestinationTile.HasOrganismInhabitant)
+                        {
+                            organism.Hunting = false;
+ 
+                            organism.DestinationTile.Inhabitant.DecreaseHealth(999);
+                        }
                         organism.State = this.state.MoveState(organismState, Actions.FoodFound); // adjacent to food, eat it
                     }
 
-                    if (organism.DestinationTile == null || !organism.DestinationTile.HasFoodInhabitant)
+                    if (organism.DestinationTile == null)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry); // Food is gone, give up
                     }
@@ -138,7 +156,7 @@ namespace EvolutionSim.StateManagement
                 case States.MovingToMate: // When an organism is moving on a path towards a mate
                     if (organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant)
                     {
-                        organism.State = this.state.MoveState(organismState, Actions.Bang); //the organism is adjacent to a mate, so go ahead and make love
+                        organism.State = this.state.MoveState(organismState, Actions.Mating); //the organism is adjacent to a mate, so go ahead and make love
                     }
 
                     if (organism.DestinationTile == null || !organism.DestinationTile.HasOrganismInhabitant)

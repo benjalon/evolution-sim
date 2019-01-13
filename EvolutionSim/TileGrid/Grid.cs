@@ -205,6 +205,16 @@ namespace EvolutionSim.TileGrid
             return inhabitant != null && inhabitant.GetType() == typeof(Organism) && ((Organism)inhabitant).State == States.SeekMate;
         }
 
+        public bool IsOrganismAt(Organism organism, int x, int y)
+        {
+            var inhabitant = this.tiles[x][y].Inhabitant;
+            if (inhabitant == organism)
+            {
+                return false; // The organism is checking itself, so it isn't a mate.
+            }
+            return inhabitant != null && inhabitant.GetType() == typeof(Organism);
+        }
+
         public bool IsAdjacent(Point StartPosition, Point EndPosition)
         {
             var distance = Math.Floor(Math.Sqrt((StartPosition.X - EndPosition.X) * (StartPosition.X - EndPosition.X) + (StartPosition.Y - EndPosition.Y) * (StartPosition.Y - EndPosition.Y)));

@@ -100,16 +100,20 @@ namespace EvolutionSim.StateManagement
             // path is not blocked so carry on as normal
             else if (organism.Path.Count > 0)
             {
+
                 if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
                 {
                     organism.Path.RemoveAt(0);
+
+
                 }
-            } 
+            }
+
         }
 
         public static void MoveAlongMatePath(Organism organism, Grid grid)
         {
-            var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant || 
+            var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant ||
                                 organism.Path.Count == 1 && organism.Path[0].HasFoodInhabitant; // If the path has only one tile, it should only contain the target organism
 
             if (isPathBlocked)
@@ -142,6 +146,10 @@ namespace EvolutionSim.StateManagement
                 return false; // The tile is out of bounds or there's no food there
             }
 
+            // Type check tile
+            // If type is organism
+            //      If I am carnivore
+            //          THEN FOOD
             // Does the food type match the organism's diet type
             var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
             var validFood = organism.Attributes.DietType == DietTypes.Omnivore ||
@@ -176,9 +184,45 @@ namespace EvolutionSim.StateManagement
                         organism.Computing = false;
                     }), null);
                 }
+                else if (organism.Attributes.DietType == DietTypes.Canivore || organism.Attributes.DietType == DietTypes.Omnivore)
+                {
+
+                    Tile potentialPrey = PreyInRange(organism, grid);
+
+                    if (potentialPrey != null)
+                    {
+                        if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
+
+                            ((Organism)potentialPrey.Inhabitant).Frozen = true;
+                            //((Organism)potentialPrey.Inhabitant).DecreaseHealth(999);
+                            organism.Computing = true;
+                            ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
+                            {
+                                organism.Path = PathFinding.FindShortestPath(grid.GetTileAt(organism), potentialPrey, grid);
+                                organism.Hunting = true;
+                                organism.Computing = false;
+                            }), null);
+
+                        }
+                        else
+                        {
+                            Roam(organism, grid, timeManager);
+
+                        }
+
+                    }
+                    else
+                    {
+                        Roam(organism, grid, timeManager);
+
+                    }
+
+
+                }
                 else
                 {
                     Roam(organism, grid, timeManager);
+
                 }
 
             }
@@ -270,6 +314,27 @@ namespace EvolutionSim.StateManagement
                 }
                 return null;
             }
+
+
+
+            private static Tile PreyInRange(Organism organism, Grid grid)
+            {
+                int firstX = organism.GridIndex.X - Organism.DETECTION_RADIUS;
+                int firstY = organism.GridIndex.Y - Organism.DETECTION_RADIUS;
+                for (int i = 0; i < Organism.DETECTION_DIAMETER; i++)
+                {
+                    for (int j = 0; j < Organism.DETECTION_DIAMETER; j++)
+                    {
+                        if (grid.InBounds(firstX + i, firstY + j) && grid.IsOrganismAt(organism, firstX + i, firstY + j))
+                        {
+                            return grid.GetTileAt(firstX + i, firstY + j);
+                        }
+                    }
+
+                }
+                return null;
+            }
+
         }
 
         /// <summary>
@@ -337,5 +402,9 @@ namespace EvolutionSim.StateManagement
                 //System.Console.WriteLine("Waiting!"); // TODO: Have a way of leaving this state after some time if a mate hasn't reached them
             }
         }
+
+      
     }
+
+
 }
