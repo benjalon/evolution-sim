@@ -18,6 +18,8 @@ namespace EvolutionSim.Sprites
         private const float SCALE_MULTIPLIER = 0.2f;
         private const float UPPER_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
 
+
+    
         // Breed attributes
         public Attributes Attributes { get; }
 
@@ -39,6 +41,8 @@ namespace EvolutionSim.Sprites
         public bool JustMated { get; set; } = false;
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
+        public bool Hunting { get; set; }
+        public bool Frozen { get; set; }
 
         public bool RecentlyHunted { get; set; } = false;
 
