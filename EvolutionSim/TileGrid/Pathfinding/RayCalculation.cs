@@ -53,7 +53,7 @@ namespace EvolutionSim.TileGrid.Pathfinding
             //getting the absolute difference between the organism positions
             int xMagnitude = Math.Abs(desiredLocationX - predatorLocationX) - 1;
 
-            int yMagnitude = Math.Abs(desiredLocationY - predatorLocationY ) - 1;
+            int yMagnitude = Math.Abs(desiredLocationY - predatorLocationY) - 1;
 
             
         
@@ -96,7 +96,6 @@ namespace EvolutionSim.TileGrid.Pathfinding
             }
 
              //set the predator's path to this rey
-             //also assuming this carries a ref to OG orgamism
             Predator.Path = this.Ray;
 
             }

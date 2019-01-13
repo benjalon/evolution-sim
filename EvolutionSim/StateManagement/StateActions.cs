@@ -136,8 +136,6 @@ namespace EvolutionSim.StateManagement
 
         }
 
-
-
         public static void MoveAlongMatePath(Organism organism, Grid grid)
         {
             var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant || 
@@ -188,8 +186,6 @@ namespace EvolutionSim.StateManagement
 
                     return validFood;
 
-                   // break;
-
                 case States.Hunting:
 
                     //if there is valid prey at the location
@@ -206,9 +202,6 @@ namespace EvolutionSim.StateManagement
                     var validPrey = huntedOrg.Attributes.DietType == DietTypes.Herbivore;
 
                     return validPrey;
-
-
-                    //break;
 
 
                 default:
