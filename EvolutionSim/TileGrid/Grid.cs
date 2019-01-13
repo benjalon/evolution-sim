@@ -277,9 +277,27 @@ namespace EvolutionSim.TileGrid
         public void AddRayCalculationObject(Organism huntedOrganism, Organism chasingOrganism)
         {
            
-            Rays.Add(new RayCalculation(huntedOrganism, chasingOrganism, this));
+            Rays.Add(new RayCalculation(huntedOrganism, chasingOrganism));
 
         }
+
+        public void UpdateRay()
+        {
+            if(this.Rays.Count != 0)
+            {
+                foreach(RayCalculation ray in this.Rays)
+                {
+
+                    ray.CalculateRay(this);
+
+                }
+
+            }
+
+
+
+        }
+
 
         /// <summary>
         /// Handle food being eaten by removing the food from the grid and removing its reference from the list of food.
