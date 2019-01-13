@@ -41,8 +41,10 @@ namespace EvolutionSim.StateManagement
                     CheckState(timeManager, organism);
                 if (!organism.Frozen)
                     DetermineBehaviour(grid, timeManager, organism);
-        
-                
+
+
+
+
             }
         }
 
@@ -89,7 +91,7 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry);
                     }
 
-                    if (organism.DestinationTile != null && (organism.DestinationTile.HasFoodInhabitant || organism.DestinationTile.HasOrganismInhabitant))
+                    if (organism.DestinationTile != null)
 
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
@@ -108,15 +110,14 @@ namespace EvolutionSim.StateManagement
                     {
                         if (organism.DestinationTile.HasOrganismInhabitant)
                         {
+                            organism.Hunting = false;
+ 
                             organism.DestinationTile.Inhabitant.DecreaseHealth(999);
                         }
                         organism.State = this.state.MoveState(organismState, Actions.FoodFound); // adjacent to food, eat it
                     }
 
-                    if (organism.DestinationTile == null 
-                        || (!organism.DestinationTile.HasFoodInhabitant && organism.Attributes.DietType== DietTypes.Herbivore ) 
-                        || (!organism.DestinationTile.HasOrganismInhabitant && organism.Attributes.DietType == DietTypes.Canivore)
-                        || (!organism.DestinationTile.HasOrganismInhabitant && !organism.DestinationTile.HasFoodInhabitant && organism.Attributes.DietType == DietTypes.Omnivore))
+                    if (organism.DestinationTile == null)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry); // Food is gone, give up
                     }

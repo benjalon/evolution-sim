@@ -100,6 +100,7 @@ namespace EvolutionSim.StateManagement
             // path is not blocked so carry on as normal
             else if (organism.Path.Count > 0)
             {
+
                 if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
                 {
                     organism.Path.RemoveAt(0);
@@ -186,14 +187,11 @@ namespace EvolutionSim.StateManagement
                 else if (organism.Attributes.DietType == DietTypes.Canivore || organism.Attributes.DietType == DietTypes.Omnivore)
                 {
 
-                    // If we can't FIND food, TRY to kill some, otherwise just roam
-                    //      Try Hunt
-                    //
                     Tile potentialPrey = PreyInRange(organism, grid);
 
                     if (potentialPrey != null)
                     {
-                        if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength && ((Organism)potentialPrey.Inhabitant).Frozen ==false){
+                        if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
 
                             ((Organism)potentialPrey.Inhabitant).Frozen = true;
                             //((Organism)potentialPrey.Inhabitant).DecreaseHealth(999);
@@ -206,8 +204,6 @@ namespace EvolutionSim.StateManagement
                             }), null);
 
                         }
-
-
                         else
                         {
                             Roam(organism, grid, timeManager);
