@@ -171,7 +171,7 @@ namespace EvolutionSim.StateManagement
 
                     return validFood;
 
-                    break;
+                   // break;
 
                 case States.Hunting:
 
@@ -191,7 +191,7 @@ namespace EvolutionSim.StateManagement
                     return validPrey;
 
 
-                    break;
+                    //break;
 
 
                 default:
