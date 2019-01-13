@@ -2,7 +2,7 @@
 using EvolutionSim.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using EvolutionSim.PathFinding;
+using EvolutionSim.TileGrid.Pathfinding;
 using System;
 using System.Collections.Generic;
 
@@ -20,7 +20,7 @@ namespace EvolutionSim.TileGrid
 
         public List<OrganismLocation> HuntedOrganisms { get; private set; } = new List<OrganismLocation>();
 
-        public List<RayCalculation> 
+        public List<RayCalculation> Rays { get; private set; } = new List<RayCalculation>();
         public List<Food> Foods { get; private set; } = new List<Food>();
         public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
 
@@ -268,6 +268,16 @@ namespace EvolutionSim.TileGrid
             Tile tileOccupied = this.GetTileAt(huntedOrg);
 
             HuntedOrganisms.Add(new OrganismLocation(huntedOrg, tileOccupied.GridIndex.X, tileOccupied.GridIndex.Y));
+
+        }
+
+        /// <summary>
+        /// When we have a chase going on add a ray calculation object in
+        /// </summary>
+        public void AddRayCalculationObject(Organism huntedOrganism, Organism chasingOrganism)
+        {
+           
+            Rays.Add(new RayCalculation(huntedOrganism, chasingOrganism, this));
 
         }
 

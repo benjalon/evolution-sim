@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Threading;
 
+
 namespace EvolutionSim.StateManagement
 {
     enum Directions
@@ -115,8 +116,24 @@ namespace EvolutionSim.StateManagement
         /// <param name="grid"></param>
         public static void MoveAlongPreyPath(Organism organism, Grid grid)
         {
+            var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant ||
+                organism.Path.Count == 1 && organism.Path[0].HasOrganismInhabitant;
 
-    
+            if (isPathBlocked)
+            {
+                organism.Path.Clear(); // The path is blocked so it will need recalculating
+            }
+
+            // path is not blocked so carry on as normal
+            else if (organism.Path.Count > 0)
+            {
+                if (MoveTowards(organism, organism.Path[0], grid)) // Wait for the lerp
+                {
+                    organism.Path.RemoveAt(0);
+                }
+            }
+
+
         }
 
 
@@ -360,7 +377,7 @@ namespace EvolutionSim.StateManagement
         /// </summary>
         public static class HuntingOrganism
         {
-         
+            
 
         }
 

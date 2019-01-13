@@ -318,7 +318,7 @@ namespace EvolutionSim.StateManagement
                     //state upon the next call of checkState
                     if(organism.DestinationTile != null && organism.PreyFound == true)
                     {
-                        grid.addOrganismBeingHunted((Organism)organism.DestinationTile.Inhabitant);
+                        grid.AddRayCalculationObject((Organism)organism.DestinationTile.Inhabitant, organism);
 
                     }
 
@@ -328,8 +328,8 @@ namespace EvolutionSim.StateManagement
                     //each tick of the system will re-calculate 
                     //the destination tile and the path to the destination tile
                     //with simplified path finding
-                case States.Hunting: 
-
+                case States.Hunting:
+                    
                 
 
                     break;
@@ -339,6 +339,9 @@ namespace EvolutionSim.StateManagement
 
                     var prey = (Organism)organism.DestinationTile.Inhabitant;
                     prey.killOrganism();
+
+                    //set the prey found equal to false
+                    organism.PreyFound = false;
 
                     break;
 

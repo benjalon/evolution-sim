@@ -17,7 +17,7 @@ namespace EvolutionSim.TileGrid.Pathfinding
     {
        private Organism OrganismChased;
        private Organism Predator;
-        private readonly Grid grid;
+       private readonly Grid grid;
     
         //tiles between predator and prey
        private List<Tile> Ray;
@@ -34,7 +34,7 @@ namespace EvolutionSim.TileGrid.Pathfinding
 
             this.OrganismChased = organismChased;
             this.Predator = predator;
-
+            this.grid = grid;
 
         }
 
@@ -56,19 +56,17 @@ namespace EvolutionSim.TileGrid.Pathfinding
         public void CalculateRay()
         {
             
-            Tile huntedOrganismPos = grid.GetTileAt(this.OrganismChased);
-            Tile predatorOrganismPos = grid.GetTileAt(this.Predator);
 
-            int desiredLocationX = huntedOrganismPos.Inhabitant.GridIndex.X;
-            int desiredLocationY = huntedOrganismPos.Inhabitant.GridIndex.Y;
+            int desiredLocationX = this.OrganismChased.GridIndex.X;
+            int desiredLocationY = this.OrganismChased.GridIndex.Y;
 
-            int predatorLocationX = predatorOrganismPos.Inhabitant.GridIndex.X;
-            int predatorLocationY = predatorOrganismPos.Inhabitant.GridIndex.Y;
+            int predatorLocationX = this.Predator.GridIndex.X;
+            int predatorLocationY = this.Predator.GridIndex.Y;
 
             //getting the absolute difference between the organism positions
-            int xMagnitude = Math.Abs(huntedOrganismPos.Inhabitant.GridIndex.X - predatorOrganismPos.Inhabitant.GridIndex.X) - 1;
+            int xMagnitude = Math.Abs(desiredLocationX - predatorLocationX) - 1;
 
-            int yMagnitude = Math.Abs(huntedOrganismPos.Inhabitant.GridIndex.Y - predatorOrganismPos.Inhabitant.GridIndex.Y) - 1;
+            int yMagnitude = Math.Abs(desiredLocationY - predatorLocationY ) - 1;
 
             
         
