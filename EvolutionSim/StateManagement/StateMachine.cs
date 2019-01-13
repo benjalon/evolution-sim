@@ -189,7 +189,7 @@ namespace EvolutionSim.StateManagement
                 case States.FindingPrey:
                     
                     //then move into the Hunting state
-                    if ((bool)organism.PreyFound && organism.DestinationTile != null)
+                    if (organism.PreyFound == true && organism.DestinationTile != null)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
 
