@@ -64,9 +64,13 @@ namespace EvolutionSim.Sprites
             this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
 
             //if the organism isn't a carnivore then make PreyFound null
-            if(this.Attributes.DietType != DietTypes.Canivore)
+            if(this.Attributes.DietType == DietTypes.Canivore)
             {
-                PreyFound = null;
+                this.PreyFound = null;
+            }
+            else
+            {
+                this.PreyFound = false;
             }
 
 
