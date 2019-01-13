@@ -16,9 +16,7 @@ namespace EvolutionSim.TileGrid
         public const int TILE_COUNT_X = Graphics.SIMULATION_WIDTH / Tile.TILE_SIZE;
         public const int TILE_COUNT_Y = Graphics.SIMULATION_WIDTH / Tile.TILE_SIZE;
 
-        public List<Organism> Organisms { get; private set; } = new List<Organism>();
-
-        public List<OrganismLocation> HuntedOrganisms { get; private set; } = new List<OrganismLocation>();
+        public List<Organism> Organisms { get; private set; } = new List<Organism>(); 
 
         public List<RayCalculation> Rays { get; private set; } = new List<RayCalculation>();
         public List<Food> Foods { get; private set; } = new List<Food>();
@@ -255,24 +253,9 @@ namespace EvolutionSim.TileGrid
             ShouldSpawnCorpse?.Invoke(organism, EventArgs.Empty);
         }
 
-        /// <summary>
-        /// When an organism is being hunted add it to the list 
-        /// of things being purused
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void addOrganismBeingHunted(Organism huntedOrg)
-        {
-
-
-            Tile tileOccupied = this.GetTileAt(huntedOrg);
-
-            HuntedOrganisms.Add(new OrganismLocation(huntedOrg, tileOccupied.GridIndex.X, tileOccupied.GridIndex.Y));
-
-        }
 
         /// <summary>
-        /// When we have a chase going on add a ray calculation object in
+        /// Method called to add an organism chasing it's prey
         /// </summary>
         public void AddRayCalculationObject(Organism huntedOrganism, Organism chasingOrganism)
         {
@@ -281,6 +264,10 @@ namespace EvolutionSim.TileGrid
 
         }
 
+        /// <summary>
+        /// With every tick of the simulation 
+        /// we want to update the traversal path for the organism hunting it's prey
+        /// </summary>
         public void UpdateRay()
         {
             if(this.Rays.Count != 0)
