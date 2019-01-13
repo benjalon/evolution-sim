@@ -11,7 +11,7 @@ namespace EvolutionSim.Utility
     public static class AttributeUpdater
     {
         private const int STARVING_THRESHOLD = 0;
-        private const int DYING_THRESHOLD = 1000;
+        private const int DYING_THRESHOLD = 250;
         private const float HUNGRY_RATE = 0.001f;
       
        

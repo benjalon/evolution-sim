@@ -47,6 +47,7 @@ namespace EvolutionSim
 
             this.graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
             this.graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
+            this.graphics.IsFullScreen = true;
             this.graphics.ApplyChanges();
         }
 
