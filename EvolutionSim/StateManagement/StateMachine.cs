@@ -187,15 +187,16 @@ namespace EvolutionSim.StateManagement
                 #region Hunt States 
 
                 case States.FindingPrey:
-                    
-                    // check if the destination tile is null, then if the inhabitant of said tile is null 
-                    if (organism.PreyFound == true && organism.DestinationTile!= null)
-                    {
-                        if (organism.DestinationTile.Inhabitant != null)
-                        {
-                            organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
-                        }
 
+                    // check if the destination tile is null, then if the inhabitant of said tile is null 
+                    if (organism.DestinationTile != null)
+                    {
+                        if (organism.PreyFound == true && organism.DestinationTile.HasOrganismInhabitant)
+                        {
+
+                            organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
+
+                        }
                     }
 
                     if (timeManager.HasHuntingCooldownExpired(organism)) // if the cooldown has expired then give up looking
@@ -208,11 +209,6 @@ namespace EvolutionSim.StateManagement
                     break;
 
 
-                // now here's the tricky bit, need to find an organism, create a location variable which updates with deltaT
-                // then calculate and traverse along the path until either:
-                // 1) we catch the prey
-                // 2) the chase time expires
-                // chasing speed should be based on the speed of the organism
                 case States.Hunting:
 
                     //then we've found the target or time has expired so stop hunting
@@ -237,7 +233,10 @@ namespace EvolutionSim.StateManagement
                     //organism has finished hunting
                     organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
 
+                    var org = organism.DestinationTile.Inhabitant;
                     //set the prey found to be false
+                    //now kill the organism and set to false;
+                    
                     organism.PreyFound = false;
 
                     break;
@@ -313,6 +312,8 @@ namespace EvolutionSim.StateManagement
 
                 case States.FindingPrey:
 
+                    //this is returning null
+                    //
                     StateActions.SeekingFood.SeekFood(organism, grid, timeManager);
 
                     //should be called once as the organism will move out of state as soon as the
