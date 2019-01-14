@@ -36,11 +36,20 @@ namespace EvolutionSim
 
             this.bearBreeds = new List<Attributes>()
             {
+                //should be herbivore
                 new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
+
+                //should be herbivore
                 new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
-                new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
+
+                //omivore
+                new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Canivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
+
+                //should be carnivore
                 new Attributes() { Species = "AngryRed", Texture = Graphics.SimulationTextures["organism_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
-                new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
+
+                //omnivore
+                new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Canivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
             };
 
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(Graphics.SimulationTextures["healthbar_red"], Graphics.SimulationTextures["healthbar_green"]);
