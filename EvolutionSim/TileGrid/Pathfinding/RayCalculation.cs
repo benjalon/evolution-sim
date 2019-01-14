@@ -42,7 +42,11 @@ namespace EvolutionSim.TileGrid.Pathfinding
         /// <returns></returns>
         public void CalculateRay(Grid grid)
         {
-            
+            //then clear the path
+            if(this.Ray.Count > 0)
+            {
+                this.Ray.Clear();
+            }
 
             int desiredLocationX = this.OrganismChased.GridIndex.X;
             int desiredLocationY = this.OrganismChased.GridIndex.Y;

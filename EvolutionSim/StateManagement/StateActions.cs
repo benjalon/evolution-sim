@@ -238,7 +238,7 @@ namespace EvolutionSim.StateManagement
                     // Path to food
                     organism.Computing = true;
 
-                    if(organism.State == States.Hunting)
+                    if(organism.State == States.FindingPrey)
                     {
                         organism.PreyFound = true;
                     }
