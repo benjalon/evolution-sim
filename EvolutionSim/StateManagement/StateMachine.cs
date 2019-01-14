@@ -316,10 +316,14 @@ namespace EvolutionSim.StateManagement
                     //destination tile isn't null
                     //this will only work if this is checked once before moving onto the following state
                     //state upon the next call of checkState
-                    if(organism.DestinationTile != null && organism.PreyFound == true)
-                    {
-                        grid.AddRayCalculationObject((Organism)organism.DestinationTile.Inhabitant, organism);
 
+                    if (organism.DestinationTile != null)
+                    {
+                        if (organism.DestinationTile.HasOrganismInhabitant && organism.PreyFound == true)
+                        {
+                            grid.AddRayCalculationObject((Organism)organism.DestinationTile.Inhabitant, organism);
+
+                        }
                     }
 
                     break;

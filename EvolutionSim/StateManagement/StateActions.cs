@@ -196,10 +196,13 @@ namespace EvolutionSim.StateManagement
                     }
 
                     //now check the diet type of the organism at the current location
+                    //this doesn't always work properly (can still return organism types as 
+                    //valid food)
                     Organism huntedOrg = grid.GetTileAt(firstX, firstY).Inhabitant as Organism;
 
                     //if the organism type is a herbivore then hunt it
                     var validPrey = huntedOrg.Attributes.DietType == DietTypes.Herbivore;
+ 
 
                     return validPrey;
 

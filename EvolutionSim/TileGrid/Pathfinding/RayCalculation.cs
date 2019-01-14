@@ -42,7 +42,7 @@ namespace EvolutionSim.TileGrid.Pathfinding
         /// <returns></returns>
         public void CalculateRay(Grid grid)
         {
-            //then clear the path
+            //then clear the path on the next recalculation 
             if(this.Ray.Count > 0)
             {
                 this.Ray.Clear();
@@ -60,33 +60,32 @@ namespace EvolutionSim.TileGrid.Pathfinding
             int yMagnitude = Math.Abs(desiredLocationY - predatorLocationY) - 1;
 
             
-        
+            //logic error in searching code
             //while the co-ordinates aren't adjacent to the desired organisms location
-             while((predatorLocationX != desiredLocationX + 1 || predatorLocationX != desiredLocationX - 1)
-                    && (predatorLocationY != desiredLocationY + 1 || predatorLocationY != desiredLocationY - 1))
+             while(xMagnitude > 0 || yMagnitude > 0)
             {
-                if(predatorLocationX > desiredLocationX + 1 && xMagnitude != 0)
+                if(predatorLocationX > desiredLocationX + 1)
                 {
                     predatorLocationX--;
                     xMagnitude--;
 
                 }
 
-                else if(predatorLocationX < desiredLocationX - 1 && xMagnitude != 0)
+                else if(predatorLocationX < desiredLocationX - 1)
                 {
                     predatorLocationX++;
                     xMagnitude--;
 
                 }
 
-                if (predatorLocationY > desiredLocationY + 1 && yMagnitude != 0)
+                if (predatorLocationY > desiredLocationY + 1)
                 {
                     predatorLocationY--;
                     yMagnitude--;
 
                 }
 
-                else if (predatorLocationY < desiredLocationY - 1 && yMagnitude != 0)
+                else if (predatorLocationY < desiredLocationY - 1)
                 {
                     predatorLocationY++;
                     yMagnitude--;
