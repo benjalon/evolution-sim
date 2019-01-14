@@ -45,7 +45,7 @@ namespace EvolutionSim.Utility
         public bool HasSimulationTicked { get => msSinceLastTick > simulationTickCooldown + pausedElapsed; }
 
         private const int DEFAULT_MATING_COOLDOWN = 20000;
-        private const int DEFAULT_HUNTING_COOLDOWN = 30000;
+        private const int DEFAULT_HUNTING_COOLDOWN = 50000;
         private int matingCooldown = DEFAULT_MATING_COOLDOWN;
         private int huntingCooldown = DEFAULT_HUNTING_COOLDOWN;
 

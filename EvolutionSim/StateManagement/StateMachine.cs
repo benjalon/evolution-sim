@@ -188,10 +188,13 @@ namespace EvolutionSim.StateManagement
 
                 case States.FindingPrey:
                     
-                    //then move into the Hunting state
-                    if (organism.PreyFound == true && organism.DestinationTile != null)
+                    // check if the destination tile is null, then if the inhabitant of said tile is null 
+                    if (organism.PreyFound == true && organism.DestinationTile!= null)
                     {
-                        organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
+                        if (organism.DestinationTile.Inhabitant != null)
+                        {
+                            organism.State = this.state.MoveState(organismState, Actions.FoundPrey);
+                        }
 
                     }
 
@@ -222,7 +225,7 @@ namespace EvolutionSim.StateManagement
                     else if (timeManager.HasHuntingCooldownExpired(organism)) // otherwise give the hunt up if time has expired
                     {
 
-                        organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
+                        organism.State = this.state.MoveState(organismState, Actions.GiveUpLooking);
                     }
                   
 

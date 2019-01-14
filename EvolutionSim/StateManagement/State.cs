@@ -141,6 +141,10 @@ namespace EvolutionSim.StateManagement
 
                 { new StateTransition(States.Hunting, Actions.CaughtPrey), States.KillingPrey},
 
+                { new StateTransition(States.Hunting, Actions.GiveUpLooking), States.Roaming},
+
+                //killed the prey so leave state 
+                {new StateTransition(States.KillingPrey, Actions.FinishedHunt), States.Roaming}
               
             };
         }
@@ -160,6 +164,7 @@ namespace EvolutionSim.StateManagement
 
             if (!this.transitions.TryGetValue(transition, out nextState))
             {
+
                 throw new Exception("The following is not a valid transition: " + currentState + "->" + action);
             }
 
