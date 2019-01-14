@@ -186,7 +186,7 @@ namespace EvolutionSim.StateManagement
 
                     return validFood;
 
-                case States.Hunting:
+                case States.FindingPrey:
 
                     //if there is valid prey at the location
                     if(!(grid.InBounds(x,y) && grid.IsPreyAt(firstX, firstY))){
