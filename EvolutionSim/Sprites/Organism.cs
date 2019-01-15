@@ -16,7 +16,7 @@ namespace EvolutionSim.Sprites
         private const int INCREMENT_HEALTH = 1;
         private const float EATING_REGEN = 0.075f;
         private const float SCALE_MULTIPLIER = 0.2f;
-        private const float UPPER_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
+        private const float SCALE_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
 
         private const int AGE_LOWER_BOUND = 70;
         private const int AGE_UPPER_BOUND = 130;
@@ -28,6 +28,7 @@ namespace EvolutionSim.Sprites
         // Simulation Attributes
         public int Age { get; set; } = 0;
         public float Hunger { get; set; } = 0.2f;
+        private float scale = 1.0f;
 
         public int MaxAge { get; set; } = 0;
 
@@ -49,6 +50,8 @@ namespace EvolutionSim.Sprites
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
         public bool Hunting { get; set; }
+
+        //this determines if the organism is being targeted for being hunted
         public bool Frozen { get; set; }
 
         public bool RecentlyHunted { get; set; } = false;
@@ -63,6 +66,14 @@ namespace EvolutionSim.Sprites
             TOTAL_POPULATION++;
             this.MaxAge = Graphics.RANDOM.Next(AGE_LOWER_BOUND, AGE_UPPER_BOUND);
             this.Attributes = attributes;
+
+            this.scale = this.Attributes.Strength;
+
+            if (this.scale > SCALE_LIMIT)
+            {
+                this.scale = SCALE_LIMIT;
+            }
+
             this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
         }
 
@@ -70,23 +81,14 @@ namespace EvolutionSim.Sprites
         {
             //this is where the size of the organism is calculated based on strengh
             var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
-
-            //cap the scaleoffset to a certain size
-           if(scaleOffset > UPPER_LIMIT)
-            {
-
-                scaleOffset = UPPER_LIMIT;
-
-            }
-
-
+            
             if (IsSelected)
             {
-                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.Purple, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.Purple, 0, Vector2.Zero, this.scale, SpriteEffects.None, 0.0f);
             }
             else
             {
-                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.White, 0, Vector2.Zero, this.Attributes.Strength, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + scaleOffset, this.rectangle.Location.Y + scaleOffset), null, Color.White, 0, Vector2.Zero, this.scale, SpriteEffects.None, 0.0f);
             }
 
             this.healthbar.Draw(spriteBatch);
@@ -99,6 +101,8 @@ namespace EvolutionSim.Sprites
         {
 
                 Hunger += EATING_REGEN;
+
+
 
             IncreaseHealth(INCREMENT_HEALTH);
         }
