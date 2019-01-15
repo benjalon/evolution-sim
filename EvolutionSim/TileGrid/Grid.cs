@@ -288,7 +288,7 @@ namespace EvolutionSim.TileGrid
                     ray.CalculateRay(this);
 
                     //if the preyFound is false for this object
-                    //then we no long
+                    //then we no longer need to service the object
                     if(ray.Predator.PreyFound == false)
                     {
                          this.Rays.Remove(ray);
