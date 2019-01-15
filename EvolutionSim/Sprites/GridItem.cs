@@ -10,7 +10,7 @@ namespace EvolutionSim.Sprites
     public abstract class GridItem : Sprite
     {
         public static int TOTAL_GRID_ITEMS;
-        public static int MAX_GRID_ITEMS = 1500;
+        public static int MAX_GRID_ITEMS = 1000;
         public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
 
         protected int defaultHealth;

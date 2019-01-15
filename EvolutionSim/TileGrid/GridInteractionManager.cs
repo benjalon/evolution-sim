@@ -36,6 +36,7 @@ namespace EvolutionSim.TileGrid
 
         public void Update(Simulation simulation, Grid grid)
         {
+
             this.mouseStateManager.Update();
 
             // If a click occurs within the grid, deselect any selected organisms

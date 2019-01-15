@@ -180,7 +180,7 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-
+            System.Diagnostics.Debug.WriteLine("Total Items: " + Sprites.GridItem.TOTAL_GRID_ITEMS);
             switch (state)
             {
 

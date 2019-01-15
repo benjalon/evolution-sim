@@ -78,7 +78,12 @@ namespace EvolutionSim
 
 
             Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
-
+            var numFood = this.grid.Foods.Count;
+            for (var i = numFood - 1; i >= 0; i--)
+            {
+                this.grid.Foods[i].BeEaten();
+            }
+ 
 
             this.fsm.UpdateStates(this.grid, TimeManager);
             
@@ -340,7 +345,7 @@ namespace EvolutionSim
             Food food;
             for (var i = 0; i < amount; i++)
             {
-                food = new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(3, Food.MAX_GRASS_HEALTH));
+                food = new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(Food.MAX_GRASS_HEALTH/2, Food.MAX_GRASS_HEALTH));
                 PositionAtRandom(food);
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(food).Center));
             }
@@ -362,7 +367,7 @@ namespace EvolutionSim
         {
             if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
                 return;
-            var positioned = this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
+            var positioned = this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(Food.MAX_GRASS_HEALTH/2, Food.MAX_GRASS_HEALTH)), x, y);
             if (positioned)
             {
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(x, y).Center));
@@ -388,7 +393,7 @@ namespace EvolutionSim
                 return;
             var organism = ((Organism)sender);
             var tile = (Tile)grid.GetTileAt(organism);
-            this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);
+            this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["meat"], false, Graphics.RANDOM.Next(Food.MAX_MEAT_HEALTH / 2, Food.MAX_MEAT_HEALTH)), tile.GridIndex.X, tile.GridIndex.Y);
         }
     }
 }
