@@ -124,6 +124,7 @@ namespace EvolutionSim.StateManagement
 
             if (isPathBlocked)
             {
+               
                 organism.Path.Clear(); // The path is blocked so it will need recalculating
             }
             else if (hasPath(organism))

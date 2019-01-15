@@ -38,10 +38,14 @@ namespace EvolutionSim.StateManagement
             {
                 organism = grid.Organisms[i];
 
-                    
-                if (!organism.Frozen)
+                
                     CheckState(timeManager, organism);
+                if (!organism.Frozen)
                     DetermineBehaviour(grid, timeManager, organism);
+                if(organism.Frozen && timeManager.HasRoamingCooldownExpired(organism,multiplier: 4))
+                {
+                    organism.Frozen = false;
+                }
 
 
 

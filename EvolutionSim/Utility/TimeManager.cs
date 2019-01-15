@@ -120,9 +120,9 @@ namespace EvolutionSim.Utility
 
         }
 
-        public bool HasRoamingCooldownExpired(Organism organism)
+        public bool HasRoamingCooldownExpired(Organism organism, int multiplier = 1)
         {
-            var cooldownExpired = organism.MsSinceLastRoam > roamCooldown + pausedElapsed;
+            var cooldownExpired = organism.MsSinceLastRoam > (roamCooldown + pausedElapsed) * multiplier;
 
             if (cooldownExpired)
             {
