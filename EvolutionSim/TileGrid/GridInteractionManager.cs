@@ -97,7 +97,7 @@ namespace EvolutionSim.TileGrid
                     simulation.AddOrganism(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
                     break;
                 case DrawingSettings.Food:
-                    simulation.AddFood(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
+                    simulation.AddHerbivoreFood(this.HighlightedTile.GridIndex.X, this.HighlightedTile.GridIndex.Y);
                     break;
                 default:
                     break;
@@ -111,7 +111,8 @@ namespace EvolutionSim.TileGrid
             {
                 for (var y = -1; y <= 1; y++)
                 {
-                    grid.SetTerrainAt(terrainType, this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y);
+                    if(!grid.GetTileAt(this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y).HasInhabitant)
+                        grid.SetTerrainAt(terrainType, this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y);
                 }
             }
         }

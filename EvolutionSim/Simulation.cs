@@ -75,9 +75,12 @@ namespace EvolutionSim
             {
                 return;
             }
+            if (TimeManager.HasGrassTicked)
+                this.AddHerbivoreFood();
 
 
             Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
+
             var numFood = this.grid.Foods.Count;
             for (var i = numFood - 1; i >= 0; i--)
             {
@@ -362,8 +365,13 @@ namespace EvolutionSim
             }
 
         }
-
-        public void AddFood(int x, int y)
+        /// <summary>
+        /// Adds food in a specified location
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void AddHerbivoreFood(int x, int y)
         {
             if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
                 return;
@@ -372,6 +380,17 @@ namespace EvolutionSim
             {
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(x, y).Center));
             }
+        }
+        /// <summary>
+        /// Simply adds a random bit of food in an available location, does not require coordinates
+        /// </summary>
+        public void AddHerbivoreFood()
+        {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
+            Food food = new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(Food.MAX_GRASS_HEALTH / 2, Food.MAX_GRASS_HEALTH));
+            PositionAtRandom(food);
+            particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(food).Center));
         }
 
         private void PositionAtRandom(GridItem item)
