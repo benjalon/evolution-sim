@@ -19,6 +19,8 @@ namespace EvolutionSim.TileGrid
         public List<Food> Foods { get; private set; } = new List<Food>();
         public List<Terrain> Terrains { get; private set; } = new List<Terrain>();
 
+        public List<RayCalculation> Rays { get; private set; } = new List<RayCalculation>();
+
         private readonly Tile[][] tiles; // This MUST stay private, if you are trying to manipulate it elsewhere then the code is coupled which probably means it should happen here
 
         public event EventHandler ShouldSpawnCorpse;
@@ -213,6 +215,17 @@ namespace EvolutionSim.TileGrid
                 return false; // The organism is checking itself, so it isn't a mate.
             }
             return inhabitant != null && inhabitant.GetType() == typeof(Organism);
+        }
+
+
+        /// <summary>
+        /// Method called to add an organism chasing it's prey
+        /// </summary>
+        public void AddRayCalculationObject(Organism huntedOrganism, Organism chasingOrganism)
+        {
+
+            Rays.Add(new RayCalculation(huntedOrganism, chasingOrganism));
+
         }
 
         public bool IsAdjacent(Point StartPosition, Point EndPosition)
