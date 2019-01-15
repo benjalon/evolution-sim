@@ -78,7 +78,7 @@ namespace EvolutionSim
 
             Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
 
-
+            this.grid.UpdateRay();
             this.fsm.UpdateStates(this.grid, TimeManager);
             
             for (var i = this.particleEffects.Count - 1; i >= 0; i--)

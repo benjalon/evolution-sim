@@ -42,6 +42,7 @@ namespace EvolutionSim.Sprites
         public bool WaitingForMate { get; set; }
         public bool MateFound { get; set; }
         public bool Hunting { get; set; }
+        public bool SetRay { get; set; } = false;
         public bool Frozen { get; set; }
 
         public bool RecentlyHunted { get; set; } = false;

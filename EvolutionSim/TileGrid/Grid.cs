@@ -3,6 +3,7 @@ using EvolutionSim.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using EvolutionSim.TileGrid.Pathfinding;
 using System.Collections.Generic;
 
 namespace EvolutionSim.TileGrid
@@ -225,6 +226,35 @@ namespace EvolutionSim.TileGrid
         {
 
             Rays.Add(new RayCalculation(huntedOrganism, chasingOrganism));
+
+        }
+
+        /// <summary>
+        /// With every tick of the simulation 
+        /// we want to update the traversal path for the organism hunting it's prey
+        /// we move backwards through collection to avoid skipping elements and associated exceptions
+        /// </summary>
+        public void UpdateRay()
+        {
+            if (this.Rays.Count != 0)
+            {
+                for (var i = this.Rays.Count - 1; i >= 0; i--)
+                {
+                    var ray = this.Rays[i];
+
+                    ray.CalculateRay(this);
+
+                    //if the preyFound is false for this object
+                    //then we no longer need to service the object
+                    if (ray.Predator.Hunting == false)
+                    {
+                        this.Rays.Remove(ray);
+
+                    }
+
+                }
+
+            }
 
         }
 

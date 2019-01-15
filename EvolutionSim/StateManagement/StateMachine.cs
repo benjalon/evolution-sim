@@ -1,6 +1,7 @@
 ﻿using EvolutionSim.Data;
 using EvolutionSim.Sprites;
 using EvolutionSim.TileGrid;
+using EvolutionSim.TileGrid.Pathfinding;
 using EvolutionSim.Utility;
 using System;
  
@@ -240,7 +241,12 @@ namespace EvolutionSim.StateManagement
                 case States.SeekFood:
 
                     StateActions.SeekingFood.SeekFood(organism, grid, timeManager);
-
+                    //Add one ray to the path finding
+                    if (organism.Hunting && !organism.SetRay)
+                    {
+                        grid.AddRayCalculationObject((Organism)organism.DestinationTile.Inhabitant, organism);
+                        organism.SetRay = true;
+                    }
                     break;
 
                 case States.MovingToMate:
