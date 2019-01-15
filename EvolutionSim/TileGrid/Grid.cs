@@ -300,5 +300,9 @@ namespace EvolutionSim.TileGrid
 
             return tile;
         }
+        public static int ManhattanDistance(Organism a, Organism b)
+        {
+            return Math.Abs(a.GridIndex.X - b.GridIndex.X) + Math.Abs(a.GridIndex.Y - b.GridIndex.Y);
+        }
     }
 }

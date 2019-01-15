@@ -4,6 +4,7 @@ using EvolutionSim.TileGrid;
 using EvolutionSim.TileGrid.Pathfinding;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -345,6 +346,8 @@ namespace EvolutionSim.StateManagement
 
             /// <summary>
             /// Simple method to calculate the total power of the organisms
+            /// (Health * Hunger) / (Distance * Speed) + Strength
+            /// 
             /// </summary>
             /// <param name="predator"></param>
             /// <param name="prey"></param>
@@ -352,20 +355,17 @@ namespace EvolutionSim.StateManagement
             private static bool CanEatOrganism(Organism predator, Organism prey)
             {
 
-                float predatorStrength = predator.Attributes.Strength;
-                float predatorSpeed = predator.Attributes.Speed;
+                int distance = Grid.ManhattanDistance(predator, prey);
+                float predatorResult = ( predator.Health * predator.Hunger) / (distance * predator.Attributes.Speed) + predator.Attributes.Strength;
+                float preyResult = (prey.Health * prey.Hunger) / (distance * prey.Attributes.Speed) + prey.Attributes.Strength;
 
-                float preyStrength = prey.Attributes.Strength;
-                float preySpeed = prey.Attributes.Speed;
-
-                var predatorResult = predatorStrength + predatorSpeed;
-                var preyResult = preyStrength + preySpeed;
 
                 return predatorResult >= preyResult;
 
 
 
             }
+            
 
         }
 

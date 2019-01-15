@@ -15,7 +15,7 @@ namespace EvolutionSim.Sprites
     public class Food : GridItem
     {
         private const float MIN_SCALE = 0.4f;
-        public const int MAX_MEAT_HEALTH = 1200;
+        public const int MAX_MEAT_HEALTH = 800;
         public const int MAX_GRASS_HEALTH = 2200;
         private const float OFFSET_MULTIPLIER = 0.5f;
 
@@ -51,7 +51,7 @@ namespace EvolutionSim.Sprites
         /// <returns>Whether or not the food is fully eaten</returns>
         public void BeEaten()
         {
-            DecreaseHealth(1);
+            DecreaseHealth(2);
         }
         public void WitherFood()
         {

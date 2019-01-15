@@ -14,7 +14,7 @@ namespace EvolutionSim.Sprites
         public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
 
         protected int defaultHealth;
-        protected int Health { get; set; }
+        public int Health { get; set; }
         public event EventHandler DeathOccurred;
         private const int DEATH_THRESHOLD = 0;
 

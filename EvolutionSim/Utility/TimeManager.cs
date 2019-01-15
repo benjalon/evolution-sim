@@ -11,7 +11,7 @@ namespace EvolutionSim.Utility
         private const int DEFAULT_HUNTING_COOLDOWN = 30000;
         private const int DEFAULT_ROAM_COOLDOWN = 3000;
         private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 1000;
-        private const int DEFAULT_GRASS_SPAWN_COOLDOWN = 2500;
+        private const int DEFAULT_GRASS_SPAWN_COOLDOWN = 1500;
 
         public const float MOVE_SPEED = 0.01f;
         private const int FAST_SPEED = 4;
