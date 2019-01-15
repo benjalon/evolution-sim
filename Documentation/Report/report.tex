@@ -164,104 +164,109 @@ Within the simulation all organism behaviour is dictated by a finite state machi
 In addition to these state management tasks, the StateMachine also contains two methods to drive organism behaviour: CheckState and DetermineBehaviour, which are both called every cycle of the Update loop. CheckState is responsible for checking that each Organism is in the correct state based on the rules defined for the simulation, for example if an organism is currently in the ``Roaming`` state, but it's hunger levels have dropped below 0.4, this would mean that the organism must now move into ``SeekingFood``. After the state is checked, DetermineBehaviour defines how the Organism should behave within this state.
 
 \section{Crossover Algorithm}\label{crossover}
-The crossover algorithm is currently a work in progress.
+TODO
 
-\section{Grid System}\label{grid}
+\section{Tile-Based Movement}\label{grid}
 A common method of implementing movement in a simulation is by constraining it to a grid. This is useful because the number of movement states becomes finite and better lends itself to algorithms for path-finding. In terms of efficiency, a grid also reduces the need for collision detection between simulation elements by mediating on the movement between tiles.
 
-Within code, a Grid class tracks the positions of all Tiles within the simulation and supplies some simple methods for interacting with them, for example to check whether a given Tile is occupied. In order to achieve this, the Grid contains a jagged two dimensional array of type Tile, where each index within it maps to a Tile's actual screen position with the equation:
-\[tilePos = offset + (tileIndex * tileSize)\]
-When an organism wishes to move, a method on the Grid called MoveMapItem is passed as parameters the MapItem requesting the move and a destination it wishes to move to. Since Tiles are always in fixed positions from the simulation start, the Grid simply has to look up the destination from its fixed position array and check whether it is occupied and then ensure that the MapItem position is adjacent.
+Within code, the Grid class holds a collection of Tiles within a jagged array which can each potentially hold a GridItem inhabitant. Within this collection, each index maps the tile to a screen position using the equation:
+\[tilePos = offset + (tileIndex * TILE_SIZE)\]
 
 \section{Pathfinding Algorithm}\label{pathfinding}
-Pathfinding is a key component in the simulation and three main methods were considered for it: depth first search (DFS), Dijkstra's algorithm and the A* algorithm. In terms of simplicity, DFS produces fast results but is a naive algorithm and requires a large amount of time and memory to find the shortest route. Dijkstra's algorithm is an improvement because it applies a difficulty value based on the movement cost to a destination but is expensive as it compares equally and needlessly expands difficult locations without considering direction because it does not use a heuristic. Finally, at least for single-point to single-point searches like those used in this simulation, A* is considered the fastest algorithm \cite{belwariar} due to improving upon Dijkstra's with a heuristic. 
-
+Pathfinding is a key component in the simulation and three main methods were considered for it: depth first search (DFS), Dijkstra's algorithm and the A* algorithm. In terms of simplicity, DFS produces fast results but is naive and requires a large amount of time and memory to find the shortest route. Dijkstra's algorithm is an improvement because it applies a difficulty based on the movement cost to a destination, but is expensive as it compares equally and needlessly expands difficult locations without considering direction. Finally, at least for single-point to single-point searches (as used here), A* is considered the fastest algorithm \cite{belwariar} due to improving upon Dijkstra's with a heuristic. 
 \[A* Algorithm: f(n) = g(n) + h(n)\]
-In the above formula g(n) refers to the difficulty of a tile which is an important consideration in handling different terrain types such as hills or water. h(n) is the diagonal distance between the two points and f(n) refers to the sum of g(n) and h(n).
+In the above formula g(n) refers to the difficulty of a tile which is an important consideration in handling different terrain types such as hills or water. The h(n) is the diagonal distance between the two points and f(n) refers to the sum of g(n) and h(n).
 
-In terms of implementation, A* is incorporated by converting each Tile into a Node object. These Nodes keep a reference to the previous Node on the path, its Grid position, the destination's distance and the difficulty in reaching it. To calculate the g(n) difficulty value the terrain type of the Tile is taken into account and for the h(n) distance value the diagonal distance between the two points is calculated taking the maximum value of either the goal Tile's x coordinate minus the current Tile's x coordinate or the same for y coordinates. 
-
-To build up a path, two lists track Nodes to be evaluated: open and closed. When the algorithm starts, the Node that an Organism currently occupies is placed at the top of open. Open is iterated to evaluate which Node within the list has the lowest f(n) and expands it. Expanding consists of storing all of the adjacent Tiles on the Grid as Nodes and calculating their f(n) and adding them to open. If any of the Nodes evaluated are the goal Node then the loop ends and returns it. A list containing the goal Node and the path taken to get there is then created by repeatedly following the previous Node reference backwards from the goal to the start.
-
-[TODO: the various initial pathfinding bugs which caused lag]
+A* is implemented by creating Node object for each Tile, keeping a reference to the previous Node, its Grid position, the destination's distance and the difficulty in reaching it. To calculate the g(n) difficulty value the terrain type of the Tile is taken into account and for the h(n) distance value the diagonal distance between the two points is calculated taking the maximum value of either the goal Tile's x coordinate minus the current Tile's x coordinate or the same for y coordinates. Nodes to be evaluated are stored in open and closed collections which are manipulated until a path to the goal is found.
 
 \section{Optimisation}\label{optim}
-Optimisation is considered an area of importance due to the simulation's requirement in handling a large number of organisms without noticeable lag. By default, MonoGame's render loop calls two methods at a speed of sixty times per second: update and draw. Should the logic fail to complete within this ~16-17ms time-frame then it delays the draw call, which lowers the simulation's frame-rate. This has further knock-on effects where the draw calls become progressively more delayed and eventually cause input lag on the UI.
+Optimisation is important in the simulation due to its requirement in handling a large number of organisms without noticeable lag. By default, MonoGame's render loop updates and draws at sixty frames per second. Should the update logic fail to complete within this ~16-17ms time-frame then it delays the draw call, which lowers the simulation's frame-rate. This has further knock-on effects where the draw calls become progressively more delayed and eventually cause input lag on the UI. The update method is essentially the primary path through the code, it calls into several loops to cycle through the items which make up the simulation. There can be several hundred objects to iterate through during any given Update loop and keeping this entire iteration within the acceptable ~16-17ms limit required a great deal of optimisation. Despite this, optimisation was a task left until it became a problem following the argument that ``premature optimization is the root of all evil [...]`` \cite{knuth} by introducing bugs and making code less readable. 
 
-The update method is essentially the primary path through the code and handles all of the computation and organism logic. This method calls into several for loops to cycle through the various organisms and map items which make up the simulation. There can be several hundred objects to iterate through during any given Update loop, which as previously mentioned occurs sixty times per second. Keeping this entire iteration within the acceptable ~16-17ms time limit has requires consideration from an optimisation perspective.
+As the simulation grew in size, loop optimisation became an issue particularly for state management and path finding. To improve this, variables are typically declared outside of loop scope to prevent them being redeclared on each iteration. Other standard optimisations such as caching the collection length ahead of time and avoiding high precision calculations are also avoided. The grid was also changed from using a multi-dimensional array for its tiles to a jagged array which is more efficient to loop over.
 
-Optimisation is a task better left until necessary following the argument that ``premature optimization is the root of all evil [...]`` \cite{knuth}, as doing so before it is necessary wastes time, introduces bugs and makes code less readable. However, at several points during the project, particularly during the first round of pathfinding implementation, performance was considered to be a problem. The A* pathfinding algorithm [\ref{pathfinding}] requires that the program keep track of open, closed and expanded nodes within various collections and though there are many ways to implement the algorithm, they often involve some degree of manipulation. As previously mentioned, the update method is already within the sixty per second game loop and then within another nested loop for each of the tiles (\ref{grid}]. Before delving into loop micro-optimisation, the amount of loops and collection manipulation was cut down as much as possible.
 
 To improve the performance of these loops, the standard loop micro-optimisations are applied. Variables are declared outside of the loop scope, collection length is cached locally ahead of time and high precision calculations are avoided. For example, the DateTime object was initially used to time organism movements but because it uses double precision values, calculations were causing a large slowdown so it was swapped for the better optimised GameTime object. Finally, the grid stores its tiles within a two dimensional array which could potentially be implemented in C\# in two different ways: multi-dimensional arrays and jagged arrays. A jagged array is an array of arrays and allows these inner arrays to vary in length, whereas a multi-dimensional is a natural 2D array where the column count is uniform. The grid stores its tiles in a jagged array because within a jagged array, even if the arrays are the same length, it is able to iterate faster than a multi-dimensional array.
 
-Finally, though it caused issue in this instance, from an architecture perspective the grid system is also a form of optimisation. By constricting organism movements to a grid the simulation is able to cut down on the need for collision detection by having organisms request their moves to the grid, which then makes the decision of whether the move is legal. Collision detection would otherwise have been a bottleneck for the system which would have been exponentially slower as more organisms are added because each organism would need to check the position all of the others. With the tile system in place however, there are always a set number of tiles to iterate over rather than a growing list of organisms with references to each of the others.
-
-[TODO: a bit about pathfinding optimisation]
+From an more architectural perspective, the grid system is also a form of optimisation. By constricting organism movements to a grid the simulation is able to cut down on the need for collision detection, which would otherwise have been a bottleneck for the system. This would have required exponentially more computation as organisms are added because each organism would need to check the itself against all others.
 
 \section{Multi-threading}
-To better improve the performance of pathfinding, it is being moved to different threads. This is a work in progress.
+TODO.
 
 \chapter{Implementation} \label{implementation}
 
+\subsection{Modelling}
+
+TODO OOA and UML
+
+The class diagram Figure~\ref{classdiagram} was continually updated throughout the project and although it saw many changes, certain key themes remained constant throughout.
+
+An architectural decision was to ensure the separation of concerns between the graphics, states, simulation and UI. The graphical component provides a representation of the simulation's output, but they are kept unaware of the inner workings of the other to better decouple their behaviour. Likewise, while the UI can interact with the simulation, there was no need to have this behaviour tied in any way to the intricacies of it. As such, the relationship between the three key areas can be observed as limited on the class diagram.
+
+Another theme present in the class diagram is abstraction. Through inheritance, GridItems are kept as generic inhabitants by the Tiles of the Grid. This means that the Grid can manage its Tiles and their inhabitant GridItems without particular knowledge of whether they are Organisms or Food or Obstacles, simplifying the implementation.
+
 \section{Tools}\label{tools}
-Three programming languages were considered for the project: C++, C\# and Java. The simulation was identified to have a large dependency on computation due to the fact that there could be upwards of one hundred organisms on screen at any one time and each of them would require state management, path finding and collision detection. For this reason, C++ seemed to be the natural choice due to the speed benefit of dynamic memory management. However, upon further research it was found that C\# had a more diverse set of 2D graphics libraries as C++ libraries were typically focused on 3D rendering. Finally, Java was considered because the bulk of the team's experience was with the language, though because C\# can be used as a drop-in replacement for Java this was seen as another benefit in using C\#.
+Three programming languages were considered for the project: C++, C\# and Java. The simulation was identified to have a large dependency on computation due to the fact that there could be upwards of one hundred organisms on screen at any one time and each of them would require state management, path finding and collision detection. For this reason, C++ seemed to be the natural choice due to the speed benefit of dynamic memory management. However, upon further research it was found that C\# had a more diverse set of 2D graphics libraries with C++ libraries typically focused on 3D rendering. Finally, Java was considered because the bulk of the team's experience was with the language, though because C\# can be used as a drop-in replacement for Java this was seen as another benefit in using C\#.
 
-Since the availability of tools is dependant on the chosen language, the decision of a graphics framework was next. A comparison was made between several popular 2D graphics libraries, the four main candidates being Microsoft XNA, MonoGame, UltraViolet (UV) and the Simple Fast Media Library (SFML):
+A comparison was made between several popular 2D graphics libraries available in C\#, shown in Figure~\ref{library-comparison}.
 
-\begin{center}
-	\begin{tabular}{c|p{0.4\textwidth}|p{0.4\textwidth}}
-		Library & Pros & Cons \\ \hline
-		Microsoft XNA & \begin{itemize}
-			\itemsep0em
-			\item Simple and easy to use
-			\item Very well documented
-			\item Well-used commercially
-			\item Supported by Microsoft who also made C\#
-		\end{itemize} & \begin{itemize}
-			\itemsep0em
-			\item Slow and old, based on DirectX9
-			\item Deprecated and no longer works in Visual Studio 2015+
-			\item Windows only
-			\item Closed source
-		\end{itemize} \\ \hline
-		MonoGame & \begin{itemize}
-			\itemsep0em
-			\item Based on XNA with the same syntax, all of the XNA documentation is applicable
-			\item Multi-platform but requires Xamarin
-			\item Open source
-			\item Has seen use on commercial games (Stardew Valley, Transistor, Bastion etc.)
-		\end{itemize} & \begin{itemize}
-			\itemsep0em
-			\item Convoluted asset management system
-		\end{itemize} \\ \hline
-		UV & \begin{itemize}
-			\itemsep0em
-			\item Has a built in UI framework based on Windows Presentation Foundation (WPF)
-			\item Truly multi-platform
-			\item Open source
-		\end{itemize} & \begin{itemize}
-			\itemsep0em
-			\item Convoluted asset management system
-			\item Limited documentation, small time
-			\item Little to no commercial use
-		\end{itemize} \\ \hline
-		SFML & \begin{itemize}
-			\itemsep0em
-			\item Very fast, written in C++ but has C\# bindings
-			\item Well documented
-			\item Some commercial use
-			\item Multi-platform but no phone support
-			\item Open source
-		\end{itemize} & \begin{itemize}
-			\itemsep0em
-			\item C\# bindings are slightly behind on updates
-			\item Examples and documentation are written in C++ and require converting
-			\item Syntax is not as simple as other frameworks
-		\end{itemize} \\
-	\end{tabular}
-\end{center}
+\begin{figure}[H]
+	\caption{Graphics Library Comparison}\label{library-comparison}
+	\centering
+	\begin{center}
+		\begin{tabular}{c|p{0.4\textwidth}|p{0.4\textwidth}}
+			Library & Pros & Cons \\ \hline
+			Microsoft XNA & \begin{itemize}
+				\itemsep0em
+				\item Simple and easy to use
+				\item Very well documented
+				\item Well-used commercially
+				\item Supported by Microsoft who also made C\#
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item Slow and old, based on DirectX9
+				\item Deprecated and no longer works in Visual Studio 2015+
+				\item Windows only
+				\item Closed source
+			\end{itemize} \\ \hline
+			MonoGame & \begin{itemize}
+				\itemsep0em
+				\item Based on XNA with the same syntax, all of the XNA documentation is applicable
+				\item Multi-platform but requires Xamarin
+				\item Open source
+				\item Has seen use on commercial games (Stardew Valley, Transistor, Bastion etc.)
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item Convoluted asset management system
+			\end{itemize} \\ \hline
+			UV & \begin{itemize}
+				\itemsep0em
+				\item Has a built in UI framework based on Windows Presentation Foundation (WPF)
+				\item Truly multi-platform
+				\item Open source
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item Convoluted asset management system
+				\item Limited documentation, small time
+				\item Little to no commercial use
+			\end{itemize} \\ \hline
+			SFML & \begin{itemize}
+				\itemsep0em
+				\item Very fast, written in C++ but has C\# bindings
+				\item Well documented
+				\item Some commercial use
+				\item Multi-platform but no phone support
+				\item Open source
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item C\# bindings are slightly behind on updates
+				\item Examples and documentation are written in C++ and require converting
+				\item Syntax is not as simple as other frameworks
+			\end{itemize} \\
+		\end{tabular}
+	\end{center}
+\end{figure}
 
-Though UV was initially chosen due to its built-in UI support, where UI was deemed a core component of the simulation, the lack of documentation and convoluted XML system for managing assets meant that MonoGame was chosen instead. A third party UI library, GeonBit.UI, was chosen because although any 2D graphics framework is capable of rendering UI using sprite assets, one of the project requirements [\ref{requirements}] was that the UI have a professional look. Additionally, UI elements such as lists and radio buttons were considered a likely requirement and would be difficult to implement with a graphics approach.
+Though UV was initially chosen due to its built-in UI support, the lack of documentation and convoluted XML system for managing assets meant that MonoGame was used instead. The third party UI library GeonBit.UI was chosen because one of the project requirements [\ref{requirements}] was that the UI have a professional look and it also provided out of box support for radio buttons and lists.
 
 \subsection{Product Versions}\label{versioning}
 In keeping with the spirit of iterative development, the projects aim to produce a new product at the end of each sprint. This ensures that at any given time, the active project board matches the current release version. Each version aimed to iterate upon the previous release with features taken from further down the MoSCoW analysis (Figure~\ref{version-table}).
@@ -283,27 +288,13 @@ In keeping with the spirit of iterative development, the projects aim to produce
 \smallskip 
 
 \section{Proof of Concept}
-A proof of concept was made with the chosen technologies before any further planning took place because the team wanted to avoid a situation where the UML modelling and code architecture was planned according to a language or tool that was then realised to be a poor fit for the project. The aim of the proof of concept was to simply draw a number of organisms to the screen using the chosen graphics framework which could be manipulated using a simple place-holder UI.
+A proof of concept was made with the chosen technologies to avoid a situation where the UML modelling and code architecture was planned according to a language or tool which was a poor fit for the project. It aimed to simply draw a number of organisms to the screen using the chosen graphics framework which could be manipulated using a simple place-holder UI.
 
 \begin{figure}[H]
 	\caption{Proof of Concept}\label{poc}
 	\centering
 	\includegraphics[width=0.8\textwidth]{poc}
 \end{figure}
-
-The proof of concept was deemed a success as it was able to create organisms using the UI button, move them around and render them without lag.
-\section{Modelling}
-The class diagram Figure~\ref{classdiagram} was continually updated throughout the project and although it saw many changes, certain key themes remained constant throughout.
-
-An important architectural decision made from the outset was to ensure the separation of concerns between the graphics, simulation and UI. It was decided that the graphical component should provide a representation of the simulation's output, but that they should be kept unaware of the inner workings of the other to better decouple their behaviour. Likewise, while the UI would be able to interact with the simulation, there was no need to have this behaviour tied in any way to the intricacies of it. As such, the relationship between the three key areas can be observed as limited on the class diagram.
-
-Another theme present in the class diagram is abstraction. Through inheritance, MapItems are kept as generic inhabitants by the Tiles of the Grid. This means that the Grid can manage its Tiles and their inhabitant MapItems without particular knowledge of whether they are Organisms, Food or Obstacles, simplifying the implementation.
-
-\section{Version 1}
-[TODO: Write this, include the end of sprint meeting (performance issues)]
-
-\section{Version 2}
-Version 2 is currently a work in progress.
 
 \chapter{Testing}\label{testing}
 
