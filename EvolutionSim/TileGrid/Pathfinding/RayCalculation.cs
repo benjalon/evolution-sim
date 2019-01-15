@@ -13,11 +13,13 @@ namespace EvolutionSim.TileGrid.Pathfinding
     /// <summary>
     /// This gives us simplified path finding
     /// </summary>
-   public class RayCalculation
+    public class RayCalculation
     {
-       private Organism OrganismChased;
-       private Organism Predator;
-       private List<Tile> Ray;
+        private Organism OrganismChased;
+        public Organism Predator { get; set; }
+        private List<Tile> Ray;
+
+       
 
 
         /// <summary>
@@ -102,6 +104,10 @@ namespace EvolutionSim.TileGrid.Pathfinding
             Predator.Path = this.Ray;
 
             }
+
+
+
+
 
 
 
