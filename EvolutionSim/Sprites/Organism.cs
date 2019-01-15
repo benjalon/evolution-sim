@@ -11,7 +11,7 @@ namespace EvolutionSim.Sprites
     {
         public static int TOTAL_POPULATION = 0;
         public const int KILL_HEALTH = int.MaxValue;
-        public const int DETECTION_RADIUS = 5;
+        public const int DETECTION_RADIUS = 8;
         public const int DETECTION_DIAMETER = DETECTION_RADIUS * 2;
         private const int INCREMENT_HEALTH = 1;
         private const float EATING_REGEN = 0.075f;
