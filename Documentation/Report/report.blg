@@ -3,12 +3,9 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: report.aux
 The style file: unsrt.bst
 Database file #1: references.bib
-Warning--I didn't find a database entry for "Taylor:2007"
-Warning--I didn't find a database entry for "Morton:1966"
-Warning--I didn't find a database entry for "Soos:2012"
 You've used 6 entries,
             1791 wiz_defined-function locations,
-            481 strings with 4723 characters,
+            475 strings with 4661 characters,
 and the built_in function-call counts, 744 in all, are:
 = -- 61
 > -- 9
@@ -47,4 +44,3 @@ warning$ -- 0
 while$ -- 2
 width$ -- 7
 write$ -- 53
-(There were 3 warnings)
