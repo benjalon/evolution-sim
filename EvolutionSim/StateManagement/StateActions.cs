@@ -191,7 +191,9 @@ namespace EvolutionSim.StateManagement
 
                     if (potentialPrey != null)
                     {
-                        if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
+                        //if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
+                        if(WageWar(organism, (Organism)potentialPrey.Inhabitant) || ((Organism)potentialPrey.Inhabitant).Frozen == false) { 
+
 
                             ((Organism)potentialPrey.Inhabitant).Frozen = true;
                             organism.Computing = true;
@@ -332,6 +334,30 @@ namespace EvolutionSim.StateManagement
 
                 }
                 return null;
+            }
+
+            /// <summary>
+            /// Simple method to calculate the total power of the organisms
+            /// </summary>
+            /// <param name="organism1"></param>
+            /// <param name="organism2"></param>
+            /// <returns></returns>
+            private static bool WageWar(Organism organism1, Organism organism2)
+            {
+
+                float StrengthChallenger = organism1.Attributes.Strength;
+                float SpeedChallenger = organism2.Attributes.Speed;
+
+                float StrengthHomie = organism2.Attributes.Strength;
+                float SpeedHomie = organism2.Attributes.Speed;
+
+                var totalPower1 = StrengthChallenger + SpeedChallenger;
+                var totalPower2 = StrengthHomie + SpeedChallenger;
+
+                return totalPower1 >= totalPower2;
+
+
+
             }
 
         }
