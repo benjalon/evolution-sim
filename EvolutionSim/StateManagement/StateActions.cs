@@ -45,6 +45,7 @@ namespace EvolutionSim.StateManagement
 
         public static void Roam(Organism organism, Grid grid, TimeManager timeManager)
         {
+            organism.Frozen = false;
             // If we don't have a set destination, pick a random tile to explore
             if (timeManager.HasRoamingCooldownExpired(organism))
             {
@@ -357,7 +358,7 @@ namespace EvolutionSim.StateManagement
                 float preySpeed = prey.Attributes.Speed;
 
                 var predatorResult = predatorStrength + predatorSpeed;
-                var preyResult = preyStrength + preyStrength;
+                var preyResult = preyStrength + preySpeed;
 
                 return predatorResult >= preyResult;
 
