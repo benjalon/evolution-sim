@@ -22,7 +22,7 @@
 \vspace{1cm}
 {\large  CMP-7009A Advanced Programming Concepts and Techniques}
 \vspace{7.5cm}
-\\{\Large Project Interim Report - 14 November 2018}
+\\{\Large Project Report - 14 November 2018}
 \vspace{1.5cm}
 \\{\LARGE Evolution Sandbox}
 \vspace{1.0cm}
@@ -34,79 +34,34 @@
 \end{center}
 \end{titlepage}
 
-
 \setcounter{page}{1}
 %\pagenumbering{roman}
 %\newpage
 
-
-\begin{abstract}
-[TODO: Write this]
-\end{abstract}
-
 \chapter{Introduction}
-An evolution simulation attempts to represent the way a set of organisms evolve within a limited ecosystem, typically a number of biological algorithms such as fitness functions and crossover are employed to dictate how this plays out. One such example of an evolution simulation is Conway's Game of Life. Created in 1970 by John Conway, the simulation takes place on an infinitely sized grid where each cell is either live or dead. It progresses according to a set of simple rules \cite{guardian}:
-\begin{itemize}
-	\item A live cell with less than two live neighbours becomes dead
-	\item A live cell with more than four live neighbours becomes dead
-	\item A dead cell with three live neighbours becomes alive
-\end{itemize}
+[TODO: Need work]
+An evolution simulation attempts to represent the way a set of organisms evolve within a limited ecosystem. Typically a number of biological algorithms such as fitness functions and crossover are employed to dictate how this plays out. 
 
-Conway's Game of Life is often praised for its ability to show how simple rules can spawn complex evolutionary patterns \cite{callahan}. This project will tackle evolution simulating by taking inspiration from Conway's Game of Life to produce a piece of software it terms an ``evolution sandbox``; a simulation with emphasis on real-time manipulation and customization which will allow the user to observe the outcome of their actions on the ecosystem.
-
-\section{MoSCoW}
-In order to better understand the scope and priorities of the project, a set of analysis' were carried out with the goal of producing a MoSCoW analysis.
-\smallskip 
-Firstly, the basic requirement analysis was defined as follows:
+\section{Aims and Objective}
+The aim of this project is to produce a graphical evolutionary simulation with some degree of interactivity. In order to meet this objective, a set of requirements were produced:
 \begin{itemize}\label{requirements}
 	\item Organisms should act based on personal attributes, similar to the rule system in Conway's Game of Life
 	\item Organism attributes should be customisable on the fly
 	\item Organism attributes should mutate over generations using a crossover algorithm
-	\item Organisms should utilize logical path finding when seeking
+	\item Organisms should utilize logical path finding when seeking out their objectives
 	\item The ecosystem should reach equilibrium when left to its own devices
 	\item The simulation should be able to handle a large number of organisms without noticeable lag
 	\item The simulation should employ realistic biological algorithms where possible
 	\item The UI should be clean, simple and professional
 	\item The graphics should faithfully represent the underlying simulation
 \end{itemize}
+
+\section{MoSCoW}
+To better understand the scope and priorities of the project, a MoSCoW analysis was produced (Figure~\ref{moscow}). In general, the ``Must Have`` objectives are those identified to be necessary for an end-to-end functioning product, while ``Should Have`` is considered a bare minimum submission. ``Could Have`` contains a mix of objectives such as spritesheet animation would improve the simulation quality but are not necessarily crucial, or otherwise those such as speciation which would increase the simulation complexity substantially. The implementation of this analysis is discussed in detail within Section~\ref{versioning}.
 \smallskip 
 
-Next, an Object Oriented Analysis was carried out to identify the objects of the system to later be the focus of the priorities in the MoSCoW analysis:
-\smallskip 
-\begin{itemize}
-	\item End Goal: Biological Evolution Sandbox
-	\begin{itemize}
-		\item What is required?
-		\begin{itemize}
-			\item End game, stable ecology
-			\begin{itemize}
-				\item Net number of organisms doesn't change
-			\end{itemize}
-			\item Food, vegetation, other organisms
-			\item Water
-			\begin{itemize}
-				\item Some organisms can go in water
-			\end{itemize}
-			\item Weather
-			\begin{itemize}
-				\item Hot and cold
-				\item Different types of weather
-			\end{itemize}
-			\item Statistics
-			\item A log
-			\item Disease
-			\item Natural Disasters
-			\item Terrain
-			\item Live edit of organisms
-			\item Tile-based graphics
-		\end{itemize}
-	\end{itemize}
-\end{itemize}
-\smallskip 
-
-Finally, taking these objects and systems a MoSCoW analysis was produced:
-\smallskip 
-\begin{center}
+\begin{figure}[H]
+	\centering
 	\begin{tabular}{c|p{0.8\textwidth}}\label{moscow}
 		Must Have & \begin{itemize}
 			\itemsep0em
@@ -139,16 +94,22 @@ Finally, taking these objects and systems a MoSCoW analysis was produced:
 			\item Scale realism
 		\end{itemize} \\
 	\end{tabular}
-\end{center}
-\smallskip
-
-In general, the ``Must Have`` objectives are those identified to be necessary to a bare minimum working product, while ``Should Have`` is considered a bare minimum submission. The logic being that these ``Should Have`` objectives could also potentially be developed further to have enough depth to utilize advanced programming techniques or have the simulation revolve around them. ``Could Have`` objectives are those which are considered incredibly difficult or potentially out of scope. For example, particle effects and spritesheet animation will not improve the depth of the simulation and would require effort in areas which are not programming-related. Natural disasters and speciation on the other hand would be difficult to implement while maintaining equilibrium within the ecosystem. Finally, the ``Won't Have`` objectives are identified to disproportionately increase the simulation's complexity when compared with the pay-off for implementing them. The implementation of this analysis is discussed in detail within Section~\ref{versioning}.
+\end{figure}
 
 \section{Report structure}
 This report will cover a brief background of evolution and the algorithms which attempt to simulate it in Section~\ref{background}. Section~\ref{methodology} details the various advanced programming and project management techniques utilized in the project. Tools used and implementation details are outlined in Section~\ref{implementation}. Finally, the product's quality will be tested and verified through testing in Section~\ref{testing} and drawn to a conclusion in Sections \ref{discussion} and \ref{conclusion}.
 
 \chapter{Background}\label{background}
-[TODO: Write this]
+[TODO: I'm not sure Conway's Game of Life should be the focus anymore]
+
+One such example of an evolution simulation is Conway's Game of Life. Created in 1970 by John Conway, the simulation takes place on an infinitely sized grid where each cell is either live or dead. It progresses according to a set of simple rules \cite{guardian}:
+\begin{itemize}
+	\item A live cell with less than two live neighbours becomes dead
+	\item A live cell with more than four live neighbours becomes dead
+	\item A dead cell with three live neighbours become alive
+\end{itemize}
+
+Conway's Game of Life is often praised for its ability to show how simple rules can spawn complex evolutionary patterns \cite{callahan}. This project will tackle evolution simulating by taking inspiration from Conway's Game of Life to produce a piece of software it terms an ``evolution sandbox``; a simulation with emphasis on real-time manipulation and customization which will allow the user to observe the outcome of their actions on the ecosystem.
 
 \chapter{Methodology}\label{methodology}
 
