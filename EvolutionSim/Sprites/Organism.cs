@@ -39,6 +39,9 @@ namespace EvolutionSim.Sprites
         // State management
         public States State { get; set; } = States.Roaming;
         public int MsSinceLastRoam { get; set; } = 0;
+
+        public int MsSinceLastWeather { get; set; } = 0;
+
         public int MsSinceLastMate { get; set; } = 0;
         //not sure if I should move this
         public int MsSinceLastHunted { get; set; } = 0;

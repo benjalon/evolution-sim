@@ -25,7 +25,10 @@ namespace EvolutionSim.Utility
                 organism = organisms[i];
                 if (SimulationTick)
                 {
-                    UpdateWeatherAttribute(organism, weatherSettings);
+                    if (timeManager.HasWeatherCooldownExpired(organism))
+                    {
+                        UpdateWeatherAttribute(organism, weatherSettings);
+                    }
                     UpdateHungerAttribute(organism);
                     UpdateAgeAttribute(organism);
                 }
