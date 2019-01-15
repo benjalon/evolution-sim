@@ -38,8 +38,9 @@ namespace EvolutionSim.StateManagement
             {
                 organism = grid.Organisms[i];
 
-                    CheckState(timeManager, organism);
+                    
                 if (!organism.Frozen)
+                    CheckState(timeManager, organism);
                     DetermineBehaviour(grid, timeManager, organism);
 
 
@@ -91,11 +92,14 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry);
                     }
 
-                    if (organism.DestinationTile != null)
+                   else if (organism.DestinationTile != null)
 
                     {
-                        organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
+                        if(organism.DestinationTile.HasFoodInhabitant || organism.DestinationTile.HasOrganismInhabitant)
+                            organism.State = this.state.MoveState(organismState, Actions.FoodDetected); // Food found, move towards it
                     }
+   
+
 
                     //if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant)
                     //{
@@ -111,15 +115,16 @@ namespace EvolutionSim.StateManagement
                         if (organism.DestinationTile.HasOrganismInhabitant)
                         {
                             organism.Hunting = false;
- 
+                            ((Organism)organism.DestinationTile.Inhabitant).Frozen = false;
                             organism.DestinationTile.Inhabitant.DecreaseHealth(Organism.KILL_HEALTH);
                         }
                         organism.State = this.state.MoveState(organismState, Actions.FoodFound); // adjacent to food, eat it
                     }
 
-                    if (organism.DestinationTile == null)
+                    if (organism.DestinationTile == null || !organism.DestinationTile.HasInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry); // Food is gone, give up
+                        organism.Path.Clear();
                     }
 
                     break;

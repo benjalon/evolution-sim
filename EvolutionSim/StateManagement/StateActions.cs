@@ -94,7 +94,12 @@ namespace EvolutionSim.StateManagement
 
             if (isPathBlocked)
             {
-                organism.Path.Clear(); // The path is blocked so it will need recalculating
+                if (organism.DestinationTile.HasOrganismInhabitant)
+                {
+                    ((Organism)organism.DestinationTile.Inhabitant).Frozen = false;
+                    organism.Hunting = false;
+                }
+                        organism.Path.Clear(); // The path is blocked so it will need recalculating
             }
 
             // path is not blocked so carry on as normal
@@ -192,7 +197,7 @@ namespace EvolutionSim.StateManagement
                     if (potentialPrey != null)
                     {
                         //if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
-                        if(WageWar(organism, (Organism)potentialPrey.Inhabitant) || ((Organism)potentialPrey.Inhabitant).Frozen == false) { 
+                        if(CanEatOrganism(organism, (Organism)potentialPrey.Inhabitant) && ((Organism)potentialPrey.Inhabitant).Frozen == false && !organism.Attributes.Species.Equals(((Organism)potentialPrey.Inhabitant).Attributes.Species)) { 
 
 
                             ((Organism)potentialPrey.Inhabitant).Frozen = true;
@@ -339,22 +344,22 @@ namespace EvolutionSim.StateManagement
             /// <summary>
             /// Simple method to calculate the total power of the organisms
             /// </summary>
-            /// <param name="organism1"></param>
-            /// <param name="organism2"></param>
+            /// <param name="predator"></param>
+            /// <param name="prey"></param>
             /// <returns></returns>
-            private static bool WageWar(Organism organism1, Organism organism2)
+            private static bool CanEatOrganism(Organism predator, Organism prey)
             {
 
-                float StrengthChallenger = organism1.Attributes.Strength;
-                float SpeedChallenger = organism2.Attributes.Speed;
+                float predatorStrength = predator.Attributes.Strength;
+                float predatorSpeed = predator.Attributes.Speed;
 
-                float StrengthHomie = organism2.Attributes.Strength;
-                float SpeedHomie = organism2.Attributes.Speed;
+                float preyStrength = prey.Attributes.Strength;
+                float preySpeed = prey.Attributes.Speed;
 
-                var totalPower1 = StrengthChallenger + SpeedChallenger;
-                var totalPower2 = StrengthHomie + SpeedChallenger;
+                var predatorResult = predatorStrength + predatorSpeed;
+                var preyResult = preyStrength + preyStrength;
 
-                return totalPower1 >= totalPower2;
+                return predatorResult >= preyResult;
 
 
 
