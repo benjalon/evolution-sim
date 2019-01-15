@@ -111,8 +111,9 @@ namespace EvolutionSim.TileGrid
             {
                 for (var y = -1; y <= 1; y++)
                 {
-                    if(!grid.GetTileAt(this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y).HasInhabitant)
-                        grid.SetTerrainAt(terrainType, this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y);
+                    if(grid.InBounds(this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y))
+                        if(!grid.GetTileAt(this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y).HasInhabitant)
+                            grid.SetTerrainAt(terrainType, this.HighlightedTile.GridIndex.X + x, this.HighlightedTile.GridIndex.Y + y);
                 }
             }
         }
