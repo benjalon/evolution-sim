@@ -194,7 +194,6 @@ namespace EvolutionSim.StateManagement
                         if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
 
                             ((Organism)potentialPrey.Inhabitant).Frozen = true;
-                            //((Organism)potentialPrey.Inhabitant).DecreaseHealth(999);
                             organism.Computing = true;
                             ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
                             {
@@ -348,8 +347,11 @@ namespace EvolutionSim.StateManagement
 
                 if (timeManager.HasSimulationTicked) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
                 {
-                    food.BeEaten();
-                    organism.Eat(); //organism gets fuller after eating
+                    if (food != null)
+                    {
+                        food.BeEaten();
+                        organism.Eat(); //organism gets fuller after eating
+                    }
                 }
             }
 

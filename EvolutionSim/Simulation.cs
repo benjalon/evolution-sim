@@ -36,6 +36,7 @@ namespace EvolutionSim
 
             this.bearBreeds = new List<Attributes>()
             {
+                
                 new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
                 new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
                 new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
@@ -134,6 +135,10 @@ namespace EvolutionSim
 
         public void BirthHandler(object sender, EventArgs args)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+            {
+                return;
+            }
 
 
             const float EXTREME = 0.4f;
@@ -263,7 +268,6 @@ namespace EvolutionSim
 
             #endregion
 
-
             var child = new Organism(advancedCrossBreed, this.healthbarTextures);
 
             // Top left corner
@@ -298,7 +302,10 @@ namespace EvolutionSim
 
         public void AddOrganisms(int amount)
         {
-            Organism organism;
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
+
+                Organism organism;
             for (var i = 0; i < amount; i++)
             {
                 organism = new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures);
@@ -308,7 +315,9 @@ namespace EvolutionSim
         }
         public void AddOrganisms(List<Attributes> attributes, int amount)
         {
-            foreach(var attribute in attributes)
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
+            foreach (var attribute in attributes)
             {
                 Organism organism;
                 for (var i = 0; i < amount; i++)
@@ -326,6 +335,8 @@ namespace EvolutionSim
 
         public void AddFoods(int amount)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
             Food food;
             for (var i = 0; i < amount; i++)
             {
@@ -337,6 +348,8 @@ namespace EvolutionSim
 
         public void AddOrganism(int x, int y)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
             var positioned = this.grid.AttemptToPositionAt(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures), x, y);
             if (positioned)
             {
@@ -347,6 +360,8 @@ namespace EvolutionSim
 
         public void AddFood(int x, int y)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
             var positioned = this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
             if (positioned)
             {
@@ -369,6 +384,8 @@ namespace EvolutionSim
         /// <param name="e">Event arguments.</param>
         private void SpawnCorpseHandler(object sender, EventArgs e)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
             var organism = ((Organism)sender);
             var tile = (Tile)grid.GetTileAt(organism);
             this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);

@@ -11,9 +11,8 @@ namespace EvolutionSim.Utility
     public static class AttributeUpdater
     {
         private const int STARVING_THRESHOLD = 0;
-        private const int DYING_THRESHOLD = 250;
-        private const float HUNGRY_RATE = 0.001f;
-      
+        private const float HUNGRY_RATE = 0.002f;
+        
        
 
         public static void UpdateAttributes(List<Organism> organisms, WeatherSettings weatherSettings, Boolean SimulationTick, TimeManager timeManager)
@@ -67,10 +66,10 @@ namespace EvolutionSim.Utility
         private static void UpdateAgeAttribute(Organism organism)
         {
             organism.Age += 1;
-            if (organism.Age > DYING_THRESHOLD)
+            if (organism.Age > organism.MaxAge)
             {
                 //kill the organism
-                organism.DecreaseHealth(DYING_THRESHOLD);
+                organism.DecreaseHealth(Organism.KILL_HEALTH);
             }
 
 

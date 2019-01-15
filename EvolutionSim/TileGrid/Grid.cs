@@ -99,6 +99,8 @@ namespace EvolutionSim.TileGrid
                 Foods.Add(food);
             }
 
+
+
             return true; // Successfully positioned
         }
 
@@ -242,6 +244,7 @@ namespace EvolutionSim.TileGrid
             var organism = (Organism)sender;
             this.GetTileAt(organism).RemoveInhabitant();
             this.Organisms.Remove(organism);
+            GridItem.TOTAL_GRID_ITEMS--;
 
             ShouldSpawnCorpse?.Invoke(organism, EventArgs.Empty);
     }
@@ -256,6 +259,8 @@ namespace EvolutionSim.TileGrid
             var food = (Food)sender;
             this.GetTileAt(food).RemoveInhabitant();
             this.Foods.Remove(food);
+            GridItem.TOTAL_GRID_ITEMS--;
+
         }
 
         public Tile FindRandomNearbyEmptyTile(Organism organism)

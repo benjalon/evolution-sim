@@ -9,6 +9,8 @@ namespace EvolutionSim.Sprites
     /// </summary>
     public abstract class GridItem : Sprite
     {
+        public static int TOTAL_GRID_ITEMS;
+        public static int MAX_GRID_ITEMS = 1500;
         public Point GridIndex; // The index of this item on the grid, this is not the object's actual screen position
 
         protected int defaultHealth;
@@ -22,6 +24,8 @@ namespace EvolutionSim.Sprites
         /// <param name="texture">The appearance of the GridItem</param>
         public GridItem(Texture2D texture, int health) : base(texture)
         {
+ 
+            TOTAL_GRID_ITEMS++;
             this.defaultHealth = health;
             Health = health;
         }
