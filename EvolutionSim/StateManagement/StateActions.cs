@@ -4,6 +4,7 @@ using EvolutionSim.TileGrid;
 using EvolutionSim.TileGrid.Pathfinding;
 using EvolutionSim.Utility;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -45,6 +46,7 @@ namespace EvolutionSim.StateManagement
 
         public static void Roam(Organism organism, Grid grid, TimeManager timeManager)
         {
+            organism.Frozen = false;
             // If we don't have a set destination, pick a random tile to explore
             if (timeManager.HasRoamingCooldownExpired(organism))
             {
@@ -94,7 +96,12 @@ namespace EvolutionSim.StateManagement
 
             if (isPathBlocked)
             {
-                organism.Path.Clear(); // The path is blocked so it will need recalculating
+                if (organism.DestinationTile.HasOrganismInhabitant)
+                {
+                    ((Organism)organism.DestinationTile.Inhabitant).Frozen = false;
+                    organism.Hunting = false;
+                }
+                        organism.Path.Clear(); // The path is blocked so it will need recalculating
             }
 
             // path is not blocked so carry on as normal
@@ -118,6 +125,7 @@ namespace EvolutionSim.StateManagement
 
             if (isPathBlocked)
             {
+               
                 organism.Path.Clear(); // The path is blocked so it will need recalculating
             }
             else if (hasPath(organism))
@@ -191,10 +199,11 @@ namespace EvolutionSim.StateManagement
 
                     if (potentialPrey != null)
                     {
-                        if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
+                        //if(organism.Attributes.Strength > ((Organism)potentialPrey.Inhabitant).Attributes.Strength || ((Organism)potentialPrey.Inhabitant).Frozen ==false){
+                        if(CanEatOrganism(organism, (Organism)potentialPrey.Inhabitant) && ((Organism)potentialPrey.Inhabitant).Frozen == false && !organism.Attributes.Species.Equals(((Organism)potentialPrey.Inhabitant).Attributes.Species)) { 
+
 
                             ((Organism)potentialPrey.Inhabitant).Frozen = true;
-                            //((Organism)potentialPrey.Inhabitant).DecreaseHealth(999);
                             organism.Computing = true;
                             ThreadPool.QueueUserWorkItem(new WaitCallback(delegate (object state)
                             {
@@ -335,6 +344,29 @@ namespace EvolutionSim.StateManagement
                 return null;
             }
 
+            /// <summary>
+            /// Simple method to calculate the total power of the organisms
+            /// (Health * Hunger) / (Distance * Speed) + Strength
+            /// 
+            /// </summary>
+            /// <param name="predator"></param>
+            /// <param name="prey"></param>
+            /// <returns></returns>
+            private static bool CanEatOrganism(Organism predator, Organism prey)
+            {
+
+                int distance = Grid.ManhattanDistance(predator, prey);
+                float predatorResult = ( predator.Health * predator.Hunger) / (distance * predator.Attributes.Speed) + predator.Attributes.Strength;
+                float preyResult = (prey.Health * prey.Hunger) / (distance * prey.Attributes.Speed) + prey.Attributes.Strength;
+
+
+                return predatorResult >= preyResult;
+
+
+
+            }
+            
+
         }
 
         /// <summary>
@@ -348,8 +380,11 @@ namespace EvolutionSim.StateManagement
 
                 if (timeManager.HasSimulationTicked) // It's rare but two organisms can attempt to eat the same food source and the type preference is indifferent 
                 {
-                    food.BeEaten();
-                    organism.Eat(); //organism gets fuller after eating
+                    if (food != null)
+                    {
+                        food.BeEaten();
+                        organism.Eat(); //organism gets fuller after eating
+                    }
                 }
             }
 

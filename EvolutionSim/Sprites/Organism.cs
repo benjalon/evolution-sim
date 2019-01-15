@@ -10,16 +10,18 @@ namespace EvolutionSim.Sprites
     public class Organism : GridItem
     {
         public static int TOTAL_POPULATION = 0;
-
-        public const int DETECTION_RADIUS = 5;
+        public const int KILL_HEALTH = int.MaxValue;
+        public const int DETECTION_RADIUS = 8;
         public const int DETECTION_DIAMETER = DETECTION_RADIUS * 2;
         private const int INCREMENT_HEALTH = 1;
-        private const float EATING_REGEN = 0.4f;
+        private const float EATING_REGEN = 0.075f;
         private const float SCALE_MULTIPLIER = 0.2f;
         private const float SCALE_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
 
+        private const int AGE_LOWER_BOUND = 70;
+        private const int AGE_UPPER_BOUND = 130;
 
-    
+
         // Breed attributes
         public Attributes Attributes { get; }
 
@@ -27,6 +29,8 @@ namespace EvolutionSim.Sprites
         public int Age { get; set; } = 0;
         public float Hunger { get; set; } = 0.2f;
         private float scale = 1.0f;
+
+        public int MaxAge { get; set; } = 0;
 
         // Pathfinding 
         public bool Computing { get; set; } = false;
@@ -36,6 +40,9 @@ namespace EvolutionSim.Sprites
         // State management
         public States State { get; set; } = States.Roaming;
         public int MsSinceLastRoam { get; set; } = 0;
+
+        public int MsSinceLastWeather { get; set; } = 0;
+
         public int MsSinceLastMate { get; set; } = 0;
         //not sure if I should move this
         public int MsSinceLastHunted { get; set; } = 0;
@@ -55,8 +62,9 @@ namespace EvolutionSim.Sprites
         
         public Organism(Attributes attributes, Tuple<Texture2D, Texture2D> healthbarTextures) : base(attributes.Texture, attributes.MaxHealth)
         {
-            TOTAL_POPULATION++;
 
+            TOTAL_POPULATION++;
+            this.MaxAge = Graphics.RANDOM.Next(AGE_LOWER_BOUND, AGE_UPPER_BOUND);
             this.Attributes = attributes;
 
             this.scale = this.Attributes.Strength;
@@ -91,11 +99,10 @@ namespace EvolutionSim.Sprites
         /// </summary>
         public void Eat()
         {
-            // if the organism is
-            if (this.Hunger < 1.0)
-            {
+
                 Hunger += EATING_REGEN;
-            }
+
+
 
             IncreaseHealth(INCREMENT_HEALTH);
         }

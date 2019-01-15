@@ -180,7 +180,6 @@ namespace EvolutionSim
         /// <param name="gameTime">Delta - time since last update call</param>
         protected override void Update(GameTime gameTime)
         {
-
             switch (state)
             {
 
