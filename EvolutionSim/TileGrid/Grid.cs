@@ -200,6 +200,7 @@ namespace EvolutionSim.TileGrid
         public bool IsPreyAt(int x, int y)
         {
             var inhabitant = this.tiles[x][y].Inhabitant;
+            
             return inhabitant != null && inhabitant.GetType() == typeof(Organism);
 
 

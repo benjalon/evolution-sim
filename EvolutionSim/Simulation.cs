@@ -89,6 +89,7 @@ namespace EvolutionSim
 
             Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
 
+            //maybe this should be after the UpdateStates
             this.grid.UpdateRay();
 
             this.fsm.UpdateStates(this.grid, TimeManager);

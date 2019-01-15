@@ -186,11 +186,13 @@ namespace EvolutionSim.StateManagement
                 //these states are only avaliable to carnivores, the preyFound bool will be null if organisms are omnivores or herbivores
                 #region Hunt States 
 
+                //when the organism enters the finiding prey state the destination tile will be null (has no inhabitant)
                 case States.FindingPrey:
-
-                    // check if the destination tile is null, then if the inhabitant of said tile is null 
+                   
+                    // check if the destination tile is null, then if the inhabitant of said tile has an organism present
                     if (organism.DestinationTile != null)
                     {
+                        
                         if (organism.PreyFound == true && organism.DestinationTile.HasOrganismInhabitant)
                         {
 
@@ -211,17 +213,23 @@ namespace EvolutionSim.StateManagement
 
                 case States.Hunting:
 
-                    //then we've found the target or time has expired so stop hunting
-                    if(organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant)
+                    //when organisms first enter the hunting state the destination tile SHOULD NOT!!!!!
+                    //be null, i have NO idea why this is the case
+                    if (organism.DestinationTile != null)
                     {
-                        organism.State = this.state.MoveState(organismState, Actions.CaughtPrey);
+                        //then we've found the target or time has expired so stop hunting
+                        if (organism.Path.Count == 1 && organism.DestinationTile.HasOrganismInhabitant)
+                        {
+                            organism.State = this.state.MoveState(organismState, Actions.CaughtPrey);
 
-                    }
+                        }
 
-                    else if (timeManager.HasHuntingCooldownExpired(organism)) // otherwise give the hunt up if time has expired
-                    {
+                        //otherwise give the hunt up if time has expired
+                        else if (timeManager.HasHuntingCooldownExpired(organism)) 
+                        {
 
-                        organism.State = this.state.MoveState(organismState, Actions.GiveUpLooking);
+                            organism.State = this.state.MoveState(organismState, Actions.GiveUpLooking);
+                        }
                     }
                   
 
@@ -233,10 +241,13 @@ namespace EvolutionSim.StateManagement
                     //organism has finished hunting
                     organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
 
+                    //this is giving a null exception error, however it should never be null
                     if (organism.DestinationTile != null)
                     {
                         var org = organism.DestinationTile.Inhabitant;
                     }
+
+
                     //set the prey found to be false
                     //now kill the organism and set to false;
                     
@@ -316,7 +327,6 @@ namespace EvolutionSim.StateManagement
                 case States.FindingPrey:
 
                     //this is returning null
-                    //
                     StateActions.SeekingFood.SeekFood(organism, grid, timeManager);
 
                     //should be called once as the organism will move out of state as soon as the
@@ -324,21 +334,14 @@ namespace EvolutionSim.StateManagement
                     //this will only work if this is checked once before moving onto the following state
                     //state upon the next call of checkState
 
-                    if (organism.DestinationTile != null)
+                    if (organism.DestinationTile != null && organism.DestinationTile.HasOrganismInhabitant)
                     {
-                        if (organism.DestinationTile.HasOrganismInhabitant && organism.PreyFound == true)
-                        {
                             grid.AddRayCalculationObject((Organism)organism.DestinationTile.Inhabitant, organism);
-
-                        }
                     }
 
                     break;
 
-                    //this is where all the pathfinding will go, 
-                    //each tick of the system will re-calculate 
-                    //the destination tile and the path to the destination tile
-                    //with simplified path finding
+
                 case States.Hunting:
 
                     StateActions.MoveAlongPreyPath(organism, grid);

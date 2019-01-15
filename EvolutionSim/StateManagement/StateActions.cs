@@ -109,13 +109,13 @@ namespace EvolutionSim.StateManagement
         }
 
         /// <summary>
-        /// This method contains the implementation for organisms who are chasing a herbivore
-        /// do not want to run A* algorithm for this
+        /// Logic for when an organism is traversing along it's recalculated path
         /// </summary>
         /// <param name="organism"></param>
         /// <param name="grid"></param>
         public static void MoveAlongPreyPath(Organism organism, Grid grid)
         {
+            //this simply states the path is blocked when an organism is infront of 
             var isPathBlocked = organism.Path.Count > 1 && organism.Path[0].HasInhabitant ||
                 organism.Path.Count == 1 && organism.Path[0].HasOrganismInhabitant;
 

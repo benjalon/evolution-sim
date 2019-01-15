@@ -143,7 +143,7 @@ namespace EvolutionSim.Sprites
         /// </summary>
         public void killOrganism()
         {
-            this.Health = 0;
+            this.DecreaseHealth(999);
         }
     }
 }
