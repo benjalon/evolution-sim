@@ -233,7 +233,10 @@ namespace EvolutionSim.StateManagement
                     //organism has finished hunting
                     organism.State = this.state.MoveState(organismState, Actions.FinishedHunt);
 
-                    var org = organism.DestinationTile.Inhabitant;
+                    if (organism.DestinationTile != null)
+                    {
+                        var org = organism.DestinationTile.Inhabitant;
+                    }
                     //set the prey found to be false
                     //now kill the organism and set to false;
                     
