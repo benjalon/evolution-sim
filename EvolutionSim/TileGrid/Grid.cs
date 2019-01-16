@@ -247,6 +247,7 @@ namespace EvolutionSim.TileGrid
             this.GetTileAt(organism).RemoveInhabitant();
             this.Organisms.Remove(organism);
             GridItem.TOTAL_GRID_ITEMS--;
+            Organism.TOTAL_POPULATION--;
 
             ShouldSpawnCorpse?.Invoke(organism, EventArgs.Empty);
     }
