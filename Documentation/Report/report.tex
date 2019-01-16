@@ -62,48 +62,6 @@ The aim of this project is to produce a graphical evolutionary simulation with s
 
 \section{MoSCoW}
 To better understand the scope and priorities of the project, a MoSCoW analysis was produced (Figure~\ref{moscow}). In general, the ``Must Have`` objectives are those identified to be necessary for an end-to-end functioning product, while ``Should Have`` is considered a bare minimum submission. ``Could Have`` contains a mix of objectives such as spritesheet animation would improve the simulation quality but are not necessarily crucial, or otherwise those such as speciation which would substantially increase the simulation complexity. The implementation of this analysis is discussed in detail within Section~\ref{versioning}.
-\smallskip 
-
-\begin{figure}[H]
-	\caption{MoSCoW Analysis}\label{moscow}
-	\centering
-	\begin{tabular}{c|p{0.8\textwidth}}
-		Must Have & \begin{itemize}
-			\itemsep0em
-			\item Organism life cycle
-			\item Genetic crossover algorithm
-			\item Unique organism attributes such as health, age, strength, speed and resistances
-			\item Organisms state determined by their unique attributes
-			\item Unique organism attributes should be editable on the fly
-			\item Simple UI Overlay
-			\item Live edit of organisms
-			\item Simple 2D graphics
-			\item Herbivores and natural food sources
-		\end{itemize} \\ \hline
-		Should Have & \begin{itemize}
-			\itemsep0em
-			\item Weather/disease system
-			\item Advanced path-finding algorithm
-			\item Carnivores and predator/prey organisms
-			\item Terrain variation, e.g. grass, mountainous, water
-			\item Ability to pause, speed up and slow down simulation
-		\end{itemize} \\ \hline
-		Could Have & \begin{itemize}
-			\itemsep0em
-			\item Natural disasters
-			\item Speciation (new species forming from heavily mutated organisms over time)
-			\item A game log with charts and text output
-			\item Spritesheet animation
-			\item Particle effects, e.g. weather effects, running water, blood
-			\item Program flow (start screen, simulation setup, end screen etc.)
-		\end{itemize} \\ \hline
-		Won't Have & \begin{itemize}
-			\itemsep0em
-			\item 3D graphics
-			\item Scale realism
-		\end{itemize} \\
-	\end{tabular}
-\end{figure}
 
 \section{Report structure}
 This report will cover a brief background of evolution and the algorithms which attempt to simulate it in Section~\ref{background}. Section~\ref{methodology} details the various advanced programming and project management techniques utilized in the project. Models and implementation details are outlined in Section~\ref{implementation}. Finally, the product's quality will be tested and verified through experiments in Section~\ref{testing} before being drawn to a conclusion in Sections \ref{discussion} and \ref{conclusion}.
@@ -206,67 +164,18 @@ Taking the potential classes identified in Section~\ref{ooa}, a class diagram wa
 
 Furthermore, a requirement of the classes is that they aim to encapsulate their data and provide abstraction in information to make the code more manageable across the team. For example, code relating to a component such as the weather system is kept isolated within its class. The diagram also illustrates how this is achieved through inheritance, where base classes are generic and intricate functionality is extended further down the hierarchy. The main example of this can be seen in GridItems, essentially generic tile-based sprites, Food and Organism.
 
+Due to the simulation's dependency on a complicated state management system, a state diagram was also created to identify how organisms would act (Figure~\ref{state-diagram}).
+
+\begin{figure}[H]
+	\caption{State Diagram}\label{state-diagram}
+	\centering
+	\includegraphics[width=1\textwidth]{state-diagram}
+\end{figure}
+
 \section{Tools}\label{tools}
 Three programming languages were considered for the project: C++, C\# and Java. The simulation was identified to have a large dependency on computation due to the fact that there could be upwards of one hundred organisms on screen at any one time and each of them would require state management, path finding and collision detection. For this reason, C++ seemed to be the natural choice due to the speed benefit of dynamic memory management. However, upon further research it was found that C\# had a more diverse set of 2D graphics libraries with C++ libraries typically focused on 3D rendering. Finally, Java was considered because the bulk of the team's experience was with the language, though because C\# can be used as a drop-in replacement for Java this was seen as another benefit in using C\#.
 
 A comparison was made between several popular 2D graphics libraries available in C\#, shown in Figure~\ref{library-comparison}.
-
-\begin{figure}[H]
-	\caption{Graphics Library Comparison}\label{library-comparison}
-	\centering
-	\begin{center}
-		\begin{tabular}{c|p{0.4\textwidth}|p{0.4\textwidth}}
-			Library & Pros & Cons \\ \hline
-			Microsoft XNA & \begin{itemize}
-				\itemsep0em
-				\item Simple and easy to use
-				\item Very well documented
-				\item Well-used commercially
-				\item Supported by Microsoft who also made C\#
-			\end{itemize} & \begin{itemize}
-				\itemsep0em
-				\item Slow and old, based on DirectX9
-				\item Deprecated and no longer works in Visual Studio 2015+
-				\item Windows only
-				\item Closed source
-			\end{itemize} \\ \hline
-			MonoGame & \begin{itemize}
-				\itemsep0em
-				\item Based on XNA with the same syntax, all of the XNA documentation is applicable
-				\item Multi-platform but requires Xamarin
-				\item Open source
-				\item Has seen use on commercial games (Stardew Valley, Transistor, Bastion etc.)
-			\end{itemize} & \begin{itemize}
-				\itemsep0em
-				\item Convoluted asset management system
-			\end{itemize} \\ \hline
-			UV & \begin{itemize}
-				\itemsep0em
-				\item Has a built in UI framework based on Windows Presentation Foundation (WPF)
-				\item Truly multi-platform
-				\item Open source
-			\end{itemize} & \begin{itemize}
-				\itemsep0em
-				\item Convoluted asset management system
-				\item Limited documentation, small time
-				\item Little to no commercial use
-			\end{itemize} \\ \hline
-			SFML & \begin{itemize}
-				\itemsep0em
-				\item Very fast, written in C++ but has C\# bindings
-				\item Well documented
-				\item Some commercial use
-				\item Multi-platform but no phone support
-				\item Open source
-			\end{itemize} & \begin{itemize}
-				\itemsep0em
-				\item C\# bindings are slightly behind on updates
-				\item Examples and documentation are written in C++ and require converting
-				\item Syntax is not as simple as other frameworks
-			\end{itemize} \\
-		\end{tabular}
-	\end{center}
-\end{figure}
 
 Though UV was initially chosen due to its built-in UI support, the lack of documentation and convoluted XML system for managing assets meant that MonoGame was used instead. The third party UI library GeonBit.UI was chosen because one of the project requirements [\ref{requirements}] was that the UI have a professional look and it also provided out of box support for radio buttons and lists.
 
@@ -452,8 +361,49 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 		\end{itemize} \\
 	\end{tabular}
 \end{center}
-\smallskip
+
 \chapter*{Appendix A}
+
+\begin{figure}[H]
+	\caption{MoSCoW Analysis}\label{moscow}
+	\centering
+	\begin{tabular}{c|p{0.8\textwidth}}
+		Must Have & \begin{itemize}
+			\itemsep0em
+			\item Organism life cycle
+			\item Genetic crossover algorithm
+			\item Unique organism attributes such as health, age, strength, speed and resistances
+			\item Organisms state determined by their unique attributes
+			\item Unique organism attributes should be editable on the fly
+			\item Simple UI Overlay
+			\item Live edit of organisms
+			\item Simple 2D graphics
+			\item Herbivores and natural food sources
+		\end{itemize} \\ \hline
+		Should Have & \begin{itemize}
+			\itemsep0em
+			\item Weather/disease system
+			\item Advanced path-finding algorithm
+			\item Carnivores and predator/prey organisms
+			\item Terrain variation, e.g. grass, mountainous, water
+			\item Ability to pause, speed up and slow down simulation
+		\end{itemize} \\ \hline
+		Could Have & \begin{itemize}
+			\itemsep0em
+			\item Natural disasters
+			\item Speciation (new species forming from heavily mutated organisms over time)
+			\item A game log with charts and text output
+			\item Spritesheet animation
+			\item Particle effects, e.g. weather effects, running water, blood
+			\item Program flow (start screen, simulation setup, end screen etc.)
+		\end{itemize} \\ \hline
+		Won't Have & \begin{itemize}
+			\itemsep0em
+			\item 3D graphics
+			\item Scale realism
+		\end{itemize} \\
+	\end{tabular}
+\end{figure}
 
 \begin{figure}[H]
 	\caption{Object Oriented Analysis Breakdown}\label{ooa-breakdown}
@@ -511,7 +461,64 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 	\end{figure}
 \end{landscape}
 
-\smallskip 
+
+\begin{figure}[H]
+	\caption{Graphics Library Comparison}\label{library-comparison}
+	\centering
+	\begin{center}
+		\begin{tabular}{c|p{0.4\textwidth}|p{0.4\textwidth}}
+			Library & Pros & Cons \\ \hline
+			Microsoft XNA & \begin{itemize}
+				\itemsep0em
+				\item Simple and easy to use
+				\item Very well documented
+				\item Well-used commercially
+				\item Supported by Microsoft who also made C\#
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item Slow and old, based on DirectX9
+				\item Deprecated and no longer works in Visual Studio 2015+
+				\item Windows only
+				\item Closed source
+			\end{itemize} \\ \hline
+			MonoGame & \begin{itemize}
+				\itemsep0em
+				\item Based on XNA with the same syntax, all of the XNA documentation is applicable
+				\item Multi-platform but requires Xamarin
+				\item Open source
+				\item Has seen use on commercial games (Stardew Valley, Transistor, Bastion etc.)
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item Convoluted asset management system
+			\end{itemize} \\ \hline
+			UV & \begin{itemize}
+				\itemsep0em
+				\item Has a built in UI framework based on Windows Presentation Foundation (WPF)
+				\item Truly multi-platform
+				\item Open source
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item Convoluted asset management system
+				\item Limited documentation, small time
+				\item Little to no commercial use
+			\end{itemize} \\ \hline
+			SFML & \begin{itemize}
+				\itemsep0em
+				\item Very fast, written in C++ but has C\# bindings
+				\item Well documented
+				\item Some commercial use
+				\item Multi-platform but no phone support
+				\item Open source
+			\end{itemize} & \begin{itemize}
+				\itemsep0em
+				\item C\# bindings are slightly behind on updates
+				\item Examples and documentation are written in C++ and require converting
+				\item Syntax is not as simple as other frameworks
+			\end{itemize} \\
+		\end{tabular}
+	\end{center}
+\end{figure}
+
 \begin{figure}[H]
 	\caption{Requirements Testing} \label{requirements-testing}
 		\begin{tabular}{llllll}
@@ -540,7 +547,6 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 		\end{tabular}
 	
 \end{figure}
-\smallskip 
 
 \end{document}
 
