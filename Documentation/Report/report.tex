@@ -63,9 +63,6 @@ The aim of this project is to produce a graphical evolutionary simulation with s
 \section{MoSCoW}
 To better understand the scope and priorities of the project, a MoSCoW analysis was produced (Figure~\ref{moscow}). In general, the ``Must Have`` objectives are those identified to be necessary for an end-to-end functioning product, while ``Should Have`` is considered a bare minimum submission. ``Could Have`` contains a mix of objectives such as spritesheet animation would improve the simulation quality but are not necessarily crucial, or otherwise those such as speciation which would substantially increase the simulation complexity. The implementation of this analysis is discussed in detail within Section~\ref{versioning}.
 
-\section{Report structure}
-This report will cover a brief background of evolution and the algorithms which attempt to simulate it in Section~\ref{background}. Section~\ref{methodology} details the various advanced programming and project management techniques utilized in the project. Models and implementation details are outlined in Section~\ref{implementation}. Finally, the product's quality will be tested and verified through experiments in Section~\ref{testing} before being drawn to a conclusion in Sections \ref{discussion} and \ref{conclusion}.
-
 \chapter{Background}\label{background}
 
 \section{Evolution}
@@ -115,16 +112,16 @@ The SOLID principles define five guidelines which are used as the guiding princi
 	\item Dependency Inversion: Keep abstract code abstract by avoiding dependencies on low level code.
 \end{itemize}
 
-An example of how this has influenced design can be seen in the choice to split Grid from StateMachine within their use inside Simulation. Although both handle moving and positioning organisms, Grid is treated as the ``graphical brain``, positioning organisms and drawing them at their positions, whereas the StateMachine is used as the ``logical brain``, dictating the behaviour which causes the organisms to be repositioned in the first place. This separation of concerns can also be seen in the namespaces, for example EvolutionSim.StateMachine, EvolutionSim.TileGrid, EvolutionSim.Data and EvolutionSim.UI.
+An example of how this has influenced design can be seen in the choice to split Grid from StateMachine. Although both handle moving and positioning organisms, Grid is treated as the ``graphical brain``, positioning organisms and drawing them at their positions, whereas the StateMachine is used as the ``logical brain``, dictating the behaviour which causes the organisms to be repositioned in the first place. This separation of concerns can also be seen in the namespaces, for example EvolutionSim.StateMachine, EvolutionSim.TileGrid, EvolutionSim.Data and EvolutionSim.UI.
 
 Another example is through having GridItem function as a base class for Organism and Food. This swappable base is important due to the Tiles of Grid accepting either as a potential inhabitant. This swappable nature would not work if the Liskov Substitution principle was not applied.
 
 To ensure a clean and consistent code-base, the official Microsoft C\# conventions are applied where possible. Notable examples include placing braces on a new line, using camelCase for variable names and avoiding one line if statements \cite{microsoft}.
 
 \section{State Management}\label{statemanagement}
-Within the simulation all organism behaviour is dictated by a finite state machine which contains a set of states and rules for moving between them. The StateMachine class is passed State objects which are essentially a lookup table for each state transition. Transitions use a pair of enum values, OrganismState and Action, where OrganismState refers to the current state of the Organism and Action is the event responsible for causing the transition. Based on this supplied information, the StateMachine determines which state the Organism should transition to and throws an exception if it determines the move to be illegal, for example it is impossible for an Organism to move directly from ``Mating`` to ``Eating`` through the Action ``FoundFood`` as the Organism must be in the ``Roaming`` state in order to reach this clause.
+Within the simulation all organism behaviour is dictated by a finite state machine which contains a set of states and rules for moving between them. The StateMachine class is passed State objects which are essentially a lookup table for each state transition. Based on supplied information, the StateMachine determines which state the Organism should transition to and throws an exception if it determines the move to be illegal, for example it is impossible for an Organism to move directly from ``Mating`` to ``Eating`` through the Action ``FoundFood`` as the Organism must be in the ``Roaming`` state in order to reach this clause.
 
-In addition to these state management tasks, the StateMachine also contains two methods to drive organism behaviour: CheckState and DetermineBehaviour, which are both called every cycle of the Update loop. CheckState is responsible for checking that each Organism is in the correct state based on the rules defined for the simulation, for example if an organism is currently in the ``Roaming`` state, but it's hunger levels have dropped below 0.4, this would mean that the organism must now move into ``SeekingFood``. After the state is checked, DetermineBehaviour defines how the Organism should behave within this state.
+The StateMachine also contains two methods to drive organism behaviour: CheckState and DetermineBehaviour, which are both called every cycle of the Update loop. CheckState is responsible for checking that each Organism is in the correct state based on the rules defined for the simulation, for example if an organism is currently in the ``Roaming`` state, but it's hunger levels have dropped below 0.4, this would mean that the organism must now move into ``SeekingFood``. After the state is checked, DetermineBehaviour defines how the Organism should behave within this state.
 
 \section{Crossover Algorithm}\label{crossover}
 The initial crossover algorithm took an average from parent attributes and applied some random variations to these numbers. While effective and efficient in getting the general concept implemented, it was not complex enough to provide diversity in the simulation.
@@ -138,14 +135,14 @@ Within code, the Grid class holds a collection of Tiles within a jagged array wh
 \[tilePos = offset + (tileIndex * TILE_SIZE)\]
 
 \section{Pathfinding Algorithm}\label{pathfinding}
-Pathfinding is a key component in the simulation and three main methods were considered for it: depth first search (DFS), Dijkstra's algorithm and the A* algorithm. In terms of simplicity, DFS produces fast results but is naive and requires a large amount of time and memory to find the shortest route. Dijkstra's algorithm is an improvement because it applies a difficulty based on the movement cost to a destination, but is expensive as it compares equally and needlessly expands difficult locations without considering direction. Finally, at least for single-point to single-point searches (as used in this project), A* is considered the fastest algorithm \cite{belwariar} due to its improvement upon Dijkstra's with a heuristic. 
+Pathfinding is a key component in the simulation and several implementations were considered. In terms of simplicity, DFS produces fast results but is naive and requires a large amount of time and memory to find the shortest route. Dijkstra's algorithm is an improvement because it applies a difficulty based on the movement cost to a destination, but is expensive as it compares equally and needlessly expands difficult locations without considering direction. Finally, at least for single-point to single-point searches (as used in this project), A* is considered the fastest algorithm \cite{belwariar} due to its improvement upon Dijkstra's with a heuristic. 
 \[A* Algorithm: f(n) = g(n) + h(n)\]
-In the above formula g(n) refers to the difficulty of a tile which is an important consideration in handling different terrain types such as hills or water. The h(n) is the diagonal distance between the two points and f(n) refers to the sum of g(n) and h(n).
+In the above formula g(n) refers to the difficulty of a tile, used to handle different terrain types such. The h(n) is the diagonal distance between the two points and f(n) refers to the sum of g(n) and h(n).
 
 A* is implemented in code by creating a Node object for each Tile, each holding a reference to the previous Node, its Grid position, the destination's distance and the difficulty in reaching it. To calculate the g(n) difficulty value, the terrain type of the Tile is taken into account and for the h(n) distance value, the diagonal distance between the two points is calculated by taking the maximum value of either the goal Tile's x coordinate minus the current Tile's x coordinate or the same for y coordinates. Nodes to be evaluated are stored in open and closed collections which are manipulated until a path to the goal is found.
 
 \section{Optimisation}\label{optim}
-Optimisation is important for the project due to its requirement in handling a large number of organisms without noticeable lag. By default, MonoGame's render loop updates and draws at sixty frames per second. Should the update logic fail to complete within this ~16-17ms time-frame then it delays the draw call, which lowers the simulation's frame-rate. This has further knock-on effects where the draw calls become progressively more delayed and eventually cause input lag on the UI. As the update method is essentially the primary path through the code, it calls into several loops to cycle through the items which make up the simulation. There can be several hundred objects to iterate through during any given Update loop and keeping this entire iteration within the acceptable ~16-17ms limit required a great deal of optimisation. Despite this, optimisation was a task left until it became a problem following the argument that ``premature optimization is the root of all evil [...]`` \cite{knuth} by introducing bugs and making code less readable. 
+Optimisation is important for the project due to its requirement in handling a large number of organisms without noticeable lag. By default, MonoGame's render loop updates and draws at sixty frames per second. Should the update logic fail to complete within this ~16-17ms time-frame then it delays the draw call, which lowers the simulation's frame-rate. This has further knock-on effects where the draw calls become progressively more delayed and eventually cause input lag on the UI. As the update method is essentially the primary path through the code, it calls into several loops to cycle through the items which make up the simulation. There can be several hundred objects to iterate through during any given Update loop and keeping this entire iteration within the acceptable ~16-17ms limit required a great deal of optimisation. Despite this, optimisation was a task left until it became a problem following the argument that ``premature optimization is the root of all evil`` \cite{knuth} by introducing bugs and making code less readable. 
 
 As the simulation grew in size, loop optimisation became an issue particularly for state management and path finding. To improve this, variables are typically declared outside of loop scope to prevent them being redeclared on each iteration. Other standard optimisations such as caching the collection length ahead of time and avoiding high precision calculations are also applied. The grid's collection for storing tile objects is also a jagged array as opposed to a multi-directional one which is more efficient to loop over.
 
@@ -156,30 +153,21 @@ The path-finding code was designed to run on a multi-threaded system to help sta
 
 \chapter{Implementation} \label{implementation}
 
-\subsection{Object Oriented Analysis}\label{ooa}
+\section{Object Oriented Analysis}\label{ooa}
 An object oriented analysis was produced to gain an understanding of the problem domain and identify classes for the initial class diagram (Figure~\ref{ooa-breakdown}).
 
-\subsection{UML}\label{uml}
+\section{UML}\label{uml}
 Taking the potential classes identified in Section~\ref{ooa}, a class diagram was produced (Figure~\ref{classdiagram}) which was continually updated throughout the project but keeping its key themes. Figure~\ref{classdiagram-2} shows the final class diagram produced in this project which was used to identify the growing issue of coupling within the project. As discussed in Section~\ref{architecture}, the project was split into namespaces each housing components relating to their tasks. Communication between namespaces (except EvolutionSim.Utility and EvolutionSim.Data) is discouraged and the team was able to eliminate unnecessary imports through this diagram.
 
 Furthermore, a requirement of the classes is that they aim to encapsulate their data and provide abstraction in information to make the code more manageable across the team. For example, code relating to a component such as the weather system is kept isolated within its class. The diagram also illustrates how this is achieved through inheritance, where base classes are generic and intricate functionality is extended further down the hierarchy. The main example of this can be seen in GridItems, essentially generic tile-based sprites, Food and Organism.
 
 Due to the simulation's dependency on a complicated state management system, a state diagram was also created to identify how organisms would act (Figure~\ref{state-diagram}).
-
-\begin{figure}[H]
-	\caption{State Diagram}\label{state-diagram}
-	\centering
-	\includegraphics[width=1\textwidth]{state-diagram}
-\end{figure}
-
 \section{Tools}\label{tools}
-Three programming languages were considered for the project: C++, C\# and Java. The simulation was identified to have a large dependency on computation due to the fact that there could be upwards of one hundred organisms on screen at any one time and each of them would require state management, path finding and collision detection. For this reason, C++ seemed to be the natural choice due to the speed benefit of dynamic memory management. However, upon further research it was found that C\# had a more diverse set of 2D graphics libraries with C++ libraries typically focused on 3D rendering. Finally, Java was considered because the bulk of the team's experience was with the language, though because C\# can be used as a drop-in replacement for Java this was seen as another benefit in using C\#.
+The simulation was identified to have a large dependency on computation due to the fact that there could be upwards of one hundred organisms on screen at any one time and each of them would require state management, path finding and collision detection. For this reason, C++ seemed to be the natural choice due to the speed benefit of dynamic memory management. However, upon further research it was found that C\# had a more diverse set of 2D graphics libraries with C++ libraries typically focused on 3D rendering.
 
-A comparison was made between several popular 2D graphics libraries available in C\#, shown in Figure~\ref{library-comparison}.
+A comparison was made between several popular 2D graphics libraries available in C\#, shown in Figure~\ref{library-comparison}, with MonoGame being chosen.
 
-Though UV was initially chosen due to its built-in UI support, the lack of documentation and convoluted XML system for managing assets meant that MonoGame was used instead. The third party UI library GeonBit.UI was chosen because one of the project requirements [\ref{requirements}] was that the UI have a professional look and it also provided out of box support for radio buttons and lists.
-
-\subsection{Product Versions}\label{versioning}
+\section{Product Versions}\label{versioning}
 In keeping with the spirit of iterative development, the projects aim to produce a new product at the end of each sprint. This ensures that at any given time, the active project board matches the current release version. Each version aimed to iterate upon the previous release with features taken from further down the MoSCoW analysis (Figure~\ref{version-table}).
 
 \smallskip 
@@ -208,10 +196,19 @@ A proof of concept was made with the chosen technologies to avoid a situation wh
 	\includegraphics[width=0.8\textwidth]{poc}
 \end{figure}
 
+\section{Final Version}
+The final version of the product was able to implement all ``Must Have`` and ``Should Have`` requirements in addition to several ``Could Have`` objectives. Compared to the proof of concept it also received a graphics overhaul and a much more sophisticated UI.
+
+\begin{figure}[H]
+	\caption{Final Version}\label{final-ver}
+	\centering
+	\includegraphics[width=0.8\textwidth]{final-ver}
+\end{figure}
+
 \chapter{Testing}\label{testing}
 Throughout the project dynamic white box testing was carried out in the form of pull requests and code reviews using GitHub. Agile development encourages testing to occur at all stages of the project, rather than as a formalised testing phase at the end. For this reason, to assure the quality of the software throughout, strict rules were enforced on GitHub by locking commits to the master branch. All code was required to be tested by and reviews by a member of the team other than the one submitting the code. In this code reviews, issues such as failure to keep to the coding standards, poor architectural decisions or bugs were highlighted and requested to be fixed before the merge was approved.
 
-Dynamic black box testing was used extensively throughout the project. It was also dedicated a sprint to itself at the end of the project (Figure~\ref{gitbugfixing}.
+Dynamic black box testing was used extensively throughout the project. It was also dedicated a sprint to itself at the end of the project (Figure~\ref{gitbugfixing}).
 
 \begin{figure}[H]
 	\caption{Final Bugfixing Sprint}\label{gitbugfixing}
@@ -230,7 +227,6 @@ In order to prove equilibrium, the simulation was left running for an hour while
 	\includegraphics[width=0.8\textwidth]{equilibrium-test}
 \end{figure}
 	
-
 \section{Code Metrics}
 Visual Studio provides tools to analyse a project, providing insight into the maintainability, coupling and cyclomatic complexity of a project. The overview of these results can be seen in Figure~\ref{metrics-1} and the specifics in Figures \ref{metrics-2} and \ref{metrics-3}.
 
@@ -268,12 +264,13 @@ A key strength of the simulation lies in its ability to handle a large amount of
 In terms of functioning as an evolutionary sandbox, the simulation has reached a level of intricacy whereby the organisms will evolve differently depending on the simulation parameters. In a map which is segregated into parts by the presence of terrain, camps of organisms will evolve with differing attributes depending on what has become important to their survival. For example, an area which has seen a rare mutation in strength will have larger organisms over time than a camp which did not acquire this mutation. Furthermore, whether herbivores, omnivores or carnivores become the majority varies significantly across multiple simulations.
 
 Likely the biggest shortcoming of the project is in its lack of variation of species. The team originally planned to have bird and fish species to add further meaning to the terrain system. A bird species for example would not receive a movement penalty when passing over water or mountains, a fish would also be impeded by water but would find all other ground impassable. The A* algorithm and simulation state management currently have the functionality to handle this kind of behaviour but due to time constraints, producing artwork and maintaining equilibrium with these new species was deemed not possible.
-Finally if this project were to be repeated again, one change would be to focus on having fewer but more sophisticated systems. Initial plans for this project were too ambitious and were not corrected until the mid-point, this led to some redundancy in how time was spent developing the luxury systems.
 
 \chapter{Conclusion and Future Work}\label{conclusion}
-Overall this project was ambitious in its aims to produce an evolution sandbox which some degree of interactivity and from this perspective it can be deemed a success. Many of the requirements (\ref{requirements}) and MoSCoW goals {(\ref{moscow}) allude to the attainment of an equilibrium within the ecosystem and this is something that has been tested to work in Section~\ref{requirements-testing}. In terms of the MoSCoW analysis, all core functionality identified in ``Must Have`` and ``Should Have`` have been implemented, while some attempt was made at implementing a program flow and particle effects from the ``Could Have`` objectives.
+Overall this project was ambitious in its aims to produce an evolution sandbox with some degree of interactivity and in many ways would benefit from more time. Despite this, many of the requirements (\ref{requirements}) and MoSCoW goals {(\ref{moscow}) allude to the attainment of an equilibrium within the ecosystem and this is something that has been tested to work in Section~\ref{requirements-testing}. In terms of the MoSCoW analysis, all core functionality identified in ``Must Have`` and ``Should Have`` have been implemented, while some attempt was made at implementing a program flow and particle effects from the ``Could Have`` objectives. For these reasons, the project could be argued to be successful.
 
 If this project were to continue, the priority would be on implementing an improved hunting system. Due to time constraints, a system which had been developed using ray calculations and a new set of states had to be removed during the final stretch due to the presence of bugs. The system which replaced it is functional, but simplistic and not as elegant of a solution. With this feature in place, adding new species with more diverse attributes such as binocular and monocular vision and expanding the movement speed system to account for terrain differences and the speed attribute would follow this.
+
+Finally, if this project were to be repeated again, one change would be to focus on having fewer but more sophisticated systems. Initial plans for this project were too ambitious and were not corrected until the mid-point, this led to redundancy in how time was spent developing the luxury systems.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
@@ -461,6 +458,11 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 	\end{figure}
 \end{landscape}
 
+\begin{figure}[H]
+	\caption{UML State Diagram}\label{state-diagram}
+	\centering
+	\includegraphics[width=1\textwidth]{state-diagram}
+\end{figure}
 
 \begin{figure}[H]
 	\caption{Graphics Library Comparison}\label{library-comparison}
@@ -521,31 +523,14 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 
 \begin{figure}[H]
 	\caption{Requirements Testing} \label{requirements-testing}
-		\begin{tabular}{llllll}
-			& MOSCOW ANALYSIS                                                                                                       & Testing notes                                                                                                                                                                                                                                                                           &  &  &  \\
-			Must   &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Organism\\   life cycle\end{tabular}                                                       & \begin{tabular}[c]{@{}l@{}}Organisms are created at first by the user. After that they need food\\   to survive and die if their hunger reaches 0. Once the organism reaches its\\   maximum age it dies.\end{tabular}                                                                  &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Genetic\\   crossover algorithm\end{tabular}                                               & \begin{tabular}[c]{@{}l@{}}They can mate producing an offspring of the same species and their\\   individual attributes appear to crossover to produce the offspring\\   attributes.\end{tabular}                                                                                       &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Organism\\   attributes\end{tabular}                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Live\\   edit of organisms\end{tabular}                                                    & \begin{tabular}[c]{@{}l@{}}This is possible and editing the organisms results in them being\\   affected while on screen. For instance, setting hunger to 0 slowly kills the\\   organism and setting the speed increases the organisms moving speed around\\   the map.\end{tabular}   &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Simple\\   2D graphics\end{tabular}                                                        & \begin{tabular}[c]{@{}l@{}}The graphics are good quality with 2D particle effects when food or\\   an organism is placed into the world. The organisms do not overlap and occupy\\   the same grid tile and when they die their sprite is replaced with meat.\end{tabular}              &  &  &  \\
-			& Herbivores and natural food sources                                                                                   & \begin{tabular}[c]{@{}l@{}}Plant material can be added to the map and organisms will consume it,\\   increasing their own hunger and removing the plant from the world.\\    \\   When organisms die they\\   are turned into a meat source which other organisms can eat.\end{tabular} &  &  &  \\
-			Should &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Weather/disease\\   system\end{tabular}                                                    & \begin{tabular}[c]{@{}l@{}}If the environment becomes too cold or hot, some organisms will start\\   to die from the environment and if the temperature does not change then this\\   can kill many the organisms on the map.\end{tabular}                                              &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Advanced\\   path finding algorithm\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}During testing and observance, when searching for food or a mate the\\   organisms will avoid paths with take them over mountains or water. They will\\   also avoid moving to the same tile as other organisms.\end{tabular}                                &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Terrain\\   variation, e.g. grass, mountains, water\end{tabular}                           &                                                                                                                                                                                                                                                                                         &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Ability\\   to pause, speed up and slow down simulation\end{tabular}                       & Implemented and seems to work.                                                                                                                                                                                                                                                          &  &  &  \\
-			Could  &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Natural\\   disasters\end{tabular}                                                         & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Speciation\\   (new species forming from heavily mutated organisms over time)\end{tabular} & \begin{tabular}[c]{@{}l@{}}The species do change\\   over time and form new organisms through reproduction. However, there is no\\   clustering of organisms to make set populations around the map.\end{tabular}                                                                       &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}A game\\   log with charts and text output\end{tabular}                                    & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Sprite\\   sheet animation\end{tabular}                                                    & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Particle\\   effects, e.g. weather effects, running water, blood\end{tabular}              & \begin{tabular}[c]{@{}l@{}}There\\   is blood\end{tabular}                                                                                                                                                                                                                              &  &  &  \\
-			Won’t  &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}3D\\   graphics\end{tabular}                                                               & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
-			& \begin{tabular}[c]{@{}l@{}}Scale\\   realism\end{tabular}                                                             & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  & 
-		\end{tabular}
-	
+	\centering
+	\includegraphics[width=1\textwidth]{testing-1}
+\end{figure}
+
+\begin{figure}[H]
+	\caption{Requirements Testing}
+	\centering
+	\includegraphics[width=1\textwidth]{testing-2}
 \end{figure}
 
 \end{document}
