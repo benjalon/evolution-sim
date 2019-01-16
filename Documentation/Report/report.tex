@@ -1,6 +1,6 @@
 
 \documentclass[a4paper, oneside, 11pt]{report}
-\usepackage{epsfig,pifont,float,amsmath,amssymb, url, graphicx}
+\usepackage{epsfig,pifont,float,amsmath,amssymb, url, graphicx, lscape}
 \newcommand{\mc}{\multicolumn{1}{c|}}
 \newcommand{\mb}{\mathbf}
 \newcommand{\mi}{\mathit}
@@ -187,7 +187,7 @@ As the simulation grew in size, loop optimisation became an issue particularly f
 
 From an more architectural perspective, the grid system is also a form of optimisation. By constricting organism movements to a grid the simulation is able to cut down on the need for collision detection, which would otherwise have been a bottleneck for the system. This would have required exponentially more computation as organisms are added because each organism would need to check the itself against all others.
 
-\section{Multi-threading}
+\section{Multi-threading} \label{multithreading}
 The path-finding code was designed to run on a multi-threaded system to help stabilize overall system runtime, as well as naturally separating out tasks which can be asynchronously performed. It works by creating a pool of worker threads which can be delegated tasks to free up the main thread of execution, the ThreadPool class handles the queueing and waiting of threads as well as their destruction and creation. By pooling threads, stuttering through on-the-fly thread creation is avoided as much as possible.
 
 \chapter{Implementation} \label{implementation}
@@ -351,7 +351,7 @@ Dynamic black box testing was used extensively throughout the project. It was al
 Dynamic black box testing was also performed on the simulation to ensure that the initial project requirements were met. This was achieved through ``test to pass`` and ``test to fail`` approaches to maximise the bug and issue reporting. This test plan can be seen in Figure~\ref{requirements-testing}
 
 \section{Code Metrics}
-Visual Studio provides tools to analyse a project, providing insight into the maintainability, coupling and cyclomatic complexity of a project.
+Visual Studio provides tools to analyse a project, providing insight into the maintainability, coupling and cyclomatic complexity of a project. The overview of these results can be seen in Figure~\ref{metrics-1} and the specifics in Figures \ref{metrics-2} and \ref{metrics-3}.
 
 The maintainability rating estimates how difficult code is to maintain by testing how long and heavily interlinked it is. The project has an overall maintainability score of 81 out of 100, which ranks green (the highest rating). Individual classes within the project report scores between 56 and 96 and this difference can typically be explained through how algorithmic or state-based a class is. In general, any score above 50 is considered good in the Visual Studio maintainability metric.
 
@@ -360,6 +360,7 @@ Complexity measures the number of decisions present within a block of code plus 
 Finally, coupling is measured as a value of how many other classes or imports a class is dependent on. This was deemed the most important factor to reduce throughout the project and much effort was placed on reducing coupling where possible, particularly between namespaces. The worst offenders for coupling, either by design or otherwise, are StateMachine, Organism and Grid. 
 
 \chapter{Discussion}\label{discussion}
+
 
 This section will be about the following:
 \begin{itemize}
@@ -378,8 +379,7 @@ This section will conclude the MoSCoW analysis, discuss shortcomings and future 
 \bibliography{references}
 
 \chapter*{Contributions}
-
-The team has agreed on a 25\% contibution each as of the time of writing. Note that these contributions are to date and not representative of planned features. 
+The team has agreed on a 25\% contibution each as of the time of writing. Many tasks such as the proof of concept, research and planning were completed as a team .
 \smallskip 
 \begin{center}
 	\begin{tabular}{c|p{0.4\textwidth}|p{0.4\textwidth}}
@@ -389,57 +389,80 @@ The team has agreed on a 25\% contibution each as of the time of writing. Note t
 			\item Project management [\ref{projectmanagement}]
 			\item A* Pathfinding [\ref{pathfinding}]
 			\item Testing [\ref{testing}]
+			\item Report writing
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Grid/tile system [\ref{grid}]
 			\item Bio. algorithms research [\ref{crossover}]
+			\item Organism attributes
+			\item Movement logic
 		\end{itemize} \\ \hline
 		Rupert Hammond & \begin{itemize}
 			\itemsep0em
 			\item State management [\ref{statemanagement}]
 			\item State machine rules
-			\item Bio. algorithms research [\ref{crossover}]
 			\item Organism attributes
+			\item Hunting system
+			\item Multi-threading [\ref{multithreading}]
+			\item Mating system
+			\item Crossover algorithm [\ref{crossover}]
+			\item Raycasting
+			\item State/sequence UML
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
-			\item Bug fixing [\ref{bugfixing}]
-			\item A* Pathfinding [\ref{pathfinding}]
+			\item Bug fixing
+			\item Report writing
+			\item Cooldown system
 		\end{itemize} \\ \hline
 		Ryan Phelan & \begin{itemize}
 			\itemsep0em
-			\item Graphics/UI research and implementation [\ref{tools}]
+			\item Graphics setup [\ref{tools}]
 			\item Grid/tile system [\ref{grid}]
-			\item Optimisation [\ref{optim}]
 			\item Report writing
+			\item In-game UI
+			\item Real-time attribute editing
+			\item Drawing and selection system
+			\item Particle effects
+			\item Birth, death and eating events
+			\item Spritework
+			\item Terrain
+			\item Weather system
+			\item Timing and cooldown system
+			\item Class UML
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Project management [\ref{projectmanagement}]
 			\item Code architecture [\ref{architecture}]
+			\item Code Optimisation [\ref{optim}]
+			\item HP bars
+			\item Naive crossover [\ref{crossover}]
 		\end{itemize} \\ \hline
 		Travis Payne & \begin{itemize}
 			\itemsep0em
 			\item Food system
-			\item Movement logic
+			\item Advanced movement logic
 			\item Simulation flow [\ref{statemanagement}]
+			\item Multi-threading [\ref{multithreading}]
+			\item Simulation set-up UI
+			\item Bugfixing
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Code architecture [\ref{architecture}]
-			\item Bug fixing [\ref{bugfixing}]
-			\item A* Pathfinding [\ref{pathfinding}]
 			\item Organism attributes
+			\item Hunting system
 		\end{itemize} \\
 	\end{tabular}
 \end{center}
 \smallskip
-Other work such as the Proof of Concept, UML and analysis' were completed as a team with all members present.
 \chapter*{Appendix A}
 
 \begin{figure}[H]
 	\caption{UML Class Diagram}\label{classdiagram}
-	\includegraphics[width=\textwidth,height=\textheight]{class-diagram}
+	\includegraphics[width=\textwidth]{class-diagram}
 \end{figure}
 
 \smallskip 
+\begin{landscape}
 \begin{figure}[H]
 	\caption{Requirements Testing} \label{requirements-testing}
 	\centering
@@ -453,6 +476,7 @@ Other work such as the Proof of Concept, UML and analysis' were completed as a t
 		Must &  &   \\ \hline
 	\end{tabular}
 \end{figure}
+\end{landscape}
 \smallskip 
 
 \end{document}
