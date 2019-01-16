@@ -163,7 +163,9 @@ Within the simulation all organism behaviour is dictated by a finite state machi
 In addition to these state management tasks, the StateMachine also contains two methods to drive organism behaviour: CheckState and DetermineBehaviour, which are both called every cycle of the Update loop. CheckState is responsible for checking that each Organism is in the correct state based on the rules defined for the simulation, for example if an organism is currently in the ``Roaming`` state, but it's hunger levels have dropped below 0.4, this would mean that the organism must now move into ``SeekingFood``. After the state is checked, DetermineBehaviour defines how the Organism should behave within this state.
 
 \section{Crossover Algorithm}\label{crossover}
-TODO
+The initial crossover algorithm took an average from parent attributes and applied some random variations to these numbers. While effective and efficient in getting the general concept implemented, it was not complex enough to provide diversity in the simulation.
+
+The improved crossover algorithm utilizes a probability class to generate a gaussian variable to provide implicit changes in the organisms and prevent stagnation. This is achieved by using a single component of the Box-Muller transform, a method traditionally used for gaussian estimation in a cartesian plane \cite{box1958note}, however in the case of our simulation we simply need to model the severity of each mutation. Once the gaussian variable has been calculated this is passed to a function which determines the severity of mutation based on the distance from the mean and which side of the distribution it falls on.
 
 \section{Tile-Based Movement}\label{grid}
 A common method of implementing movement in a simulation is by constraining it to a grid. This is useful because the number of movement states becomes finite and better lends itself to algorithms for path-finding. In terms of efficiency, a grid also reduces the need for collision detection between simulation elements by mediating on the movement between tiles. Linear interpolation is also applied to all tiles movements so that the organisms move smoothly rather than ``teleporting`` between them.
@@ -186,20 +188,20 @@ As the simulation grew in size, loop optimisation became an issue particularly f
 From an more architectural perspective, the grid system is also a form of optimisation. By constricting organism movements to a grid the simulation is able to cut down on the need for collision detection, which would otherwise have been a bottleneck for the system. This would have required exponentially more computation as organisms are added because each organism would need to check the itself against all others.
 
 \section{Multi-threading}
-TODO.
+The path-finding code was designed to run on a multi-threaded system to help stabilize overall system runtime, as well as naturally separating out tasks which can be asynchronously performed. It works by creating a pool of worker threads which can be delegated tasks to free up the main thread of execution, the ThreadPool class handles the queueing and waiting of threads as well as their destruction and creation. By pooling threads, stuttering through on-the-fly thread creation is avoided as much as possible.
 
 \chapter{Implementation} \label{implementation}
 
-\subsection{Object Oriented Analysis}
+\subsection{Object Oriented Analysis}\label{ooa}
 An object oriented analysis was produced to gain an understanding of the problem domain and identify classes for the initial class diagram.
 
-\textbf{Specification}
+\textbf{Specification} \\
 Objective: To make a simulation of evolution that reaches a stable point at some point.
 What does stable ecology mean? 
 \begin{itemize}
 \item Net number of organisms does not significantly increase or decrease over a given period of time.
 \end{itemize}
-Requirements:
+\textbf{Requirements} \\
 Graphical representation of an organism.
 An organism has attributes such as:
 \begin{itemize}
@@ -211,8 +213,8 @@ The organisms need to eat food which can either be other organisms or vegetation
 The organisms should breed and their attributes (representing genetics) will be crossed over to make a composite organism with random features within limit. 
 Environmental factors play a part in the life cycle and cold or hot climate can kill some organisms unless they have the specific resistances to temperatures. 
 Water should be present on the map which organisms can walk into but slows them down. Same with different terrain such as mountains. 
-Real World Domain
-Environment 
+
+\textbf{Real World Domain Environment:}
 \begin{itemize}
 \item Mountains
 \item Water
@@ -220,25 +222,26 @@ Environment
 \item Hot
 \item Cold
 \end{itemize}
-Sprites/ organisms
+
+\textbf{Sprites and Organisms:}
 \begin{itemize}
 \item Herbivore 
 \item Carnivore 
 \item Plant
 \end{itemize}
-Simulation
+
+\textbf{Simulation:}
 \begin{itemize}
 \item State machine / brain
 \end{itemize}
 
-
 \subsection{UML}
 
-The class diagram Figure~\ref{classdiagram} was continually updated throughout the project and although it saw many changes, certain key themes remained constant throughout.
+Taking the potential classes identified in Section~\ref{ooa}, a class diagram was produced (Figure~\ref{classdiagram}. This was continually updated throughout the project (Figure~\ref{classdiagram-2} but kept its key themes.
 
-An architectural decision was to ensure the separation of concerns between the graphics, states, simulation and UI. The graphical component provides a representation of the simulation's output, but they are kept unaware of the inner workings of the other to better decouple their behaviour. Likewise, while the UI can interact with the simulation, there was no need to have this behaviour tied in any way to the intricacies of it. As such, the relationship between the three key areas can be observed as limited on the class diagram.
+As discussed in Section~\ref{architecture}, the project was split into namespaces each housing components relating to their tasks. Communication between namespaces (except EvolutionSim.Utility and EvolutionSim.Data) is discouraged and instead it is the role of Simulation to bring the program together.
 
-Another theme present in the class diagram is abstraction. Through inheritance, GridItems are kept as generic inhabitants by the Tiles of the Grid. This means that the Grid can manage its Tiles and their inhabitant GridItems without particular knowledge of whether they are Organisms or Food or Obstacles, simplifying the implementation.
+Furthermore, a requirement of the classes is that they aim to encapsulate their data and provide abstraction in information to make the code more manageable across the team. For example, code relating to a component such as the weather system is kept isolated within its class. The diagram also illustrates how this is achieved through inheritance, where base classes are generic and intricate functionality is extended further down the hierarchy. The main example of this can be seen in GridItems, essentially generic tile-based sprites, Food and Organism.
 
 \section{Tools}\label{tools}
 Three programming languages were considered for the project: C++, C\# and Java. The simulation was identified to have a large dependency on computation due to the fact that there could be upwards of one hundred organisms on screen at any one time and each of them would require state management, path finding and collision detection. For this reason, C++ seemed to be the natural choice due to the speed benefit of dynamic memory management. However, upon further research it was found that C\# had a more diverse set of 2D graphics libraries with C++ libraries typically focused on 3D rendering. Finally, Java was considered because the bulk of the team's experience was with the language, though because C\# can be used as a drop-in replacement for Java this was seen as another benefit in using C\#.
@@ -309,8 +312,9 @@ In keeping with the spirit of iterative development, the projects aim to produce
 
 \smallskip 
 \begin{figure}[H]
+	\caption{Product versions and sprints} \label{version-table}
 	\centering
-	\begin{tabular}{c|p{0.7\textwidth}|l} \label{version-table}
+	\begin{tabular}{c|p{0.7\textwidth}|l}
 		Version & Goal & Deadline \\ \hline
 		0 & A proof of concept to test the chosen technologies & Tuesday week 2 \\ \hline
 		1 & A fully functioning basic simulation with all of the ``Must Have`` components from the MoSCoW analysis & Friday week 6 \\ \hline
@@ -333,16 +337,27 @@ A proof of concept was made with the chosen technologies to avoid a situation wh
 \end{figure}
 
 \chapter{Testing}\label{testing}
+Throughout the project dynamic white box testing was carried out in the form of pull requests and code reviews using GitHub. Agile development encourages testing to occur at all stages of the project, rather than as a formalised testing phase at the end. For this reason, to assure the quality of the software throughout, strict rules were enforced on GitHub by locking commits to the master branch. All code was required to be tested by and reviews by a member of the team other than the one submitting the code. In this code reviews, issues such as failure to keep to the coding standards, poor architectural decisions or bugs were highlighted and requested to be fixed before the merge was approved.
 
-This section will be about the following:
-\begin{itemize}
-	\itemsep0em
-	\item Pull requests as a form of white-box testing during development
-	\item Unit testing with the built in C\# tools
-	\item Experimenting with several untouched simulations to ensure equilibrium is reached 
-	\item Experimenting with editing attributes and reaching equilibrium, likewise with natural disasters and disease
-	\item A section on the bug fixing ticket system in place \label{bugfixing}
-\end{itemize} 
+Dynamic black box testing was used extensively throughout the project. It was also dedicated a sprint to itself at the end of the project (Figure~\ref{gitbugfixing}.
+
+\begin{figure}[H]
+	\caption{Final Bugfixing Sprint}\label{gitbugfixing}
+	\centering
+	\includegraphics[width=0.8\textwidth]{gitbugfixing}
+\end{figure}
+
+\section{Requirements Testing}
+Dynamic black box testing was also performed on the simulation to ensure that the initial project requirements were met. This was achieved through ``test to pass`` and ``test to fail`` approaches to maximise the bug and issue reporting. This test plan can be seen in Figure~\ref{requirements-testing}
+
+\section{Code Metrics}
+Visual Studio provides tools to analyse a project, providing insight into the maintainability, coupling and cyclomatic complexity of a project.
+
+The maintainability rating estimates how difficult code is to maintain by testing how long and heavily interlinked it is. The project has an overall maintainability score of 81 out of 100, which ranks green (the highest rating). Individual classes within the project report scores between 56 and 96 and this difference can typically be explained through how algorithmic or state-based a class is. In general, any score above 50 is considered good in the Visual Studio maintainability metric.
+
+Complexity measures the number of decisions present within a block of code plus 1. This generally correlates to how easy the code is to comprehend and therefore how easy it is to fix or add to. The worst score in the project can be credited to the EvolutionSim.StateMachine namespace, which is natural. The state machine handles all of the branching for organism behaviour and is essentially the logical brain of the project. Overall, it would be desirable for the project to aim to lower these scores moving forwards as cyclomatic complexity causes many problems both in terms of maintainability and robustness.
+
+Finally, coupling is measured as a value of how many other classes or imports a class is dependent on. This was deemed the most important factor to reduce throughout the project and much effort was placed on reducing coupling where possible, particularly between namespaces. The worst offenders for coupling, either by design or otherwise, are StateMachine, Organism and Grid. 
 
 \chapter{Discussion}\label{discussion}
 
@@ -423,6 +438,22 @@ Other work such as the Proof of Concept, UML and analysis' were completed as a t
 	\caption{UML Class Diagram}\label{classdiagram}
 	\includegraphics[width=\textwidth,height=\textheight]{class-diagram}
 \end{figure}
+
+\smallskip 
+\begin{figure}[H]
+	\caption{Requirements Testing} \label{requirements-testing}
+	\centering
+	\begin{tabular}{c|c|p{0.7\textwidth}}
+		MoSCoW & Objective & Result \\ \hline
+		Must & Organism life cycle & Organisms are created at first by the user. After that they need food to survive and die if their hunger reaches 0. Once the organism reaches its maximum age it dies.  \\ \hline
+		Must & Genetic crossover algorithm & They can mate producing an offspring of the same species and their individual attributes appear to crossover to produce the offspring attributes.  \\ \hline
+		Must &  &   \\ \hline
+		Must &  &   \\ \hline
+		Must &  &   \\ \hline
+		Must &  &   \\ \hline
+	\end{tabular}
+\end{figure}
+\smallskip 
 
 \end{document}
 
