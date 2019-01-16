@@ -162,7 +162,7 @@ namespace EvolutionSim.StateManagement
             var food = grid.GetTileAt(firstX, firstY).Inhabitant as Food;
             var validFood = organism.Attributes.DietType == DietTypes.Omnivore ||
                             (organism.Attributes.DietType == DietTypes.Herbivore && food.IsHerbivoreFood) ||
-                            (organism.Attributes.DietType == DietTypes.Carnivore && !food.IsHerbivoreFood);
+                            (organism.Attributes.DietType == DietTypes.Canivore && !food.IsHerbivoreFood);
 
             return validFood;
         }
@@ -192,7 +192,7 @@ namespace EvolutionSim.StateManagement
                         organism.Computing = false;
                     }), null);
                 }
-                else if (organism.Attributes.DietType == DietTypes.Carnivore || organism.Attributes.DietType == DietTypes.Omnivore)
+                else if (organism.Attributes.DietType == DietTypes.Canivore || organism.Attributes.DietType == DietTypes.Omnivore)
                 {
 
                     Tile potentialPrey = PreyInRange(organism, grid);

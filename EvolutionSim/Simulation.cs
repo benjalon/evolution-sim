@@ -46,7 +46,7 @@ namespace EvolutionSim
             this.bearBreeds = new List<Attributes>()
             {
                 new Attributes() { Species = "Smart Boi", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.9f, Strength = 0.3f, Speed = 0.4f, ResistCold = false, ResistHeat = false },
-                new Attributes() { Species = "Strong Boi", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Carnivore, MaxHealth = 20, Intelligence = 0.1f, Strength = 0.9f, Speed = 0.2f, ResistCold = true, ResistHeat = false },
+                new Attributes() { Species = "Strong Boi", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Canivore, MaxHealth = 20, Intelligence = 0.1f, Strength = 0.9f, Speed = 0.2f, ResistCold = true, ResistHeat = false },
                 new Attributes() { Species = "Average Boi", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.5f, Strength = 0.5f, Speed = 0.5f, ResistCold = false, ResistHeat = false }
 
             };
