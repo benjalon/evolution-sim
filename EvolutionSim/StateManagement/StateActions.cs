@@ -346,7 +346,7 @@ namespace EvolutionSim.StateManagement
 
             /// <summary>
             /// Simple method to calculate the total power of the organisms
-            /// (Health * Hunger) / (Distance * Speed) + Strength
+            /// (Intelligence) / (Distance * Speed) + (Strength * Hunger)
             /// 
             /// </summary>
             /// <param name="predator"></param>
@@ -356,8 +356,8 @@ namespace EvolutionSim.StateManagement
             {
 
                 int distance = Grid.ManhattanDistance(predator, prey);
-                float predatorResult = ( predator.Health * predator.Hunger) / (distance * predator.Attributes.Speed) + predator.Attributes.Strength;
-                float preyResult = (prey.Health * prey.Hunger) / (distance * prey.Attributes.Speed) + prey.Attributes.Strength;
+                float predatorResult = ( predator.Attributes.Intelligence ) / (distance * predator.Attributes.Speed) + (predator.Attributes.Strength * predator.Hunger);
+                float preyResult = ( prey.Attributes.Intelligence ) / (distance * prey.Attributes.Speed) + (prey.Attributes.Strength * predator.Hunger);
 
 
                 return predatorResult >= preyResult;
