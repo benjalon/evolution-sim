@@ -2,6 +2,9 @@
 
 namespace EvolutionSim.Data
 {
+    /// <summary>
+    /// Different weather settings possible
+    /// </summary>
     public enum WeatherSettings
     {
         Warm,
@@ -9,6 +12,9 @@ namespace EvolutionSim.Data
         Hot
     }
 
+    /// <summary>
+    /// object to handle weather arguments passed
+    /// </summary>
     public class WeatherArgs : EventArgs
     {
         public WeatherSettings weatherSetting { get; private set; }
