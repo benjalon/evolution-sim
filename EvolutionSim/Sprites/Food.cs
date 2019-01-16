@@ -7,11 +7,6 @@ namespace EvolutionSim.Sprites
     /// <summary>
     /// Herbivore food sources which can grow on Tiles.
     /// </summary>
-    ///
-
-
-
-
     public class Food : GridItem
     {
         private const float MIN_SCALE = 0.4f;
@@ -20,12 +15,20 @@ namespace EvolutionSim.Sprites
         private const float OFFSET_MULTIPLIER = 0.5f;
 
         public bool IsHerbivoreFood { get; private set; }
+
         private int MaxFoodHealth { get => IsHerbivoreFood ? MAX_GRASS_HEALTH : MAX_MEAT_HEALTH;  }
 
         //this is where the scale is being  calculated for food based on how much health that food item has over the whole food item
         private readonly float scale;
         private readonly float scaleOffset;
 
+        /// <summary>
+        /// Food constructor, set food health and 
+        /// the size of the object based on how much food it gives
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="herbivoreFood"></param>
+        /// <param name="health"></param>
         public Food(Texture2D texture, bool herbivoreFood, int health) : base(texture, health)
         {
             this.IsHerbivoreFood = herbivoreFood;
@@ -53,14 +56,24 @@ namespace EvolutionSim.Sprites
         {
             DecreaseHealth(2);
         }
+
+        /// <summary>
+        /// As food sits on the map it degenerates over time
+        /// </summary>
         public void WitherFood()
         {
             DecreaseHealth(1);
         }
 
+        /// <summary>
+        /// Draw the food item on screen
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + this.scaleOffset, this.rectangle.Location.Y + this.scaleOffset), null, Color.White, 0, Vector2.Zero, this.scale, SpriteEffects.None, 0.0f);
         }
+
+   
     }
 }

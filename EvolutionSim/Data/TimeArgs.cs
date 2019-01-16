@@ -2,6 +2,9 @@
 
 namespace EvolutionSim.Data
 {
+    /// <summary>
+    /// The different speeds which the simulation can be set to
+    /// </summary>
     public enum TimeSettings
     {
         Normal,
@@ -9,6 +12,9 @@ namespace EvolutionSim.Data
         Paused
     }
 
+    /// <summary>
+    /// Object to handle time adjustments
+    /// </summary>
     public class TimeArgs : EventArgs
     {
         public TimeSettings TimeSetting { get; private set; }

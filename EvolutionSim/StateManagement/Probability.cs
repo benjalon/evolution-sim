@@ -43,6 +43,7 @@ namespace EvolutionSim.StateManagement
         /// of -3 and 3, 
         /// Works by performing a Box-Muller transform on a pair of 
         /// randomly generated doubles
+        /// CODE USED FROM: https://stackoverflow.com/questions/218060/random-gaussian-variables
         /// </summary>
         public double generateCrossoverMutationValue()
         {

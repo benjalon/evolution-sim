@@ -66,6 +66,13 @@ namespace EvolutionSim
             this.WeatherOverlay = new WeatherOverlay(Graphics.SimulationTextures["cold_overlay"], Graphics.SimulationTextures["hot_overlay"]);
         }
 
+
+        /// <summary>
+        /// This is the highest level update method,
+        /// which is responsible for calling all of the updates methods associated with
+        /// object states which change over time
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
             TimeManager.Update(gameTime);
@@ -81,12 +88,7 @@ namespace EvolutionSim
 
             Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
 
-            var numFood = this.grid.Foods.Count;
-            for (var i = numFood - 1; i >= 0; i--)
-            {
-                this.grid.Foods[i].BeEaten();
-            }
- 
+            this.grid.UpdateFood();
 
             this.fsm.UpdateStates(this.grid, TimeManager);
             
@@ -101,7 +103,11 @@ namespace EvolutionSim
             }
         }
 
-
+        /// <summary>
+        /// Handles the drawing of particle effects when 
+        /// spawning in organisms or food
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             this.background.Draw(spriteBatch);
@@ -117,6 +123,13 @@ namespace EvolutionSim
             }
         }
 
+        /// <summary>
+        /// works by comparing the two floats and creating a new tuple 
+        /// where the first element within the tuple is always higher
+        /// </summary>
+        /// <param name="rawX"></param>
+        /// <param name="rawY"></param>
+        /// <returns></returns>
         private Tuple<int, int> MakeUseableValues(float rawX, float rawY)
         {
             var x = (int)(rawX * 10);
@@ -125,6 +138,13 @@ namespace EvolutionSim
             return xIsHigher ? new Tuple<int, int>(y, x) : new Tuple<int, int>(x, y);
         }
 
+        /// <summary>
+        /// works by comparing the two ints and creating a new tuple 
+        /// where the first element within the tuple is always higher
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private Tuple<int, int> MakeUseableValues(int x, int y)
         {
             var xIsHigher = x > y;
@@ -132,15 +152,13 @@ namespace EvolutionSim
         }
 
 
-        //private void calculationHandler(ref float attribute, Tuple attributeTuple)
-        //{
-
-
-
-
-
-        //}
-
+        /// <summary>
+        /// This is the event listning for the trigger in state machine
+        /// when this is called we create the stats for the new organism
+        /// based on the crossover algorithm
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void BirthHandler(object sender, EventArgs args)
         {
             if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
@@ -168,25 +186,13 @@ namespace EvolutionSim
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
             var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
 
-            var simpleCrossbreed = new Attributes()
-            {
-                Species = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.Species : mother.Attributes.Species,
-                Texture = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Texture : mother.Texture,
-                DietType = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.DietType : mother.Attributes.DietType,
-                MaxHealth = Graphics.RANDOM.Next(orderedMaxHealth.Item1, orderedMaxHealth.Item2),
-                Strength = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
-                Speed = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
-                ResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold,
-                ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistHeat : mother.Attributes.ResistHeat,
-            };
-
             //this takes into account the stdDeviation from the normal
             //workout an average of the mother and father's attributes
             //then offset the change based on the mutation variation
 
 
          
-
+       
             #region Handle Mutation
             switch (mutation)
             {
@@ -308,6 +314,11 @@ namespace EvolutionSim
             particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(child).Center));
         }
 
+        /// <summary>
+        /// Attempt to randomly add organisms on the screen
+        /// will fail if the max cap on the screen is reached
+        /// </summary>
+        /// <param name="amount"></param>
         public void AddOrganisms(int amount)
         {
             if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
@@ -321,6 +332,13 @@ namespace EvolutionSim
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(organism).Center));
             }
         }
+
+        /// <summary>
+        /// Try to add organisms based on a list of precalculated attribute objects 
+        /// and with a pre-defined amount
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <param name="amount"></param>
         public void AddOrganisms(List<Attributes> attributes, int amount)
         {
             if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
@@ -340,6 +358,7 @@ namespace EvolutionSim
 
 
         }
+
 
         public void AddFoods(int amount)
         {
