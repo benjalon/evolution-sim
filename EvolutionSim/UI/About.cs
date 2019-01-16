@@ -21,7 +21,7 @@ namespace EvolutionSim.UI
 
         public About()
         {
-            UserInterface.Active.Clear();
+           // UserInterface.Active.Clear();
 
             UserInterface.Active.UseRenderTarget = true;
             UserInterface.Active.CursorScale = 0.5f;
@@ -30,7 +30,6 @@ namespace EvolutionSim.UI
             this.backButton = new Button("Back", anchor: Anchor.AutoCenter,size: new Vector2(Graphics.WINDOW_WIDTH / 6, 50));
             this.backButton.OnClick = (Entity btn) =>
             {
-                Console.Write("YAY");
                 UserInterface.Active.Clear();
                 backButtonPressed = true;
             };

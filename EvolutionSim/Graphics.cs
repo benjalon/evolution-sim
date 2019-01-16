@@ -273,6 +273,7 @@ namespace EvolutionSim
                 if (state == Utility.GameState.Running)
                 {
                     state = Utility.GameState.Pause;
+                    
                     LoadContent();
                 }
                 else if(state == Utility.GameState.Pause)
@@ -299,6 +300,7 @@ namespace EvolutionSim
         {
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
             UserInterface.Active.Draw(spriteBatch);
+
             //this.WriteFPS(gameTime);
 
             // Draw graphical elements
@@ -325,7 +327,9 @@ namespace EvolutionSim
 
             UserInterface.Active.DrawMainRenderTarget(spriteBatch);
 
+
             base.Draw(gameTime);
+
         }
 
         private void WriteFPS(GameTime gameTime)
