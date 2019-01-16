@@ -302,7 +302,7 @@ namespace EvolutionSim.UI
                 }
             };
 
-            var editIntelligenceText = new Paragraph("Intelligence:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            var editIntelligenceText = new Paragraph("Intel:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
             this.editIntelligenceValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
             this.editIntelligenceValue.OnValueChange = (Entity btn) =>
             {
