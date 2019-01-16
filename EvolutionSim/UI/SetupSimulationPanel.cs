@@ -106,12 +106,13 @@ namespace EvolutionSim.UI
             }
             catch (Exception e)
             {
-                Console.WriteLine("really?!?");
+                Console.WriteLine("really");
                 return null;
 
             }
 
 
+            // this.InitPopulation = Convert.ToInt32(startPopulation.Value);
 
         }
 

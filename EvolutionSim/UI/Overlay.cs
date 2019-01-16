@@ -43,10 +43,15 @@ namespace EvolutionSim.UI
         private TextInput editSpeciesValue;
         private TextInput editHungerValue;
         private TextInput editAgeValue;
+        private TextInput editIntelligenceValue;
         private TextInput editStrengthValue;
         private TextInput editSpeedValue;
 
+        private Button saveChanges;
+
+
         private Organism selectedOrganism;
+        private Paragraph stateDisplay;
 
         public Overlay()
         {
@@ -297,6 +302,58 @@ namespace EvolutionSim.UI
                 }
             };
 
+            var editIntelligenceText = new Paragraph("Intelligence:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            this.editIntelligenceValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
+            this.editIntelligenceValue.OnValueChange = (Entity btn) =>
+            {
+                var button = (TextInput)btn;
+                if (float.TryParse(button.Value, out var input))
+                {
+                    if (input > MAX_ATTRIBUTE_INPUT)
+                    {
+                        input = MAX_ATTRIBUTE_INPUT;
+                    }
+
+                    var attributes = this.selectedOrganism.Attributes;
+                    attributes.Intelligence = input;
+                }
+            };
+
+             this.stateDisplay = new Paragraph("", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+
+            this.saveChanges = new Button("Save Changes", anchor: Anchor.AutoCenter);
+            this.saveChanges.OnClick = (Entity btn) =>
+            {
+                try { 
+                Attributes attrib = new Attributes()
+                {
+                   
+                    Species = this.editSpeciesValue.Value,
+                    Intelligence = (float)Convert.ToDouble(this.editIntelligenceValue.Value),
+                    MaxHealth = this.selectedOrganism.Attributes.MaxHealth,
+                    ResistCold = this.selectedOrganism.Attributes.ResistCold,
+                    ResistHeat = this.selectedOrganism.Attributes.ResistHeat,
+                    Speed = (float)Convert.ToDouble(this.editSpeedValue.Value),
+                    Strength = (float)Convert.ToDouble(this.editStrengthValue.Value),
+                    Texture = this.selectedOrganism.Texture,
+                    DietType = this.selectedOrganism.Attributes.DietType
+                };
+                this.selectedOrganism.Attributes = attrib;
+            }
+            catch (Exception e)
+            {
+
+            }
+                finally
+                {
+                    
+                    RefreshOrganismStats();
+                }
+
+            };
+   
+
+
             // Draw order
 
             this.bottomPanel.AddChild(editAttributesText);
@@ -310,43 +367,60 @@ namespace EvolutionSim.UI
             this.bottomPanel.AddChild(this.editStrengthValue);
             this.bottomPanel.AddChild(editSpeedText);
             this.bottomPanel.AddChild(this.editSpeedValue);
+            this.bottomPanel.AddChild(editIntelligenceText);
+            this.bottomPanel.AddChild(this.editIntelligenceValue);
+            this.bottomPanel.AddChild(stateDisplay);
+            this.bottomPanel.AddChild(saveChanges);
+
+
         }
 
+
+        private void RefreshOrganismStats()
+        {
+
+
+            this.editSpeciesValue.Value = "";
+            this.editHungerValue.Value = "";
+            this.editAgeValue.Value = "";
+            this.editStrengthValue.Value = "";
+            this.editSpeedValue.Value = "";
+            this.editIntelligenceValue.Value = "";
+            this.stateDisplay.Text = "State: " + selectedOrganism.State.ToString();
+
+
+
+            this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_CONTRACTED_HEIGHT);
+            this.bottomPanel.Visible = true;
+        }
         /// <summary>
         /// Take input from input devices
         /// </summary>
         /// <param name="gameTime">Time elapsed since last update call</param>
-        public void Update(GameTime gameTime, Organism selectedOrganism)
+        public void Update(GameTime gameTime, Organism uiSelectedOrganism)
         {
+
             UserInterface.Active.Update(gameTime);
             
-            if (selectedOrganism == null)
+            if (uiSelectedOrganism == null)
             {
                 this.selectedOrganism = null;
-
-                this.editHungerValue.Value = "";
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_EXPANDED_HEIGHT);
                 this.bottomPanel.Visible = false;
             }
-            else if (this.selectedOrganism != selectedOrganism)
+            else 
             {
-                this.selectedOrganism = selectedOrganism;
-                System.Diagnostics.Debug.WriteLine("State: " + this.selectedOrganism.State + 
-                                                    " --- " + "Desination Tile: " + this.selectedOrganism.DestinationTile + 
-                                                    " --  Path Count: " + this.selectedOrganism.Path.Count + 
-                                                    " -- last roam: "+ this.selectedOrganism.MsSinceLastRoam
-                                                    + " -- Frozen: " + this.selectedOrganism.Frozen);
+                this.selectedOrganism = uiSelectedOrganism;
 
                 this.editSpeciesValue.PlaceholderText = selectedOrganism.Attributes.Species;
                 this.editHungerValue.PlaceholderText = Math.Round(selectedOrganism.Hunger, 2).ToString();
                 this.editAgeValue.PlaceholderText = selectedOrganism.Age.ToString();
                 this.editStrengthValue.PlaceholderText = Math.Round(selectedOrganism.Attributes.Strength, 2).ToString();
                 this.editSpeedValue.PlaceholderText = Math.Round(selectedOrganism.Attributes.Speed, 2).ToString();
-                this.editSpeciesValue.Value = "";
-                this.editHungerValue.Value = "";
-                this.editAgeValue.Value = "";
-                this.editStrengthValue.Value = "";
-                this.editSpeedValue.Value = "";
+                this.editIntelligenceValue.PlaceholderText = Math.Round(selectedOrganism.Attributes.Intelligence, 2).ToString();
+                this.stateDisplay.Text = "State: " + selectedOrganism.State.ToString();
+
+               
 
                 this.middlePanel.Size = new Vector2(this.middlePanel.Size.X, MIDDLE_PANEL_CONTRACTED_HEIGHT);
                 this.bottomPanel.Visible = true;

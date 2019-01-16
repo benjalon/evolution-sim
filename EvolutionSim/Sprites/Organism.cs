@@ -22,7 +22,7 @@ namespace EvolutionSim.Sprites
 
 
         // Breed attributes
-        public Attributes Attributes { get; }
+        public Attributes Attributes { get; set; }
 
         // Simulation Attributes
         public int Age { get; set; } = 0;
