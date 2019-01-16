@@ -7,7 +7,7 @@
     {
         Herbivore,
         Omnivore,
-        Canivore
+        Carnivore
     }
 
 }

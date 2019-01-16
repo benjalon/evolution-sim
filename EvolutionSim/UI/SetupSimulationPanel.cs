@@ -65,7 +65,7 @@ namespace EvolutionSim.UI
                         startingAttributes.DietType = DietTypes.Herbivore;
                         break;
                     case "Carnivore":
-                        startingAttributes.DietType = DietTypes.Canivore;
+                        startingAttributes.DietType = DietTypes.Carnivore;
                         break;
                 }
                 startingAttributes.MaxHealth = Convert.ToInt32(startHealth.Value);
