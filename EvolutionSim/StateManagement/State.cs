@@ -108,7 +108,6 @@ namespace EvolutionSim.StateManagement
                 
                 { new StateTransition(States.SeekMate, Actions.MateFound), States.MovingToMate},
 
-
                 //now if an organism is waiting for a mate and takes the action move to go over to partner
                 {new StateTransition(States.SeekMate, Actions.Waiting), States.WaitingForMate},
 

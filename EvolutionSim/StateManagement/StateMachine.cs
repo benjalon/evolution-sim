@@ -187,8 +187,14 @@ namespace EvolutionSim.StateManagement
                         organism.State = this.state.MoveState(organismState, Actions.Move); //mating is over, so go back into roaming.
                     }
 
-                    // TODO: its possible to starve to death in this state, its also possible their mate gets killed on the way and never arrives
+                    //their mate has probably been eaten or died on the way over so just move out
+                    else if (timeManager.HasWaitingCooldownExpired(organism))
+                    {
+                        organism.State = this.state.MoveState(organismState, Actions.Move);
 
+                    }
+
+                 
                     break;
 
                 case States.Mating: // When an organism is mating

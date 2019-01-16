@@ -42,6 +42,8 @@ namespace EvolutionSim.Sprites
 
         public int MsSinceLastWeather { get; set; } = 0;
 
+        public int MsSinceLastWaited{ get; set; } = 0;
+
         public int MsSinceLastMate { get; set; } = 0;
         
 
