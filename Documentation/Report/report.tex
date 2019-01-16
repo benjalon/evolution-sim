@@ -190,9 +190,49 @@ TODO.
 
 \chapter{Implementation} \label{implementation}
 
-\subsection{Modelling}
+\subsection{Object Oriented Analysis}
+An object oriented analysis was produced to gain an understanding of the problem domain and identify classes for the initial class diagram.
 
-TODO OOA and UML
+\textbf{Specification}
+Objective: To make a simulation of evolution that reaches a stable point at some point.
+What does stable ecology mean? 
+\begin{itemize}
+\item Net number of organisms does not significantly increase or decrease over a given period of time.
+\end{itemize}
+Requirements:
+Graphical representation of an organism.
+An organism has attributes such as:
+\begin{itemize}
+\item Health 
+\item Hunger 
+\item Speed
+\end{itemize}
+The organisms need to eat food which can either be other organisms or vegetation. 
+The organisms should breed and their attributes (representing genetics) will be crossed over to make a composite organism with random features within limit. 
+Environmental factors play a part in the life cycle and cold or hot climate can kill some organisms unless they have the specific resistances to temperatures. 
+Water should be present on the map which organisms can walk into but slows them down. Same with different terrain such as mountains. 
+Real World Domain
+Environment 
+\begin{itemize}
+\item Mountains
+\item Water
+\item Land
+\item Hot
+\item Cold
+\end{itemize}
+Sprites/ organisms
+\begin{itemize}
+\item Herbivore 
+\item Carnivore 
+\item Plant
+\end{itemize}
+Simulation
+\begin{itemize}
+\item State machine / brain
+\end{itemize}
+
+
+\subsection{UML}
 
 The class diagram Figure~\ref{classdiagram} was continually updated throughout the project and although it saw many changes, certain key themes remained constant throughout.
 
@@ -333,6 +373,7 @@ The team has agreed on a 25\% contibution each as of the time of writing. Note t
 			\itemsep0em
 			\item Project management [\ref{projectmanagement}]
 			\item A* Pathfinding [\ref{pathfinding}]
+			\item Testing [\ref{testing}]
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Grid/tile system [\ref{grid}]
