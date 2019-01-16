@@ -2,6 +2,9 @@
 
 namespace EvolutionSim.Data
 {
+    /// <summary>
+    /// Types of terrian/objects to draw 
+    /// </summary>
     public enum DrawingSettings
     {
         Grass,
@@ -11,6 +14,9 @@ namespace EvolutionSim.Data
         Food
     }
 
+    /// <summary>
+    /// Set the drawing args in the draw constructor
+    /// </summary>
     public class DrawingArgs : EventArgs
     {
         public DrawingSettings DrawingSetting { get; private set; }

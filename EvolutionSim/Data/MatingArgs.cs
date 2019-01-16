@@ -31,6 +31,12 @@ namespace EvolutionSim.Data
 
         public Severity Mutation { get; private set; }
 
+        /// <summary>
+        /// This is the constrctor for the arguments to be used for mating
+        /// we initalise a probabiity object
+        /// </summary>
+        /// <param name="father"></param>
+        /// <param name="organism"></param>
         public MatingArgs(Organism father, Organism organism) : base()
         {
             Father = father;

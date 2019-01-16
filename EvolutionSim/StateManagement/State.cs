@@ -5,7 +5,10 @@ using System.Collections.Generic;
 namespace EvolutionSim.StateManagement
 {
 
-    //these represent the transition paths between states
+     /// <summary>
+     /// These enums represents the actions an organism must take in order to move into a certain state, 
+     /// these are used in conjunction with
+     /// </summary>
     public enum Actions
     {
         NotHungry,
@@ -29,7 +32,10 @@ namespace EvolutionSim.StateManagement
         private const int HASHING_CONST_2 = 31;
 
 
-        //a nested and publically avaliable class to determine behaviour of organsim when changing states
+        /// <summary>
+        /// a nested and publically avaliable class to act as a lookup table for the
+        /// state machine class
+        /// </summary>
         class StateTransition
         {
             private readonly States currentState;
@@ -64,10 +70,11 @@ namespace EvolutionSim.StateManagement
         // represent a transition table as a dictonary
         private Dictionary<StateTransition, States> transitions;
         
-        //Sets each state to roaming by default
+        /// <summary>
+        /// Sets each state to roaming by default
+        /// </summary>
         public State()
         {
-            //CurrentState = PotentialStates.Roaming;
 
             //opens a new dictonary which holds a StateTransition object as a key with the coresponding State enum
             this.transitions = new Dictionary<StateTransition, States>
@@ -116,7 +123,12 @@ namespace EvolutionSim.StateManagement
         }
 
 
-        //return the next state deterministically
+        /// <summary>
+        /// reference 
+        /// </summary>
+        /// <param name="currentState"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public States GetNext(States currentState, Actions action)
         {
             StateTransition transition = new StateTransition(currentState, action);
@@ -130,7 +142,12 @@ namespace EvolutionSim.StateManagement
             return nextState;
         }
 
-        //handles the moving of states.
+        /// <summary>
+        /// Call this to try to move an organism from one state to another
+        /// </summary>
+        /// <param name="determinedState"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public States MoveState(States determinedState, Actions action)
         {
             determinedState = GetNext(determinedState, action);

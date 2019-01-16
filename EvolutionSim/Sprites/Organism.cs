@@ -17,8 +17,7 @@ namespace EvolutionSim.Sprites
         private const float EATING_REGEN = 0.075f;
         private const float SCALE_MULTIPLIER = 0.2f;
         private const float SCALE_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
-
-        private const int AGE_LOWER_BOUND = 70;
+        private const int AGE_LOWER_BOUND = 70; // represents the range of ages possible
         private const int AGE_UPPER_BOUND = 130;
 
 
@@ -44,7 +43,10 @@ namespace EvolutionSim.Sprites
         public int MsSinceLastWeather { get; set; } = 0;
 
         public int MsSinceLastMate { get; set; } = 0;
-        //not sure if I should move this
+        
+
+        //these booleans are used inconjection with the state machine to determine 
+        //it's 
         public int MsSinceLastHunted { get; set; } = 0;
         public bool JustMated { get; set; } = false;
         public bool WaitingForMate { get; set; }
@@ -60,6 +62,11 @@ namespace EvolutionSim.Sprites
         private readonly Healthbar healthbar;
         public bool IsSelected { get; set; } = false;
         
+        /// <summary>
+        /// Construct an organism, create attributes and allocate health bar and textures
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <param name="healthbarTextures"></param>
         public Organism(Attributes attributes, Tuple<Texture2D, Texture2D> healthbarTextures) : base(attributes.Texture, attributes.MaxHealth)
         {
 
@@ -77,6 +84,10 @@ namespace EvolutionSim.Sprites
             this.healthbar = new Healthbar(healthbarTextures, rectangle, this.defaultHealth);
         }
 
+        /// <summary>
+        /// Draw the organism, scales based on strength
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             //this is where the size of the organism is calculated based on strengh
@@ -99,11 +110,8 @@ namespace EvolutionSim.Sprites
         /// </summary>
         public void Eat()
         {
-
-                Hunger += EATING_REGEN;
-
-
-
+            //increase the health of organism as well as their health
+            Hunger += EATING_REGEN;
             IncreaseHealth(INCREMENT_HEALTH);
         }
         
@@ -114,12 +122,20 @@ namespace EvolutionSim.Sprites
         }
 
  
+        /// <summary>
+        /// Method called to increase the health of the organism
+        /// </summary>
+        /// <param name="value"></param>
         public override void IncreaseHealth(int value)
         {
             base.IncreaseHealth(value);
             this.healthbar.CurrentHealth = this.Health;
         }
 
+        /// <summary>
+        /// Method called to reduce the health of organism
+        /// </summary>
+        /// <param name="value"></param>
         public override void DecreaseHealth(int value)
         {
             base.DecreaseHealth(value);
