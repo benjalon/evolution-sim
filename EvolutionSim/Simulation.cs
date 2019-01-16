@@ -168,25 +168,13 @@ namespace EvolutionSim
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
             var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
 
-            var simpleCrossbreed = new Attributes()
-            {
-                Species = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.Species : mother.Attributes.Species,
-                Texture = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Texture : mother.Texture,
-                DietType = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.DietType : mother.Attributes.DietType,
-                MaxHealth = Graphics.RANDOM.Next(orderedMaxHealth.Item1, orderedMaxHealth.Item2),
-                Strength = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
-                Speed = Graphics.RANDOM.Next(orderedStrength.Item1, orderedStrength.Item2) * 0.1f,
-                ResistCold = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistCold : mother.Attributes.ResistCold,
-                ResistHeat = Graphics.RANDOM.NextDouble() >= 0.5 ? father.Attributes.ResistHeat : mother.Attributes.ResistHeat,
-            };
-
             //this takes into account the stdDeviation from the normal
             //workout an average of the mother and father's attributes
             //then offset the change based on the mutation variation
 
 
          
-
+       
             #region Handle Mutation
             switch (mutation)
             {
