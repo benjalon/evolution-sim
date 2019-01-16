@@ -234,6 +234,7 @@ namespace EvolutionSim
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
             {
+                
                 state = Utility.GameState.Exit;
                 Exit();
             }
