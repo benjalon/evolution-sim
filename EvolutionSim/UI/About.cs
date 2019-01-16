@@ -27,7 +27,7 @@ namespace EvolutionSim.UI
             UserInterface.Active.CursorScale = 0.5f;
             this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
             this.aboutParagraph = new Paragraph("YEEEEEEEEEEEEEET");
-            this.backButton = new Button("Back", anchor: Anchor.AutoCenter);
+            this.backButton = new Button("Back", anchor: Anchor.AutoCenter,size: new Vector2(Graphics.WINDOW_WIDTH / 6, 50));
             this.backButton.OnClick = (Entity btn) =>
             {
                 Console.Write("YAY");
