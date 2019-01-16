@@ -18,8 +18,6 @@ namespace EvolutionSim.StateManagement
         Move,
         Waiting,
         Mating,
-
-
     }
 
 

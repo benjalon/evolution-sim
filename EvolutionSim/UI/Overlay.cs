@@ -331,6 +331,11 @@ namespace EvolutionSim.UI
             else if (this.selectedOrganism != selectedOrganism)
             {
                 this.selectedOrganism = selectedOrganism;
+                System.Diagnostics.Debug.WriteLine("State: " + this.selectedOrganism.State + 
+                                                    " --- " + "Desination Tile: " + this.selectedOrganism.DestinationTile + 
+                                                    " --  Path Count: " + this.selectedOrganism.Path.Count + 
+                                                    " -- last roam: "+ this.selectedOrganism.MsSinceLastRoam
+                                                    + " -- Frozen: " + this.selectedOrganism.Frozen);
 
                 this.editSpeciesValue.PlaceholderText = selectedOrganism.Attributes.Species;
                 this.editHungerValue.PlaceholderText = Math.Round(selectedOrganism.Hunger, 2).ToString();

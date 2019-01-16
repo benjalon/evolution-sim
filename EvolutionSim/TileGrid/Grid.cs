@@ -68,6 +68,8 @@ namespace EvolutionSim.TileGrid
             }
         }
 
+        
+
         /// <summary>
         /// Attempt to position the given item at the given index. If the space is occupied already it will fail.
         /// </summary>
@@ -98,6 +100,8 @@ namespace EvolutionSim.TileGrid
                 food.DeathOccurred += FoodEatenHandler;
                 Foods.Add(food);
             }
+
+
 
             return true; // Successfully positioned
         }
@@ -242,6 +246,7 @@ namespace EvolutionSim.TileGrid
             var organism = (Organism)sender;
             this.GetTileAt(organism).RemoveInhabitant();
             this.Organisms.Remove(organism);
+            GridItem.TOTAL_GRID_ITEMS--;
 
             ShouldSpawnCorpse?.Invoke(organism, EventArgs.Empty);
     }
@@ -256,6 +261,8 @@ namespace EvolutionSim.TileGrid
             var food = (Food)sender;
             this.GetTileAt(food).RemoveInhabitant();
             this.Foods.Remove(food);
+            GridItem.TOTAL_GRID_ITEMS--;
+
         }
 
         public Tile FindRandomNearbyEmptyTile(Organism organism)
@@ -292,6 +299,10 @@ namespace EvolutionSim.TileGrid
             }
 
             return tile;
+        }
+        public static int ManhattanDistance(Organism a, Organism b)
+        {
+            return Math.Abs(a.GridIndex.X - b.GridIndex.X) + Math.Abs(a.GridIndex.Y - b.GridIndex.Y);
         }
     }
 }

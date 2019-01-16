@@ -36,9 +36,10 @@ namespace EvolutionSim
 
             this.bearBreeds = new List<Attributes>()
             {
+                
                 new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
                 new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
-                new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.1f, ResistCold = true, ResistHeat = true },
+                new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.5f, ResistCold = true, ResistHeat = true },
                 new Attributes() { Species = "AngryRed", Texture = Graphics.SimulationTextures["organism_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
                 new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
             };
@@ -74,10 +75,18 @@ namespace EvolutionSim
             {
                 return;
             }
+            if (TimeManager.HasGrassTicked)
+                this.AddHerbivoreFood();
 
 
             Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
 
+            var numFood = this.grid.Foods.Count;
+            for (var i = numFood - 1; i >= 0; i--)
+            {
+                this.grid.Foods[i].BeEaten();
+            }
+ 
 
             this.fsm.UpdateStates(this.grid, TimeManager);
             
@@ -134,6 +143,10 @@ namespace EvolutionSim
 
         public void BirthHandler(object sender, EventArgs args)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+            {
+                return;
+            }
 
 
             const float EXTREME = 0.4f;
@@ -263,7 +276,6 @@ namespace EvolutionSim
 
             #endregion
 
-
             var child = new Organism(advancedCrossBreed, this.healthbarTextures);
 
             // Top left corner
@@ -298,7 +310,10 @@ namespace EvolutionSim
 
         public void AddOrganisms(int amount)
         {
-            Organism organism;
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
+
+                Organism organism;
             for (var i = 0; i < amount; i++)
             {
                 organism = new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures);
@@ -308,7 +323,9 @@ namespace EvolutionSim
         }
         public void AddOrganisms(List<Attributes> attributes, int amount)
         {
-            foreach(var attribute in attributes)
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
+            foreach (var attribute in attributes)
             {
                 Organism organism;
                 for (var i = 0; i < amount; i++)
@@ -326,10 +343,12 @@ namespace EvolutionSim
 
         public void AddFoods(int amount)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
             Food food;
             for (var i = 0; i < amount; i++)
             {
-                food = new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(3, Food.MAX_GRASS_HEALTH));
+                food = new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(Food.MAX_GRASS_HEALTH/2, Food.MAX_GRASS_HEALTH));
                 PositionAtRandom(food);
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(food).Center));
             }
@@ -337,6 +356,8 @@ namespace EvolutionSim
 
         public void AddOrganism(int x, int y)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
             var positioned = this.grid.AttemptToPositionAt(new Organism(this.bearBreeds[Graphics.RANDOM.Next(0, this.bearBreeds.Count)], this.healthbarTextures), x, y);
             if (positioned)
             {
@@ -344,14 +365,32 @@ namespace EvolutionSim
             }
 
         }
-
-        public void AddFood(int x, int y)
+        /// <summary>
+        /// Adds food in a specified location
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void AddHerbivoreFood(int x, int y)
         {
-            var positioned = this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(1, Food.MAX_GRASS_HEALTH)), x, y);
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
+            var positioned = this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(Food.MAX_GRASS_HEALTH/2, Food.MAX_GRASS_HEALTH)), x, y);
             if (positioned)
             {
                 particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(x, y).Center));
             }
+        }
+        /// <summary>
+        /// Simply adds a random bit of food in an available location, does not require coordinates
+        /// </summary>
+        public void AddHerbivoreFood()
+        {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
+            Food food = new Food(Graphics.SimulationTextures["food"], true, Graphics.RANDOM.Next(Food.MAX_GRASS_HEALTH / 2, Food.MAX_GRASS_HEALTH));
+            PositionAtRandom(food);
+            particleEffects.Add(new ParticleEffect(this.particleTextures, typeof(SpawnParticle), 10, 1000, this.grid.GetTileAt(food).Center));
         }
 
         private void PositionAtRandom(GridItem item)
@@ -369,9 +408,11 @@ namespace EvolutionSim
         /// <param name="e">Event arguments.</param>
         private void SpawnCorpseHandler(object sender, EventArgs e)
         {
+            if (GridItem.TOTAL_GRID_ITEMS > GridItem.MAX_GRID_ITEMS)
+                return;
             var organism = ((Organism)sender);
             var tile = (Tile)grid.GetTileAt(organism);
-            this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["meat"], false, organism.Attributes.MaxHealth), tile.GridIndex.X, tile.GridIndex.Y);
+            this.grid.AttemptToPositionAt(new Food(Graphics.SimulationTextures["meat"], false, Graphics.RANDOM.Next(Food.MAX_MEAT_HEALTH / 2, Food.MAX_MEAT_HEALTH)), tile.GridIndex.X, tile.GridIndex.Y);
         }
     }
 }
