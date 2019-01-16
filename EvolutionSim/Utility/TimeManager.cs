@@ -96,7 +96,8 @@ namespace EvolutionSim.Utility
             }
             else if (pausedElapsed > 0)
             {
-                pausedElapsed -= this.deltaMs;
+                pausedElapsed = 0;
+
             }
 
             UpdateGrassSpawn(gameTime);
