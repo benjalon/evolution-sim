@@ -11,6 +11,7 @@ namespace EvolutionSim.Utility
         StartMenu,
         Exit,
         Running,
-        Setup
+        Setup,
+        About
     }
 }

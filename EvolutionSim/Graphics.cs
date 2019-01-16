@@ -26,6 +26,7 @@ namespace EvolutionSim
         private Overlay overlay;
         private Simulation simulation;
         private SetupSimulation setupSimulation;
+        private About about;
 
         public static Dictionary<String, Texture2D> SimulationTextures;
 
@@ -100,9 +101,13 @@ namespace EvolutionSim
                 case Utility.GameState.Setup:
                      this.setupSimulation = new SetupSimulation();
                     break;
+                case Utility.GameState.About:
+                    this.about = new About();
+                    break;
                 case Utility.GameState.Exit:
                     Exit();
                     break;
+                
             }
 
         }
@@ -120,6 +125,8 @@ namespace EvolutionSim
 
             Button sandboxMode = new Button("Sandbox Mode", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50), new Vector2(0, WINDOW_HEIGHT / 8));
             Button simulationSetup = new Button("Setup Simulation", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+            Button about = new Button("About", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+
             Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
             sandboxMode.OnClick = (Entity btn) => {
                 state = Utility.GameState.Running;
@@ -128,6 +135,11 @@ namespace EvolutionSim
             };
             simulationSetup.OnClick = (Entity btn) => {
                 state = Utility.GameState.Setup;
+                UserInterface.Active.Clear();
+                LoadContent();
+            };
+            about.OnClick = (Entity btn) => {
+                state = Utility.GameState.About;
                 UserInterface.Active.Clear();
                 LoadContent();
             };
@@ -141,6 +153,7 @@ namespace EvolutionSim
             UserInterface.Active.AddEntity(horizontalLine);
             UserInterface.Active.AddEntity(sandboxMode);
             UserInterface.Active.AddEntity(simulationSetup);
+            UserInterface.Active.AddEntity(about);
             UserInterface.Active.AddEntity(exit);
         }
         private void LoadSimulation()
@@ -193,13 +206,24 @@ namespace EvolutionSim
                         state = Utility.GameState.Running;
                         UserInterface.Active.Clear();
                         LoadContent();
-                        
+
 
                     }
                     else
                     {
                         this.setupSimulation.Update(gameTime);
                     }
+                    break;
+                case Utility.GameState.About:
+                    if (this.about.backButtonPressed) { 
+                        state = Utility.GameState.StartMenu;
+                        LoadContent();
+                    }
+
+                    break;
+                case Utility.GameState.StartMenu:
+
+
                     break;
 
 
@@ -240,6 +264,8 @@ namespace EvolutionSim
                     break;
                 case Utility.GameState.Setup:
                     //this.setupSimulation.Draw(this.spriteBatch);
+                    break;
+                case Utility.GameState.About:
                     break;
             }
 
