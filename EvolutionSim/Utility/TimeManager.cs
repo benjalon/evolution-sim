@@ -12,6 +12,7 @@ namespace EvolutionSim.Utility
         private const int DEFAULT_ROAM_COOLDOWN = 3000;
         private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 1000;
         private const int DEFAULT_GRASS_SPAWN_COOLDOWN = 1500;
+        private const int DEFAULT_WAIT_COOLDOWN = 6000;
 
         public const float MOVE_SPEED = 0.01f;
         private const int FAST_SPEED = 4;
@@ -23,6 +24,7 @@ namespace EvolutionSim.Utility
         private int roamCooldown = DEFAULT_ROAM_COOLDOWN;
         private int weatherCooldown = DEFAULT_WEATHER_COOLDOWN;
         private int grassCooldown = DEFAULT_GRASS_SPAWN_COOLDOWN;
+        private int waitingCooldown = DEFAULT_WAIT_COOLDOWN;
 
         
 
@@ -73,10 +75,6 @@ namespace EvolutionSim.Utility
 
 
         // A simulation tick is a global progression of events. Each time this happens food gets eaten slightly, mating progresses, organisms get slightly more hungry etc.
-
-
-
-
         public void Update(GameTime gameTime)
         {
             this.deltaMs = gameTime.ElapsedGameTime.Milliseconds;
@@ -132,6 +130,8 @@ namespace EvolutionSim.Utility
             organism.MsSinceLastHunted += this.deltaMs;
 
             organism.MsSinceLastWeather += this.deltaMs;
+
+            organism.MsSinceLastWaited += this.deltaMs;
         }
 
         public bool HasMatingCooldownExpired(Organism organism)
@@ -146,7 +146,11 @@ namespace EvolutionSim.Utility
             return cooldownExpired;
         }
 
-
+        /// <summary>
+        /// Could be used to set a cap on hunting
+        /// </summary>
+        /// <param name="organism"></param>
+        /// <returns></returns>
         public bool HasHuntingCooldownExpired(Organism organism)
         {
 
@@ -160,6 +164,24 @@ namespace EvolutionSim.Utility
             return cooldownExpired;
 
 
+
+        }
+
+        /// <summary>
+        /// Used to test if an organism
+        /// </summary>
+        /// <param name="organism"></param>
+        /// <returns></returns>
+        public bool  HasWaitingCooldownExpired(Organism organism)
+        {
+            var cooldownExpired = organism.MsSinceLastWaited> waitingCooldown + pausedElapsed;
+
+            if (cooldownExpired)
+            {
+                organism.MsSinceLastWaited = 0;
+            }
+
+            return cooldownExpired;
 
         }
 
