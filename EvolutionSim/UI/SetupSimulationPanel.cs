@@ -23,6 +23,7 @@ namespace EvolutionSim.UI
         private TextInput startHealth;
         private TextInput startSpeed;
         private TextInput startStrength;
+        private TextInput startIntellgence;
         private TextInput startPopulation;
 
         private DropDown textureName;
@@ -89,18 +90,28 @@ namespace EvolutionSim.UI
                     startingAttributes.Strength = strengthInput;
                 }
 
+                if (float.TryParse(startIntellgence.Value, out var intelligenceInput))
+                {
+                    if (intelligenceInput > MAX_ATTRIBUTE_INPUT)
+                    {
+                        intelligenceInput = MAX_ATTRIBUTE_INPUT;
+                    }
+
+                    startingAttributes.Intelligence = intelligenceInput;
+                }
+
                 startingAttributes.ResistHeat = Convert.ToBoolean(resistHeatChoice.SelectedValue);
                 startingAttributes.ResistCold = Convert.ToBoolean(resistColdChoice.SelectedValue);
                 return startingAttributes;
             }
             catch (Exception e)
             {
+                Console.WriteLine("really?!?");
                 return null;
 
             }
 
 
-            // this.InitPopulation = Convert.ToInt32(startPopulation.Value);
 
         }
 
@@ -166,12 +177,15 @@ namespace EvolutionSim.UI
             this.startHealth = new TextInput();
             this.startHealth.Validators.Add(new GeonBit.UI.Entities.TextValidators.TextValidatorNumbersOnly());
 
-            Label labelStartSpeed = new Label("Start Speed: ");
+            Label labelStartSpeed = new Label("Starting Speed 0 - 1.0: ");
             this.startSpeed = new TextInput();
 
 
-            Label labelStartStrength = new Label("Start Strength: ");
+            Label labelStartStrength = new Label("Starting Strength 0 - 1.0: ");
             this.startStrength = new TextInput();
+
+            Label labelStartIntelligence = new Label("Starting Intelligence 0 - 1.0: ");
+            this.startIntellgence = new TextInput();
 
 
             // Resist Cold DropDown
@@ -201,6 +215,8 @@ namespace EvolutionSim.UI
             attributePanel.AddChild(startSpeed);
             attributePanel.AddChild(labelStartStrength);
             attributePanel.AddChild(startStrength);
+            attributePanel.AddChild(labelStartIntelligence);
+            attributePanel.AddChild(startIntellgence);
             attributePanel.AddChild(labelResistCold);
             attributePanel.AddChild(resistColdChoice);
             attributePanel.AddChild(labelResistHeat);

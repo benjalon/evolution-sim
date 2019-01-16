@@ -13,8 +13,10 @@ namespace EvolutionSim.Data
         public int MaxHealth { get; set; }
         public float Speed { get; set; }
         public float Strength { get; set; }
+        public float Intelligence { get; set; }
         public bool ResistCold { get; set; }
         public bool ResistHeat { get; set; }
+    
 
     }
 }

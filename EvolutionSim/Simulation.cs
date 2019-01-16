@@ -34,20 +34,22 @@ namespace EvolutionSim
 
             this.particleTextures = new List<Texture2D>() { Graphics.SimulationTextures["star"], Graphics.SimulationTextures["diamond"], Graphics.SimulationTextures["circle"] };
 
-            this.bearBreeds = new List<Attributes>()
-            {
-                
-                new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
-                new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
-                new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.5f, ResistCold = true, ResistHeat = true },
-                new Attributes() { Species = "AngryRed", Texture = Graphics.SimulationTextures["organism_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, ResistCold = false, ResistHeat = true },
-                new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, ResistCold = true, ResistHeat = true }
-            };
             //this.bearBreeds = new List<Attributes>()
             //{
-            //    new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, ResistCold = false, ResistHeat = false },
-            //    new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Canivore, MaxHealth = 20, Strength = 0.9f, Speed = 0.6f, ResistCold = true, ResistHeat = false },
+                
+            //    new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, Intelligence = 0.3f, ResistCold = false, ResistHeat = false },
+            //    new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, Intelligence = 0.7f, ResistCold = true, ResistHeat = false },
+            //    new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.5f, Intelligence = 1.0f, ResistCold = true, ResistHeat = true },
+            //    new Attributes() { Species = "AngryRed", Texture = Graphics.SimulationTextures["organism_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, Intelligence = 0.4f, ResistCold = false, ResistHeat = true },
+            //    new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, Intelligence = 0.6f, ResistCold = true, ResistHeat = true }
             //};
+            this.bearBreeds = new List<Attributes>()
+            {
+                new Attributes() { Species = "Smart Boi", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.9f, Strength = 0.3f, Speed = 0.4f, ResistCold = false, ResistHeat = false },
+                new Attributes() { Species = "Strong Boi", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Canivore, MaxHealth = 20, Intelligence = 0.1f, Strength = 0.9f, Speed = 0.2f, ResistCold = true, ResistHeat = false },
+                new Attributes() { Species = "Average Boi", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.5f, Strength = 0.5f, Speed = 0.5f, ResistCold = false, ResistHeat = false }
+
+            };
 
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(Graphics.SimulationTextures["healthbar_red"], Graphics.SimulationTextures["healthbar_green"]);
 
@@ -181,18 +183,21 @@ namespace EvolutionSim
             bool newResistCold = false;
             float newStrength = 0.0f;
             float newSpeed = 0.0f;
+            float newIntelligence = 0.0f;
 
             var orderedMaxHealth = MakeUseableValues(mother.Attributes.MaxHealth, father.Attributes.MaxHealth);
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
             var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
+            var orderIntelligence = MakeUseableValues(mother.Attributes.Intelligence, father.Attributes.Intelligence);
+
 
             //this takes into account the stdDeviation from the normal
             //workout an average of the mother and father's attributes
             //then offset the change based on the mutation variation
 
 
-         
-       
+
+
             #region Handle Mutation
             switch (mutation)
             {
@@ -205,7 +210,8 @@ namespace EvolutionSim
                     //take an average of the parents strength and speed then take away according to mutation category
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - EXTREME;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - EXTREME;
-                    
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) - EXTREME;
+
 
                     break;
                 case MatingArgs.Severity.MiddleBad:
@@ -215,6 +221,8 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - MIDDLE;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - MIDDLE;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) - MIDDLE;
+
 
                     break;
 
@@ -225,6 +233,9 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - MILD;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - MILD;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) - MILD;
+
+
 
                     break;
 
@@ -235,6 +246,8 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + MILD;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) + MILD;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) + MILD;
+
 
                     break;
 
@@ -246,6 +259,8 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + MIDDLE;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2) *0.1f /2) + MIDDLE;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) + MIDDLE;
+
 
                     break;
 
@@ -258,12 +273,27 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + EXTREME;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) + EXTREME;
-
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) + EXTREME;
                     break;
 
                 default:
                     break;
 
+            }
+            int mute = Graphics.RANDOM.Next(0, 10);
+            if (mute < 3)
+            {
+                switch (WeatherOverlay.WeatherSetting)
+                {
+                    case WeatherSettings.Hot:
+                        newResistHeat = true;
+                        break;
+                    case WeatherSettings.Cold:
+                        newResistHeat = true;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             var advancedCrossBreed = new Attributes()
@@ -276,6 +306,7 @@ namespace EvolutionSim
                         MaxHealth = Graphics.RANDOM.Next(orderedMaxHealth.Item1, orderedMaxHealth.Item2),
                         Strength = newStrength,
                         Speed = newSpeed,
+                        Intelligence = newIntelligence,
                         ResistCold = newResistCold,
                         ResistHeat = newResistHeat,
                     };
