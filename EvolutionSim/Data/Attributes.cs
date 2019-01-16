@@ -2,6 +2,9 @@
 
 namespace EvolutionSim.Data
 {
+    /// <summary>
+    /// Properties used to create an organism
+    /// </summary>
     public struct Attributes
     {
         public string Species { get; set; }

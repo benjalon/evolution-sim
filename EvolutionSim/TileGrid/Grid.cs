@@ -265,6 +265,29 @@ namespace EvolutionSim.TileGrid
 
         }
 
+        /// <summary>
+        /// Called to kill food present on the
+        /// grid over time
+        /// </summary>
+        public void UpdateFood()
+        {
+
+            var numFood = this.Foods.Count;
+
+            //this loop gradually reduces the food 
+            for (var i = numFood - 1; i >= 0; i--)
+            {
+
+                this.Foods[i].WitherFood();
+            }
+
+        }
+
+        /// <summary>
+        /// This method is called from the roam method
+        /// </summary>
+        /// <param name="organism"></param>
+        /// <returns></returns>
         public Tile FindRandomNearbyEmptyTile(Organism organism)
         {
             const int MINIMUM_BOUND = 0;

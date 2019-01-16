@@ -4,6 +4,9 @@ using System;
 
 namespace EvolutionSim.Sprites
 {
+    /// <summary>
+    /// Healthbars class to show organism health 
+    /// </summary>
     public class Healthbar : Sprite
     {
         private const int WIDTH = 32;
@@ -20,6 +23,7 @@ namespace EvolutionSim.Sprites
         private Texture2D innerTexture;
         private Rectangle innerRectangle;
 
+      
         public Healthbar(Tuple<Texture2D, Texture2D> textures, Rectangle parentRectangle, int maxHealth) : base(textures.Item1, new Rectangle(0, 0, WIDTH, HEIGHT))
         {
             this.maxHealth = maxHealth;
@@ -27,6 +31,10 @@ namespace EvolutionSim.Sprites
             this.innerRectangle = new Rectangle(0, 0, WIDTH, HEIGHT);
         }
 
+        /// <summary>
+        /// Draw health object
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (this.isAtFullHealth)
@@ -38,6 +46,11 @@ namespace EvolutionSim.Sprites
             spriteBatch.Draw(this.innerTexture, this.innerRectangle, Color.White);
         }
 
+        /// <summary>
+        /// Calculate position relative to organism
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public override void SetScreenPosition(int x, int y)
         {
             var yPos = y - OFFSET_Y;

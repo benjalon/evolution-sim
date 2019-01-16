@@ -1,6 +1,8 @@
 ﻿namespace EvolutionSim.Data
 {
-    //these represent states
+    /// <summary>
+    /// Enum to represent the possible states an organism can be in
+    /// </summary>
     public enum States
     {
         Roaming,
