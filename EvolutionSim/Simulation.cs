@@ -183,18 +183,21 @@ namespace EvolutionSim
             bool newResistCold = false;
             float newStrength = 0.0f;
             float newSpeed = 0.0f;
+            float newIntelligence = 0.0f;
 
             var orderedMaxHealth = MakeUseableValues(mother.Attributes.MaxHealth, father.Attributes.MaxHealth);
             var orderedStrength = MakeUseableValues(mother.Attributes.Strength, father.Attributes.Strength);
             var orderedSpeed = MakeUseableValues(mother.Attributes.Speed, father.Attributes.Speed);
+            var orderIntelligence = MakeUseableValues(mother.Attributes.Intelligence, father.Attributes.Intelligence);
+
 
             //this takes into account the stdDeviation from the normal
             //workout an average of the mother and father's attributes
             //then offset the change based on the mutation variation
 
 
-         
-       
+
+
             #region Handle Mutation
             switch (mutation)
             {
@@ -207,7 +210,8 @@ namespace EvolutionSim
                     //take an average of the parents strength and speed then take away according to mutation category
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - EXTREME;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - EXTREME;
-                    
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) - EXTREME;
+
 
                     break;
                 case MatingArgs.Severity.MiddleBad:
@@ -217,6 +221,8 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - MIDDLE;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - MIDDLE;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) - MIDDLE;
+
 
                     break;
 
@@ -227,6 +233,9 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) - MILD;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) - MILD;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) - MILD;
+
+
 
                     break;
 
@@ -237,6 +246,8 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + MILD;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) + MILD;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) + MILD;
+
 
                     break;
 
@@ -248,6 +259,8 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + MIDDLE;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2) *0.1f /2) + MIDDLE;
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) + MIDDLE;
+
 
                     break;
 
@@ -260,7 +273,7 @@ namespace EvolutionSim
 
                     newStrength = ((orderedStrength.Item1 + orderedStrength.Item2)*0.1f / 2) + EXTREME;
                     newSpeed = ((orderedSpeed.Item1 + orderedSpeed.Item2)*0.1f / 2) + EXTREME;
-
+                    newIntelligence = ((orderIntelligence.Item1 + orderIntelligence.Item2) * 0.1f / 2) + EXTREME;
                     break;
 
                 default:
@@ -293,6 +306,7 @@ namespace EvolutionSim
                         MaxHealth = Graphics.RANDOM.Next(orderedMaxHealth.Item1, orderedMaxHealth.Item2),
                         Strength = newStrength,
                         Speed = newSpeed,
+                        Intelligence = newIntelligence,
                         ResistCold = newResistCold,
                         ResistHeat = newResistHeat,
                     };
