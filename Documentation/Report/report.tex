@@ -40,7 +40,7 @@
 %\newpage
 
 \begin{abstract}
-	
+	The evolution simulation attempts to model natural life processes observed in organisms including predator prey relationships, natural selection through environmental pressures and the resulting outcomes. Using advanced programming techniques such as A* path-finding, multi-thread pooling and finite state machines, the project has been able to provide insight into the process of creating Artificial Life. This report outlines the development methodologies and technologies which drove the project.
 \end{abstract}
 
 \chapter{Introduction}
@@ -109,9 +109,15 @@ To better understand the scope and priorities of the project, a MoSCoW analysis 
 This report will cover a brief background of evolution and the algorithms which attempt to simulate it in Section~\ref{background}. Section~\ref{methodology} details the various advanced programming and project management techniques utilized in the project. Models and implementation details are outlined in Section~\ref{implementation}. Finally, the product's quality will be tested and verified through experiments in Section~\ref{testing} before being drawn to a conclusion in Sections \ref{discussion} and \ref{conclusion}.
 
 \chapter{Background}\label{background}
-[TODO: I'm not sure Conway's Game of Life should be the focus anymore]
 
-One such example of an evolution simulation is Conway's Game of Life. Created in 1970 by John Conway, the simulation takes place on an infinitely sized grid where each cell is either live or dead. It progresses according to a set of simple rules \cite{guardian}:
+\section{Evolution}
+Biologically speaking, the process of evolution is both simple and overwhelmingly complex. At a basic level, environmental selection pressures favour certain characteristics in organisms. Organisms with favourable adaptations to a particular environment have a higher chance of producing offspring, thereby passing on their DNA and their favourable features to the next generation. Organisms with unfavourable mutations are less likely to survive and therefore not pass on their genes to the next generation, shaping a particular species to have better characteristics to survive their environment. Though the process has more factors and complexity than described above, simplifying evolution to these base elements allow this project to undertake simulating a topic of such vast scope.
+
+\section{Artificial Life}
+Artificial life refers to the field of study focusing on modelling natural life and its processes though computerised systems in order to gain an insight into the workings of evolution, adaptation, and other natural systems. Artificial life often deals with using genetic crossover algorithms to model how random changes in a DNA base will affect gene production and mutate an organism to develop an adaptation \cite{grand}.
+
+\section{Related Work}
+An example of an evolution simulation is Conway's Game of Life. Created in 1970 by John Conway, the simulation takes place on an infinitely sized grid where each cell is either live or dead. It progresses according to a set of simple rules \cite{guardian}:
 \begin{itemize}
 	\item A live cell with less than two live neighbours becomes dead
 	\item A live cell with more than four live neighbours becomes dead
@@ -193,53 +199,10 @@ The path-finding code was designed to run on a multi-threaded system to help sta
 \chapter{Implementation} \label{implementation}
 
 \subsection{Object Oriented Analysis}\label{ooa}
-An object oriented analysis was produced to gain an understanding of the problem domain and identify classes for the initial class diagram.
+An object oriented analysis was produced to gain an understanding of the problem domain and identify classes for the initial class diagram (Figure~\ref{ooa-breakdown}).
 
-\textbf{Specification} \\
-Objective: To make a simulation of evolution that reaches a stable point at some point.
-What does stable ecology mean? 
-\begin{itemize}
-\item Net number of organisms does not significantly increase or decrease over a given period of time.
-\end{itemize}
-\textbf{Requirements} \\
-Graphical representation of an organism.
-An organism has attributes such as:
-\begin{itemize}
-\item Health 
-\item Hunger 
-\item Speed
-\end{itemize}
-The organisms need to eat food which can either be other organisms or vegetation. 
-The organisms should breed and their attributes (representing genetics) will be crossed over to make a composite organism with random features within limit. 
-Environmental factors play a part in the life cycle and cold or hot climate can kill some organisms unless they have the specific resistances to temperatures. 
-Water should be present on the map which organisms can walk into but slows them down. Same with different terrain such as mountains. 
-
-\textbf{Real World Domain Environment:}
-\begin{itemize}
-\item Mountains
-\item Water
-\item Land
-\item Hot
-\item Cold
-\end{itemize}
-
-\textbf{Sprites and Organisms:}
-\begin{itemize}
-\item Herbivore 
-\item Carnivore 
-\item Plant
-\end{itemize}
-
-\textbf{Simulation:}
-\begin{itemize}
-\item State machine / brain
-\end{itemize}
-
-\subsection{UML}
-
-Taking the potential classes identified in Section~\ref{ooa}, a class diagram was produced (Figure~\ref{classdiagram}. This was continually updated throughout the project (Figure~\ref{classdiagram-2} but kept its key themes.
-
-As discussed in Section~\ref{architecture}, the project was split into namespaces each housing components relating to their tasks. Communication between namespaces (except EvolutionSim.Utility and EvolutionSim.Data) is discouraged and instead it is the role of Simulation to bring the program together.
+\subsection{UML}\label{uml}
+Taking the potential classes identified in Section~\ref{ooa}, a class diagram was produced (Figure~\ref{classdiagram}) which was continually updated throughout the project but keeping its key themes. Figure~\ref{classdiagram-2} shows the final class diagram produced in this project which was used to identify the growing issue of coupling within the project. As discussed in Section~\ref{architecture}, the project was split into namespaces each housing components relating to their tasks. Communication between namespaces (except EvolutionSim.Utility and EvolutionSim.Data) is discouraged and the team was able to eliminate unnecessary imports through this diagram.
 
 Furthermore, a requirement of the classes is that they aim to encapsulate their data and provide abstraction in information to make the code more manageable across the team. For example, code relating to a component such as the weather system is kept isolated within its class. The diagram also illustrates how this is achieved through inheritance, where base classes are generic and intricate functionality is extended further down the hierarchy. The main example of this can be seen in GridItems, essentially generic tile-based sprites, Food and Organism.
 
@@ -348,10 +311,37 @@ Dynamic black box testing was used extensively throughout the project. It was al
 \end{figure}
 
 \section{Requirements Testing}
-Dynamic black box testing was also performed on the simulation to ensure that the initial project requirements were met. This was achieved through ``test to pass`` and ``test to fail`` approaches to maximise the bug and issue reporting. This test plan can be seen in Figure~\ref{requirements-testing}
+Dynamic black box testing was also performed on the simulation to ensure that the initial project requirements were met. This was achieved through ``test to pass`` and ``test to fail`` approaches to maximise the bug and issue reporting. This test plan can be seen in Figure~\ref{requirements-testing}.
+
+In order to prove equilibrium, the simulation was left running for an hour while logging the population count over time (Figure~\ref{equilibrium-test}). Though the population fluctuates, it always returns to equilibrium given time.
+	
+\begin{figure}[H]
+	\caption{Equilibrium Test}\label{equilibrium-test}
+	\centering
+	\includegraphics[width=0.8\textwidth]{equilibrium-test}
+\end{figure}
+	
 
 \section{Code Metrics}
 Visual Studio provides tools to analyse a project, providing insight into the maintainability, coupling and cyclomatic complexity of a project. The overview of these results can be seen in Figure~\ref{metrics-1} and the specifics in Figures \ref{metrics-2} and \ref{metrics-3}.
+
+\begin{figure}[H]
+	\caption{Code Metrics Namespaces}\label{metrics-1}
+	\centering
+	\includegraphics[width=0.8\textwidth]{metrics-1}
+\end{figure}
+
+\begin{figure}[H]
+\caption{Code Metrics Classes Pt. 1}\label{metrics-2}
+\centering
+\includegraphics[width=0.8\textwidth]{metrics-2}
+\end{figure}
+
+\begin{figure}[H]
+	\caption{Code Metrics Classes Pt. 2}\label{metrics-3}
+	\centering
+	\includegraphics[width=0.8\textwidth]{metrics-3}
+\end{figure}
 
 The maintainability rating estimates how difficult code is to maintain by testing how long and heavily interlinked it is. The project has an overall maintainability score of 81 out of 100, which ranks green (the highest rating). Individual classes within the project report scores between 56 and 96 and this difference can typically be explained through how algorithmic or state-based a class is. In general, any score above 50 is considered good in the Visual Studio maintainability metric.
 
@@ -360,20 +350,21 @@ Complexity measures the number of decisions present within a block of code plus 
 Finally, coupling is measured as a value of how many other classes or imports a class is dependent on. This was deemed the most important factor to reduce throughout the project and much effort was placed on reducing coupling where possible, particularly between namespaces. The worst offenders for coupling, either by design or otherwise, are StateMachine, Organism and Grid. 
 
 \chapter{Discussion}\label{discussion}
+At all points in the project, one of the systems that worked well was the iterative approach to development. Categorising tasks into sprints, where high priority tasks were tackled earlier in the project and luxury additions were dealt with later ensured that the product development kept moving forward, ensuring a high level of motivation. Additionally, the team was able to re-evaluate the importance of aspects of the simulation continuously, allowing it to grow from the initial plans. The success of this iterative development is due to the effectiveness of the project management and the tools chosen to support it.
 
+However, although the project management as a whole was effective, there were several areas that it could be improved upon in future projects. Beginning the project with a proof of concept was a great decision in the short term, but the benefits it brought were diminished somewhat by a poor choice of following tasks. Tackling tasks in order of priority produced mixed results because certain core functionality such as a sophisticated roam function and a time manager were left until far too late in the project. This meant that when they were eventually implemented, other features had to be retroactively fitted to handle them, which led to some redundancy and therefore wasted time.
 
-This section will be about the following:
-\begin{itemize}
-	\itemsep0em
-	\item Discussion of testing and experiment results
-	\item Issues encountered: frequent rewrites, tangled state management early on, slowdown and lag, inconsistent coding standards, pathfinding necessitating optimisation and multiple threads, pull request system 
-	\item What went well/badly
-	\item What could be improved
-\end{itemize} 
+A key strength of the simulation lies in its ability to handle a large amount of computation with minimal lag. As discussed in Section~\ref{optim}, within the code there are many advanced algorithms such as the A* path-finding which must apply to a great number of objects and finish computing within a tight schedule. Through careful consideration to optimisation, frequent rewrites of inefficient areas of the code and a system of running complex algorithms on separate threads, the simulation is able to handle upwards of a thousand elements without noticeable issue.
+
+In terms of functioning as an evolutionary sandbox, the simulation has reached a level of intricacy whereby the organisms will evolve differently depending on the simulation parameters. In a map which is segregated into parts by the presence of terrain, camps of organisms will evolve with differing attributes depending on what has become important to their survival. For example, an area which has seen a rare mutation in strength will have larger organisms over time than a camp which did not acquire this mutation. Furthermore, whether herbivores, omnivores or carnivores become the majority varies significantly across multiple simulations.
+
+Likely the biggest shortcoming of the project is in its lack of variation of species. The team originally planned to have bird and fish species to add further meaning to the terrain system. A bird species for example would not receive a movement penalty when passing over water or mountains, a fish would also be impeded by water but would find all other ground impassable. The A* algorithm and simulation state management currently have the functionality to handle this kind of behaviour but due to time constraints, producing artwork and maintaining equilibrium with these new species was deemed not possible.
+Finally if this project were to be repeated again, one change would be to focus on having fewer but more sophisticated systems. Initial plans for this project were too ambitious and were not corrected until the mid-point, this led to some redundancy in how time was spent developing the luxury systems.
 
 \chapter{Conclusion and Future Work}\label{conclusion}
+Overall this project was ambitious in its aims to produce an evolution sandbox which some degree of interactivity and from this perspective it can be deemed a success. Many of the requirements (\ref{requirements}) and MoSCoW goals {(\ref{moscow}) allude to the attainment of an equilibrium within the ecosystem and this is something that has been tested to work in Section~\ref{requirements-testing}. In terms of the MoSCoW analysis, all core functionality identified in ``Must Have`` and ``Should Have`` have been implemented, while some attempt was made at implementing a program flow and particle effects from the ``Could Have`` objectives.
 
-This section will conclude the MoSCoW analysis, discuss shortcomings and future developments with more time. It will avoid subjective opinions, rants and excuses.
+If this project were to continue, the priority would be on implementing an improved hunting system. Due to time constraints, a system which had been developed using ray calculations and a new set of states had to be removed during the final stretch due to the presence of bugs. The system which replaced it is functional, but simplistic and not as elegant of a solution. With this feature in place, adding new species with more diverse attributes such as binocular and monocular vision and expanding the movement speed system to account for terrain differences and the speed attribute would follow this.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
@@ -390,12 +381,14 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 			\item A* Pathfinding [\ref{pathfinding}]
 			\item Testing [\ref{testing}]
 			\item Report writing
+			\item Spiral seek algorithm
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Grid/tile system [\ref{grid}]
+			\item Tile movement logic
 			\item Bio. algorithms research [\ref{crossover}]
+			\item Background research [\ref{background}]
 			\item Organism attributes
-			\item Movement logic
 		\end{itemize} \\ \hline
 		Rupert Hammond & \begin{itemize}
 			\itemsep0em
@@ -406,13 +399,15 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 			\item Multi-threading [\ref{multithreading}]
 			\item Mating system
 			\item Crossover algorithm [\ref{crossover}]
-			\item Raycasting
-			\item State/sequence UML
+			\item Unused ray calculations
+			\item Spiral seek algorithm
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Bug fixing
 			\item Report writing
 			\item Cooldown system
+			\item Background research [\ref{background}]
+			\item State UML [\ref{uml}]
 		\end{itemize} \\ \hline
 		Ryan Phelan & \begin{itemize}
 			\itemsep0em
@@ -425,17 +420,17 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 			\item Particle effects
 			\item Birth, death and eating events
 			\item Spritework
-			\item Terrain
+			\item Terrain system
 			\item Weather system
 			\item Timing and cooldown system
-			\item Class UML
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Project management [\ref{projectmanagement}]
 			\item Code architecture [\ref{architecture}]
-			\item Code Optimisation [\ref{optim}]
+			\item Code optimisation [\ref{optim}]
 			\item HP bars
 			\item Naive crossover [\ref{crossover}]
+			\item Class UML [\ref{uml}]
 		\end{itemize} \\ \hline
 		Travis Payne & \begin{itemize}
 			\itemsep0em
@@ -444,12 +439,16 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 			\item Simulation flow [\ref{statemanagement}]
 			\item Multi-threading [\ref{multithreading}]
 			\item Simulation set-up UI
-			\item Bugfixing
+			\item Bug fixing
+			\item Miscellaneous tweaks
 		\end{itemize} & \begin{itemize}
 			\itemsep0em
 			\item Code architecture [\ref{architecture}]
 			\item Organism attributes
 			\item Hunting system
+			\item In-game UI
+			\item Real-time attribute editing
+			\item Naive seek algorithm
 		\end{itemize} \\
 	\end{tabular}
 \end{center}
@@ -457,26 +456,90 @@ The team has agreed on a 25\% contibution each as of the time of writing. Many t
 \chapter*{Appendix A}
 
 \begin{figure}[H]
+	\caption{Object Oriented Analysis Breakdown}\label{ooa-breakdown}
+	
+	\textbf{Specification} \\
+	Objective: To make a simulation of evolution that reaches a stable point at some point.
+	What does stable ecology mean? 
+	\begin{itemize}
+		\item Net number of organisms does not significantly increase or decrease over a given period of time.
+	\end{itemize}
+	\textbf{Requirements} \\
+	Graphical representation of an organism.
+	An organism has attributes such as:
+	\begin{itemize}
+		\item Health 
+		\item Hunger 
+		\item Speed
+	\end{itemize}
+	The organisms need to eat food which can either be other organisms or vegetation. 
+	The organisms should breed and their attributes (representing genetics) will be crossed over to make a composite organism with random features within limit. 
+	Environmental factors play a part in the life cycle and cold or hot climate can kill some organisms unless they have the specific resistances to temperatures. 
+	Water should be present on the map which organisms can walk into but slows them down. Same with different terrain such as mountains. 
+	
+	\textbf{Real World Domain Environment:}
+	\begin{itemize}
+		\item Mountains
+		\item Water
+		\item Land
+		\item Hot
+		\item Cold
+	\end{itemize}
+	
+	\textbf{Sprites and Organisms:}
+	\begin{itemize}
+		\item Herbivore 
+		\item Carnivore 
+		\item Plant
+	\end{itemize}
+	
+	\textbf{Simulation:}
+	\begin{itemize}
+		\item State machine / brain
+	\end{itemize}
+\end{figure}
+
+\begin{figure}[H]
 	\caption{UML Class Diagram}\label{classdiagram}
 	\includegraphics[width=\textwidth]{class-diagram}
 \end{figure}
 
-\smallskip 
 \begin{landscape}
+	\begin{figure}[H]
+		\caption{UML Class Diagram December}\label{classdiagram-2}
+		\includegraphics[height=\textheight]{class-diagram-2}
+	\end{figure}
+\end{landscape}
+
+\smallskip 
 \begin{figure}[H]
 	\caption{Requirements Testing} \label{requirements-testing}
-	\centering
-	\begin{tabular}{c|c|p{0.7\textwidth}}
-		MoSCoW & Objective & Result \\ \hline
-		Must & Organism life cycle & Organisms are created at first by the user. After that they need food to survive and die if their hunger reaches 0. Once the organism reaches its maximum age it dies.  \\ \hline
-		Must & Genetic crossover algorithm & They can mate producing an offspring of the same species and their individual attributes appear to crossover to produce the offspring attributes.  \\ \hline
-		Must &  &   \\ \hline
-		Must &  &   \\ \hline
-		Must &  &   \\ \hline
-		Must &  &   \\ \hline
-	\end{tabular}
+		\begin{tabular}{llllll}
+			& MOSCOW ANALYSIS                                                                                                       & Testing notes                                                                                                                                                                                                                                                                           &  &  &  \\
+			Must   &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Organism\\   life cycle\end{tabular}                                                       & \begin{tabular}[c]{@{}l@{}}Organisms are created at first by the user. After that they need food\\   to survive and die if their hunger reaches 0. Once the organism reaches its\\   maximum age it dies.\end{tabular}                                                                  &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Genetic\\   crossover algorithm\end{tabular}                                               & \begin{tabular}[c]{@{}l@{}}They can mate producing an offspring of the same species and their\\   individual attributes appear to crossover to produce the offspring\\   attributes.\end{tabular}                                                                                       &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Organism\\   attributes\end{tabular}                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Live\\   edit of organisms\end{tabular}                                                    & \begin{tabular}[c]{@{}l@{}}This is possible and editing the organisms results in them being\\   affected while on screen. For instance, setting hunger to 0 slowly kills the\\   organism and setting the speed increases the organisms moving speed around\\   the map.\end{tabular}   &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Simple\\   2D graphics\end{tabular}                                                        & \begin{tabular}[c]{@{}l@{}}The graphics are good quality with 2D particle effects when food or\\   an organism is placed into the world. The organisms do not overlap and occupy\\   the same grid tile and when they die their sprite is replaced with meat.\end{tabular}              &  &  &  \\
+			& Herbivores and natural food sources                                                                                   & \begin{tabular}[c]{@{}l@{}}Plant material can be added to the map and organisms will consume it,\\   increasing their own hunger and removing the plant from the world.\\    \\   When organisms die they\\   are turned into a meat source which other organisms can eat.\end{tabular} &  &  &  \\
+			Should &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Weather/disease\\   system\end{tabular}                                                    & \begin{tabular}[c]{@{}l@{}}If the environment becomes too cold or hot, some organisms will start\\   to die from the environment and if the temperature does not change then this\\   can kill many the organisms on the map.\end{tabular}                                              &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Advanced\\   path finding algorithm\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}During testing and observance, when searching for food or a mate the\\   organisms will avoid paths with take them over mountains or water. They will\\   also avoid moving to the same tile as other organisms.\end{tabular}                                &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Terrain\\   variation, e.g. grass, mountains, water\end{tabular}                           &                                                                                                                                                                                                                                                                                         &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Ability\\   to pause, speed up and slow down simulation\end{tabular}                       & Implemented and seems to work.                                                                                                                                                                                                                                                          &  &  &  \\
+			Could  &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Natural\\   disasters\end{tabular}                                                         & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Speciation\\   (new species forming from heavily mutated organisms over time)\end{tabular} & \begin{tabular}[c]{@{}l@{}}The species do change\\   over time and form new organisms through reproduction. However, there is no\\   clustering of organisms to make set populations around the map.\end{tabular}                                                                       &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}A game\\   log with charts and text output\end{tabular}                                    & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Sprite\\   sheet animation\end{tabular}                                                    & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Particle\\   effects, e.g. weather effects, running water, blood\end{tabular}              & \begin{tabular}[c]{@{}l@{}}There\\   is blood\end{tabular}                                                                                                                                                                                                                              &  &  &  \\
+			Won’t  &                                                                                                                       &                                                                                                                                                                                                                                                                                         &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}3D\\   graphics\end{tabular}                                                               & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  &  \\
+			& \begin{tabular}[c]{@{}l@{}}Scale\\   realism\end{tabular}                                                             & \begin{tabular}[c]{@{}l@{}}Not\\   implemented\end{tabular}                                                                                                                                                                                                                             &  &  & 
+		\end{tabular}
+	
 \end{figure}
-\end{landscape}
 \smallskip 
 
 \end{document}
