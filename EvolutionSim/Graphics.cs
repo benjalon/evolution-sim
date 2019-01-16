@@ -28,6 +28,8 @@ namespace EvolutionSim
         private SetupSimulation setupSimulation;
         private About about;
 
+        private Panel pause;
+
         public static Dictionary<String, Texture2D> SimulationTextures;
 
         private double fps = 0;
@@ -106,6 +108,37 @@ namespace EvolutionSim
                     break;
                 case Utility.GameState.Exit:
                     Exit();
+                    break;
+                case Utility.GameState.Pause:
+                    pause = new Panel();
+                    pause.Visible = true;
+                    Button menu = new Button("Back to start menu");
+                    Button resume = new Button("Resume");
+                    Button exit = new Button("Exit");
+                    pause.AddChild(menu);
+                    pause.AddChild(resume);
+                    pause.AddChild(exit);
+
+                    UserInterface.Active.AddEntity(pause);
+
+                    menu.OnClick = (Entity btn) =>
+                    {
+                        state = Utility.GameState.StartMenu;
+                        UserInterface.Active.Clear();
+                        LoadContent();
+                    };
+                    resume.OnClick = (Entity btn) =>
+                    {
+                        state = Utility.GameState.Running;
+                        pause.Visible = false;
+                    };
+                    exit.OnClick = (Entity btn) =>
+                    {
+                        state = Utility.GameState.Exit;
+                        Exit();
+                    };
+
+
                     break;
                 
             }
@@ -225,6 +258,9 @@ namespace EvolutionSim
 
 
                     break;
+                case Utility.GameState.Pause:
+
+                    break;
 
 
             }
@@ -234,9 +270,20 @@ namespace EvolutionSim
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
             {
-                
-                state = Utility.GameState.Exit;
-                Exit();
+                if (state == Utility.GameState.Running)
+                {
+                    state = Utility.GameState.Pause;
+                    LoadContent();
+                }
+                else if(state == Utility.GameState.Pause)
+                {
+                    
+                }
+                else
+                {
+                    state = Utility.GameState.Exit;
+                    Exit();
+                }
             }
 
           

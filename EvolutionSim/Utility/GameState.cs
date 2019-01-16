@@ -12,6 +12,7 @@ namespace EvolutionSim.Utility
         Exit,
         Running,
         Setup,
-        About
+        About,
+        Pause
     }
 }
