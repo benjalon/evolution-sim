@@ -265,6 +265,20 @@ namespace EvolutionSim.TileGrid
 
         }
 
+        public void UpdateFood()
+        {
+
+            var numFood = this.Foods.Count;
+
+            //this loop gradually reduces the food 
+            for (var i = numFood - 1; i >= 0; i--)
+            {
+
+                this.Foods[i].WitherFood();
+            }
+
+        }
+
         public Tile FindRandomNearbyEmptyTile(Organism organism)
         {
             const int MINIMUM_BOUND = 0;

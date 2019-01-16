@@ -58,9 +58,12 @@ namespace EvolutionSim.Sprites
             DecreaseHealth(1);
         }
 
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(this.Texture, new Vector2(this.rectangle.Location.X + this.scaleOffset, this.rectangle.Location.Y + this.scaleOffset), null, Color.White, 0, Vector2.Zero, this.scale, SpriteEffects.None, 0.0f);
         }
+
+   
     }
 }

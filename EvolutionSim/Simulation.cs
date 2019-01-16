@@ -81,12 +81,17 @@ namespace EvolutionSim
 
             Utility.AttributeUpdater.UpdateAttributes(this.grid.Organisms, this.WeatherOverlay.WeatherSetting, TimeManager.HasSimulationTicked, TimeManager);
 
-            var numFood = this.grid.Foods.Count;
-            for (var i = numFood - 1; i >= 0; i--)
-            {
-                this.grid.Foods[i].BeEaten();
-            }
- 
+
+            //var numFood = this.grid.Foods.Count;
+
+            ////this loop gradually reduces the food 
+            //for (var i = numFood - 1; i >= 0; i--)
+            //{
+
+            //    this.grid.Foods[i].WitherFood();
+            //}
+
+            this.grid.UpdateFood();
 
             this.fsm.UpdateStates(this.grid, TimeManager);
             
