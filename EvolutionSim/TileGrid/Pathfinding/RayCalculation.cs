@@ -39,8 +39,10 @@ namespace EvolutionSim.TileGrid.Pathfinding
         }
 
         /// <summary>
-        /// returns the path for the organism to follow to its prey
-        /// //is oblivious to potential obstructions
+        /// returns the path for the organism to follow to its prey.
+        /// is oblivious to potential obstructions.
+        /// works by calculating the distance between the two organisms,
+        /// then calculates the most direct path to the closest adjacent tile
         /// </summary>
         /// <returns></returns>
         public void CalculateRay(Grid grid)
@@ -63,10 +65,11 @@ namespace EvolutionSim.TileGrid.Pathfinding
             int yMagnitude = Math.Abs(desiredLocationY - predatorLocationY) - 1;
 
 
-            //logic error in searching code
-            //while the co-ordinates aren't adjacent to the desired organisms location
+           //when the xMagnitude and yMagnitude aren't zero 
+           //we still have more tiles to calculate!
             while (xMagnitude > 0 || yMagnitude > 0)
             {
+                
                 if (predatorLocationX > desiredLocationX + 1)
                 {
                     predatorLocationX--;
@@ -101,7 +104,7 @@ namespace EvolutionSim.TileGrid.Pathfinding
 
             }
 
-            //set the predator's path to this rey
+            //Set this to the predators path
             Predator.Path = this.Ray;
 
         }
