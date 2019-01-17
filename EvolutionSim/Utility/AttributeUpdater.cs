@@ -10,8 +10,8 @@ namespace EvolutionSim.Utility
 {
     public static class AttributeUpdater
     {
-        private const int STARVING_THRESHOLD = 0;
-        private const float HUNGRY_RATE = 0.002f;
+        private const float STARVING_THRESHOLD = 0.1f;
+        private const float HUNGRY_RATE = 0.003f;
         
        
 

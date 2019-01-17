@@ -17,8 +17,8 @@ namespace EvolutionSim.Sprites
         private const float EATING_REGEN = 0.075f;
         private const float SCALE_MULTIPLIER = 0.2f;
         private const float SCALE_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
-        private const int AGE_LOWER_BOUND = 70; // represents the range of ages possible
-        private const int AGE_UPPER_BOUND = 130;
+        private const int AGE_LOWER_BOUND = 100; // represents the range of ages possible
+        private const int AGE_UPPER_BOUND = 150;
 
 
         // Breed attributes
@@ -92,8 +92,9 @@ namespace EvolutionSim.Sprites
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
+           
             //this is where the size of the organism is calculated based on strengh
-            var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
+            var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)*0.1f) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
             
             if (IsSelected)
             {

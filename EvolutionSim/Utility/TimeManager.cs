@@ -6,13 +6,13 @@ namespace EvolutionSim.Utility
 {
     public class TimeManager
     {
-        private const int DEFAULT_MATING_COOLDOWN = 20000;
+        private const int DEFAULT_MATING_COOLDOWN = 10000;
         private const int DEFAULT_WEATHER_COOLDOWN = 5000;
         private const int DEFAULT_HUNTING_COOLDOWN = 30000;
         private const int DEFAULT_ROAM_COOLDOWN = 3000;
         private const int DEFAULT_SIMULATION_TICK_COOLDOWN = 1000;
         private const int DEFAULT_GRASS_SPAWN_COOLDOWN = 1500;
-        private const int DEFAULT_WAIT_COOLDOWN = 6000;
+        private const int DEFAULT_WAIT_COOLDOWN = 10000;
 
         public const float MOVE_SPEED = 0.01f;
         private const int FAST_SPEED = 4;
