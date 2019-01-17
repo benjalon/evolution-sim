@@ -17,8 +17,8 @@ namespace EvolutionSim.Sprites
         private const float EATING_REGEN = 0.075f;
         private const float SCALE_MULTIPLIER = 0.2f;
         private const float SCALE_LIMIT = 1.0f; // we want an upper limit of 1.0f on both strength and speed
-        private const int AGE_LOWER_BOUND = 70; // represents the range of ages possible
-        private const int AGE_UPPER_BOUND = 130;
+        private const int AGE_LOWER_BOUND = 100; // represents the range of ages possible
+        private const int AGE_UPPER_BOUND = 150;
 
 
         // Breed attributes

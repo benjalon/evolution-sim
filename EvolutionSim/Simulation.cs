@@ -34,22 +34,22 @@ namespace EvolutionSim
 
             this.particleTextures = new List<Texture2D>() { Graphics.SimulationTextures["star"], Graphics.SimulationTextures["diamond"], Graphics.SimulationTextures["circle"] };
 
-            //this.bearBreeds = new List<Attributes>()
-            //{
-                
-            //    new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, Intelligence = 0.3f, ResistCold = false, ResistHeat = false },
-            //    new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, Intelligence = 0.7f, ResistCold = true, ResistHeat = false },
-            //    new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.5f, Intelligence = 1.0f, ResistCold = true, ResistHeat = true },
-            //    new Attributes() { Species = "AngryRed", Texture = Graphics.SimulationTextures["organism_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 0.8f, Speed = 0.2f, Intelligence = 0.4f, ResistCold = false, ResistHeat = true },
-            //    new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, Intelligence = 0.6f, ResistCold = true, ResistHeat = true }
-            //};
             this.bearBreeds = new List<Attributes>()
             {
-                new Attributes() { Species = "Smart Boi", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.9f, Strength = 0.3f, Speed = 0.4f, ResistCold = false, ResistHeat = false },
-                new Attributes() { Species = "Strong Boi", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Canivore, MaxHealth = 20, Intelligence = 0.1f, Strength = 0.9f, Speed = 0.2f, ResistCold = true, ResistHeat = false },
-                new Attributes() { Species = "Average Boi", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.5f, Strength = 0.5f, Speed = 0.5f, ResistCold = false, ResistHeat = false }
 
+                new Attributes() { Species = "MiniGreen", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Strength = 0.3f, Speed = 0.7f, Intelligence = 0.3f, ResistCold = false, ResistHeat = false },
+                new Attributes() { Species = "MysteryPurp", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Herbivore, MaxHealth = 20, Strength = 0.5f, Speed = 0.6f, Intelligence = 0.7f, ResistCold = true, ResistHeat = false },
+                new Attributes() { Species = "Blastoise", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Omnivore, MaxHealth = 25, Strength = 0.7f, Speed = 0.5f, Intelligence = 0.1f, ResistCold = true, ResistHeat = true },
+                new Attributes() { Species = "AngryRed", Texture = Graphics.SimulationTextures["organism_3"], DietType = DietTypes.Canivore, MaxHealth = 28, Strength = 1.0f, Speed = 2.0f, Intelligence = 0.4f, ResistCold = false, ResistHeat = true },
+                new Attributes() { Species = "YellowBoi", Texture = Graphics.SimulationTextures["organism_4"], DietType = DietTypes.Omnivore, MaxHealth = 15, Strength = 0.5f, Speed = 0.5f, Intelligence = 0.6f, ResistCold = true, ResistHeat = true }
             };
+            //this.bearBreeds = new List<Attributes>()
+            //{
+            //    new Attributes() { Species = "Smart Boi", Texture = Graphics.SimulationTextures["organism_0"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.9f, Strength = 0.3f, Speed = 0.4f, ResistCold = false, ResistHeat = false },
+            //    new Attributes() { Species = "Strong Boi", Texture = Graphics.SimulationTextures["organism_1"], DietType = DietTypes.Canivore, MaxHealth = 20, Intelligence = 0.1f, Strength = 0.9f, Speed = 0.2f, ResistCold = true, ResistHeat = false },
+            //    new Attributes() { Species = "Average Boi", Texture = Graphics.SimulationTextures["organism_2"], DietType = DietTypes.Herbivore, MaxHealth = 10, Intelligence = 0.5f, Strength = 0.5f, Speed = 0.5f, ResistCold = false, ResistHeat = false }
+
+            //};
 
             this.healthbarTextures = new Tuple<Texture2D, Texture2D>(Graphics.SimulationTextures["healthbar_red"], Graphics.SimulationTextures["healthbar_green"]);
 
