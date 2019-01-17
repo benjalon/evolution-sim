@@ -92,6 +92,7 @@ namespace EvolutionSim.Sprites
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
+
             //this is where the size of the organism is calculated based on strengh
             var scaleOffset = (Tile.TILE_SIZE * (1.0f - this.Attributes.Strength)) * SCALE_MULTIPLIER; // TODO: if organisms never get stronger, this can be pre-calculated at birth
             
