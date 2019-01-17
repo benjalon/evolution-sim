@@ -1,5 +1,11 @@
 \begin{thebibliography}{1}
 
+\bibitem{grand}
+{Artificial Life}, 2018.
+\newblock
+  {\hspace*{\fill}\linebreak[4]\url{https://www.britannica.com/technology/artificial-life}\linebreak[4]Website
+  accessed 16th January, 2018}.
+
 \bibitem{guardian}
 {The Game of Life: a beginner's guide}, 2014.
 \newblock
@@ -23,6 +29,11 @@
 \newblock
   {\hspace*{\fill}\linebreak[4]\url{https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions}\linebreak[4]Website
   accessed 03rd November, 2018}.
+
+\bibitem{box1958note}
+George~EP Box.
+\newblock A note on the generation of random normal deviates.
+\newblock {\em Ann. Math. Stat.}, 29:610--611, 1958.
 
 \bibitem{belwariar}
 {A* Search Algorithm}, 2018.
