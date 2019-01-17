@@ -26,6 +26,9 @@ namespace EvolutionSim
         private Overlay overlay;
         private Simulation simulation;
         private SetupSimulation setupSimulation;
+        private About about;
+
+        private Panel pause;
 
         public static Dictionary<String, Texture2D> SimulationTextures;
 
@@ -100,9 +103,44 @@ namespace EvolutionSim
                 case Utility.GameState.Setup:
                      this.setupSimulation = new SetupSimulation();
                     break;
+                case Utility.GameState.About:
+                    this.about = new About();
+                    break;
                 case Utility.GameState.Exit:
                     Exit();
                     break;
+                case Utility.GameState.Pause:
+                    pause = new Panel();
+                    pause.Visible = true;
+                    Button menu = new Button("Back to start menu");
+                    Button resume = new Button("Resume");
+                    Button exit = new Button("Exit");
+                    pause.AddChild(menu);
+                    pause.AddChild(resume);
+                    pause.AddChild(exit);
+
+                    UserInterface.Active.AddEntity(pause);
+
+                    menu.OnClick = (Entity btn) =>
+                    {
+                        state = Utility.GameState.StartMenu;
+                        UserInterface.Active.Clear();
+                        LoadContent();
+                    };
+                    resume.OnClick = (Entity btn) =>
+                    {
+                        state = Utility.GameState.Running;
+                        pause.Visible = false;
+                    };
+                    exit.OnClick = (Entity btn) =>
+                    {
+                        state = Utility.GameState.Exit;
+                        Exit();
+                    };
+
+
+                    break;
+                
             }
 
         }
@@ -120,6 +158,8 @@ namespace EvolutionSim
 
             Button sandboxMode = new Button("Sandbox Mode", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50), new Vector2(0, WINDOW_HEIGHT / 8));
             Button simulationSetup = new Button("Setup Simulation", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+            Button about = new Button("About", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
+
             Button exit = new Button("Exit", ButtonSkin.Default, Anchor.AutoCenter, new Vector2(WINDOW_WIDTH / 6, 50));
             sandboxMode.OnClick = (Entity btn) => {
                 state = Utility.GameState.Running;
@@ -128,6 +168,11 @@ namespace EvolutionSim
             };
             simulationSetup.OnClick = (Entity btn) => {
                 state = Utility.GameState.Setup;
+                UserInterface.Active.Clear();
+                LoadContent();
+            };
+            about.OnClick = (Entity btn) => {
+                state = Utility.GameState.About;
                 UserInterface.Active.Clear();
                 LoadContent();
             };
@@ -141,6 +186,7 @@ namespace EvolutionSim
             UserInterface.Active.AddEntity(horizontalLine);
             UserInterface.Active.AddEntity(sandboxMode);
             UserInterface.Active.AddEntity(simulationSetup);
+            UserInterface.Active.AddEntity(about);
             UserInterface.Active.AddEntity(exit);
         }
         private void LoadSimulation()
@@ -193,13 +239,27 @@ namespace EvolutionSim
                         state = Utility.GameState.Running;
                         UserInterface.Active.Clear();
                         LoadContent();
-                        
+
 
                     }
                     else
                     {
                         this.setupSimulation.Update(gameTime);
                     }
+                    break;
+                case Utility.GameState.About:
+                    if (this.about.backButtonPressed) { 
+                        state = Utility.GameState.StartMenu;
+                        LoadContent();
+                    }
+
+                    break;
+                case Utility.GameState.StartMenu:
+
+
+                    break;
+                case Utility.GameState.Pause:
+
                     break;
 
 
@@ -210,8 +270,21 @@ namespace EvolutionSim
             var escapeClicked = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (escapeClicked)
             {
-                state = Utility.GameState.Exit;
-                Exit();
+                if (state == Utility.GameState.Running)
+                {
+                    state = Utility.GameState.Pause;
+                    
+                    LoadContent();
+                }
+                else if(state == Utility.GameState.Pause)
+                {
+                    
+                }
+                else
+                {
+                    state = Utility.GameState.Exit;
+                    Exit();
+                }
             }
 
           
@@ -227,6 +300,7 @@ namespace EvolutionSim
         {
             GraphicsDevice.Clear(Color.LightGreen); // Set background color
             UserInterface.Active.Draw(spriteBatch);
+
             //this.WriteFPS(gameTime);
 
             // Draw graphical elements
@@ -241,6 +315,8 @@ namespace EvolutionSim
                 case Utility.GameState.Setup:
                     //this.setupSimulation.Draw(this.spriteBatch);
                     break;
+                case Utility.GameState.About:
+                    break;
             }
 
             this.spriteBatch.End();
@@ -251,7 +327,9 @@ namespace EvolutionSim
 
             UserInterface.Active.DrawMainRenderTarget(spriteBatch);
 
+
             base.Draw(gameTime);
+
         }
 
         private void WriteFPS(GameTime gameTime)

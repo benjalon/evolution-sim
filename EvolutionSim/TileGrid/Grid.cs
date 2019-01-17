@@ -244,6 +244,12 @@ namespace EvolutionSim.TileGrid
         private void OrganismDeathHandler(object sender, EventArgs e)
         {
             var organism = (Organism)sender;
+            if(organism.State == States.MovingToMate)
+            {
+                ((Organism)organism.DestinationTile.Inhabitant).WaitingForMate = false;
+                ((Organism)organism.DestinationTile.Inhabitant).State = States.SeekMate;
+
+            }
             this.GetTileAt(organism).RemoveInhabitant();
             this.Organisms.Remove(organism);
             GridItem.TOTAL_GRID_ITEMS--;

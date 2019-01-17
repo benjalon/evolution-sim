@@ -302,7 +302,7 @@ namespace EvolutionSim.UI
                 }
             };
 
-            var editIntelligenceText = new Paragraph("Intelligence:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
+            var editIntelligenceText = new Paragraph("Intel:", Anchor.AutoInline, new Vector2(TEXT_WIDTH, ELEMENT_HEIGHT));
             this.editIntelligenceValue = new TextInput(false, new Vector2(EDIT_TEXT_WIDTH, ELEMENT_HEIGHT), Anchor.AutoInline, null, PanelSkin.Fancy);
             this.editIntelligenceValue.OnValueChange = (Entity btn) =>
             {
@@ -324,25 +324,62 @@ namespace EvolutionSim.UI
             this.saveChanges = new Button("Save Changes", anchor: Anchor.AutoCenter);
             this.saveChanges.OnClick = (Entity btn) =>
             {
-                try { 
-                Attributes attrib = new Attributes()
-                {
-                   
-                    Species = this.editSpeciesValue.Value,
-                    Intelligence = (float)Convert.ToDouble(this.editIntelligenceValue.Value),
-                    MaxHealth = this.selectedOrganism.Attributes.MaxHealth,
-                    ResistCold = this.selectedOrganism.Attributes.ResistCold,
-                    ResistHeat = this.selectedOrganism.Attributes.ResistHeat,
-                    Speed = (float)Convert.ToDouble(this.editSpeedValue.Value),
-                    Strength = (float)Convert.ToDouble(this.editStrengthValue.Value),
-                    Texture = this.selectedOrganism.Texture,
-                    DietType = this.selectedOrganism.Attributes.DietType
+                try {
+                    var tempSpecies ="";
+                    var tempIntel = 0.0f;
+                    var tempSpeed = 0.0f;
+                    var tempStrength= 0.0f;
+                    var tempAge = 0;
+                    var tempHunger = 0.0f;
+
+
+                    if (this.editSpeciesValue.Value == "")
+                        tempSpecies = this.selectedOrganism.Attributes.Species;
+                    else
+                        tempSpecies = this.editSpeciesValue.Value;
+                    if (this.editAgeValue.Value == "")
+                        tempAge = this.selectedOrganism.Age;
+                    else
+                        tempAge = Convert.ToInt16(this.editAgeValue.Value);
+                    if (this.editHungerValue.Value == "")
+                        tempHunger = this.selectedOrganism.Hunger;
+                    else
+                        this.selectedOrganism.Hunger = (float)Convert.ToDouble(this.editHungerValue.Value);
+
+                    if (this.editSpeedValue.Value == "")
+                        tempSpeed = this.selectedOrganism.Attributes.Speed;
+                    else
+                        tempSpeed = (float)Convert.ToDouble(this.editSpeedValue.Value);
+                    if (this.editStrengthValue.Value == "")
+                        tempStrength = this.selectedOrganism.Attributes.Strength;
+                    else
+                        tempStrength = (float)Convert.ToDouble(this.editStrengthValue.Value);
+
+                    if (this.editIntelligenceValue.Value == "")
+                        tempIntel = this.selectedOrganism.Attributes.Strength;
+                    else
+                        tempIntel = (float)Convert.ToDecimal(this.editIntelligenceValue.Value);
+
+
+                    Attributes attrib = new Attributes()
+                    {
+                        Species = tempSpecies,
+                        Intelligence = tempIntel,
+                        MaxHealth = this.selectedOrganism.Attributes.MaxHealth,
+                        ResistCold = this.selectedOrganism.Attributes.ResistCold,
+                        ResistHeat = this.selectedOrganism.Attributes.ResistHeat,
+                        Speed = tempSpeed,
+                        Strength = tempStrength,
+                        Texture = this.selectedOrganism.Texture,
+                        DietType = this.selectedOrganism.Attributes.DietType
                 };
                 this.selectedOrganism.Attributes = attrib;
+                    this.selectedOrganism.Age = tempAge;
+                    this.selectedOrganism.Hunger = tempHunger;
             }
             catch (Exception e)
             {
-
+                    Console.WriteLine(e);
             }
                 finally
                 {

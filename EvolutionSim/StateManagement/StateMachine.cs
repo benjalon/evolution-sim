@@ -121,7 +121,9 @@ namespace EvolutionSim.StateManagement
                             organism.Hunting = false;
                             ((Organism)organism.DestinationTile.Inhabitant).Frozen = false;
                             organism.DestinationTile.Inhabitant.DecreaseHealth(Organism.KILL_HEALTH);
+
                         }
+
                         organism.State = this.state.MoveState(organismState, Actions.FoodFound); // adjacent to food, eat it
                     }
 
@@ -137,8 +139,10 @@ namespace EvolutionSim.StateManagement
                     if (organism.DestinationTile == null || !organism.DestinationTile.HasFoodInhabitant)
                     {
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry); // Food is gone, stop eating
+                        organism.Path.Clear();
+
                     }
-                    if(organism.Hunger > 1.0)
+                    if (organism.Hunger > 1.0)
                     {
                         organism.Hunger = 1.0f;
                         organism.State = this.state.MoveState(organismState, Actions.NotHungry); // Food is gone, stop eating
