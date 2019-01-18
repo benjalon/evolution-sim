@@ -110,33 +110,33 @@ namespace EvolutionSim
                     Exit();
                     break;
                 case Utility.GameState.Pause:
-                    pause = new Panel();
-                    pause.Visible = true;
-                    Button menu = new Button("Back to start menu");
-                    Button resume = new Button("Resume");
-                    Button exit = new Button("Exit");
-                    pause.AddChild(menu);
-                    pause.AddChild(resume);
-                    pause.AddChild(exit);
+                    //pause = new Panel();
+                    //pause.Visible = true;
+                    //Button menu = new Button("Back to start menu");
+                    //Button resume = new Button("Resume");
+                    //Button exit = new Button("Exit");
+                    //pause.AddChild(menu);
+                    //pause.AddChild(resume);
+                    //pause.AddChild(exit);
 
-                    UserInterface.Active.AddEntity(pause);
+                    //UserInterface.Active.AddEntity(pause);
 
-                    menu.OnClick = (Entity btn) =>
-                    {
-                        state = Utility.GameState.StartMenu;
-                        UserInterface.Active.Clear();
-                        LoadContent();
-                    };
-                    resume.OnClick = (Entity btn) =>
-                    {
-                        state = Utility.GameState.Running;
-                        pause.Visible = false;
-                    };
-                    exit.OnClick = (Entity btn) =>
-                    {
-                        state = Utility.GameState.Exit;
-                        Exit();
-                    };
+                    //menu.OnClick = (Entity btn) =>
+                    //{
+                    //    state = Utility.GameState.StartMenu;
+                    //    UserInterface.Active.Clear();
+                    //    LoadContent();
+                    //};
+                    //resume.OnClick = (Entity btn) =>
+                    //{
+                    //    state = Utility.GameState.Running;
+                    //    pause.Visible = false;
+                    //};
+                    //exit.OnClick = (Entity btn) =>
+                    //{
+                    //    state = Utility.GameState.Exit;
+                    //    Exit();
+                    //};
 
 
                     break;
@@ -272,9 +272,9 @@ namespace EvolutionSim
             {
                 if (state == Utility.GameState.Running)
                 {
-                    state = Utility.GameState.Pause;
+                    //state = Utility.GameState.Pause;
                     
-                    LoadContent();
+                    //LoadContent();
                 }
                 else if(state == Utility.GameState.Pause)
                 {
