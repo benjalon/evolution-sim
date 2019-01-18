@@ -26,7 +26,7 @@ namespace EvolutionSim.UI
             UserInterface.Active.UseRenderTarget = true;
             UserInterface.Active.CursorScale = 0.5f;
             this.mainPanel = new Panel(new Vector2(Graphics.WINDOW_WIDTH / 2, Graphics.WINDOW_HEIGHT / 1.25f));
-            this.aboutParagraph = new Paragraph("YEEEEEEEEEEEEEET");
+            this.aboutParagraph = new Paragraph("EvolutionSim V1.0\n\nDeveloped by Darwin's Boys\n\nPlease report bugs to: https://github.com/benjalon/evolution-sim/issues/new");
             this.backButton = new Button("Back", anchor: Anchor.AutoCenter,size: new Vector2(Graphics.WINDOW_WIDTH / 6, 50));
             this.backButton.OnClick = (Entity btn) =>
             {

@@ -54,7 +54,7 @@ namespace EvolutionSim.Sprites
                         organism = organisms[i];
                         if (!organism.Attributes.ResistCold)
                         {
-                            organism.DecreaseHealth(1);
+                            organism.DecreaseHealth(2);
                         }
                     }
                     break;
@@ -64,7 +64,7 @@ namespace EvolutionSim.Sprites
                         organism = organisms[i];
                         if (!organism.Attributes.ResistHeat)
                         {
-                            organism.DecreaseHealth(1);
+                            organism.DecreaseHealth(2);
                         }
                     }
                     break;

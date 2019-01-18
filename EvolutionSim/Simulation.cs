@@ -82,7 +82,7 @@ namespace EvolutionSim
 
             if (TimeManager.Paused)
             {
-                Graphics.state = GameState.Pause;
+                //Graphics.state = GameState.Pause;
                 return;
             }
             if (TimeManager.HasGrassTicked)
